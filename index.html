@@ -7,63 +7,263 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="matrix-bg"></div>
+    
     <!-- Header Section -->
     <header>
         <nav>
-            <h1>Our Book Title</h1>
+            <div class="logo-container">
+                <span class="logo-bracket">[</span>
+                <h1>OUR BOOK</h1>
+                <span class="logo-bracket">]</span>
+            </div>
             <ul>
-                <li><a href="#about">About</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#chapters">Chapters</a></li>
                 <li><a href="#authors">Authors</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#contact" class="cta-button">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="scan-line"></div>
         <div class="hero-content">
-            <h2>Welcome to Our Book</h2>
-            <p>A captivating story about...</p>
-            <button id="learn-more">Learn More</button>
+            <div class="glitch-wrapper">
+                <h2 class="glitch" data-text="ENTER THE STORY">ENTER THE STORY</h2>
+            </div>
+            <p class="typing-text">A journey beyond imagination awaits...</p>
+            <div class="hero-buttons">
+                <button id="learn-more" class="primary-btn">
+                    <span>INITIALIZE</span>
+                    <div class="btn-glow"></div>
+                </button>
+                <button class="secondary-btn">
+                    <span>READ PREVIEW</span>
+                </button>
+            </div>
+            <div class="status-bar">
+                <span class="status-indicator"></span>
+                <span>SYSTEM ONLINE</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="stats">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>// BOOK STATISTICS</h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📖</div>
+                <div class="stat-number" data-target="350">0</div>
+                <div class="stat-label">Pages</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-number" data-target="15">0</div>
+                <div class="stat-label">Chapters</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-number" data-target="2">0</div>
+                <div class="stat-label">Authors</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-number" data-target="99">0</div>
+                <div class="stat-label">Epic Moments</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%"></div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="about">
-        <h2>About the Book</h2>
-        <p>This book tells the story of...</p>
-        <p>Add your book description here.</p>
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>// ABOUT THE BOOK</h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="about-content">
+            <div class="about-panel">
+                <div class="panel-header">
+                    <span class="panel-indicator"></span>
+                    <span>SYNOPSIS</span>
+                </div>
+                <p>In a world where reality and fiction collide, two authors embark on an extraordinary journey...</p>
+                <p>This groundbreaking story explores themes of creativity, brotherhood, and the power of storytelling itself. Written collaboratively, each chapter unveils new mysteries and challenges that will keep you on the edge of your seat.</p>
+                <div class="feature-tags">
+                    <span class="tag">Adventure</span>
+                    <span class="tag">Thriller</span>
+                    <span class="tag">Mystery</span>
+                    <span class="tag">Sci-Fi</span>
+                </div>
+            </div>
+            <div class="about-panel">
+                <div class="panel-header">
+                    <span class="panel-indicator"></span>
+                    <span>WHAT TO EXPECT</span>
+                </div>
+                <ul class="feature-list">
+                    <li><span class="bullet">►</span> Mind-bending plot twists</li>
+                    <li><span class="bullet">►</span> Complex character development</li>
+                    <li><span class="bullet">►</span> Immersive world-building</li>
+                    <li><span class="bullet">►</span> Fast-paced action sequences</li>
+                    <li><span class="bullet">►</span> Thought-provoking themes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chapters Preview -->
+    <section id="chapters" class="chapters">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>// CHAPTER PREVIEW</h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="chapter-grid">
+            <div class="chapter-card">
+                <div class="chapter-number">01</div>
+                <h3>The Beginning</h3>
+                <p>Where it all starts...</p>
+                <button class="read-btn">READ</button>
+            </div>
+            <div class="chapter-card">
+                <div class="chapter-number">02</div>
+                <h3>First Discovery</h3>
+                <p>Uncovering the truth...</p>
+                <button class="read-btn">READ</button>
+            </div>
+            <div class="chapter-card">
+                <div class="chapter-number">03</div>
+                <h3>The Challenge</h3>
+                <p>Facing the unknown...</p>
+                <button class="read-btn">READ</button>
+            </div>
+        </div>
     </section>
 
     <!-- Authors Section -->
     <section id="authors" class="authors">
-        <h2>About the Authors</h2>
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>// THE AUTHORS</h2>
+            <div class="header-line"></div>
+        </div>
         <div class="author-grid">
-            <div class="author">
-                <h3>Author 1 Name</h3>
-                <p>Bio goes here...</p>
+            <div class="author-card">
+                <div class="author-frame">
+                    <div class="author-img">👤</div>
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                </div>
+                <h3>AUTHOR ONE</h3>
+                <div class="author-role">CO-CREATOR</div>
+                <p>A visionary storyteller with a passion for crafting immersive narratives. Specializes in world-building and character development.</p>
+                <div class="author-stats">
+                    <span>Chapters Written: <strong>8</strong></span>
+                </div>
             </div>
-            <div class="author">
-                <h3>Author 2 Name</h3>
-                <p>Bio goes here...</p>
+            <div class="author-card">
+                <div class="author-frame">
+                    <div class="author-img">👤</div>
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                </div>
+                <h3>AUTHOR TWO</h3>
+                <div class="author-role">CO-CREATOR</div>
+                <p>Master of suspense and action sequences. Brings energy and excitement to every page with dynamic storytelling.</p>
+                <div class="author-stats">
+                    <span>Chapters Written: <strong>7</strong></span>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="contact">
-        <h2>Get in Touch</h2>
-        <form id="contact-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>// INITIATE CONTACT</h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>GET IN TOUCH</h3>
+                <p>Have questions? Want updates? Send us a message.</p>
+                <div class="info-items">
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <span>contact@ourbook.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🐦</span>
+                        <span>@OurBookOfficial</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📱</span>
+                        <span>@OurBookInsta</span>
+                    </div>
+                </div>
+            </div>
+            <form id="contact-form" class="contact-form">
+                <div class="form-group">
+                    <label>NAME</label>
+                    <input type="text" placeholder="Enter your name..." required>
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" placeholder="Enter your email..." required>
+                </div>
+                <div class="form-group">
+                    <label>MESSAGE</label>
+                    <textarea placeholder="Type your message..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <span>TRANSMIT MESSAGE</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </form>
+        </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Our Book. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 OUR BOOK. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">STORIES THAT TRANSCEND REALITY</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <span>|</span>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-decoration"></div>
     </footer>
 
     <script src="script.js"></script>
