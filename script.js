@@ -12,12 +12,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Learn More button - scroll to about section
-document.getElementById('learn-more').addEventListener('click', function () {
-    document.querySelector('#about').scrollIntoView({
-        behavior: 'smooth'
-    });
-});
 
 // Animated counter for statistics
 function animateCounter(element) {
