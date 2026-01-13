@@ -343,8 +343,8 @@ section {
 
     .section-header h2 {
         font-size: 2rem;
-        color: var(--neon-blue);
-        text-shadow: 0 0 10px var(--primary-blue);
+        color: var(--accent-red);
+        text-shadow: 0 0 10px var(--accent-red);
         letter-spacing: 2px;
     }
 
