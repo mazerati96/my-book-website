@@ -92,12 +92,12 @@ document.getElementById('contact-form').addEventListener('submit', function (e) 
 
     setTimeout(() => {
         button.querySelector('span').textContent = 'MESSAGE SENT!';
-        button.style.backgroundColor = 'var(--neon-green)';
+        button.style.backgroundColor = 'var(--neon-blue)';
 
         setTimeout(() => {
             button.querySelector('span').textContent = originalText;
             button.style.opacity = '1';
-            button.style.backgroundColor = 'var(--primary-green)';
+            button.style.backgroundColor = 'var(--primary-blue)';
             button.disabled = false;
             this.reset();
         }, 2000);
@@ -138,7 +138,7 @@ function createMatrixRain() {
         span.style.position = 'absolute';
         span.style.left = Math.random() * 100 + '%';
         span.style.top = -20 + 'px';
-        span.style.color = 'var(--primary-green)';
+        span.style.color = 'var(--primary-blue)';
         span.style.fontSize = '14px';
         span.style.opacity = Math.random() * 0.5 + 0.2;
         span.style.animation = `fall ${Math.random() * 10 + 10}s linear infinite`;
@@ -168,14 +168,14 @@ document.querySelectorAll('.read-btn').forEach(btn => {
 
         // Visual feedback
         this.textContent = 'LOADING...';
-        this.style.backgroundColor = 'var(--neon-green)';
+        this.style.backgroundColor = 'var(--neon-blue)';
         this.style.color = 'var(--bg-black)';
 
         setTimeout(() => {
             alert(`Opening ${chapterTitle}...\n\nThis feature will link to your chapter pages once they're created!`);
             this.textContent = 'READ';
             this.style.backgroundColor = 'transparent';
-            this.style.color = 'var(--primary-green)';
+            this.style.color = 'var(--primary-blue)';
         }, 1000);
     });
 });
@@ -223,6 +223,6 @@ document.querySelectorAll('.primary-btn, .secondary-btn, .submit-btn, .read-btn,
 });
 
 // Console message for developers
-console.log('%c⚠ SYSTEM ACCESS DETECTED ⚠', 'color: #00ff41; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #00ff41;');
-console.log('%cWelcome to the Book Website. If you\'re seeing this, you might be one of us.', 'color: #00cc33; font-size: 14px;');
-console.log('%cBuilt with: HTML, CSS, JavaScript', 'color: #00ff41; font-size: 12px;');
+console.log('%c⚠ SYSTEM ACCESS DETECTED ⚠', 'color: #00d4ff; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #00d4ff;');
+console.log('%cWelcome to the Book Website. If you\'re seeing this, you might be one of us.', 'color: #0099cc; font-size: 14px;');
+console.log('%cBuilt with: HTML, CSS, JavaScript', 'color: #00d4ff; font-size: 12px;');
