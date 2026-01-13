@@ -105,7 +105,7 @@ nav ul {
 }
 
 .nav-link {
-    color: var(--primary-blue);
+    color: var(--accent-red);
     text-decoration: none;
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
@@ -122,9 +122,9 @@ nav ul {
     }
 
     .nav-link:hover {
-        border: 1px solid var(--primary-blue);
+        border: 1px solid var(--accent-red);
         padding-left: 1.5rem;
-        box-shadow: 0 0 10px var(--primary-blue);
+        box-shadow: 0 0 10px var(--accent-red);
     }
 
         .nav-link:hover::before {
