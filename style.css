@@ -6,14 +6,14 @@
 }
 
 :root {
-    --primary-blue: #00ff41;
-    --dark-blue: #00cc33;
-    --neon-blue: #39ff14;
+    --primary-blue: #00d4ff;
+    --dark-blue: #0099cc;
+    --neon-blue: #00e5ff;
     --accent-red: #ff0033;
     --bg-black: #0a0a0a;
     --bg-dark: #111111;
     --bg-card: #1a1a1a;
-    --border-blue: #00ff4144;
+    --border-blue: #00d4ff44;
 }
 
 body {
@@ -31,7 +31,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, #0a0a0a 0%, #001a00 100%);
+    background: linear-gradient(180deg, #0a0a0a 0%, #001a1a 100%);
     z-index: -1;
     opacity: 0.3;
 }
@@ -155,7 +155,7 @@ nav ul {
     text-align: center;
     padding: 2rem;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, rgba(0, 255, 65, 0.1) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
 }
 
 .scan-line {
@@ -301,7 +301,7 @@ nav ul {
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border: 1px solid var(--border-blue);
-    background-color: rgba(0, 255, 65, 0.05);
+    background-color: rgba(0, 212, 255, 0.05);
     color: var(--dark-blue);
     font-size: 0.9rem;
 }
@@ -423,7 +423,7 @@ section {
 .progress-bar {
     width: 100%;
     height: 4px;
-    background-color: rgba(0, 255, 65, 0.1);
+    background-color: rgba(0, 212, 255, 0.1);
     border-radius: 2px;
     overflow: hidden;
 }
@@ -513,7 +513,7 @@ section {
 
 .tag {
     padding: 0.3rem 1rem;
-    background-color: rgba(0, 255, 65, 0.1);
+    background-color: rgba(0, 212, 255, 0.1);
     border: 1px solid var(--border-blue);
     color: var(--primary-blue);
     font-size: 0.9rem;
@@ -570,7 +570,7 @@ section {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+        background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
         transform: translateX(-100%);
         transition: transform 0.5s;
     }
