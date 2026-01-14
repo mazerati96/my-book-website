@@ -60,7 +60,7 @@ body {
 
 /* Header and Navigation */
 header {
-    background-color: rgba(10, 10, 10, 0.95);
+    background-color: white;
     border-bottom: 2px solid var(--primary-white);
     padding: 1rem 0;
     position: sticky;
