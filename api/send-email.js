@@ -1,4 +1,4 @@
-﻿import { Resend } from 'resend';
+import { Resend } from 'resend';
 
 export default async function handler(req, res) {
     // Add CORS headers
