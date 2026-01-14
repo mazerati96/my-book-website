@@ -1,0 +1,295 @@
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
+
+.scan-line {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+    animation: scan 4s linear infinite;
+    box-shadow: 0 0 10px var(--accent-red);
+}
+
+.hero-content {
+    z-index: 1;
+    max-width: 1200px;
+}
+
+.book-label {
+    color: var(--accent-red);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px var(--accent-red);
+}
+
+.glitch-wrapper {
+    margin-bottom: 2rem;
+}
+
+.glitch {
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--primary-white);
+    text-shadow: 0 0 10px var(--primary-white), 0 0 20px var(--primary-white), 0 0 30px var(--primary-white);
+    position: relative;
+    animation: glitch-text 3s infinite;
+}
+
+.typing-text {
+    font-size: 1.5rem;
+    color: var(--dark-white);
+    margin-bottom: 3rem;
+}
+
+.book-tagline-hero {
+    font-size: 1.3rem;
+    color: var(--accent-red);
+    font-style: italic;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px var(--accent-red);
+}
+
+.coming-soon-badge {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border: 2px solid var(--accent-red);
+    background-color: rgba(255, 0, 51, 0.1);
+    animation: pulse-border 2s ease-in-out infinite;
+}
+
+.badge-text {
+    color: var(--accent-red);
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.primary-btn,
+.secondary-btn,
+.submit-btn {
+    position: relative;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    border: 2px solid var(--accent-red);
+    background-color: transparent;
+    color: var(--primary-white);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.primary-btn,
+.submit-btn {
+    background-color: var(--accent-red);
+    color: white;
+    box-shadow: 0 0 20px var(--accent-red);
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px var(--accent-red);
+        transform: translateY(-2px);
+    }
+
+.secondary-btn:hover {
+    background-color: var(--accent-red);
+    color: white;
+    box-shadow: 0 0 20px var(--accent-red);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transition: left 0.5s;
+}
+
+.primary-btn:hover .btn-glow,
+.submit-btn:hover .btn-glow {
+    left: 100%;
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    position: relative;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+    .section-header h2 {
+        font-size: 2rem;
+        color: var(--accent-red);
+        text-shadow: 0 0 10px var(--accent-red);
+        letter-spacing: 2px;
+        white-space: nowrap;
+    }
+
+.header-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+    max-width: 300px;
+}
+
+/* ============================================
+   INTRO SECTIONS
+   ============================================ */
+.intro-section,
+.authors-intro {
+    background-color: var(--bg-dark);
+    border-top: 2px solid var(--accent-red);
+    border-bottom: 2px solid var(--accent-red);
+}
+
+.intro-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+    .intro-panel,
+    .intro-content p {
+        color: var(--dark-white);
+        font-size: 1.1rem;
+        line-height: 1.9;
+        margin-bottom: 1.5rem;
+    }
+
+    .intro-content strong {
+        color: var(--primary-white);
+    }
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.cta-section {
+    text-align: center;
+    background-color: var(--bg-dark);
+    border-top: 2px solid var(--accent-red);
+    border-bottom: 2px solid var(--accent-red);
+}
+
+.cta-content h2 {
+    color: var(--neon-white);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px var(--primary-white);
+}
+
+.cta-content p {
+    color: var(--dark-white);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.cta-content em {
+    color: var(--accent-red);
+    font-size: 1.1rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    background-color: var(--bg-black);
+    border-top: 2px solid var(--accent-red);
+    padding: 3rem 2rem 2rem;
+    position: relative;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-text p {
+    color: var(--dark-white);
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.footer-tagline {
+    color: var(--primary-white);
+    font-style: italic;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+    .footer-links a {
+        color: var(--primary-white);
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+        .footer-links a:hover {
+            color: var(--accent-red);
+            text-shadow: 0 0 10px var(--accent-red);
+        }
+
+    .footer-links span {
+        color: var(--dark-white);
+    }
+
+.footer-decoration {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+    margin-top: 2rem;
+    animation: glow-pulse 2s ease-in-out infinite;
+}

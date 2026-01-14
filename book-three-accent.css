@@ -1,0 +1,242 @@
+/* ============================================
+   BOOK THREE ACCENT COLOR OVERRIDES (YELLOW/GOLD)
+   ============================================ */
+
+:root {
+    --accent-red: #ffd700;
+}
+
+/* Override all red accent colors with gold */
+.hamburger {
+    border-color: #ffd700;
+}
+
+    .hamburger:hover {
+        box-shadow: 0 0 20px #ffd700;
+    }
+
+    .hamburger span {
+        background-color: #ffd700;
+    }
+
+.sidebar {
+    border-left-color: #ffd700;
+}
+
+.logo-bracket {
+    color: #ffd700;
+}
+
+.nav-link::before {
+    color: #ffd700;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    border-color: #ffd700;
+    box-shadow: 0 0 15px #ffd700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+.nav-link.cta-nav {
+    background-color: #ffd700;
+    border-color: #ffd700;
+    color: var(--bg-black);
+}
+
+    .nav-link.cta-nav:hover {
+        box-shadow: 0 0 25px #ffd700;
+    }
+
+.status-indicator {
+    background-color: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+.scan-line {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    box-shadow: 0 0 10px #ffd700;
+}
+
+.book-label {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.book-tagline-hero {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.coming-soon-badge {
+    border-color: #ffd700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+.badge-text {
+    color: #ffd700;
+}
+
+.primary-btn,
+.submit-btn {
+    border-color: #ffd700;
+    background-color: #ffd700;
+    color: var(--bg-black);
+    box-shadow: 0 0 20px #ffd700;
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px #ffd700;
+    }
+
+.secondary-btn {
+    border-color: #ffd700;
+}
+
+    .secondary-btn:hover {
+        background-color: #ffd700;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #ffd700;
+    }
+
+.section-header h2 {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.header-line {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}
+
+.intro-section,
+.authors-intro {
+    border-top-color: #ffd700;
+    border-bottom-color: #ffd700;
+}
+
+.book-tagline {
+    color: #ffd700;
+}
+
+.card-btn {
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+    .card-btn:hover {
+        background-color: #ffd700;
+        color: var(--bg-black);
+        box-shadow: 0 0 15px #ffd700;
+    }
+
+.theme-card:hover {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.cta-section {
+    border-top-color: #ffd700;
+    border-bottom-color: #ffd700;
+}
+
+.cta-content em {
+    color: #ffd700;
+}
+
+footer {
+    border-top-color: #ffd700;
+}
+
+.footer-links a:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.footer-decoration {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}
+
+.book-epigraph {
+    border-left-color: #ffd700;
+}
+
+.trilogy-btn {
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+    .trilogy-btn:hover {
+        background-color: #ffd700;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #ffd700;
+    }
+
+.theme-tag:hover {
+    background-color: #ffd700;
+    border-color: #ffd700;
+    color: var(--bg-black);
+}
+
+.author-role {
+    color: #ffd700;
+}
+
+.stat-row .stat-value {
+    color: #ffd700;
+}
+
+.corner {
+    border-color: #ffd700;
+}
+
+.philosophy-section,
+.inspiration-section {
+    border-top-color: #ffd700;
+}
+
+.philosophy-panel h3 {
+    color: #ffd700;
+}
+
+.contact-note {
+    background-color: rgba(255, 215, 0, 0.05);
+    border-left-color: #ffd700;
+}
+
+    .contact-note strong {
+        color: #ffd700;
+    }
+
+.contact-form input:focus,
+.contact-form textarea:focus,
+.contact-form select:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.info-item:hover {
+    border-color: #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.info-label {
+    color: #ffd700;
+}
+
+.faq-section {
+    border-top-color: #ffd700;
+}
+
+.faq-item:hover {
+    border-color: #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.coming-soon-text {
+    color: #ffd700 !important;
+}
+
+.page-transition::before {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}

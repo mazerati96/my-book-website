@@ -1,0 +1,410 @@
+/* ============================================
+   REUSABLE COMPONENTS
+   ============================================ */
+
+/* Book Preview Cards */
+.book-preview {
+    background-color: var(--bg-dark);
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.preview-card {
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-white);
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+}
+
+    .preview-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--accent-red);
+    }
+
+    .preview-card.book-one-accent::before {
+        background: #00ff88;
+    }
+
+    .preview-card.book-two-accent::before {
+        background: #00d4ff;
+    }
+
+    .preview-card.book-three-accent::before {
+        background: #ffd700;
+    }
+
+    .preview-card:hover {
+        border-color: var(--primary-white);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        transform: translateY(-10px);
+    }
+
+.book-number {
+    font-size: 3rem;
+    color: var(--accent-red);
+    opacity: 0.2;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-weight: bold;
+}
+
+.preview-card h3 {
+    color: var(--neon-white);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px var(--primary-white);
+}
+
+.book-tagline {
+    color: var(--accent-red);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.preview-card p {
+    color: var(--dark-white);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.card-btn {
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    background-color: transparent;
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s;
+}
+
+    .card-btn:hover {
+        background-color: var(--accent-red);
+        color: white;
+        box-shadow: 0 0 15px var(--accent-red);
+    }
+
+/* Theme Cards */
+.themes,
+.themes-section {
+    background-color: var(--bg-dark);
+}
+
+.themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.theme-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-white);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+    .theme-card:hover {
+        border-color: var(--accent-red);
+        box-shadow: 0 0 20px rgba(255, 0, 51, 0.3);
+        transform: translateY(-5px);
+    }
+
+.theme-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.theme-card h3 {
+    color: var(--neon-white);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.theme-card p {
+    color: var(--dark-white);
+    line-height: 1.7;
+}
+
+/* Trilogy Cards */
+.trilogy-books {
+    background-color: var(--bg-dark);
+    padding: 5rem 2rem;
+}
+
+.trilogy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.trilogy-card {
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-white);
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.4s;
+}
+
+    .trilogy-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15);
+    }
+
+.book-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--accent-red);
+}
+
+    .book-accent-bar.book-one-accent {
+        background: #00ff88;
+    }
+
+    .book-accent-bar.book-two-accent {
+        background: #00d4ff;
+    }
+
+    .book-accent-bar.book-three-accent {
+        background: #ffd700;
+    }
+
+.trilogy-card .book-number {
+    color: var(--accent-red);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+.trilogy-card h2 {
+    color: var(--neon-white);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px var(--primary-white);
+}
+
+.trilogy-card .book-tagline {
+    color: var(--accent-red);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.book-epigraph {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 3px solid var(--accent-red);
+    position: relative;
+}
+
+    .book-epigraph .quote-mark {
+        font-size: 3rem;
+        color: var(--accent-red);
+        opacity: 0.3;
+        font-family: Georgia, serif;
+        line-height: 0;
+    }
+
+    .book-epigraph p {
+        color: var(--primary-white);
+        font-style: italic;
+        margin: 1rem 0;
+        line-height: 1.7;
+    }
+
+.book-description {
+    color: var(--dark-white);
+    line-height: 1.8;
+    margin: 1.5rem 0;
+}
+
+    .book-description p {
+        margin-bottom: 1rem;
+    }
+
+.coming-soon-text {
+    color: var(--accent-red) !important;
+    font-style: italic;
+    margin-top: 1.5rem !important;
+}
+
+.book-themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.theme-tag {
+    padding: 0.4rem 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-white);
+    color: var(--primary-white);
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+    .theme-tag:hover {
+        background-color: var(--accent-red);
+        border-color: var(--accent-red);
+        color: white;
+    }
+
+.trilogy-btn {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    margin-top: 1rem;
+    background-color: transparent;
+    border: 2px solid var(--accent-red);
+    color: var(--accent-red);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+    .trilogy-btn:hover {
+        background-color: var(--accent-red);
+        color: white;
+        box-shadow: 0 0 20px var(--accent-red);
+    }
+
+/* Author Cards */
+.author-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.author-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-white);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+    .author-card:hover {
+        border-color: var(--primary-white);
+        box-shadow: 0 0 30px var(--border-white);
+    }
+
+.author-frame {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 2rem;
+}
+
+.author-img {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-dark);
+    border: 2px solid var(--primary-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--accent-red);
+}
+
+    .corner.tl {
+        top: -5px;
+        left: -5px;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .corner.tr {
+        top: -5px;
+        right: -5px;
+        border-left: none;
+        border-bottom: none;
+    }
+
+    .corner.bl {
+        bottom: -5px;
+        left: -5px;
+        border-right: none;
+        border-top: none;
+    }
+
+    .corner.br {
+        bottom: -5px;
+        right: -5px;
+        border-left: none;
+        border-top: none;
+    }
+
+.author-card h3 {
+    color: var(--neon-white);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 5px var(--primary-white);
+}
+
+.author-role {
+    color: var(--accent-red);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+}
+
+.author-card p {
+    color: var(--dark-white);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.author-stats {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-white);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+    .stat-row .stat-label {
+        color: var(--dark-white);
+    }
+
+    .stat-row .stat-value {
+        color: var(--accent-red);
+        font-weight: bold;
+    }

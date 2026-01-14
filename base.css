@@ -1,0 +1,96 @@
+/* ============================================
+   BASE STYLES & RESET
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-white: #ffffff;
+    --dark-white: #cccccc;
+    --neon-white: #ffffff;
+    --accent-red: #ff0033;
+    --bg-black: #0a0a0a;
+    --bg-dark: #111111;
+    --bg-card: #1a1a1a;
+    --border-white: rgba(255, 255, 255, 0.3);
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    color: var(--primary-white);
+    background-color: var(--bg-black);
+    overflow-x: hidden;
+}
+
+/* ============================================
+   ANIMATED BACKGROUND
+   ============================================ */
+.matrix-style-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 100%);
+    z-index: -1;
+    opacity: 0.8;
+    overflow: visible;
+    pointer-events: none;
+}
+
+    .matrix-style-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary-white) 2px, var(--primary-white) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, var(--primary-white) 2px, var(--primary-white) 4px);
+        opacity: 0.03;
+        animation: matrix-scroll 20s linear infinite;
+    }
+
+/* Ash particles - controlled by JS */
+.ash-particle {
+    position: fixed !important;
+    pointer-events: none;
+    z-index: 999 !important;
+    background: white;
+    border-radius: 50%;
+}
+
+/* ============================================
+   PAGE TRANSITION OVERLAY
+   ============================================ */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-black);
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+    .page-transition.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .page-transition::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+        animation: scan-transition 0.5s ease-out;
+    }

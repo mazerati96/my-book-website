@@ -1,0 +1,242 @@
+/* ============================================
+   BOOK TWO ACCENT COLOR OVERRIDES (LIGHT BLUE)
+   ============================================ */
+
+:root {
+    --accent-red: #00d4ff;
+}
+
+/* Override all red accent colors with light blue */
+.hamburger {
+    border-color: #00d4ff;
+}
+
+    .hamburger:hover {
+        box-shadow: 0 0 20px #00d4ff;
+    }
+
+    .hamburger span {
+        background-color: #00d4ff;
+    }
+
+.sidebar {
+    border-left-color: #00d4ff;
+}
+
+.logo-bracket {
+    color: #00d4ff;
+}
+
+.nav-link::before {
+    color: #00d4ff;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px #00d4ff;
+    background-color: rgba(0, 212, 255, 0.1);
+}
+
+.nav-link.cta-nav {
+    background-color: #00d4ff;
+    border-color: #00d4ff;
+    color: var(--bg-black);
+}
+
+    .nav-link.cta-nav:hover {
+        box-shadow: 0 0 25px #00d4ff;
+    }
+
+.status-indicator {
+    background-color: #00d4ff;
+    box-shadow: 0 0 10px #00d4ff;
+}
+
+.scan-line {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    box-shadow: 0 0 10px #00d4ff;
+}
+
+.book-label {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+.book-tagline-hero {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+.coming-soon-badge {
+    border-color: #00d4ff;
+    background-color: rgba(0, 212, 255, 0.1);
+}
+
+.badge-text {
+    color: #00d4ff;
+}
+
+.primary-btn,
+.submit-btn {
+    border-color: #00d4ff;
+    background-color: #00d4ff;
+    color: var(--bg-black);
+    box-shadow: 0 0 20px #00d4ff;
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px #00d4ff;
+    }
+
+.secondary-btn {
+    border-color: #00d4ff;
+}
+
+    .secondary-btn:hover {
+        background-color: #00d4ff;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #00d4ff;
+    }
+
+.section-header h2 {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+.header-line {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+}
+
+.intro-section,
+.authors-intro {
+    border-top-color: #00d4ff;
+    border-bottom-color: #00d4ff;
+}
+
+.book-tagline {
+    color: #00d4ff;
+}
+
+.card-btn {
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+    .card-btn:hover {
+        background-color: #00d4ff;
+        color: var(--bg-black);
+        box-shadow: 0 0 15px #00d4ff;
+    }
+
+.theme-card:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.cta-section {
+    border-top-color: #00d4ff;
+    border-bottom-color: #00d4ff;
+}
+
+.cta-content em {
+    color: #00d4ff;
+}
+
+footer {
+    border-top-color: #00d4ff;
+}
+
+.footer-links a:hover {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+.footer-decoration {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+}
+
+.book-epigraph {
+    border-left-color: #00d4ff;
+}
+
+.trilogy-btn {
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+    .trilogy-btn:hover {
+        background-color: #00d4ff;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #00d4ff;
+    }
+
+.theme-tag:hover {
+    background-color: #00d4ff;
+    border-color: #00d4ff;
+    color: var(--bg-black);
+}
+
+.author-role {
+    color: #00d4ff;
+}
+
+.stat-row .stat-value {
+    color: #00d4ff;
+}
+
+.corner {
+    border-color: #00d4ff;
+}
+
+.philosophy-section,
+.inspiration-section {
+    border-top-color: #00d4ff;
+}
+
+.philosophy-panel h3 {
+    color: #00d4ff;
+}
+
+.contact-note {
+    background-color: rgba(0, 212, 255, 0.05);
+    border-left-color: #00d4ff;
+}
+
+    .contact-note strong {
+        color: #00d4ff;
+    }
+
+.contact-form input:focus,
+.contact-form textarea:focus,
+.contact-form select:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.info-item:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.info-label {
+    color: #00d4ff;
+}
+
+.faq-section {
+    border-top-color: #00d4ff;
+}
+
+.faq-item:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.coming-soon-text {
+    color: #00d4ff !important;
+}
+
+.page-transition::before {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+}

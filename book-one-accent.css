@@ -1,0 +1,242 @@
+/* ============================================
+   BOOK ONE ACCENT COLOR OVERRIDES (GREEN)
+   ============================================ */
+
+:root {
+    --accent-red: #00ff88;
+}
+
+/* Override all red accent colors with green */
+.hamburger {
+    border-color: #00ff88;
+}
+
+    .hamburger:hover {
+        box-shadow: 0 0 20px #00ff88;
+    }
+
+    .hamburger span {
+        background-color: #00ff88;
+    }
+
+.sidebar {
+    border-left-color: #00ff88;
+}
+
+.logo-bracket {
+    color: #00ff88;
+}
+
+.nav-link::before {
+    color: #00ff88;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px #00ff88;
+    background-color: rgba(0, 255, 136, 0.1);
+}
+
+.nav-link.cta-nav {
+    background-color: #00ff88;
+    border-color: #00ff88;
+    color: var(--bg-black);
+}
+
+    .nav-link.cta-nav:hover {
+        box-shadow: 0 0 25px #00ff88;
+    }
+
+.status-indicator {
+    background-color: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+.scan-line {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+    box-shadow: 0 0 10px #00ff88;
+}
+
+.book-label {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.book-tagline-hero {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.coming-soon-badge {
+    border-color: #00ff88;
+    background-color: rgba(0, 255, 136, 0.1);
+}
+
+.badge-text {
+    color: #00ff88;
+}
+
+.primary-btn,
+.submit-btn {
+    border-color: #00ff88;
+    background-color: #00ff88;
+    color: var(--bg-black);
+    box-shadow: 0 0 20px #00ff88;
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px #00ff88;
+    }
+
+.secondary-btn {
+    border-color: #00ff88;
+}
+
+    .secondary-btn:hover {
+        background-color: #00ff88;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #00ff88;
+    }
+
+.section-header h2 {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.header-line {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+}
+
+.intro-section,
+.authors-intro {
+    border-top-color: #00ff88;
+    border-bottom-color: #00ff88;
+}
+
+.book-tagline {
+    color: #00ff88;
+}
+
+.card-btn {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+    .card-btn:hover {
+        background-color: #00ff88;
+        color: var(--bg-black);
+        box-shadow: 0 0 15px #00ff88;
+    }
+
+.theme-card:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.cta-section {
+    border-top-color: #00ff88;
+    border-bottom-color: #00ff88;
+}
+
+.cta-content em {
+    color: #00ff88;
+}
+
+footer {
+    border-top-color: #00ff88;
+}
+
+.footer-links a:hover {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.footer-decoration {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+}
+
+.book-epigraph {
+    border-left-color: #00ff88;
+}
+
+.trilogy-btn {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+    .trilogy-btn:hover {
+        background-color: #00ff88;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #00ff88;
+    }
+
+.theme-tag:hover {
+    background-color: #00ff88;
+    border-color: #00ff88;
+    color: var(--bg-black);
+}
+
+.author-role {
+    color: #00ff88;
+}
+
+.stat-row .stat-value {
+    color: #00ff88;
+}
+
+.corner {
+    border-color: #00ff88;
+}
+
+.philosophy-section,
+.inspiration-section {
+    border-top-color: #00ff88;
+}
+
+.philosophy-panel h3 {
+    color: #00ff88;
+}
+
+.contact-note {
+    background-color: rgba(0, 255, 136, 0.05);
+    border-left-color: #00ff88;
+}
+
+    .contact-note strong {
+        color: #00ff88;
+    }
+
+.contact-form input:focus,
+.contact-form textarea:focus,
+.contact-form select:focus {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.info-item:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.info-label {
+    color: #00ff88;
+}
+
+.faq-section {
+    border-top-color: #00ff88;
+}
+
+.faq-item:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.coming-soon-text {
+    color: #00ff88 !important;
+}
+
+.page-transition::before {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+}
