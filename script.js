@@ -122,7 +122,6 @@ document.querySelectorAll('section').forEach(section => {
     fadeObserver.observe(section);
 });
 
-
 // Falling ash effect in background
 function createFallingAsh() {
     const matrixBg = document.querySelector('.matrix-style-bg');
