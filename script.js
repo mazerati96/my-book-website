@@ -1,3 +1,21 @@
+//wind function for ash effect
+
+let windStrength = 0; // current wind force in vw
+let targetWind = 0;   // where the wind is heading
+
+setInterval(() => {
+    // New gust every 4–8 seconds
+    targetWind = (Math.random() * 40 - 20); // -20vw to +20vw
+}, Math.random() * 4000 + 4000);
+
+setInterval(() => {
+    // Smoothly ease toward the target wind
+    windStrength += (targetWind - windStrength) * 0.02;
+}, 100);
+
+
+
+
 // ============================================
 // PAGE TRANSITION EFFECT
 // ============================================
@@ -107,8 +125,8 @@ function initializeFallingAsh() {
         // Random properties
         const size = Math.random() * 2.5 + 1.5;
         const startX = Math.random() * 100;
-        const endX = startX + (Math.random() * 40 - 20);
-        const duration = Math.random() * 12 + 10;
+        const drift = Math.random() * 20 - 10; // gentle personal drift
+        const duration = Math.random() * 15 + 18;
         const delay = Math.random() * 8;
         const opacity = Math.random() * 0.4 + 0.5;
 
@@ -142,7 +160,7 @@ function initializeFallingAsh() {
                     opacity: ${opacity * 0.6};
                 }
                 100% {
-                    transform: translate(${endX - startX}vw, calc(100vh + 20px));
+                    transform: translate(calc(${drift}vw + ${windStrength}vw), calc(100vh + 20px));
                     opacity: 0;
                 }
             }
