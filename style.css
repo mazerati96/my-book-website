@@ -155,7 +155,7 @@ nav ul {
     text-align: center;
     padding: 2rem;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, var(--bg-black) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, var(--bg-blue) 0%, transparent 70%);
 }
 
 .scan-line {
