@@ -86,12 +86,12 @@ document.getElementById('contact-form').addEventListener('submit', function (e) 
 
     setTimeout(() => {
         button.querySelector('span').textContent = 'MESSAGE SENT!';
-        button.style.backgroundColor = 'var(--neon-blue)';
+        button.style.backgroundColor = 'var(--neon-white)';
 
         setTimeout(() => {
             button.querySelector('span').textContent = originalText;
             button.style.opacity = '1';
-            button.style.backgroundColor = 'var(--primary-blue)';
+            button.style.backgroundColor = 'var(--primary-white)';
             button.disabled = false;
             this.reset();
         }, 2000);
@@ -132,7 +132,7 @@ function createMatrixRain() {
         span.style.position = 'absolute';
         span.style.left = Math.random() * 100 + '%';
         span.style.top = -20 + 'px';
-        span.style.color = 'var(--primary-blue)';
+        span.style.color = 'var(--primary-white)';
         span.style.fontSize = '14px';
         span.style.opacity = Math.random() * 0.5 + 0.2;
         span.style.animation = `fall ${Math.random() * 10 + 10}s linear infinite`;
@@ -162,14 +162,14 @@ document.querySelectorAll('.read-btn').forEach(btn => {
 
         // Visual feedback
         this.textContent = 'LOADING...';
-        this.style.backgroundColor = 'var(--neon-blue)';
+        this.style.backgroundColor = 'var(--neon-white)';
         this.style.color = 'var(--bg-black)';
 
         setTimeout(() => {
             alert(`Opening ${chapterTitle}...\n\nThis feature will link to your chapter pages once they're created!`);
             this.textContent = 'READ';
             this.style.backgroundColor = 'transparent';
-            this.style.color = 'var(--primary-blue)';
+            this.style.color = 'var(--primary-white)';
         }, 1000);
     });
 });

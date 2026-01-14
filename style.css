@@ -6,9 +6,9 @@
 }
 
 :root {
-    --primary-blue: #00d4ff;
-    --dark-blue: #0099cc;
-    --neon-blue: #00e5ff;
+    --primary-white: #00d4ff;
+    --dark-white: #0099cc;
+    --neon-white: #00e5ff;
     --accent-red: #ff0033;
     --bg-black: #0a0a0a;
     --bg-dark: #111111;
@@ -19,7 +19,7 @@
 body {
     font-family: 'Courier New', monospace;
     line-height: 1.6;
-    color: var(--primary-blue);
+    color: var(--primary-white);
     background-color: var(--bg-black);
     overflow-x: hidden;
 }
@@ -43,7 +43,7 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary-blue) 2px, var(--primary-blue) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, var(--primary-blue) 2px, var(--primary-blue) 4px);
+        background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary-white) 2px, var(--primary-white) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, var(--primary-white) 2px, var(--primary-white) 4px);
         opacity: 0.03;
         animation: matrix-scroll 20s linear infinite;
     }
@@ -61,7 +61,7 @@ body {
 /* Header and Navigation */
 header {
     background-color: rgba(10, 10, 10, 0.95);
-    border-bottom: 2px solid var(--primary-blue);
+    border-bottom: 2px solid var(--primary-white);
     padding: 1rem 0;
     position: sticky;
     top: 0;
@@ -93,8 +93,8 @@ nav {
 
 nav h1 {
     font-size: 1.5rem;
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px var(--primary-blue);
+    color: var(--neon-white);
+    text-shadow: 0 0 10px var(--primary-white);
     letter-spacing: 3px;
 }
 
@@ -155,16 +155,16 @@ nav ul {
     text-align: center;
     padding: 2rem;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, white 0%, transparent 70%);
 }
 
 .scan-line {
     position: absolute;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--neon-white), transparent);
     animation: scan 4s linear infinite;
-    box-shadow: 0 0 10px var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-white);
 }
 
 @keyframes scan {
@@ -188,8 +188,8 @@ nav ul {
 .glitch {
     font-size: 4rem;
     font-weight: bold;
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--primary-blue), 0 0 30px var(--primary-blue);
+    color: var(--neon-white);
+    text-shadow: 0 0 10px var(--primary-white), 0 0 20px var(--primary-white), 0 0 30px var(--primary-white);
     position: relative;
     animation: glitch-text 3s infinite;
 }
@@ -218,9 +218,9 @@ nav ul {
 
 .typing-text {
     font-size: 1.5rem;
-    color: var(--dark-blue);
+    color: var(--dark-white);
     margin-bottom: 3rem;
-    border-right: 2px solid var(--primary-blue);
+    border-right: 2px solid var(--primary-white);
     animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
     overflow: hidden;
     white-space: nowrap;
@@ -256,29 +256,29 @@ nav ul {
     font-size: 1rem;
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    border: 2px solid var(--primary-blue);
+    border: 2px solid var(--primary-white);
     background-color: transparent;
-    color: var(--primary-blue);
+    color: var(--primary-white);
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s;
 }
 
 .primary-btn {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-white);
     color: var(--bg-black);
-    box-shadow: 0 0 20px var(--primary-blue);
+    box-shadow: 0 0 20px var(--primary-white);
 }
 
     .primary-btn:hover, .submit-btn:hover {
-        box-shadow: 0 0 30px var(--neon-blue);
+        box-shadow: 0 0 30px var(--neon-white);
         transform: translateY(-2px);
     }
 
 .secondary-btn:hover {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-white);
     color: var(--bg-black);
-    box-shadow: 0 0 20px var(--primary-blue);
+    box-shadow: 0 0 20px var(--primary-white);
 }
 
 .btn-glow {
@@ -301,18 +301,18 @@ nav ul {
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border: 1px solid var(--border-blue);
-    background-color: rgba(0, 212, 255, 0.05);
-    color: var(--dark-blue);
+    background-color: white;
+    color: var(--dark-white);
     font-size: 0.9rem;
 }
 
 .status-indicator {
     width: 8px;
     height: 8px;
-    background-color: var(--neon-blue);
+    background-color: var(--neon-white);
     border-radius: 50%;
     animation: pulse 1.5s ease-in-out infinite;
-    box-shadow: 0 0 10px var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-white);
 }
 
 @keyframes pulse {
@@ -351,15 +351,15 @@ section {
 .header-line {
     flex: 1;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--primary-white), transparent);
     max-width: 200px;
 }
 
 /* Stats Section */
 .stats {
     background-color: var(--bg-dark);
-    border-top: 2px solid var(--primary-blue);
-    border-bottom: 2px solid var(--primary-blue);
+    border-top: 2px solid var(--primary-white);
+    border-bottom: 2px solid var(--primary-white);
 }
 
 .stats-grid {
@@ -385,7 +385,7 @@ section {
         left: -100%;
         width: 100%;
         height: 2px;
-        background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+        background: linear-gradient(90deg, transparent, var(--neon-white), transparent);
         transition: left 0.5s;
     }
 
@@ -394,7 +394,7 @@ section {
     }
 
     .stat-card:hover {
-        border-color: var(--primary-blue);
+        border-color: var(--primary-white);
         box-shadow: 0 0 20px var(--border-blue);
         transform: translateY(-5px);
     }
@@ -406,14 +406,14 @@ section {
 
 .stat-number {
     font-size: 3rem;
-    color: var(--neon-blue);
+    color: var(--neon-white);
     font-weight: bold;
-    text-shadow: 0 0 10px var(--primary-blue);
+    text-shadow: 0 0 10px var(--primary-white);
     margin-bottom: 0.5rem;
 }
 
 .stat-label {
-    color: var(--dark-blue);
+    color: var(--dark-white);
     font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -423,15 +423,15 @@ section {
 .progress-bar {
     width: 100%;
     height: 4px;
-    background-color: rgba(0, 212, 255, 0.1);
+    background-color: white;
     border-radius: 2px;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-blue), var(--neon-blue));
-    box-shadow: 0 0 10px var(--primary-blue);
+    background: linear-gradient(90deg, var(--primary-white), var(--neon-white));
+    box-shadow: 0 0 10px var(--primary-white);
     animation: progress-glow 2s ease-in-out infinite;
 }
 
@@ -464,7 +464,7 @@ section {
         position: absolute;
         width: 20px;
         height: 20px;
-        border: 2px solid var(--primary-blue);
+        border: 2px solid var(--primary-white);
     }
 
     .about-panel::before {
@@ -487,7 +487,7 @@ section {
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
-    color: var(--neon-blue);
+    color: var(--neon-white);
     letter-spacing: 2px;
 }
 
@@ -499,7 +499,7 @@ section {
 }
 
 .about-panel p {
-    color: var(--dark-blue);
+    color: var(--dark-white);
     margin-bottom: 1rem;
     line-height: 1.8;
 }
@@ -513,17 +513,17 @@ section {
 
 .tag {
     padding: 0.3rem 1rem;
-    background-color: rgba(0, 212, 255, 0.1);
+    background-color: white;
     border: 1px solid var(--border-blue);
-    color: var(--primary-blue);
+    color: var(--primary-white);
     font-size: 0.9rem;
     transition: all 0.3s;
 }
 
     .tag:hover {
-        background-color: var(--primary-blue);
+        background-color: var(--primary-white);
         color: var(--bg-black);
-        box-shadow: 0 0 10px var(--primary-blue);
+        box-shadow: 0 0 10px var(--primary-white);
     }
 
 .feature-list {
@@ -531,7 +531,7 @@ section {
 }
 
     .feature-list li {
-        color: var(--dark-blue);
+        color: var(--dark-white);
         margin-bottom: 0.8rem;
         display: flex;
         align-items: center;
@@ -570,7 +570,7 @@ section {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+        background: linear-gradient(45deg, transparent, white, transparent);
         transform: translateX(-100%);
         transition: transform 0.5s;
     }
@@ -580,7 +580,7 @@ section {
     }
 
     .chapter-card:hover {
-        border-color: var(--primary-blue);
+        border-color: var(--primary-white);
         box-shadow: 0 0 30px var(--border-blue);
         transform: translateY(-10px);
     }
@@ -596,31 +596,31 @@ section {
 }
 
 .chapter-card h3 {
-    color: var(--neon-blue);
+    color: var(--neon-white);
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    text-shadow: 0 0 5px var(--primary-blue);
+    text-shadow: 0 0 5px var(--primary-white);
 }
 
 .chapter-card p {
-    color: var(--dark-blue);
+    color: var(--dark-white);
     margin-bottom: 1.5rem;
 }
 
 .read-btn {
     padding: 0.7rem 1.5rem;
     background-color: transparent;
-    border: 1px solid var(--primary-blue);
-    color: var(--primary-blue);
+    border: 1px solid var(--primary-white);
+    color: var(--primary-white);
     font-family: 'Courier New', monospace;
     cursor: pointer;
     transition: all 0.3s;
 }
 
     .read-btn:hover {
-        background-color: var(--primary-blue);
+        background-color: var(--primary-white);
         color: var(--bg-black);
-        box-shadow: 0 0 15px var(--primary-blue);
+        box-shadow: 0 0 15px var(--primary-white);
     }
 
 /* Authors Section */
@@ -639,7 +639,7 @@ section {
 }
 
     .author-card:hover {
-        border-color: var(--primary-blue);
+        border-color: var(--primary-white);
         box-shadow: 0 0 30px var(--border-blue);
     }
 
@@ -654,7 +654,7 @@ section {
     width: 100%;
     height: 100%;
     background-color: var(--bg-dark);
-    border: 2px solid var(--primary-blue);
+    border: 2px solid var(--primary-white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -697,10 +697,10 @@ section {
     }
 
 .author-card h3 {
-    color: var(--neon-blue);
+    color: var(--neon-white);
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 5px var(--primary-blue);
+    text-shadow: 0 0 5px var(--primary-white);
 }
 
 .author-role {
@@ -711,7 +711,7 @@ section {
 }
 
 .author-card p {
-    color: var(--dark-blue);
+    color: var(--dark-white);
     line-height: 1.8;
     margin-bottom: 1.5rem;
 }
@@ -719,17 +719,17 @@ section {
 .author-stats {
     padding-top: 1rem;
     border-top: 1px solid var(--border-blue);
-    color: var(--primary-blue);
+    color: var(--primary-white);
 }
 
     .author-stats strong {
-        color: var(--neon-blue);
+        color: var(--neon-white);
     }
 
 /* Contact Section */
 .contact {
     background-color: var(--bg-dark);
-    border-top: 2px solid var(--primary-blue);
+    border-top: 2px solid var(--primary-white);
 }
 
 .contact-container {
@@ -739,14 +739,14 @@ section {
 }
 
 .contact-info h3 {
-    color: var(--neon-blue);
+    color: var(--neon-white);
     font-size: 1.8rem;
     margin-bottom: 1rem;
-    text-shadow: 0 0 10px var(--primary-blue);
+    text-shadow: 0 0 10px var(--primary-white);
 }
 
 .contact-info p {
-    color: var(--dark-blue);
+    color: var(--dark-white);
     margin-bottom: 2rem;
 }
 
@@ -760,7 +760,7 @@ section {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: var(--primary-blue);
+    color: var(--primary-white);
     padding: 1rem;
     background-color: var(--bg-card);
     border: 1px solid var(--border-blue);
@@ -768,7 +768,7 @@ section {
 }
 
     .info-item:hover {
-        border-color: var(--primary-blue);
+        border-color: var(--primary-white);
         box-shadow: 0 0 15px var(--border-blue);
         transform: translateX(10px);
     }
@@ -790,7 +790,7 @@ section {
 }
 
     .form-group label {
-        color: var(--primary-blue);
+        color: var(--primary-white);
         font-size: 0.9rem;
         letter-spacing: 1px;
     }
@@ -800,7 +800,7 @@ section {
     padding: 1rem;
     background-color: var(--bg-card);
     border: 1px solid var(--border-blue);
-    color: var(--primary-blue);
+    color: var(--primary-white);
     font-family: 'Courier New', monospace;
     font-size: 1rem;
     transition: all 0.3s;
@@ -809,7 +809,7 @@ section {
     .contact-form input:focus,
     .contact-form textarea:focus {
         outline: none;
-        border-color: var(--primary-blue);
+        border-color: var(--primary-white);
         box-shadow: 0 0 15px var(--border-blue);
     }
 
@@ -820,10 +820,10 @@ section {
 
 .submit-btn {
     width: 100%;
-    background-color: var(--primary-blue);
+    background-color: var(--primary-white);
     color: var(--bg-black);
-    border: 2px solid var(--primary-blue);
-    box-shadow: 0 0 20px var(--primary-blue);
+    border: 2px solid var(--primary-white);
+    box-shadow: 0 0 20px var(--primary-white);
     position: relative;
     overflow: hidden;
 }
@@ -831,7 +831,7 @@ section {
 /* Footer */
 footer {
     background-color: var(--bg-black);
-    border-top: 2px solid var(--primary-blue);
+    border-top: 2px solid var(--primary-white);
     padding: 3rem 2rem 2rem;
     position: relative;
 }
@@ -847,12 +847,12 @@ footer {
 }
 
 .footer-text p {
-    color: var(--dark-blue);
+    color: var(--dark-white);
     margin: 0.5rem 0;
 }
 
 .footer-tagline {
-    color: var(--primary-blue);
+    color: var(--primary-white);
     font-style: italic;
 }
 
@@ -863,23 +863,23 @@ footer {
 }
 
     .footer-links a {
-        color: var(--primary-blue);
+        color: var(--primary-white);
         text-decoration: none;
         transition: all 0.3s;
     }
 
         .footer-links a:hover {
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--primary-blue);
+            color: var(--neon-white);
+            text-shadow: 0 0 10px var(--primary-white);
         }
 
     .footer-links span {
-        color: var(--dark-blue);
+        color: var(--dark-white);
     }
 
 .footer-decoration {
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--primary-white), transparent);
     margin-top: 2rem;
     animation: glow-pulse 2s ease-in-out infinite;
 }
@@ -891,7 +891,7 @@ footer {
 
     50% {
         opacity: 1;
-        box-shadow: 0 0 20px var(--primary-blue);
+        box-shadow: 0 0 20px var(--primary-white);
     }
 }
 
