@@ -34,7 +34,8 @@ body {
     background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 100%);
     z-index: -1;
     opacity: 0.8;
-    overflow: hidden;
+    overflow: visible;
+    pointer-events: none;
 }
 
     .matrix-style-bg::before {
@@ -48,6 +49,13 @@ body {
         opacity: 0.03;
         animation: matrix-scroll 20s linear infinite;
     }
+
+/* Ash particle styling */
+.ash-particle {
+    position: fixed !important;
+    pointer-events: none;
+    z-index: 999 !important;
+}
 
 @keyframes matrix-scroll {
     0% {
