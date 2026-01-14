@@ -6,14 +6,14 @@
 }
 
 :root {
-    --primary-white: #00d4ff;
-    --dark-white: #0099cc;
-    --neon-white: #00e5ff;
+    --primary-white: #ffffff;
+    --dark-white: #cccccc;
+    --neon-white: #ffffff;
     --accent-red: #ff0033;
     --bg-black: #0a0a0a;
     --bg-dark: #111111;
     --bg-card: #1a1a1a;
-    --border-blue: #00d4ff44;
+    --border-white: rgba(255, 255, 255, 0.3);
 }
 
 body {
@@ -31,7 +31,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, #0a0a0a 0%, #001a1a 100%);
+    background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 100%);
     z-index: -1;
     opacity: 0.3;
 }
@@ -155,7 +155,7 @@ nav ul {
     text-align: center;
     padding: 2rem;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, var(--bg-blue) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
 }
 
 .scan-line {
@@ -188,7 +188,7 @@ nav ul {
 .glitch {
     font-size: 4rem;
     font-weight: bold;
-    color: black;
+    color: var(--primary-white);
     text-shadow: 0 0 10px var(--primary-white), 0 0 20px var(--primary-white), 0 0 30px var(--primary-white);
     position: relative;
     animation: glitch-text 3s infinite;
@@ -300,9 +300,9 @@ nav ul {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    border: 1px solid var(--border-blue);
-    background-color: white;
-    color: var(--dark-white);
+    border: 1px solid var(--border-white);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--primary-white);
     font-size: 0.9rem;
 }
 
@@ -356,6 +356,7 @@ section {
 }
 
 /* Stats Section */
+/* Features Section */
 .stats {
     background-color: var(--bg-dark);
     border-top: 2px solid var(--primary-white);
@@ -370,7 +371,7 @@ section {
 
 .stat-card {
     background-color: var(--bg-card);
-    border: 1px solid var(--border-blue);
+    border: 1px solid var(--border-white);
     padding: 2rem;
     text-align: center;
     transition: all 0.3s;
@@ -395,7 +396,7 @@ section {
 
     .stat-card:hover {
         border-color: var(--primary-white);
-        box-shadow: 0 0 20px var(--border-blue);
+        box-shadow: 0 0 20px var(--border-white);
         transform: translateY(-5px);
     }
 
@@ -405,7 +406,7 @@ section {
 }
 
 .stat-number {
-    font-size: 3rem;
+    font-size: 2rem;
     color: var(--neon-white);
     font-weight: bold;
     text-shadow: 0 0 10px var(--primary-white);
@@ -420,10 +421,16 @@ section {
     margin-bottom: 1rem;
 }
 
+.feature-description {
+    color: var(--dark-white);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
 .progress-bar {
     width: 100%;
     height: 4px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
     overflow: hidden;
 }
@@ -454,7 +461,7 @@ section {
 
 .about-panel {
     background-color: var(--bg-card);
-    border: 1px solid var(--border-blue);
+    border: 1px solid var(--border-white);
     padding: 2rem;
     position: relative;
 }
@@ -513,8 +520,8 @@ section {
 
 .tag {
     padding: 0.3rem 1rem;
-    background-color: white;
-    border: 1px solid var(--border-blue);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-white);
     color: var(--primary-white);
     font-size: 0.9rem;
     transition: all 0.3s;
@@ -556,7 +563,7 @@ section {
 
 .chapter-card {
     background-color: var(--bg-card);
-    border: 2px solid var(--border-blue);
+    border: 2px solid var(--border-white);
     padding: 2rem;
     position: relative;
     transition: all 0.3s;
@@ -570,7 +577,7 @@ section {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(45deg, transparent, white, transparent);
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         transform: translateX(-100%);
         transition: transform 0.5s;
     }
@@ -581,7 +588,7 @@ section {
 
     .chapter-card:hover {
         border-color: var(--primary-white);
-        box-shadow: 0 0 30px var(--border-blue);
+        box-shadow: 0 0 30px var(--border-white);
         transform: translateY(-10px);
     }
 
@@ -632,7 +639,7 @@ section {
 
 .author-card {
     background-color: var(--bg-card);
-    border: 1px solid var(--border-blue);
+    border: 1px solid var(--border-white);
     padding: 2rem;
     text-align: center;
     transition: all 0.3s;
@@ -640,7 +647,7 @@ section {
 
     .author-card:hover {
         border-color: var(--primary-white);
-        box-shadow: 0 0 30px var(--border-blue);
+        box-shadow: 0 0 30px var(--border-white);
     }
 
 .author-frame {
@@ -718,7 +725,7 @@ section {
 
 .author-stats {
     padding-top: 1rem;
-    border-top: 1px solid var(--border-blue);
+    border-top: 1px solid var(--border-white);
     color: var(--primary-white);
 }
 
@@ -763,13 +770,13 @@ section {
     color: var(--primary-white);
     padding: 1rem;
     background-color: var(--bg-card);
-    border: 1px solid var(--border-blue);
+    border: 1px solid var(--border-white);
     transition: all 0.3s;
 }
 
     .info-item:hover {
         border-color: var(--primary-white);
-        box-shadow: 0 0 15px var(--border-blue);
+        box-shadow: 0 0 15px var(--border-white);
         transform: translateX(10px);
     }
 
@@ -799,7 +806,7 @@ section {
 .contact-form textarea {
     padding: 1rem;
     background-color: var(--bg-card);
-    border: 1px solid var(--border-blue);
+    border: 1px solid var(--border-white);
     color: var(--primary-white);
     font-family: 'Courier New', monospace;
     font-size: 1rem;
@@ -810,7 +817,7 @@ section {
     .contact-form textarea:focus {
         outline: none;
         border-color: var(--primary-white);
-        box-shadow: 0 0 15px var(--border-blue);
+        box-shadow: 0 0 15px var(--border-white);
     }
 
 .contact-form textarea {
