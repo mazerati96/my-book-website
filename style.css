@@ -1,4 +1,4 @@
-﻿/* Reset and Base Styles */
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -25,7 +25,7 @@ body {
 }
 
 /* Animated Matrix Background */
-.matrix-bg {
+.matrix-style-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -34,9 +34,10 @@ body {
     background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 100%);
     z-index: -1;
     opacity: 0.3;
+    overflow: hidden;
 }
 
-    .matrix-bg::before {
+    .matrix-style-bg::before {
         content: '';
         position: absolute;
         top: 0;
@@ -55,6 +56,37 @@ body {
 
     100% {
         transform: translateY(50px);
+    }
+}
+
+/* Falling ash particles */
+@keyframes fall-ash {
+    0% {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes sway {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(10px);
     }
 }
 

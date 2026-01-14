@@ -1,4 +1,4 @@
-﻿// Smooth scrolling for navigation links
+// Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -122,38 +122,37 @@ document.querySelectorAll('section').forEach(section => {
     fadeObserver.observe(section);
 });
 
-// Matrix rain effect in background (optional - lightweight version)
-function createMatrixRain() {
-    const matrixBg = document.querySelector('.matrix-bg');
-    const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
 
-    for (let i = 0; i < 15; i++) {
-        const span = document.createElement('span');
-        span.textContent = characters[Math.floor(Math.random() * characters.length)];
-        span.style.position = 'absolute';
-        span.style.left = Math.random() * 100 + '%';
-        span.style.top = -20 + 'px';
-        span.style.color = 'var(--primary-white)';
-        span.style.fontSize = '14px';
-        span.style.opacity = Math.random() * 0.5 + 0.2;
-        span.style.animation = `fall ${Math.random() * 10 + 10}s linear infinite`;
-        span.style.animationDelay = Math.random() * 5 + 's';
-        matrixBg.appendChild(span);
+// Falling ash effect in background
+function createFallingAsh() {
+    const matrixBg = document.querySelector('.matrix-style-bg');
+
+    // Create 50 ash particles
+    for (let i = 0; i < 50; i++) {
+        const ash = document.createElement('div');
+        ash.className = 'ash-particle';
+
+        // Random positioning
+        ash.style.position = 'absolute';
+        ash.style.left = Math.random() * 100 + '%';
+        ash.style.width = (Math.random() * 3 + 1) + 'px';
+        ash.style.height = ash.style.width;
+        ash.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        ash.style.borderRadius = '50%';
+        ash.style.pointerEvents = 'none';
+
+        // Random animation timing
+        const duration = Math.random() * 10 + 8; // 8-18 seconds
+        const delay = Math.random() * 5; // 0-5 second delay
+        const swayDuration = Math.random() * 3 + 2; // 2-5 seconds for sway
+
+        ash.style.animation = `fall-ash ${duration}s linear ${delay}s infinite, sway ${swayDuration}s ease-in-out infinite`;
+
+        matrixBg.appendChild(ash);
     }
 }
 
-// CSS animation for falling characters
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fall {
-        to {
-            transform: translateY(100vh);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-createMatrixRain();
+createFallingAsh();
 
 // Read button interaction
 document.querySelectorAll('.read-btn').forEach(btn => {
