@@ -5,22 +5,22 @@ let isTransitioning = false;
 
 function initPageTransition() {
     const overlay = document.querySelector('.page-transition');
-    
+
     // Handle all internal links
     document.querySelectorAll('a[href]').forEach(link => {
         const href = link.getAttribute('href');
-        
+
         // Only handle internal HTML links
         if (href && href.endsWith('.html') && !link.hasAttribute('data-no-transition')) {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 if (isTransitioning) return;
-                
+
                 e.preventDefault();
                 isTransitioning = true;
-                
+
                 // Trigger transition
                 overlay.classList.add('active');
-                
+
                 // Navigate after glitch effect
                 setTimeout(() => {
                     window.location.href = href;
@@ -28,7 +28,7 @@ function initPageTransition() {
             });
         }
     });
-    
+
     // Fade out transition on page load
     setTimeout(() => {
         overlay.classList.remove('active');
@@ -42,14 +42,14 @@ function initPageTransition() {
 function initHamburgerMenu() {
     const hamburger = document.querySelector('.hamburger');
     const sidebar = document.querySelector('.sidebar');
-    
+
     if (!hamburger || !sidebar) return;
-    
+
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
         sidebar.classList.toggle('active');
     });
-    
+
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
         if (!hamburger.contains(e.target) && !sidebar.contains(e.target)) {
@@ -57,7 +57,7 @@ function initHamburgerMenu() {
             sidebar.classList.remove('active');
         }
     });
-    
+
     // Close menu when clicking a link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
@@ -65,7 +65,7 @@ function initHamburgerMenu() {
             sidebar.classList.remove('active');
         });
     });
-    
+
     // Set active state based on current page
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -168,14 +168,14 @@ function initializeFallingAsh() {
 function initGlitchEffect() {
     const glitchText = document.querySelector('.glitch');
     if (!glitchText) return;
-    
+
     const originalText = glitchText.textContent;
 
     setInterval(() => {
         if (Math.random() > 0.95) {
             glitchText.textContent = originalText
                 .split('')
-                .map(char => Math.random() > 0.9 ? 
+                .map(char => Math.random() > 0.9 ?
                     String.fromCharCode(33 + Math.floor(Math.random() * 94)) : char)
                 .join('');
 
@@ -187,7 +187,7 @@ function initGlitchEffect() {
 }
 
 // ============================================
-// CONTACT FORM HANDLING
+// CONTACT FORM HANDLING - WITH EMAIL API
 // ============================================
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
@@ -204,9 +204,19 @@ function initContactForm() {
         const formData = {
             name: this.querySelector('input[name="name"]').value,
             email: this.querySelector('input[name="email"]').value,
-            subject: this.querySelector('select[name="subject"]')?.value || 'general',
             message: this.querySelector('textarea[name="message"]').value
         };
+
+        // Validate all fields are filled
+        if (!formData.name || !formData.email || !formData.message) {
+            buttonText.textContent = 'PLEASE FILL ALL FIELDS';
+            button.style.backgroundColor = 'var(--accent-red)';
+            setTimeout(() => {
+                buttonText.textContent = originalText;
+                button.style.backgroundColor = 'var(--primary-white)';
+            }, 2000);
+            return;
+        }
 
         // Show transmitting state
         buttonText.textContent = 'TRANSMITTING...';
@@ -214,27 +224,47 @@ function initContactForm() {
         button.disabled = true;
 
         try {
-            // Simulate API call (replace with real endpoint)
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // Call your Vercel serverless function
+            const response = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
 
-            // Success state
-            buttonText.textContent = 'MESSAGE SENT!';
-            button.style.opacity = '1';
+            const result = await response.json();
 
-            setTimeout(() => {
-                buttonText.textContent = originalText;
-                button.disabled = false;
-                this.reset();
-            }, 2000);
+            if (response.ok && result.success) {
+                // Success!
+                buttonText.textContent = 'MESSAGE SENT!';
+                button.style.backgroundColor = 'var(--neon-white)';
+                button.style.color = 'var(--bg-black)';
 
-            console.log('Form submitted:', formData);
+                setTimeout(() => {
+                    buttonText.textContent = originalText;
+                    button.style.opacity = '1';
+                    button.style.backgroundColor = 'var(--primary-white)';
+                    button.style.color = 'var(--bg-black)';
+                    button.disabled = false;
+                    this.reset();
+                }, 2000);
+            } else {
+                throw new Error(result.error || 'Failed to send');
+            }
+
         } catch (error) {
-            console.error('Error:', error);
+            // Error handling
+            console.error('Email send error:', error);
             buttonText.textContent = 'FAILED - TRY AGAIN';
+            button.style.backgroundColor = 'var(--accent-red)';
+            button.style.color = 'white';
 
             setTimeout(() => {
                 buttonText.textContent = originalText;
                 button.style.opacity = '1';
+                button.style.backgroundColor = 'var(--primary-white)';
+                button.style.color = 'var(--bg-black)';
                 button.disabled = false;
             }, 3000);
         }
@@ -290,7 +320,7 @@ function initSmoothScroll() {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
             if (href === '#') return;
-            
+
             const target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
@@ -308,13 +338,13 @@ function initSmoothScroll() {
 // ============================================
 function initTrilogyCards() {
     const cards = document.querySelectorAll('.trilogy-card, .preview-card');
-    
+
     cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
+        card.addEventListener('mouseenter', function () {
             this.style.transform = 'translateY(-15px) scale(1.02)';
         });
-        
-        card.addEventListener('mouseleave', function() {
+
+        card.addEventListener('mouseleave', function () {
             this.style.transform = 'translateY(0) scale(1)';
         });
     });
@@ -325,8 +355,8 @@ function initTrilogyCards() {
 // ============================================
 function initKonamiCode() {
     let konamiCode = [];
-    const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
-                          'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+        'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
     document.addEventListener('keydown', (e) => {
         konamiCode.push(e.key);
@@ -356,31 +386,14 @@ function initKonamiCode() {
 // CONSOLE MESSAGES
 // ============================================
 function initConsoleMessages() {
-    console.log('%c⚠️ SYSTEM ACCESS DETECTED ⚠️', 
+    console.log('%c⚠️ SYSTEM ACCESS DETECTED ⚠️',
         'color: #ff0033; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff0033;');
-    console.log('%cWelcome to The Measure of Souls Trilogy.', 
+    console.log('%cWelcome to The Measure of Souls Trilogy.',
         'color: #ffffff; font-size: 14px;');
-    console.log('%cIf you\'re seeing this, you might be one of us.', 
+    console.log('%cIf you\'re seeing this, you might be one of us.',
         'color: #cccccc; font-size: 12px;');
-    console.log('%cBuilt with: HTML, CSS, JavaScript', 
+    console.log('%cBuilt with: HTML, CSS, JavaScript',
         'color: #ff0033; font-size: 12px;');
-}
-
-// ============================================
-// FAQ ACCORDION (if needed)
-// ============================================
-function initFAQAccordion() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    faqItems.forEach(item => {
-        const question = item.querySelector('h3');
-        if (question) {
-            question.style.cursor = 'pointer';
-            question.addEventListener('click', () => {
-                item.classList.toggle('active');
-            });
-        }
-    });
 }
 
 // ============================================
@@ -388,7 +401,7 @@ function initFAQAccordion() {
 // ============================================
 function initializeAll() {
     console.log('🚀 Initializing The Measure of Souls website...');
-    
+
     initPageTransition();
     initHamburgerMenu();
     initializeFallingAsh();
@@ -400,8 +413,7 @@ function initializeAll() {
     initTrilogyCards();
     initKonamiCode();
     initConsoleMessages();
-    initFAQAccordion();
-    
+
     console.log('✅ All systems online!');
 }
 

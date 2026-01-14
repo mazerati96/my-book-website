@@ -23,58 +23,84 @@ export default async function handler(req, res) {
         // Validate inputs
         if (!name || !email || !message) {
             return res.status(400).json({
+                success: false,
                 error: 'Missing required fields',
                 received: { name: !!name, email: !!email, message: !!message }
+            });
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid email address'
             });
         }
 
         // Check if environment variables are set
         if (!process.env.RESEND_API_KEY) {
             console.error('RESEND_API_KEY is not set');
-            return res.status(500).json({ error: 'Server configuration error: Missing API key' });
+            return res.status(500).json({
+                success: false,
+                error: 'Server configuration error: Missing API key'
+            });
         }
 
         if (!process.env.RECIPIENT_EMAIL) {
             console.error('RECIPIENT_EMAIL is not set');
-            return res.status(500).json({ error: 'Server configuration error: Missing recipient email' });
+            return res.status(500).json({
+                success: false,
+                error: 'Server configuration error: Missing recipient email'
+            });
         }
 
         // Initialize Resend with your API key
         const resend = new Resend(process.env.RESEND_API_KEY);
 
-        // Send email notification to YOU
+        // Send email notification to you
         const emailData = await resend.emails.send({
             from: 'The Measure of Souls <onboarding@resend.dev>',
             to: [process.env.RECIPIENT_EMAIL],
             subject: `📬 New Contact Form Message from ${name}`,
-            html: `
-        <div style="font-family: 'Courier New', monospace; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0a0a0a; color: #ffffff;">
-          <h2 style="color: #ff0033; border-bottom: 2px solid #ffffff; padding-bottom: 10px;">
-            🔔 New Contact Form Submission
-          </h2>
-          
-          <div style="background-color: #1a1a1a; padding: 20px; margin: 20px 0; border: 1px solid #ffffff;">
-            <p><strong style="color: #ffffff;">From:</strong> ${name}</p>
-            <p><strong style="color: #ffffff;">Email:</strong> <a href="mailto:${email}" style="color: #00d4ff;">${email}</a></p>
-            <p><strong style="color: #ffffff;">Sent:</strong> ${new Date().toLocaleString()}</p>
-          </div>
-          
-          <div style="background-color: #1a1a1a; padding: 20px; margin: 20px 0; border: 1px solid #ffffff;">
-            <p style="color: #ffffff;"><strong>Message:</strong></p>
-            <p style="color: #cccccc; line-height: 1.6;">${message.replace(/\n/g, '<br>')}</p>
-          </div>
-          
-          <div style="margin-top: 30px; padding: 15px; background-color: #111111; border-left: 4px solid #ff0033;">
-            <p style="color: #cccccc; font-size: 12px; margin: 0;">
-              Reply directly to this email to respond to ${name}
-            </p>
-          </div>
-        </div>
-      `,
             replyTo: email, // This lets you hit "Reply" to respond directly to the sender
+            html: `
+                <div style="font-family: 'Courier New', monospace; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0a0a0a; color: #ffffff;">
+                    <h2 style="color: #ff0033; border-bottom: 2px solid #ffffff; padding-bottom: 10px;">
+                        📢 New Contact Form Submission
+                    </h2>
+                    
+                    <div style="background-color: #1a1a1a; padding: 20px; margin: 20px 0; border: 1px solid #ffffff;">
+                        <p><strong style="color: #ffffff;">From:</strong> ${name}</p>
+                        <p><strong style="color: #ffffff;">Email:</strong> <a href="mailto:${email}" style="color: #00d4ff;">${email}</a></p>
+                        <p><strong style="color: #ffffff;">Sent:</strong> ${new Date().toLocaleString('en-US', {
+                timeZone: 'America/Los_Angeles',
+                dateStyle: 'full',
+                timeStyle: 'long'
+            })}</p>
+                    </div>
+                    
+                    <div style="background-color: #1a1a1a; padding: 20px; margin: 20px 0; border: 1px solid #ffffff;">
+                        <p style="color: #ffffff;"><strong>Message:</strong></p>
+                        <p style="color: #cccccc; line-height: 1.6; white-space: pre-wrap;">${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 15px; background-color: #111111; border-left: 4px solid #ff0033;">
+                        <p style="color: #cccccc; font-size: 12px; margin: 0;">
+                            💡 Reply directly to this email to respond to ${name}
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 10px; text-align: center; border-top: 1px solid #ffffff;">
+                        <p style="color: #666666; font-size: 10px; margin: 0;">
+                            Sent from The Measure of Souls website contact form
+                        </p>
+                    </div>
+                </div>
+            `
         });
 
-        console.log('Email sent successfully:', emailData);
+        console.log('✅ Email sent successfully:', emailData);
 
         // Success response
         return res.status(200).json({
@@ -84,11 +110,20 @@ export default async function handler(req, res) {
         });
 
     } catch (error) {
-        console.error('Email sending error:', error);
+        console.error('❌ Email sending error:', error);
+
+        // Provide more specific error messages
+        let errorMessage = 'Failed to send email';
+        if (error.message.includes('API key')) {
+            errorMessage = 'Email service configuration error';
+        } else if (error.message.includes('rate limit')) {
+            errorMessage = 'Too many requests. Please try again later.';
+        }
+
         return res.status(500).json({
-            error: 'Failed to send email',
-            details: error.message,
-            type: error.name
+            success: false,
+            error: errorMessage,
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 }
