@@ -155,7 +155,7 @@ nav ul {
     text-align: center;
     padding: 2rem;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, white 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, var(--bg-black) 0%, transparent 70%);
 }
 
 .scan-line {
@@ -188,7 +188,7 @@ nav ul {
 .glitch {
     font-size: 4rem;
     font-weight: bold;
-    color: var(--neon-white);
+    color: black;
     text-shadow: 0 0 10px var(--primary-white), 0 0 20px var(--primary-white), 0 0 30px var(--primary-white);
     position: relative;
     animation: glitch-text 3s infinite;
