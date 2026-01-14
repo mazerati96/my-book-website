@@ -35,29 +35,68 @@ if (glitchText) {
 }
 
 // Contact form handling with enhanced feedback
-document.getElementById('contact-form').addEventListener('submit', function (e) {
+// Contact form handling with Vercel serverless function
+document.getElementById('contact-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const button = this.querySelector('.submit-btn');
     const originalText = button.querySelector('span').textContent;
 
-    // Simulate sending
+    // Get form data
+    const formData = {
+        name: this.querySelector('input[name="name"]').value,
+        email: this.querySelector('input[name="email"]').value,
+        message: this.querySelector('textarea[name="message"]').value
+    };
+
+    // Show transmitting state
     button.querySelector('span').textContent = 'TRANSMITTING...';
     button.style.opacity = '0.6';
     button.disabled = true;
 
-    setTimeout(() => {
-        button.querySelector('span').textContent = 'MESSAGE SENT!';
-        button.style.backgroundColor = 'var(--neon-white)';
+    try {
+        // Call your Vercel serverless function
+        const response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Success!
+            button.querySelector('span').textContent = 'MESSAGE SENT!';
+            button.style.backgroundColor = 'var(--neon-white)';
+            button.style.color = 'var(--bg-black)';
+
+            setTimeout(() => {
+                button.querySelector('span').textContent = originalText;
+                button.style.opacity = '1';
+                button.style.backgroundColor = 'var(--primary-white)';
+                button.disabled = false;
+                this.reset();
+            }, 2000);
+        } else {
+            throw new Error(result.error || 'Failed to send');
+        }
+
+    } catch (error) {
+        // Error handling
+        console.error('Error:', error);
+        button.querySelector('span').textContent = 'FAILED - TRY AGAIN';
+        button.style.backgroundColor = 'var(--accent-red)';
+        button.style.color = 'white';
 
         setTimeout(() => {
             button.querySelector('span').textContent = originalText;
             button.style.opacity = '1';
             button.style.backgroundColor = 'var(--primary-white)';
             button.disabled = false;
-            this.reset();
-        }, 2000);
-    }, 1500);
+        }, 3000);
+    }
 });
 
 // Fade-in animation for sections on scroll
