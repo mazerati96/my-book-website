@@ -1,0 +1,367 @@
+/* ============================================
+   BOOK ONE: LAY UPON THE EARTH
+   GREEN ACCENT OVERRIDES
+   ============================================ */
+
+:root {
+    --accent-red: #00ff88;
+}
+
+/* Scan line */
+.scan-line {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+    box-shadow: 0 0 10px #00ff88;
+}
+
+/* Hero tagline */
+.book-tagline-hero {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+/* Section headers */
+.section-header h2 {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.header-line {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+}
+
+/* Buttons */
+.primary-btn,
+.submit-btn {
+    background-color: #00ff88;
+    border-color: #00ff88;
+    box-shadow: 0 0 20px #00ff88;
+    color: var(--bg-black);
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px #00ff88;
+    }
+
+.secondary-btn {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+    .secondary-btn:hover {
+        background-color: #00ff88;
+        box-shadow: 0 0 20px #00ff88;
+        color: var(--bg-black);
+    }
+
+/* Hamburger & sidebar */
+.hamburger {
+    border-color: #00ff88;
+}
+
+    .hamburger:hover {
+        box-shadow: 0 0 20px #00ff88;
+    }
+
+    .hamburger span {
+        background-color: #00ff88;
+    }
+
+.sidebar {
+    border-left-color: #00ff88;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px #00ff88;
+    background-color: rgba(0, 255, 136, 0.1);
+}
+
+.nav-link::before {
+    color: #00ff88;
+}
+
+.nav-link.cta-nav {
+    background-color: #00ff88;
+    border-color: #00ff88;
+    color: var(--bg-black);
+}
+
+    .nav-link.cta-nav:hover {
+        box-shadow: 0 0 25px #00ff88;
+    }
+
+.status-indicator {
+    background-color: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+/* Card buttons */
+.card-btn {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+    .card-btn:hover {
+        background-color: #00ff88;
+        box-shadow: 0 0 15px #00ff88;
+        color: var(--bg-black);
+    }
+
+/* Theme cards */
+.theme-card:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+/* Footer */
+footer {
+    border-top-color: #00ff88;
+}
+
+.footer-decoration {
+    background: linear-gradient(90deg, transparent, #00ff88, transparent);
+}
+
+.footer-links a:hover {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+/* Book-specific sections */
+.book-label {
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+/* Epigraph section */
+.epigraph-section {
+    padding: 5rem 2rem;
+    background-color: var(--bg-dark);
+    border-top: 2px solid #00ff88;
+    border-bottom: 2px solid #00ff88;
+}
+
+.epigraph-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    padding: 3rem 2rem;
+}
+
+.quote-mark-large {
+    font-size: 5rem;
+    color: #00ff88;
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+    .quote-mark-large.closing {
+        transform: rotate(180deg);
+        display: inline-block;
+    }
+
+.epigraph-text {
+    font-size: 1.8rem;
+    color: var(--primary-white);
+    font-style: italic;
+    line-height: 1.6;
+    margin: 2rem 0;
+}
+
+/* Blurb section */
+.blurb-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.blurb-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+    .blurb-content p {
+        margin-bottom: 1.5rem;
+    }
+
+.blurb-intro {
+    font-size: 1.3rem;
+    color: var(--primary-white);
+    font-weight: bold;
+}
+
+.blurb-climax {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.blurb-closing {
+    font-style: italic;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    color: var(--primary-white);
+}
+
+/* Poem section */
+.poem-section {
+    background-color: var(--bg-dark);
+    border-top: 2px solid #00ff88;
+    border-bottom: 2px solid #00ff88;
+}
+
+.poem-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--bg-card);
+    border: 2px solid #00ff88;
+    padding: 3rem;
+    position: relative;
+}
+
+    .poem-container::before,
+    .poem-container::after {
+        content: '';
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border: 3px solid #00ff88;
+    }
+
+    .poem-container::before {
+        top: -3px;
+        left: -3px;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .poem-container::after {
+        bottom: -3px;
+        right: -3px;
+        border-left: none;
+        border-top: none;
+    }
+
+.poem-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+    .poem-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .poem-content em {
+        color: #00ff88;
+        font-style: italic;
+    }
+
+/* Character section */
+.character-section {
+    background-color: var(--bg-dark);
+}
+
+.character-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.character-panel {
+    background-color: var(--bg-card);
+    border: 2px solid #00ff88;
+    padding: 3rem;
+}
+
+.character-frame {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 2rem;
+    background-color: var(--bg-dark);
+    border: 3px solid #00ff88;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.character-icon {
+    font-size: 4rem;
+}
+
+.character-panel h3 {
+    color: #00ff88;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.character-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem;
+    background-color: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.stat-label {
+    color: #00ff88;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    color: var(--primary-white);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.character-panel p {
+    color: var(--dark-white);
+    line-height: 1.8;
+}
+
+/* Brigade section */
+.brigade-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.brigade-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+    .brigade-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .brigade-content em {
+        color: #00ff88;
+        font-style: italic;
+    }
+
+/* Intro sections for Book One */
+.intro-section {
+    border-top-color: #00ff88;
+    border-bottom-color: #00ff88;
+}
+
+/* CTA section */
+.cta-section {
+    border-top-color: #00ff88;
+    border-bottom-color: #00ff88;
+}

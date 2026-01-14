@@ -1,0 +1,354 @@
+/* ============================================
+   BOOK THREE: ASHES OF THE STARS
+   YELLOW ACCENT OVERRIDES
+   ============================================ */
+
+:root {
+    --accent-red: #ffd700;
+}
+
+/* Scan line */
+.scan-line {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    box-shadow: 0 0 10px #ffd700;
+}
+
+/* Hero tagline */
+.book-tagline-hero {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+/* Coming soon badge */
+.coming-soon-badge {
+    border-color: #ffd700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+@keyframes pulse-border {
+    0%, 100% {
+        box-shadow: 0 0 10px #ffd700;
+    }
+
+    50% {
+        box-shadow: 0 0 25px #ffd700;
+    }
+}
+
+.badge-text {
+    color: #ffd700;
+}
+
+/* Section headers */
+.section-header h2 {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.header-line {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}
+
+/* Buttons */
+.primary-btn,
+.submit-btn {
+    background-color: #ffd700;
+    border-color: #ffd700;
+    box-shadow: 0 0 20px #ffd700;
+    color: var(--bg-black);
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px #ffd700;
+    }
+
+.secondary-btn {
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+    .secondary-btn:hover {
+        background-color: #ffd700;
+        box-shadow: 0 0 20px #ffd700;
+        color: var(--bg-black);
+    }
+
+/* Hamburger & sidebar */
+.hamburger {
+    border-color: #ffd700;
+}
+
+    .hamburger:hover {
+        box-shadow: 0 0 20px #ffd700;
+    }
+
+    .hamburger span {
+        background-color: #ffd700;
+    }
+
+.sidebar {
+    border-left-color: #ffd700;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    border-color: #ffd700;
+    box-shadow: 0 0 15px #ffd700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+.nav-link::before {
+    color: #ffd700;
+}
+
+.nav-link.cta-nav {
+    background-color: #ffd700;
+    border-color: #ffd700;
+    color: var(--bg-black);
+}
+
+    .nav-link.cta-nav:hover {
+        box-shadow: 0 0 25px #ffd700;
+    }
+
+.status-indicator {
+    background-color: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+/* Card buttons */
+.card-btn {
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+    .card-btn:hover {
+        background-color: #ffd700;
+        box-shadow: 0 0 15px #ffd700;
+        color: var(--bg-black);
+    }
+
+/* Theme cards */
+.theme-card:hover {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Footer */
+footer {
+    border-top-color: #ffd700;
+}
+
+.footer-decoration {
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}
+
+.footer-links a:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+/* Book-specific sections */
+.book-label {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+/* Teaser section */
+.teaser-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.teaser-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+    .teaser-content p {
+        margin-bottom: 1.5rem;
+    }
+
+.teaser-intro {
+    font-size: 1.3rem;
+    color: var(--primary-white);
+    font-weight: bold;
+}
+
+.teaser-warning {
+    color: #ffd700;
+    font-style: italic;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.teaser-climax {
+    font-weight: bold;
+    color: var(--primary-white);
+    font-size: 1.2rem;
+}
+
+/* Preview section */
+.preview-section {
+    background-color: var(--bg-dark);
+    border-top: 2px solid #ffd700;
+    border-bottom: 2px solid #ffd700;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.preview-panel {
+    background-color: var(--bg-card);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+    .preview-panel:hover {
+        border-color: #ffd700;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        transform: translateY(-5px);
+    }
+
+.panel-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.preview-panel h3 {
+    color: #ffd700;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px #ffd700;
+}
+
+.preview-panel p {
+    color: var(--dark-white);
+    line-height: 1.7;
+}
+
+/* Conclusion section */
+.conclusion-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.conclusion-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+    .conclusion-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .conclusion-content em {
+        color: #ffd700;
+        font-style: italic;
+    }
+
+.conclusion-emphasis {
+    background-color: rgba(255, 215, 0, 0.05);
+    border-left: 4px solid #ffd700;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.conclusion-final {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #ffd700;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+
+/* Progress section */
+.progress-section {
+    background-color: var(--bg-dark);
+    border-top: 2px solid #ffd700;
+    border-bottom: 2px solid #ffd700;
+    padding: 4rem 2rem;
+}
+
+.progress-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+    .progress-content h3 {
+        color: #ffd700;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px #ffd700;
+    }
+
+    .progress-content p {
+        color: var(--dark-white);
+        margin-bottom: 2rem;
+    }
+
+.progress-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.progress-bar {
+    width: 100%;
+    max-width: 500px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffd700;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #ffed4e);
+    box-shadow: 0 0 20px #ffd700;
+    transition: width 0.5s ease;
+    animation: progress-glow 2s ease-in-out infinite;
+}
+
+@keyframes progress-glow {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.progress-label {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Intro sections */
+.intro-section {
+    border-top-color: #ffd700;
+    border-bottom-color: #ffd700;
+}
+
+/* CTA section */
+.cta-section {
+    border-top-color: #ffd700;
+    border-bottom-color: #ffd700;
+}
+
+/* Themes section */
+.themes-section {
+    background-color: var(--bg-dark);
+}

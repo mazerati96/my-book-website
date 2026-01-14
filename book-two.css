@@ -1,0 +1,279 @@
+/* ============================================
+   BOOK TWO: QUANTUM PSALM OF A DYING SUN
+   LIGHT BLUE ACCENT OVERRIDES
+   ============================================ */
+
+:root {
+    --accent-red: #00d4ff;
+}
+
+/* Scan line */
+.scan-line {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    box-shadow: 0 0 10px #00d4ff;
+}
+
+/* Hero tagline */
+.book-tagline-hero {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+/* Coming soon badge */
+.coming-soon-badge {
+    border-color: #00d4ff;
+    background-color: rgba(0, 212, 255, 0.1);
+}
+
+@keyframes pulse-border {
+    0%, 100% {
+        box-shadow: 0 0 10px #00d4ff;
+    }
+
+    50% {
+        box-shadow: 0 0 25px #00d4ff;
+    }
+}
+
+.badge-text {
+    color: #00d4ff;
+}
+
+/* Section headers */
+.section-header h2 {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+.header-line {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+}
+
+/* Buttons */
+.primary-btn,
+.submit-btn {
+    background-color: #00d4ff;
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px #00d4ff;
+    color: var(--bg-black);
+}
+
+    .primary-btn:hover,
+    .submit-btn:hover {
+        box-shadow: 0 0 30px #00d4ff;
+    }
+
+.secondary-btn {
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+    .secondary-btn:hover {
+        background-color: #00d4ff;
+        box-shadow: 0 0 20px #00d4ff;
+        color: var(--bg-black);
+    }
+
+/* Hamburger & sidebar */
+.hamburger {
+    border-color: #00d4ff;
+}
+
+    .hamburger:hover {
+        box-shadow: 0 0 20px #00d4ff;
+    }
+
+    .hamburger span {
+        background-color: #00d4ff;
+    }
+
+.sidebar {
+    border-left-color: #00d4ff;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px #00d4ff;
+    background-color: rgba(0, 212, 255, 0.1);
+}
+
+.nav-link::before {
+    color: #00d4ff;
+}
+
+.nav-link.cta-nav {
+    background-color: #00d4ff;
+    border-color: #00d4ff;
+    color: var(--bg-black);
+}
+
+    .nav-link.cta-nav:hover {
+        box-shadow: 0 0 25px #00d4ff;
+    }
+
+.status-indicator {
+    background-color: #00d4ff;
+    box-shadow: 0 0 10px #00d4ff;
+}
+
+/* Card buttons */
+.card-btn {
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+    .card-btn:hover {
+        background-color: #00d4ff;
+        box-shadow: 0 0 15px #00d4ff;
+        color: var(--bg-black);
+    }
+
+/* Theme cards */
+.theme-card:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Footer */
+footer {
+    border-top-color: #00d4ff;
+}
+
+.footer-decoration {
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+}
+
+.footer-links a:hover {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+/* Book-specific sections */
+.book-label {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+}
+
+/* Teaser section */
+.teaser-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.teaser-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+    .teaser-content p {
+        margin-bottom: 1.5rem;
+    }
+
+.teaser-intro {
+    font-size: 1.3rem;
+    color: var(--primary-white);
+    font-weight: bold;
+}
+
+.teaser-warning {
+    color: #00d4ff;
+    font-style: italic;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.teaser-climax {
+    font-weight: bold;
+    color: var(--primary-white);
+    font-size: 1.2rem;
+}
+
+/* Preview section */
+.preview-section {
+    background-color: var(--bg-dark);
+    border-top: 2px solid #00d4ff;
+    border-bottom: 2px solid #00d4ff;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.preview-panel {
+    background-color: var(--bg-card);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+    .preview-panel:hover {
+        border-color: #00d4ff;
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        transform: translateY(-5px);
+    }
+
+.panel-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.preview-panel h3 {
+    color: #00d4ff;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px #00d4ff;
+}
+
+.preview-panel p {
+    color: var(--dark-white);
+    line-height: 1.7;
+}
+
+/* Connection section */
+.connection-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.connection-content {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+    .connection-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .connection-content em {
+        color: #00d4ff;
+        font-style: italic;
+    }
+
+.connection-emphasis {
+    background-color: rgba(0, 212, 255, 0.05);
+    border-left: 4px solid #00d4ff;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Intro sections */
+.intro-section {
+    border-top-color: #00d4ff;
+    border-bottom-color: #00d4ff;
+}
+
+/* CTA section */
+.cta-section {
+    border-top-color: #00d4ff;
+    border-bottom-color: #00d4ff;
+}
+
+/* Themes section */
+.themes-section {
+    background-color: var(--bg-dark);
+}
