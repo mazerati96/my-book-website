@@ -356,60 +356,40 @@ function initConsoleMessages() {
 }
 
 // ============================================
-// AMBIENT MUSIC SYSTEM (PERSISTENT ACROSS PAGES)
+// PERSISTENT AMBIENT AUDIO (IFRAME HOST)
 // ============================================
 
-let ambientAudio = null;
+let audioIframe = null;
 
-const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
-const MUSIC_TIME_KEY = 'ambientMusicTime';
+function initPersistentAudio() {
+    // Prevent duplicate iframes
+    if (document.getElementById('audio-host')) return;
 
-function initAmbientMusic() {
-    ambientAudio = new Audio('/audio/sci-fi-moodtimeflow.mp3');
-    ambientAudio.loop = true;
-    ambientAudio.volume = 0.22;
-    ambientAudio.preload = 'auto';
+    audioIframe = document.createElement('iframe');
+    audioIframe.id = 'audio-host';
+    audioIframe.src = '/audio-player.html';
+    audioIframe.style.display = 'none';
 
-    const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
-    const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
+    document.body.appendChild(audioIframe);
 
-    // Restore playback position once metadata is ready
-    ambientAudio.addEventListener('loadedmetadata', () => {
-        if (savedTime > 0 && savedTime < ambientAudio.duration) {
-            ambientAudio.currentTime = savedTime;
-        }
-    });
-
-    // Persist playback time
-    ambientAudio.addEventListener('timeupdate', () => {
-        localStorage.setItem(MUSIC_TIME_KEY, ambientAudio.currentTime);
-    });
-
-    createMusicToggle(enabled);
-
-    if (enabled) {
-        waitForUserGesture(() => {
-            ambientAudio.play().catch(() => { });
-        });
-    }
+    createMusicToggle();
 }
 
-function waitForUserGesture(callback) {
-    const handler = () => {
-        callback();
-        document.removeEventListener('click', handler);
-        document.removeEventListener('keydown', handler);
-    };
-    document.addEventListener('click', handler);
-    document.addEventListener('keydown', handler);
+function sendAudioCommand(type) {
+    const iframe = document.getElementById('audio-host');
+    if (!iframe || !iframe.contentWindow) return;
+
+    iframe.contentWindow.postMessage({ type }, '*');
 }
 
-function createMusicToggle(isEnabled) {
+function createMusicToggle() {
+    const enabled = localStorage.getItem('ambientMusicEnabled') === 'true';
+
     const toggle = document.createElement('div');
     toggle.className = 'music-toggle';
     toggle.innerHTML = `
         <button class="music-toggle-btn">
-            🎧 Ambient Music: <strong>${isEnabled ? 'ON' : 'OFF'}</strong>
+            🎧 Ambient Music: <strong>${enabled ? 'ON' : 'OFF'}</strong>
         </button>
         <div class="music-credit">
             “Sci-Fi Moodtimeflow” — Ribhav Agrawal
@@ -421,20 +401,17 @@ function createMusicToggle(isEnabled) {
     const btn = toggle.querySelector('button');
 
     btn.addEventListener('click', () => {
-        const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
+        const isOn = localStorage.getItem('ambientMusicEnabled') === 'true';
 
-        if (enabled) {
-            ambientAudio.pause();
-            localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
+        if (isOn) {
+            sendAudioCommand('PAUSE');
             btn.innerHTML = '🎧 Ambient Music: <strong>OFF</strong>';
         } else {
-            ambientAudio.play().catch(() => { });
-            localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
+            sendAudioCommand('PLAY');
             btn.innerHTML = '🎧 Ambient Music: <strong>ON</strong>';
         }
     });
 }
-
 
 
 // ============================================
@@ -460,7 +437,8 @@ function initializeAll() {
     initTrilogyCards();
     initKonamiCode();
     initConsoleMessages();
-    initAmbientMusic();
+    initPersistentAudio();
+
 
 
     console.log('✅ All systems online!');

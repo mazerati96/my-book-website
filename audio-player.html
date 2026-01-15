@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Persistent Audio Host</title>
+</head>
+<body>
+
+<audio
+    id="ambientAudio"
+    src="/audio/sci-fi-moodtimeflow.mp3"
+    loop
+></audio>
+
+<script>
+    const audio = document.getElementById('ambientAudio');
+
+    const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
+    const MUSIC_TIME_KEY = 'ambientMusicTime';
+
+    audio.volume = 0.22;
+
+    // Restore state
+    const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
+    const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
+
+    audio.addEventListener('loadedmetadata', () => {
+        if (savedTime > 0 && savedTime < audio.duration) {
+            audio.currentTime = savedTime;
+        }
+        if (enabled) {
+            audio.play().catch(() => {});
+        }
+    });
+
+    // Persist playback position
+    audio.addEventListener('timeupdate', () => {
+        localStorage.setItem(MUSIC_TIME_KEY, audio.currentTime);
+    });
+
+    // Listen for commands from parent pages
+    window.addEventListener('message', (event) => {
+        const { type } = event.data || {};
+
+        switch (type) {
+            case 'PLAY':
+                audio.play().catch(() => {});
+                localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
+                break;
+
+            case 'PAUSE':
+                audio.pause();
+                localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
+                break;
+
+            case 'TOGGLE':
+                if (audio.paused) {
+                    audio.play().catch(() => {});
+                    localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
+                } else {
+                    audio.pause();
+                    localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
+                }
+                break;
+        }
+    });
+</script>
+
+</body>
+</html>
