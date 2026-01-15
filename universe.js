@@ -208,10 +208,10 @@ function createBlackHole() {
     // Store for animation
     blackHole.accretionDisk = accretionDisk;
     blackHole.outerGlow = outerGlow;
-}
 
-blackHole.userData.locationId = 'Charybdis Prime';
-blackHole.userData.type = 'location';
+    blackHole.userData.locationId = 'Charybdis Prime';
+    blackHole.userData.type = 'location';
+}
 
 // Create location markers
 function createLocationMarkers() {
