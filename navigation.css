@@ -167,3 +167,49 @@
     animation: pulse 1.5s ease-in-out infinite;
     box-shadow: 0 0 10px var(--accent-red);
 }
+/* scroll bar for sidebar navigation*/
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--accent-red);
+    border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-red);
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px var(--accent-red);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 15px var(--accent-red);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px var(--accent-red);
+    }
+}
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 500px) {
+    .sidebar {
+        width: 100%;
+    }
+    .hamburger {
+        width: 40px;
+        height: 40px;
+    }
+        .hamburger span {
+            width: 20px;
+        }
+        }
+
+/* End of navigation.css */
