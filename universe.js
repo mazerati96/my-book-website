@@ -11,9 +11,11 @@ let previousMouseX = 0;
 let rotationVelocity = { x: 0, y: 0 };
 let raycaster = new THREE.Raycaster();
 let mouseNDC = new THREE.Vector2();
-const SIGNAL_MIN_DISTANCE = 1600;
-const SIGNAL_MAX_DISTANCE = 3600;
-const SIGNAL_CUTOFF = 0.05; // below this = silence
+const SIGNAL_MIN_DISTANCE = 1700;
+const SIGNAL_MAX_DISTANCE = 2600;
+
+const SIGNAL_CUTOFF = 0.12;
+
 
 
 
@@ -325,12 +327,14 @@ function onMouseWheel(e) {
     strength = THREE.MathUtils.clamp(strength, 0, 1);
 
     // Visual indicator
-    if (strength > 0) {
+    if (strength > SIGNAL_CUTOFF) {
         indicator.classList.add('active');
         indicator.style.setProperty('--signal-strength', strength);
     } else {
         indicator.classList.remove('active');
+        indicator.style.setProperty('--signal-strength', 0);
     }
+
 
     // Audio behavior
     if (window.frequencyGenerator) {

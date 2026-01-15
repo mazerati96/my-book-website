@@ -295,8 +295,8 @@
         line-height: 1.6;
     }
 
-/* Upload Section */
-.upload-section {
+/* Upload Section- commented out for no longer needed for now */
+/*.upload-section {
     background-color: #111111;
     border-top: 2px solid #ff0033;
     padding: 4rem 2rem;
@@ -347,7 +347,7 @@
         padding: 1rem;
         margin-top: 0.5rem;
         overflow-x: auto;
-    }
+    } */
 
 /* Responsive */
 @media (max-width: 768px) {
