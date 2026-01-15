@@ -85,7 +85,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-size: cover;
+    background-size: contain; /* ✅ Shows full image */
+    background-repeat: no-repeat; /* ✅ Prevents tiling */
     background-position: center;
     transition: all 0.3s;
 }
@@ -360,5 +361,137 @@
 
     .upload-instructions {
         padding-left: 1rem;
+    }
+}
+
+/* ============================================
+   LIGHTBOX MODAL
+   ============================================ */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+    .lightbox.active {
+        display: flex;
+        pointer-events: auto;
+    }
+
+.lightbox-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    cursor: pointer;
+    animation: fadeIn 0.3s ease;
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    z-index: 10001;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: 2px solid #ff0033;
+    color: #ff0033;
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+    line-height: 1;
+}
+
+    .lightbox-close:hover {
+        background-color: #ff0033;
+        color: white;
+        box-shadow: 0 0 20px #ff0033;
+        transform: rotate(90deg);
+    }
+
+#lightbox-image {
+    max-width: 100%;
+    max-height: 70vh;
+    display: block;
+    border: 3px solid #ff0033;
+    box-shadow: 0 0 50px rgba(255, 0, 51, 0.5);
+}
+
+.lightbox-info {
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 2px solid #ff0033;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+    .lightbox-info h3 {
+        color: #ffffff;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .lightbox-info p {
+        color: #cccccc;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+/* Responsive lightbox */
+@media (max-width: 768px) {
+    .lightbox-close {
+        top: -50px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    #lightbox-image {
+        max-height: 60vh;
+    }
+
+    .lightbox-info h3 {
+        font-size: 1.2rem;
     }
 }
