@@ -58,7 +58,7 @@ function showMusicNoticeIfIndex() {
         z-index: 9999;
     `;
 
-    notice.textContent = '🎧 Music playing — toggle on/off at the bottom of the page';
+    notice.textContent = '🎧 Music option — toggle on/off at the bottom of the page';
 
     const footer = document.querySelector('footer');
 
