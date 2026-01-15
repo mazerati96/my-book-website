@@ -10,7 +10,7 @@ let rotationVelocity = { x: 0, y: 0 };
 
 // Location data
 const locationData = {
-    'Charybdis Prime {
+    'Charydbis Prime': {
         title: 'Supermassive Black Hole',
         sector: 'Center of Galaxy',
         distance: '26,000 Light Years',
@@ -19,7 +19,7 @@ const locationData = {
         relevance: 'The ultimate destination. The signal emanating from this cosmic giant has been humming since before the first stars ignited—a frequency that calls to something deep within the android\'s circuits.'
     },
     'brigade-base': {
-        title: 'The Brigades Position',
+        title: 'Brigade Position',
         sector: 'Sector 7-A',
         distance: '12,500 Light Years',
         status: 'OPERATIONAL',
@@ -35,7 +35,7 @@ const locationData = {
         relevance: 'The Brigade\'s target. To reach the black hole, they need the Array\'s technology. But stealing it means facing three converging fleets and risking everything on one impossible heist.'
     },
     'Hegemony': {
-        title: 'Hegemony',
+        title: 'Empire Fleet Alpha',
         sector: 'Sector 3-C',
         distance: '15,200 Light Years',
         status: 'HOSTILE - CONVERGING',
@@ -43,7 +43,7 @@ const locationData = {
         relevance: 'One of three factions racing toward the black hole. Empire Alpha sees the frequency as a weapon, a tool of conquest. They\'ll destroy anyone who stands between them and total control.'
     },
     'Colonial Authority': {
-        title: 'Colonial Authority',
+        title: 'Empire Fleet Beta',
         sector: 'Sector 5-D',
         distance: '16,800 Light Years',
         status: 'HOSTILE - CONVERGING',
@@ -51,7 +51,7 @@ const locationData = {
         relevance: 'The second faction in the race. Empire Beta doesn\'t just want to control the signal—they want to understand it, decode it, use it to rewrite reality itself. Their methods are desperate and dangerous.'
     },
     'Sozuna Station Warzone': {
-        title: 'Former War Zone around the exoplanet Sozuna',
+        title: 'Former War Zone',
         sector: 'Sector 2-B',
         distance: '8,000 Light Years',
         status: 'ABANDONED - WRECKAGE DETECTED',
