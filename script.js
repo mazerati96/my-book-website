@@ -356,6 +356,81 @@ function initConsoleMessages() {
 }
 
 // ============================================
+// AMBIENT MUSIC SYSTEM (GLOBAL, PERSISTENT)
+// ============================================
+
+let ambientAudio = null;
+const MUSIC_STORAGE_KEY = 'ambientMusicEnabled';
+
+function initAmbientMusic() {
+    // Create audio element once
+    ambientAudio = new Audio('/audio/sci-fi-moodtimeflow.mp3');
+    ambientAudio.loop = true;
+    ambientAudio.volume = 0.22; // ambient-friendly level
+    ambientAudio.preload = 'auto';
+
+    // Restore saved preference
+    const musicEnabled = localStorage.getItem(MUSIC_STORAGE_KEY) === 'true';
+
+    if (musicEnabled) {
+        // Must wait for user interaction to start
+        const resumeOnInteraction = () => {
+            ambientAudio.play().catch(() => { });
+            document.removeEventListener('click', resumeOnInteraction);
+            document.removeEventListener('keydown', resumeOnInteraction);
+        };
+
+        document.addEventListener('click', resumeOnInteraction);
+        document.addEventListener('keydown', resumeOnInteraction);
+    }
+
+    createMusicToggle(musicEnabled);
+
+    // Pause when tab is hidden, resume when visible
+    document.addEventListener('visibilitychange', () => {
+        if (!ambientAudio) return;
+
+        if (document.hidden) {
+            ambientAudio.pause();
+        } else if (localStorage.getItem(MUSIC_STORAGE_KEY) === 'true') {
+            ambientAudio.play().catch(() => { });
+        }
+    });
+}
+
+function createMusicToggle(isEnabled) {
+    const footerToggle = document.createElement('div');
+    footerToggle.className = 'music-toggle';
+    footerToggle.innerHTML = `
+        <button class="music-toggle-btn">
+            🎧 Ambient Music: <strong>${isEnabled ? 'ON' : 'OFF'}</strong>
+        </button>
+        <div class="music-credit">
+            “Sci-Fi Moodtimeflow” — Ribhav Agrawal
+        </div>
+    `;
+
+    document.body.appendChild(footerToggle);
+
+    const button = footerToggle.querySelector('.music-toggle-btn');
+
+    button.addEventListener('click', () => {
+        const currentlyEnabled = localStorage.getItem(MUSIC_STORAGE_KEY) === 'true';
+
+        if (currentlyEnabled) {
+            ambientAudio.pause();
+            localStorage.setItem(MUSIC_STORAGE_KEY, 'false');
+            button.innerHTML = '🎧 Ambient Music: <strong>OFF</strong>';
+        } else {
+            ambientAudio.play().catch(() => { });
+            localStorage.setItem(MUSIC_STORAGE_KEY, 'true');
+            button.innerHTML = '🎧 Ambient Music: <strong>ON</strong>';
+        }
+    });
+}
+
+
+// ============================================
 // INITIALIZE ASH IMMEDIATELY (NO WAIT)
 // ============================================
 // Fire ash ASAP - don't wait for anything
@@ -378,6 +453,8 @@ function initializeAll() {
     initTrilogyCards();
     initKonamiCode();
     initConsoleMessages();
+    initAmbientMusic();
+
 
     console.log('✅ All systems online!');
 }
