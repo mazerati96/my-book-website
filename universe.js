@@ -11,6 +11,9 @@ let previousMouseX = 0;
 let rotationVelocity = { x: 0, y: 0 };
 let raycaster = new THREE.Raycaster();
 let mouseNDC = new THREE.Vector2();
+const SIGNAL_MAX_DISTANCE = 1200;
+const SIGNAL_MIN_DISTANCE = 300;
+
 
 
 // Location data
@@ -309,21 +312,39 @@ function onMouseWheel(e) {
     // Show frequency indicator when near black hole
     const distanceToBlackHole = camera.position.distanceTo(blackHole.position);
     const indicator = document.getElementById('frequency-indicator');
-    if (camera.position.z < 800) {
-        indicator.classList.add('active');
+    // Distance-based signal strength
+    const distance = camera.position.distanceTo(blackHole.position);
 
-        if (!signalActive && window.frequencyGenerator) {
-            window.frequencyGenerator.start();
-            signalActive = true;
-        }
+    // Normalize signal strength (0 → 1)
+    let strength = 1 - (distance - SIGNAL_MIN_DISTANCE) /
+        (SIGNAL_MAX_DISTANCE - SIGNAL_MIN_DISTANCE);
+
+    strength = THREE.MathUtils.clamp(strength, 0, 1);
+
+    // Visual indicator
+    if (strength > 0) {
+        indicator.classList.add('active');
+        indicator.style.setProperty('--signal-strength', strength.toFixed(2));
     } else {
         indicator.classList.remove('active');
+    }
 
-        if (signalActive && window.frequencyGenerator) {
+    // Audio behavior
+    if (window.frequencyGenerator) {
+        if (strength > 0 && !signalActive) {
+            window.frequencyGenerator.start();
+            signalActive = true;
+        } else if (strength === 0 && signalActive) {
             window.frequencyGenerator.stop();
             signalActive = false;
         }
+
+        // Optional: scale volume if supported
+        if (window.frequencyGenerator.setIntensity) {
+            window.frequencyGenerator.setIntensity(strength);
+        }
     }
+
 
 }
 

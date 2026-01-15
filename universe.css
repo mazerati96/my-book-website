@@ -268,6 +268,13 @@
         display: flex;
     }
 
+#frequency-indicator {
+    box-shadow: 0 0 calc(20px * var(--signal-strength)) #ff0033;
+    opacity: calc(0.3 + var(--signal-strength));
+    transition: box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+
 @keyframes pulse-glow {
     0%, 100% {
         box-shadow: 0 0 10px #ff0033;
