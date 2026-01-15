@@ -3,6 +3,74 @@
 // ============================================
 let isTransitioning = false;
 
+
+let audioUnlocked = false;
+
+function unlockAudioOnce() {
+    if (audioUnlocked) return;
+
+    const enabled = localStorage.getItem('ambientMusicEnabled') === 'true';
+    if (!enabled) return;
+
+    sendAudioCommand('PLAY');
+    audioUnlocked = true;
+
+    removeAudioUnlockListeners();
+}
+
+function removeAudioUnlockListeners() {
+    document.removeEventListener('click', unlockAudioOnce);
+    document.removeEventListener('keydown', unlockAudioOnce);
+    document.removeEventListener('wheel', unlockAudioOnce);
+    document.removeEventListener('touchstart', unlockAudioOnce);
+}
+
+// Listen for ANY valid user gesture
+document.addEventListener('click', unlockAudioOnce, { passive: true });
+document.addEventListener('keydown', unlockAudioOnce, { passive: true });
+document.addEventListener('wheel', unlockAudioOnce, { passive: true });
+document.addEventListener('touchstart', unlockAudioOnce, { passive: true });
+
+
+function showMusicNoticeIfIndex() {
+    if (!location.pathname.endsWith('index.html') && location.pathname !== '/') return;
+    if (sessionStorage.getItem('musicNoticeShown')) return;
+
+    const notice = document.createElement('div');
+    notice.style.cssText = `
+        position: fixed;
+        bottom: 120px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.85);
+        border: 1px solid white;
+        padding: 12px 18px;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        opacity: 0;
+        transition: opacity 1s ease;
+        z-index: 9999;
+    `;
+
+    notice.textContent = '🎧 Music playing — toggle on/off at the bottom of the page';
+
+    const footer = document.querySelector('footer');
+    if (footer) {
+        footer.appendChild(toggle);
+    } else {
+        document.body.appendChild(toggle);
+    }
+
+
+    requestAnimationFrame(() => notice.style.opacity = '1');
+
+    setTimeout(() => notice.style.opacity = '0', 4000);
+    setTimeout(() => notice.remove(), 5500);
+
+    sessionStorage.setItem('musicNoticeShown', 'true');
+}
+
+
 function initPageTransition() {
     const overlay = document.querySelector('.page-transition');
 
@@ -395,7 +463,8 @@ function createMusicToggle() {
     const enabled = localStorage.getItem('ambientMusicEnabled') === 'true';
 
     const toggle = document.createElement('div');
-    toggle.className = 'music-toggle';
+    toggle.className = 'music-toggle signal';
+
     toggle.innerHTML = `
         <button class="music-toggle-btn">
             🎧 Ambient Music: <strong>${enabled ? 'ON' : 'OFF'}</strong>
@@ -473,6 +542,8 @@ function initializeAll() {
     initConsoleMessages();
     initPersistentAudio();
     createFrequencyToggle();
+    showMusicNoticeIfIndex();
+
 
 
 

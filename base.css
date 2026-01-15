@@ -96,6 +96,10 @@ body {
     }
 
     /* music toggle button*/
+.music-toggle.signal {
+    opacity: 0.65;
+}
+
 
 .music-toggle {
     position: relative;
