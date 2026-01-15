@@ -1,10 +1,16 @@
 // ============================================
-// PAGE TRANSITION EFFECT
+// PAGE TRANSITION EFFECT with AMBIENT AUDIO
 // ============================================
+if (localStorage.getItem('ambientMusicEnabled') === null) {
+    localStorage.setItem('ambientMusicEnabled', 'true');
+}
+
+
 let isTransitioning = false;
 
 
 let audioUnlocked = false;
+
 
 function unlockAudioOnce() {
     if (audioUnlocked) return;
@@ -55,11 +61,9 @@ function showMusicNoticeIfIndex() {
     notice.textContent = '🎧 Music playing — toggle on/off at the bottom of the page';
 
     const footer = document.querySelector('footer');
-    if (footer) {
-        footer.appendChild(toggle);
-    } else {
-        document.body.appendChild(toggle);
-    }
+
+    document.body.appendChild(notice);
+
 
 
     requestAnimationFrame(() => notice.style.opacity = '1');
@@ -474,7 +478,8 @@ function createMusicToggle() {
         </div>
     `;
 
-    document.body.appendChild(toggle);
+    document.querySelector('footer')?.appendChild(toggle);
+
 
     const btn = toggle.querySelector('button');
 
@@ -549,7 +554,7 @@ function initializeAll() {
 
 
     console.log('✅ All systems online!');
-    fadeMusicUp();
+    
 
 }
 

@@ -28,9 +28,7 @@
         if (savedTime > 0 && savedTime < audio.duration) {
             audio.currentTime = savedTime;
         }
-        if (enabled) {
-            audio.play().catch(() => {});
-        }
+      
     });
 
     // Persist playback position
