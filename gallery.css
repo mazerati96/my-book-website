@@ -112,17 +112,7 @@
 }
 
 /* Placeholder styling (visible until images are added) */
-.cover1 {
-    background: linear-gradient(135deg, #1a1a1a 0%, #00ff88 100%);
-}
 
-.cover2 {
-    background: linear-gradient(135deg, #1a1a1a 0%, #00d4ff 100%);
-}
-
-.cover3 {
-    background: linear-gradient(135deg, #1a1a1a 0%, #ffd700 100%);
-}
 
 .android-vision {
     background: radial-gradient(ellipse at center, #ffd700 0%, #1a1a1a 70%);
