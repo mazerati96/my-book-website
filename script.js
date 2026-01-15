@@ -37,11 +37,6 @@ function initPageTransition() {
 }
 
 // ============================================
-// HAMBURGER MENU FUNCTIONALITY
-// ============================================
-
-
-// ============================================
 // FALLING ASH EFFECT
 // ============================================
 function initializeFallingAsh() {

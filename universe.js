@@ -345,8 +345,6 @@ function showLocationInfo(locationId) {
     }
 }
 
-// Hamburger menu functionality
-
 // Initialize everything when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
