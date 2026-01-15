@@ -7,6 +7,9 @@ let mouse = { x: 0, y: 0 };
 let isDragging = false;
 let previousMouseX = 0;
 let rotationVelocity = { x: 0, y: 0 };
+let raycaster = new THREE.Raycaster();
+let mouseNDC = new THREE.Vector2();
+
 
 // Location data
 const locationData = {
@@ -82,6 +85,7 @@ function initUniverse() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 1);
     container.appendChild(renderer.domElement);
+    container.addEventListener('click', onSceneClick);
 
     // Create star field
     createStarField();
@@ -204,15 +208,21 @@ function createBlackHole() {
     blackHole.outerGlow = outerGlow;
 }
 
+blackHole.userData.locationId = 'Charybdis Prime';
+blackHole.userData.type = 'location';
+
 // Create location markers
 function createLocationMarkers() {
     const markerPositions = {
         'brigade-base': { x: 300, y: -100, z: -800 },
-        'array': { x: -200, y: 150, z: -1000 },
-        'empire-1': { x: 400, y: 200, z: -600 },
-        'empire-2': { x: -350, y: -150, z: -700 },
-        'warzone': { x: 150, y: -250, z: -500 }
+        'Artemis Array': { x: -200, y: 150, z: -1000 },
+        'Hegemony': { x: 400, y: 200, z: -600 },
+        'Colonial Authority': { x: -350, y: -150, z: -700 },
+        'Sozuna Station Warzone': { x: 150, y: -250, z: -500 }
     };
+    
+    
+
 
     Object.keys(markerPositions).forEach(id => {
         const pos = markerPositions[id];
@@ -225,6 +235,7 @@ function createLocationMarkers() {
         const marker = new THREE.Mesh(geometry, material);
         marker.position.set(pos.x, pos.y, pos.z);
         marker.userData.locationId = id;
+        marker.userData.type = 'location';
         scene.add(marker);
         locations.push(marker);
     });
@@ -315,6 +326,12 @@ function setupLocationClicks() {
         item.addEventListener('click', () => {
             const locationId = item.dataset.location;
             showLocationInfo(locationId);
+
+            const marker = locations.find(m => m.userData.locationId === locationId);
+            if (marker) {
+                highlightMarker(marker);
+            }
+
         });
     });
 
@@ -344,6 +361,47 @@ function showLocationInfo(locationId) {
         camera.position.z = 600;
     }
 }
+
+
+function highlightMarker(targetMarker) {
+    // Reset all markers
+    locations.forEach(marker => {
+        marker.material.color.set(0xff0033);
+        marker.material.opacity = 0.8;
+    });
+
+    if (blackHole) {
+        blackHole.material.color.set(0x000000);
+    }
+
+    // Highlight selected marker
+    if (targetMarker.material) {
+        targetMarker.material.color.set(0x00ccff); // blue glow
+        targetMarker.material.opacity = 1;
+    }
+}
+
+function onSceneClick(event) {
+    const rect = renderer.domElement.getBoundingClientRect();
+
+    mouseNDC.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNDC.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouseNDC, camera);
+
+    const clickableObjects = [blackHole, ...locations];
+    const intersects = raycaster.intersectObjects(clickableObjects);
+
+    if (intersects.length > 0) {
+        const object = intersects[0].object;
+
+        if (object.userData.locationId) {
+            showLocationInfo(object.userData.locationId);
+            highlightMarker(object);
+        }
+    }
+}
+
 
 // Initialize everything when page loads
 if (document.readyState === 'loading') {
