@@ -13,6 +13,7 @@ let raycaster = new THREE.Raycaster();
 let mouseNDC = new THREE.Vector2();
 const SIGNAL_MIN_DISTANCE = 1600;
 const SIGNAL_MAX_DISTANCE = 3600;
+const SIGNAL_CUTOFF = 0.05; // below this = silence
 
 
 
@@ -307,12 +308,12 @@ function onMouseUp() {
 
 function onMouseWheel(e) {
     e.preventDefault();
+
     camera.position.z += e.deltaY * 0.5;
     camera.position.z = Math.max(300, Math.min(2000, camera.position.z));
 
-    // Show frequency indicator when near black hole
-    const distanceToBlackHole = camera.position.distanceTo(blackHole.position);
     const indicator = document.getElementById('frequency-indicator');
+    if (!indicator) return;
 
     // Z-depth distance only
     const distance = Math.abs(camera.position.z - blackHole.position.z);
@@ -333,17 +334,24 @@ function onMouseWheel(e) {
 
     // Audio behavior
     if (window.frequencyGenerator) {
-        if (strength > 0 && !signalActive) {
+        if (strength > SIGNAL_CUTOFF && !signalActive) {
             window.frequencyGenerator.start();
             signalActive = true;
-        } else if (strength === 0 && signalActive) {
+        }
+
+        if (strength <= SIGNAL_CUTOFF && signalActive) {
             window.frequencyGenerator.stop();
             signalActive = false;
         }
+
+        if (window.frequencyGenerator.setVolume) {
+            window.frequencyGenerator.setVolume(
+                strength > SIGNAL_CUTOFF ? strength : 0
+            );
+        }
     }
-
-
 }
+
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;

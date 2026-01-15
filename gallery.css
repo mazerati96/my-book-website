@@ -115,7 +115,7 @@
 /* Placeholder styling (visible until images are added) */
 
 
-.android-vision {
+/*.android-vision {  //commented out to use actual images in the future
     background: radial-gradient(ellipse at center, #ffd700 0%, #1a1a1a 70%);
 }
 
@@ -137,7 +137,7 @@
 
 .consciousness {
     background: linear-gradient(135deg, #1a1a1a 0%, #00ff88 50%, #1a1a1a 100%);
-}
+} */
 
 .placeholder-icon {
     font-size: 4rem;
