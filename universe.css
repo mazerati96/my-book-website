@@ -13,7 +13,7 @@
     background: #000000;
 }
 
-/* UI Overlay - NO pointer-events blocking */
+/* UI Overlay */
 .universe-ui {
     position: relative;
     z-index: 10;
@@ -53,7 +53,7 @@
     border: 2px solid #ff0033;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
-    pointer-events: auto;
+    z-index: 100;
 }
 
 .control-item {
@@ -89,7 +89,7 @@
     backdrop-filter: blur(10px);
     max-height: 400px;
     overflow-y: auto;
-    pointer-events: auto;
+    z-index: 100;
 }
 
     .locations-list h3 {
@@ -150,7 +150,7 @@
     backdrop-filter: blur(10px);
     box-shadow: 0 0 30px rgba(255, 0, 51, 0.6);
     animation: slideInRight 0.4s ease;
-    pointer-events: auto;
+    z-index: 100;
 }
 
 @keyframes slideInRight {
@@ -260,7 +260,7 @@
     align-items: center;
     gap: 1rem;
     animation: pulse-glow 2s ease-in-out infinite;
-    pointer-events: auto;
+    z-index: 100;
 }
 
     .frequency-indicator.active {
@@ -355,235 +355,4 @@
         bottom: auto;
         top: 320px;
     }
-}
-
-/* ============================================
-   HAMBURGER & SIDEBAR - UNIVERSE PAGE OVERRIDE
-   These override the base navigation.css styles
-   ============================================ */
-
-/* Force hamburger to be clickable and on top */
-.hamburger {
-    position: fixed !important;
-    top: 2rem !important;
-    right: 2rem !important;
-    z-index: 3000 !important;
-    width: 50px;
-    height: 50px;
-    background-color: rgba(0, 0, 0, 0.9) !important;
-    border: 2px solid #ff0033 !important;
-    cursor: pointer;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s;
-    pointer-events: auto !important;
-}
-
-    .hamburger:hover {
-        box-shadow: 0 0 20px #ff0033;
-        transform: scale(1.05);
-    }
-
-    .hamburger span {
-        width: 25px;
-        height: 2px;
-        background-color: #ff0033 !important;
-        transition: all 0.3s;
-    }
-
-    .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(8px, 8px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(8px, -8px);
-    }
-
-/* Sidebar for universe page */
-.sidebar {
-    position: fixed !important;
-    top: 0 !important;
-    right: -450px !important;
-    width: 400px !important;
-    height: 100vh !important;
-    background-color: rgba(0, 0, 0, 0.95) !important;
-    border-left: 2px solid #ff0033 !important;
-    z-index: 2999 !important;
-    padding: 2rem !important;
-    padding-top: 5rem !important;
-    display: flex !important;
-    flex-direction: column;
-    transition: right 0.4s ease !important;
-    backdrop-filter: blur(10px);
-    overflow-y: auto !important;
-    pointer-events: auto !important;
-}
-
-    .sidebar.active {
-        right: 0 !important;
-    }
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 3rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #ff0033;
-}
-
-.logo-bracket {
-    color: #ff0033;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.sidebar-header h2 {
-    color: #ffffff;
-    font-size: 1.3rem;
-    letter-spacing: 3px;
-}
-
-.nav-menu {
-    list-style: none;
-    flex: 1;
-}
-
-    .nav-menu li {
-        margin-bottom: 1.5rem;
-    }
-
-.nav-link {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    display: block;
-    padding: 1rem;
-    border: 1px solid transparent;
-    transition: all 0.3s;
-    position: relative;
-}
-
-    .nav-link::before {
-        content: '>';
-        position: absolute;
-        left: 0.5rem;
-        opacity: 0;
-        transition: all 0.3s;
-        color: #ff0033;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-        border: 1px solid #ff0033;
-        padding-left: 2rem;
-        box-shadow: 0 0 15px #ff0033;
-        background-color: rgba(255, 0, 51, 0.1);
-    }
-
-        .nav-link:hover::before,
-        .nav-link.active::before {
-            opacity: 1;
-        }
-
-    .nav-link.cta-nav {
-        background-color: #ff0033;
-        color: white;
-        border: 1px solid #ff0033;
-        text-align: center;
-        margin-top: 1rem;
-    }
-
-        .nav-link.cta-nav:hover {
-            box-shadow: 0 0 25px #ff0033;
-            transform: scale(1.02);
-        }
-
-.sidebar-footer {
-    margin-top: auto;
-    padding-top: 2rem;
-    border-top: 1px solid #ff0033;
-}
-
-.status-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.8rem;
-    border: 1px solid #ff0033;
-    background-color: rgba(255, 0, 51, 0.1);
-    color: #ffffff;
-    font-size: 0.9rem;
-}
-
-.status-indicator {
-    width: 8px;
-    height: 8px;
-    background-color: #ff0033;
-    border-radius: 50%;
-    animation: pulse 1.5s ease-in-out infinite;
-    box-shadow: 0 0 10px #ff0033;
-}
-
-/* Scrollbar for sidebar */
-.sidebar::-webkit-scrollbar {
-    width: 8px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: #ff0033;
-    border-radius: 4px;
-}
-
-    .sidebar::-webkit-scrollbar-thumb:hover {
-        background: #ff3355;
-    }
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 5px #ff0033;
-    }
-
-    50% {
-        transform: scale(1.2);
-        box-shadow: 0 0 15px #ff0033;
-    }
-
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 5px #ff0033;
-    }
-}
-
-/* Responsive */
-@media (max-width: 500px) {
-    .sidebar {
-        width: 100% !important;
-        right: -100% !important;
-    }
-
-        .sidebar.active {
-            right: 0 !important;
-        }
-
-    .hamburger {
-        width: 40px;
-        height: 40px;
-    }
-
-        .hamburger span {
-            width: 20px;
-        }
 }
