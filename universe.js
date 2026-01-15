@@ -345,18 +345,43 @@ function showLocationInfo(locationId) {
     }
 }
 
-// Initialize when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initUniverse);
-} else {
-    initUniverse();
+// Hamburger menu functionality
+function initHamburgerMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (!hamburger || !sidebar) {
+        console.error('❌ Hamburger or sidebar not found!');
+        return;
+    }
+
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        console.log('🍔 Hamburger clicked!');
+        hamburger.classList.toggle('active');
+        sidebar.classList.toggle('active');
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('active') &&
+            !sidebar.contains(e.target) &&
+            !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            sidebar.classList.remove('active');
+        }
+    });
+
+    console.log('✅ Hamburger menu initialized!');
 }
 
-
-const hamburger = document.querySelector('.hamburger');
-const sidebar = document.querySelector('.sidebar');
-
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    sidebar.classList.toggle('active');
-});
+// Initialize everything when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        initUniverse();
+        initHamburgerMenu();
+    });
+} else {
+    initUniverse();
+    initHamburgerMenu();
+}
