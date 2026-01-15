@@ -13,16 +13,11 @@
     background: #000000;
 }
 
-/* UI Overlay */
+/* UI Overlay - NO pointer-events blocking */
 .universe-ui {
     position: relative;
     z-index: 10;
-    pointer-events: none;
 }
-
-    .universe-ui > * {
-        pointer-events: auto;
-    }
 
 /* Header */
 .universe-header {
@@ -58,6 +53,7 @@
     border: 2px solid #ff0033;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
+    pointer-events: auto;
 }
 
 .control-item {
@@ -93,6 +89,7 @@
     backdrop-filter: blur(10px);
     max-height: 400px;
     overflow-y: auto;
+    pointer-events: auto;
 }
 
     .locations-list h3 {
@@ -153,6 +150,7 @@
     backdrop-filter: blur(10px);
     box-shadow: 0 0 30px rgba(255, 0, 51, 0.6);
     animation: slideInRight 0.4s ease;
+    pointer-events: auto;
 }
 
 @keyframes slideInRight {
@@ -262,6 +260,7 @@
     align-items: center;
     gap: 1rem;
     animation: pulse-glow 2s ease-in-out infinite;
+    pointer-events: auto;
 }
 
     .frequency-indicator.active {
@@ -357,25 +356,30 @@
         top: 320px;
     }
 }
+
 /* ============================================
-   HAMBURGER MENU FOR UNIVERSE PAGE
+   HAMBURGER & SIDEBAR - UNIVERSE PAGE OVERRIDE
+   These override the base navigation.css styles
    ============================================ */
+
+/* Force hamburger to be clickable and on top */
 .hamburger {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
-    z-index: 2000;
+    position: fixed !important;
+    top: 2rem !important;
+    right: 2rem !important;
+    z-index: 3000 !important;
     width: 50px;
     height: 50px;
-    background-color: rgba(0, 0, 0, 0.9);
-    border: 2px solid #ff0033;
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    border: 2px solid #ff0033 !important;
     cursor: pointer;
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 6px;
     transition: all 0.3s;
+    pointer-events: auto !important;
 }
 
     .hamburger:hover {
@@ -386,7 +390,7 @@
     .hamburger span {
         width: 25px;
         height: 2px;
-        background-color: #ff0033;
+        background-color: #ff0033 !important;
         transition: all 0.3s;
     }
 
@@ -402,28 +406,28 @@
         transform: rotate(-45deg) translate(8px, -8px);
     }
 
-/* ============================================
-   SIDEBAR NAVIGATION FOR UNIVERSE PAGE
-   ============================================ */
+/* Sidebar for universe page */
 .sidebar {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 400px;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.95);
-    border-left: 2px solid #ff0033;
-    z-index: 1999;
-    padding: 2rem;
-    display: flex;
+    position: fixed !important;
+    top: 0 !important;
+    right: -450px !important;
+    width: 400px !important;
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    border-left: 2px solid #ff0033 !important;
+    z-index: 2999 !important;
+    padding: 2rem !important;
+    padding-top: 5rem !important;
+    display: flex !important;
     flex-direction: column;
-    transition: right 0.4s ease;
+    transition: right 0.4s ease !important;
     backdrop-filter: blur(10px);
-    overflow-y: auto;
+    overflow-y: auto !important;
+    pointer-events: auto !important;
 }
 
     .sidebar.active {
-        right: 0;
+        right: 0 !important;
     }
 
 .sidebar-header {
@@ -528,7 +532,7 @@
     box-shadow: 0 0 10px #ff0033;
 }
 
-/* Scrollbar for sidebar navigation */
+/* Scrollbar for sidebar */
 .sidebar::-webkit-scrollbar {
     width: 8px;
 }
@@ -563,13 +567,16 @@
     }
 }
 
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
+/* Responsive */
 @media (max-width: 500px) {
     .sidebar {
-        width: 100%;
+        width: 100% !important;
+        right: -100% !important;
     }
+
+        .sidebar.active {
+            right: 0 !important;
+        }
 
     .hamburger {
         width: 40px;
