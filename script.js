@@ -197,14 +197,14 @@ function initContactForm() {
             if (response.ok && result.success) {
                 // Success!
                 buttonText.textContent = 'MESSAGE SENT!';
-                button.style.backgroundColor = 'var(--neon-white)';
-                button.style.color = 'var(--bg-black)';
+                button.style.backgroundColor = '';
+                button.style.color = '';
 
                 setTimeout(() => {
                     buttonText.textContent = originalText;
                     button.style.opacity = '1';
-                    button.style.backgroundColor = ' ';
-                    button.style.color = ' ';
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
                     button.disabled = false;
                     this.reset();
                 }, 2000);
