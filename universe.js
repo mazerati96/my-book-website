@@ -312,10 +312,11 @@ function onMouseWheel(e) {
     // Show frequency indicator when near black hole
     const distanceToBlackHole = camera.position.distanceTo(blackHole.position);
     const indicator = document.getElementById('frequency-indicator');
-    // Distance-based signal strength
-    const distance = camera.position.distanceTo(blackHole.position);
 
-    // Normalize signal strength (0 → 1)
+    // Z-depth distance only
+    const distance = Math.abs(camera.position.z - blackHole.position.z);
+
+    // Normalize signal strength
     let strength = 1 - (distance - SIGNAL_MIN_DISTANCE) /
         (SIGNAL_MAX_DISTANCE - SIGNAL_MIN_DISTANCE);
 
@@ -324,7 +325,7 @@ function onMouseWheel(e) {
     // Visual indicator
     if (strength > 0) {
         indicator.classList.add('active');
-        indicator.style.setProperty('--signal-strength', strength.toFixed(2));
+        indicator.style.setProperty('--signal-strength', strength);
     } else {
         indicator.classList.remove('active');
     }
@@ -337,11 +338,6 @@ function onMouseWheel(e) {
         } else if (strength === 0 && signalActive) {
             window.frequencyGenerator.stop();
             signalActive = false;
-        }
-
-        // Optional: scale volume if supported
-        if (window.frequencyGenerator.setIntensity) {
-            window.frequencyGenerator.setIntensity(strength);
         }
     }
 

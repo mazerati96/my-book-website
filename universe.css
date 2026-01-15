@@ -249,7 +249,7 @@
     }
 
 /* Frequency Indicator */
-.frequency-indicator {
+#frequency-indicator {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
@@ -262,17 +262,15 @@
     gap: 1rem;
     animation: pulse-glow 2s ease-in-out infinite;
     z-index: 100;
+    box-shadow: 0 0 calc(20px * var(--signal-strength, 0)) #ff0033;
+    opacity: calc(0.3 + var(--signal-strength, 0));
+    transition: box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-    .frequency-indicator.active {
+    #frequency-indicator.active {
         display: flex;
     }
 
-#frequency-indicator {
-    box-shadow: 0 0 calc(20px * var(--signal-strength)) #ff0033;
-    opacity: calc(0.3 + var(--signal-strength));
-    transition: box-shadow 0.2s ease, opacity 0.2s ease;
-}
 
 
 @keyframes pulse-glow {
