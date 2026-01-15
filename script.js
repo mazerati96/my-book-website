@@ -27,14 +27,16 @@ function unlockAudioOnce() {
 function removeAudioUnlockListeners() {
     document.removeEventListener('click', unlockAudioOnce);
     document.removeEventListener('keydown', unlockAudioOnce);
-    document.removeEventListener('wheel', unlockAudioOnce);
+    document.removeEventListener('wheel', unlockAudioOnce, { passive: false });
     document.removeEventListener('touchstart', unlockAudioOnce);
 }
 
 // Listen for ANY valid user gesture
+document.addEventListener('pointerdown', unlockAudioOnce);
+
 document.addEventListener('click', unlockAudioOnce, { passive: true });
 document.addEventListener('keydown', unlockAudioOnce, { passive: true });
-document.addEventListener('wheel', unlockAudioOnce, { passive: true });
+document.addEventListener('wheel', unlockAudioOnce, { passive: false });
 document.addEventListener('touchstart', unlockAudioOnce, { passive: true });
 
 
