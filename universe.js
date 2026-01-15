@@ -10,7 +10,7 @@ let rotationVelocity = { x: 0, y: 0 };
 
 // Location data
 const locationData = {
-    'Charydbis Prime': {
+    'Charybdis Prime': {
         title: 'Supermassive Black Hole',
         sector: 'Center of Galaxy',
         distance: '26,000 Light Years',
