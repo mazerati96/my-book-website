@@ -11,8 +11,9 @@ let previousMouseX = 0;
 let rotationVelocity = { x: 0, y: 0 };
 let raycaster = new THREE.Raycaster();
 let mouseNDC = new THREE.Vector2();
-const SIGNAL_MAX_DISTANCE = 1200;
-const SIGNAL_MIN_DISTANCE = 300;
+const SIGNAL_MIN_DISTANCE = 1600;
+const SIGNAL_MAX_DISTANCE = 3600;
+
 
 
 
