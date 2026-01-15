@@ -5,6 +5,7 @@ if (localStorage.getItem('ambientMusicEnabled') === null) {
     localStorage.setItem('ambientMusicEnabled', 'true');
 }
 
+initPersistentAudio();
 
 let isTransitioning = false;
 
@@ -445,7 +446,14 @@ function initPersistentAudio() {
     audioIframe.src = '/audio-player.html';
     audioIframe.style.display = 'none';
 
+    audioIframe.onload = () => {
+        if (localStorage.getItem('ambientMusicEnabled') === 'true' && audioUnlocked) {
+            sendAudioCommand('PLAY');
+        }
+    };
+
     document.body.appendChild(audioIframe);
+
 
     createMusicToggle();
 }
@@ -547,7 +555,7 @@ function initializeAll() {
     initTrilogyCards();
     initKonamiCode();
     initConsoleMessages();
-    initPersistentAudio();
+    
     createFrequencyToggle();
     showMusicNoticeIfIndex();
 
