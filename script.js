@@ -356,52 +356,58 @@ function initConsoleMessages() {
 }
 
 // ============================================
-// AMBIENT MUSIC SYSTEM (GLOBAL, PERSISTENT)
+// AMBIENT MUSIC SYSTEM (PERSISTENT ACROSS PAGES)
 // ============================================
 
 let ambientAudio = null;
-const MUSIC_STORAGE_KEY = 'ambientMusicEnabled';
+
+const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
+const MUSIC_TIME_KEY = 'ambientMusicTime';
 
 function initAmbientMusic() {
-    // Create audio element once
     ambientAudio = new Audio('/audio/sci-fi-moodtimeflow.mp3');
     ambientAudio.loop = true;
-    ambientAudio.volume = 0.22; // ambient-friendly level
+    ambientAudio.volume = 0.22;
     ambientAudio.preload = 'auto';
 
-    // Restore saved preference
-    const musicEnabled = localStorage.getItem(MUSIC_STORAGE_KEY) === 'true';
+    const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
+    const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
 
-    if (musicEnabled) {
-        // Must wait for user interaction to start
-        const resumeOnInteraction = () => {
-            ambientAudio.play().catch(() => { });
-            document.removeEventListener('click', resumeOnInteraction);
-            document.removeEventListener('keydown', resumeOnInteraction);
-        };
-
-        document.addEventListener('click', resumeOnInteraction);
-        document.addEventListener('keydown', resumeOnInteraction);
-    }
-
-    createMusicToggle(musicEnabled);
-
-    // Pause when tab is hidden, resume when visible
-    document.addEventListener('visibilitychange', () => {
-        if (!ambientAudio) return;
-
-        if (document.hidden) {
-            ambientAudio.pause();
-        } else if (localStorage.getItem(MUSIC_STORAGE_KEY) === 'true') {
-            ambientAudio.play().catch(() => { });
+    // Restore playback position once metadata is ready
+    ambientAudio.addEventListener('loadedmetadata', () => {
+        if (savedTime > 0 && savedTime < ambientAudio.duration) {
+            ambientAudio.currentTime = savedTime;
         }
     });
+
+    // Persist playback time
+    ambientAudio.addEventListener('timeupdate', () => {
+        localStorage.setItem(MUSIC_TIME_KEY, ambientAudio.currentTime);
+    });
+
+    createMusicToggle(enabled);
+
+    if (enabled) {
+        waitForUserGesture(() => {
+            ambientAudio.play().catch(() => { });
+        });
+    }
+}
+
+function waitForUserGesture(callback) {
+    const handler = () => {
+        callback();
+        document.removeEventListener('click', handler);
+        document.removeEventListener('keydown', handler);
+    };
+    document.addEventListener('click', handler);
+    document.addEventListener('keydown', handler);
 }
 
 function createMusicToggle(isEnabled) {
-    const footerToggle = document.createElement('div');
-    footerToggle.className = 'music-toggle';
-    footerToggle.innerHTML = `
+    const toggle = document.createElement('div');
+    toggle.className = 'music-toggle';
+    toggle.innerHTML = `
         <button class="music-toggle-btn">
             🎧 Ambient Music: <strong>${isEnabled ? 'ON' : 'OFF'}</strong>
         </button>
@@ -410,24 +416,25 @@ function createMusicToggle(isEnabled) {
         </div>
     `;
 
-    document.body.appendChild(footerToggle);
+    document.body.appendChild(toggle);
 
-    const button = footerToggle.querySelector('.music-toggle-btn');
+    const btn = toggle.querySelector('button');
 
-    button.addEventListener('click', () => {
-        const currentlyEnabled = localStorage.getItem(MUSIC_STORAGE_KEY) === 'true';
+    btn.addEventListener('click', () => {
+        const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
 
-        if (currentlyEnabled) {
+        if (enabled) {
             ambientAudio.pause();
-            localStorage.setItem(MUSIC_STORAGE_KEY, 'false');
-            button.innerHTML = '🎧 Ambient Music: <strong>OFF</strong>';
+            localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
+            btn.innerHTML = '🎧 Ambient Music: <strong>OFF</strong>';
         } else {
             ambientAudio.play().catch(() => { });
-            localStorage.setItem(MUSIC_STORAGE_KEY, 'true');
-            button.innerHTML = '🎧 Ambient Music: <strong>ON</strong>';
+            localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
+            btn.innerHTML = '🎧 Ambient Music: <strong>ON</strong>';
         }
     });
 }
+
 
 
 // ============================================
