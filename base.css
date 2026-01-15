@@ -126,3 +126,8 @@ body {
     font-size: 0.6rem;
     opacity: 0.6;
 }
+
+.music-toggle + .music-toggle {
+    margin-top: 20px;
+    opacity: 0.75;
+}

@@ -20,11 +20,12 @@ function initPageTransition() {
 
                 // Trigger transition
                 overlay.classList.add('active');
+                fadeMusicDown();
 
-                // Navigate after glitch effect
                 setTimeout(() => {
                     window.location.href = href;
                 }, 500);
+
             });
         }
     });
@@ -375,6 +376,14 @@ function initPersistentAudio() {
     createMusicToggle();
 }
 
+function fadeMusicDown() {
+    sendAudioCommand('FADE_DOWN');
+}
+
+function fadeMusicUp() {
+    sendAudioCommand('FADE_UP');
+}
+
 function sendAudioCommand(type) {
     const iframe = document.getElementById('audio-host');
     if (!iframe || !iframe.contentWindow) return;
@@ -413,6 +422,31 @@ function createMusicToggle() {
     });
 }
 
+function createFrequencyToggle() {
+    if (!window.frequencyGenerator) return;
+
+    const toggle = document.createElement('div');
+    toggle.className = 'music-toggle';
+    toggle.innerHTML = `
+        <button class="music-toggle-btn">
+            🧬 36 Hz Signal: <strong>OFF</strong>
+        </button>
+        <div class="music-credit">
+            Subsonic frequency generator
+        </div>
+    `;
+
+    document.body.appendChild(toggle);
+
+    const btn = toggle.querySelector('button');
+
+    btn.addEventListener('click', () => {
+        const isPlaying = window.frequencyGenerator.toggle();
+        btn.innerHTML = `🧬 36 Hz Signal: <strong>${isPlaying ? 'ON' : 'OFF'}</strong>`;
+    });
+}
+
+
 
 // ============================================
 // INITIALIZE ASH IMMEDIATELY (NO WAIT)
@@ -438,10 +472,14 @@ function initializeAll() {
     initKonamiCode();
     initConsoleMessages();
     initPersistentAudio();
+    createFrequencyToggle();
+
 
 
 
     console.log('✅ All systems online!');
+    fadeMusicUp();
+
 }
 
 // Run when DOM is ready

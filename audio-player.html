@@ -44,7 +44,7 @@
 
         switch (type) {
             case 'PLAY':
-                audio.play().catch(() => {});
+                audio.play().catch(() => { });
                 localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
                 break;
 
@@ -53,17 +53,39 @@
                 localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
                 break;
 
-            case 'TOGGLE':
-                if (audio.paused) {
-                    audio.play().catch(() => {});
-                    localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
-                } else {
-                    audio.pause();
-                    localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
-                }
+            case 'FADE_DOWN':
+                fadeTo(0.05, 400);
+                break;
+
+            case 'FADE_UP':
+                fadeTo(0.22, 600);
                 break;
         }
+
     });
+
+    let fadeInterval = null;
+
+    function fadeTo(targetVolume, duration = 500) {
+        clearInterval(fadeInterval);
+
+        const startVolume = audio.volume;
+        const steps = 20;
+        const stepTime = duration / steps;
+        let currentStep = 0;
+
+        fadeInterval = setInterval(() => {
+            currentStep++;
+            audio.volume =
+                startVolume + (targetVolume - startVolume) * (currentStep / steps);
+
+            if (currentStep >= steps) {
+                audio.volume = targetVolume;
+                clearInterval(fadeInterval);
+            }
+        }, stepTime);
+    }
+
 </script>
 
 </body>
