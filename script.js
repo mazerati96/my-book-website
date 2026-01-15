@@ -64,7 +64,7 @@ function initializeFallingAsh() {
 
         // Random properties
         const size = Math.random() * 2.5 + 1.5;
-        const startX = Math.random() * 100;
+        const startX = Math.random() * 10;            ;
         const endX = startX + (Math.random() * 40 - 20);
         const duration = Math.random() * 15 + 18;
         const delay = Math.random() * 8;
