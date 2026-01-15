@@ -10,7 +10,7 @@
     width: 100%;
     height: 100%;
     z-index: 0;
-    background: radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%);
+    background: #000000;
 }
 
 /* UI Overlay */
@@ -37,13 +37,14 @@
 
     .universe-header h1 {
         font-size: 3rem;
-        color: var(--primary-white);
-        text-shadow: 0 0 10px var(--primary-white), 0 0 20px var(--primary-white), 0 0 30px var(--accent-red);
+        color: #ffffff;
+        text-shadow: 0 0 20px rgba(255, 0, 51, 0.8);
         margin-bottom: 0.5rem;
+        letter-spacing: 2px;
     }
 
 .subtitle {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 1.1rem;
     letter-spacing: 2px;
 }
@@ -53,8 +54,8 @@
     position: fixed;
     top: 220px;
     left: 2rem;
-    background-color: rgba(10, 10, 10, 0.9);
-    border: 2px solid var(--accent-red);
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #ff0033;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
 }
@@ -64,7 +65,7 @@
     justify-content: space-between;
     gap: 2rem;
     margin-bottom: 0.8rem;
-    color: var(--primary-white);
+    color: #ffffff;
 }
 
     .control-item:last-child {
@@ -72,12 +73,12 @@
     }
 
 .control-label {
-    color: var(--accent-red);
+    color: #ff0033;
     font-weight: bold;
 }
 
 .control-value {
-    color: var(--dark-white);
+    color: #ffffff;
 }
 
 /* Locations List */
@@ -85,8 +86,8 @@
     position: fixed;
     bottom: 2rem;
     left: 2rem;
-    background-color: rgba(10, 10, 10, 0.9);
-    border: 2px solid var(--accent-red);
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #ff0033;
     padding: 1.5rem;
     max-width: 350px;
     backdrop-filter: blur(10px);
@@ -95,11 +96,11 @@
 }
 
     .locations-list h3 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 1.1rem;
         margin-bottom: 1rem;
         letter-spacing: 2px;
-        border-bottom: 1px solid var(--border-white);
+        border-bottom: 1px solid #ff0033;
         padding-bottom: 0.5rem;
     }
 
@@ -109,32 +110,33 @@
     gap: 1rem;
     padding: 0.8rem;
     margin-bottom: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-white);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #333333;
     cursor: pointer;
     transition: all 0.3s;
 }
 
     .location-item:hover {
-        border-color: var(--accent-red);
-        background-color: rgba(255, 0, 51, 0.1);
-        box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
+        border-color: #ff0033;
+        background-color: rgba(255, 0, 51, 0.15);
+        box-shadow: 0 0 15px rgba(255, 0, 51, 0.5);
         transform: translateX(5px);
     }
 
 .location-icon {
     font-size: 1.5rem;
     min-width: 30px;
+    color: #ffffff;
 }
 
 .location-name {
-    color: var(--primary-white);
+    color: #ffffff;
     font-weight: bold;
     flex: 1;
 }
 
 .location-distance {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 0.85rem;
 }
 
@@ -144,12 +146,12 @@
     top: 50%;
     right: 2rem;
     transform: translateY(-50%);
-    background-color: rgba(10, 10, 10, 0.95);
-    border: 2px solid var(--accent-red);
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ff0033;
     padding: 2rem;
     max-width: 400px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 0 30px rgba(255, 0, 51, 0.4);
+    box-shadow: 0 0 30px rgba(255, 0, 51, 0.6);
     animation: slideInRight 0.4s ease;
 }
 
@@ -171,7 +173,7 @@
     right: 1rem;
     background: none;
     border: none;
-    color: var(--accent-red);
+    color: #ff0033;
     font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.3s;
@@ -179,14 +181,15 @@
 
     .close-btn:hover {
         transform: rotate(90deg);
-        color: var(--primary-white);
+        color: #ffffff;
+        text-shadow: 0 0 10px #ff0033;
     }
 
 .info-panel h2 {
-    color: var(--neon-white);
+    color: #ffffff;
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
-    text-shadow: 0 0 10px var(--primary-white);
+    text-shadow: 0 0 10px rgba(255, 0, 51, 0.5);
 }
 
 .info-stats {
@@ -195,7 +198,7 @@
     gap: 1rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-white);
+    border-bottom: 1px solid #ff0033;
 }
 
 .stat {
@@ -205,19 +208,20 @@
 }
 
 .stat-label {
-    color: var(--accent-red);
+    color: #ff0033;
     font-size: 0.8rem;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .stat-value {
-    color: var(--primary-white);
+    color: #ffffff;
     font-weight: bold;
     font-size: 1.1rem;
 }
 
 .info-description {
-    color: var(--dark-white);
+    color: #cccccc;
     line-height: 1.7;
     margin-bottom: 1.5rem;
 }
@@ -227,20 +231,21 @@
     }
 
 .info-relevance {
-    background-color: rgba(255, 0, 51, 0.05);
-    border-left: 3px solid var(--accent-red);
+    background-color: rgba(255, 0, 51, 0.1);
+    border-left: 3px solid #ff0033;
     padding: 1rem;
 }
 
     .info-relevance h4 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 0.9rem;
         margin-bottom: 0.8rem;
         letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
     .info-relevance p {
-        color: var(--dark-white);
+        color: #ffffff;
         line-height: 1.6;
     }
 
@@ -249,8 +254,8 @@
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background-color: rgba(10, 10, 10, 0.9);
-    border: 2px solid var(--accent-red);
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #ff0033;
     padding: 1rem 1.5rem;
     backdrop-filter: blur(10px);
     display: none;
@@ -265,18 +270,18 @@
 
 @keyframes pulse-glow {
     0%, 100% {
-        box-shadow: 0 0 10px var(--accent-red);
+        box-shadow: 0 0 10px #ff0033;
     }
 
     50% {
-        box-shadow: 0 0 30px var(--accent-red);
+        box-shadow: 0 0 30px #ff0033;
     }
 }
 
 .frequency-wave {
     width: 40px;
     height: 30px;
-    background: repeating-linear-gradient( 90deg, var(--accent-red) 0px, var(--accent-red) 2px, transparent 2px, transparent 8px );
+    background: repeating-linear-gradient( 90deg, #ff0033 0px, #ff0033 2px, transparent 2px, transparent 8px );
     animation: wave-pulse 1s ease-in-out infinite;
 }
 
@@ -293,10 +298,10 @@
 }
 
 .frequency-text {
-    color: var(--accent-red);
+    color: #ff0033;
     font-weight: bold;
     letter-spacing: 1px;
-    text-shadow: 0 0 10px var(--accent-red);
+    text-shadow: 0 0 10px #ff0033;
 }
 
 /* Scrollbar for locations list */
@@ -305,16 +310,17 @@
 }
 
 .locations-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .locations-list::-webkit-scrollbar-thumb {
-    background: var(--accent-red);
+    background: #ff0033;
     border-radius: 4px;
 }
 
     .locations-list::-webkit-scrollbar-thumb:hover {
-        background: var(--neon-white);
+        background: #ff3355;
+        box-shadow: 0 0 10px #ff0033;
     }
 
 /* Responsive */
