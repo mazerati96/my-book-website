@@ -90,18 +90,26 @@
     transition: all 0.3s;
 }
 
-/* REPLACE THESE WITH YOUR IMAGES */
-/* Add these lines after you place your .png files in an images folder:
+
+
+/* BOOK COVER IMAGES */
 .cover1 {
-    background-image: url('../images/book1-cover.png');
+    background-image: url('images/book1-cover.jpg');
+    background-size: cover;
+    background-position: center;
 }
+
 .cover2 {
-    background-image: url('../images/book2-cover.png');
+    background-image: url('images/book2-cover.jpg');
+    background-size: cover;
+    background-position: center;
 }
+
 .cover3 {
-    background-image: url('../images/book3-cover.png');
+    background-image: url('images/book3-cover.jpg');
+    background-size: cover;
+    background-position: center;
 }
-*/
 
 /* Placeholder styling (visible until images are added) */
 .cover1 {
