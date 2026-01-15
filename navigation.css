@@ -60,6 +60,7 @@
     flex-direction: column;
     transition: right 0.4s ease;
     backdrop-filter: blur(10px);
+    overflow-y: auto;
 }
 
     .sidebar.active {
