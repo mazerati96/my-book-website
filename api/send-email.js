@@ -18,14 +18,14 @@ export default async function handler(req, res) {
 
     try {
         // Get form data
-        const { name, email, message } = req.body;
+        const { name, email, subject, message } = req.body;  // ✅ ADD subject
 
         // Validate inputs
-        if (!name || !email || !message) {
+        if (!name || !email || !subject || !message) {
             return res.status(400).json({
                 success: false,
                 error: 'Missing required fields',
-                received: { name: !!name, email: !!email, message: !!message }
+                received: { name: !!name, email: !!email, subject: !!subject, message: !!message }
             });
         }
 
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
         const emailData = await resend.emails.send({
             from: 'The Measure of Souls <onboarding@resend.dev>',
             to: [process.env.RECIPIENT_EMAIL],
-            subject: `📬 New Contact Form Message from ${name}`,
+            subject: `📬 [${subject}] Message from ${name}`,  // ✅ NEW - includes the form subject
             replyTo: email, // This lets you hit "Reply" to respond directly to the sender
             html: `
                 <div style="font-family: 'Courier New', monospace; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0a0a0a; color: #ffffff;">
@@ -73,6 +73,7 @@ export default async function handler(req, res) {
                     <div style="background-color: #1a1a1a; padding: 20px; margin: 20px 0; border: 1px solid #ffffff;">
                         <p><strong style="color: #ffffff;">From:</strong> ${name}</p>
                         <p><strong style="color: #ffffff;">Email:</strong> <a href="mailto:${email}" style="color: #00d4ff;">${email}</a></p>
+                        <p><strong style="color: #ffffff;">Subject:</strong> <span style="color: #00ff88;">${subject}</span></p>  
                         <p><strong style="color: #ffffff;">Sent:</strong> ${new Date().toLocaleString('en-US', {
                 timeZone: 'America/Los_Angeles',
                 dateStyle: 'full',

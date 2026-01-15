@@ -162,6 +162,7 @@ function initContactForm() {
         const formData = {
             name: this.querySelector('input[name="name"]').value,
             email: this.querySelector('input[name="email"]').value,
+            subject: this.querySelector('select[name="subject"]').value,
             message: this.querySelector('textarea[name="message"]').value
         };
 
@@ -202,8 +203,8 @@ function initContactForm() {
                 setTimeout(() => {
                     buttonText.textContent = originalText;
                     button.style.opacity = '1';
-                    button.style.backgroundColor = 'var(--primary-white)';
-                    button.style.color = 'var(--bg-black)';
+                    button.style.backgroundColor = ' ';
+                    button.style.color = ' ';
                     button.disabled = false;
                     this.reset();
                 }, 2000);
