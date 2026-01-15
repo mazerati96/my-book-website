@@ -453,6 +453,7 @@
     max-width: 100%;
     max-height: 70vh;
     display: block;
+    margin: 0 auto; /* ✅ ADD THIS - Centers the image */
     border: 3px solid #ff0033;
     box-shadow: 0 0 50px rgba(255, 0, 51, 0.5);
 }
