@@ -437,9 +437,9 @@ function onSceneClick(event) {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initUniverse();
-        initHamburgerMenu();
+       // initHamburgerMenu();
     });
 } else {
     initUniverse();
-    initHamburgerMenu();
+    //initHamburgerMenu();
 }
