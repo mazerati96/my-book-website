@@ -2,6 +2,8 @@
 // 3D STAR MAP - UNIVERSE PAGE
 // ============================================
 
+let signalActive = false;
+
 let scene, camera, renderer, starField, blackHole, locations = [];
 let mouse = { x: 0, y: 0 };
 let isDragging = false;
@@ -309,9 +311,20 @@ function onMouseWheel(e) {
     const indicator = document.getElementById('frequency-indicator');
     if (camera.position.z < 800) {
         indicator.classList.add('active');
+
+        if (!signalActive && window.frequencyGenerator) {
+            window.frequencyGenerator.start();
+            signalActive = true;
+        }
     } else {
         indicator.classList.remove('active');
+
+        if (signalActive && window.frequencyGenerator) {
+            window.frequencyGenerator.stop();
+            signalActive = false;
+        }
     }
+
 }
 
 function onWindowResize() {
