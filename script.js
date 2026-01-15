@@ -355,14 +355,20 @@ function initConsoleMessages() {
 }
 
 // ============================================
-// INITIALIZE EVERYTHING ON DOM READY
+// INITIALIZE ASH IMMEDIATELY (NO WAIT)
+// ============================================
+// Fire ash ASAP - don't wait for anything
+initializeFallingAsh();
+
+// ============================================
+// INITIALIZE EVERYTHING ELSE ON DOM READY
 // ============================================
 function initializeAll() {
     console.log('🚀 Initializing The Measure of Souls website...');
 
     initPageTransition();
     //initHamburgerMenu(); commented out for now
-    initializeFallingAsh();
+    //initializeFallingAsh(); used earlier
     initGlitchEffect();
     initContactForm();
     initScrollAnimations();
