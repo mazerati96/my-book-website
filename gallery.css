@@ -4,9 +4,9 @@
 
 /* Gallery Intro */
 .gallery-intro {
-    background-color: var(--bg-dark);
-    border-top: 2px solid var(--accent-red);
-    border-bottom: 2px solid var(--accent-red);
+    background-color: #111111;
+    border-top: 2px solid #ff0033;
+    border-bottom: 2px solid #ff0033;
     padding: 3rem 2rem;
 }
 
@@ -14,7 +14,7 @@
         max-width: 900px;
         margin: 0 auto;
         text-align: center;
-        color: var(--dark-white);
+        color: #cccccc;
         font-size: 1.1rem;
         line-height: 1.9;
     }
@@ -31,16 +31,16 @@
 }
 
 .category-title {
-    color: var(--accent-red);
+    color: #ff0033;
     font-size: 1.8rem;
     text-align: center;
     margin-bottom: 3rem;
     letter-spacing: 3px;
-    text-shadow: 0 0 10px var(--accent-red);
+    text-shadow: 0 0 10px #ff0033;
 }
 
 .title-bracket {
-    color: var(--primary-white);
+    color: #ffffff;
     font-size: 2rem;
 }
 
@@ -53,15 +53,15 @@
 
 /* Gallery Item */
 .gallery-item {
-    background-color: var(--bg-card);
-    border: 2px solid var(--border-white);
+    background-color: #1a1a1a;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     overflow: hidden;
     transition: all 0.3s;
     cursor: pointer;
 }
 
     .gallery-item:hover {
-        border-color: var(--accent-red);
+        border-color: #ff0033;
         box-shadow: 0 0 30px rgba(255, 0, 51, 0.3);
         transform: translateY(-10px);
     }
@@ -71,7 +71,7 @@
     position: relative;
     width: 100%;
     padding-top: 133.33%; /* 3:4 aspect ratio */
-    background-color: var(--bg-dark);
+    background-color: #111111;
     overflow: hidden;
 }
 
@@ -142,23 +142,23 @@
 
 .placeholder-icon {
     font-size: 4rem;
-    margin-bottom: 1rem;
+    color: #ffffff;
 }
 
 .placeholder-text {
-    color: var(--primary-white);
+    color: #ffffff;
     font-weight: bold;
     font-size: 1.2rem;
     letter-spacing: 2px;
 }
 
 .cover-note {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 0.85rem;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
     background-color: rgba(255, 0, 51, 0.1);
-    border: 1px solid var(--accent-red);
+    border: 1px solid #ff0033;
 }
 
 /* Glitch Overlay */
@@ -284,22 +284,22 @@
 }
 
     .item-info h3 {
-        color: var(--neon-white);
+        color: #ffffff;
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
-        text-shadow: 0 0 5px var(--primary-white);
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
 
     .item-info p {
-        color: var(--dark-white);
+        color: #cccccc;
         font-size: 0.9rem;
         line-height: 1.6;
     }
 
 /* Upload Section */
 .upload-section {
-    background-color: var(--bg-dark);
-    border-top: 2px solid var(--accent-red);
+    background-color: #111111;
+    border-top: 2px solid #ff0033;
     padding: 4rem 2rem;
 }
 
@@ -309,22 +309,22 @@
 }
 
     .upload-content h2 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 2rem;
         margin-bottom: 2rem;
         text-align: center;
-        text-shadow: 0 0 10px var(--accent-red);
+        text-shadow: 0 0 10px #ff0033;
     }
 
     .upload-content p {
-        color: var(--dark-white);
+        color: #cccccc;
         font-size: 1.1rem;
         margin-bottom: 1.5rem;
         text-align: center;
     }
 
 .upload-instructions {
-    color: var(--dark-white);
+    color: #cccccc;
     line-height: 2;
     padding-left: 2rem;
 }
@@ -335,11 +335,11 @@
 
     .upload-instructions code,
     .upload-instructions pre {
-        background-color: var(--bg-card);
-        border: 1px solid var(--accent-red);
+        background-color: #1a1a1a;
+        border: 1px solid #ff0033;
         padding: 0.3rem 0.6rem;
         font-family: 'Courier New', monospace;
-        color: var(--accent-red);
+        color: #ff0033;
         display: inline-block;
     }
 

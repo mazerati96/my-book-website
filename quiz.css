@@ -33,21 +33,21 @@
 
 /* Start Screen */
 .start-content {
-    background-color: var(--bg-card);
-    border: 2px solid var(--accent-red);
+    background-color: #1a1a1a;
+    border: 2px solid #ff0033;
     padding: 3rem;
     text-align: center;
 }
 
     .start-content h2 {
-        color: var(--neon-white);
+        color: #ffffff;
         font-size: 2rem;
         margin-bottom: 2rem;
-        text-shadow: 0 0 10px var(--primary-white);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
 .quiz-intro {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 2rem;
@@ -59,22 +59,23 @@
     gap: 1rem;
     padding: 1.5rem;
     background-color: rgba(255, 0, 51, 0.1);
-    border: 1px solid var(--accent-red);
+    border: 1px solid #ff0033;
     margin-bottom: 2rem;
 }
 
 .warning-icon {
     font-size: 2rem;
+    color: #ff0033;
 }
 
 .warning-box p {
-    color: var(--dark-white);
+    color: #cccccc;
     text-align: left;
     margin: 0;
 }
 
 .warning-box strong {
-    color: var(--accent-red);
+    color: #ff0033;
 }
 
 /* Quiz Buttons */
@@ -83,9 +84,9 @@
     font-family: 'Courier New', monospace;
     font-weight: bold;
     font-size: 1rem;
-    border: 2px solid var(--accent-red);
+    border: 2px solid #ff0033;
     background-color: transparent;
-    color: var(--accent-red);
+    color: #ff0033;
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
@@ -93,20 +94,20 @@
 }
 
     .quiz-btn.primary {
-        background-color: var(--accent-red);
+        background-color: #ff0033;
         color: white;
-        box-shadow: 0 0 20px var(--accent-red);
+        box-shadow: 0 0 20px #ff0033;
     }
 
         .quiz-btn.primary:hover {
-            box-shadow: 0 0 30px var(--accent-red);
+            box-shadow: 0 0 30px #ff0033;
             transform: translateY(-2px);
         }
 
     .quiz-btn.secondary:hover {
-        background-color: var(--accent-red);
+        background-color: #ff0033;
         color: white;
-        box-shadow: 0 0 20px var(--accent-red);
+        box-shadow: 0 0 20px #ff0033;
     }
 
     .quiz-btn:disabled {
@@ -131,8 +132,8 @@
 
 /* Progress Bar */
 .progress-bar {
-    background-color: var(--bg-card);
-    border: 2px solid var(--accent-red);
+    background-color: #1a1a1a;
+    border: 2px solid #ff0033;
     padding: 1rem;
     margin-bottom: 3rem;
     position: relative;
@@ -140,14 +141,14 @@
 
 .progress-fill {
     height: 8px;
-    background: linear-gradient(90deg, var(--accent-red), #ff3366);
+    background: linear-gradient(90deg, #ff0033, #ff3366);
     transition: width 0.5s ease;
-    box-shadow: 0 0 10px var(--accent-red);
+    box-shadow: 0 0 10px #ff0033;
     margin-bottom: 0.5rem;
 }
 
 .progress-text {
-    color: var(--accent-red);
+    color: #ff0033;
     font-weight: bold;
     font-size: 0.9rem;
     letter-spacing: 1px;
@@ -155,18 +156,18 @@
 
 /* Question Container */
 .question-container {
-    background-color: var(--bg-card);
-    border: 2px solid var(--border-white);
+    background-color: #1a1a1a;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     padding: 3rem;
     margin-bottom: 2rem;
 }
 
 .question-text {
-    color: var(--neon-white);
+    color: #ffffff;
     font-size: 1.5rem;
     line-height: 1.6;
     margin-bottom: 2rem;
-    text-shadow: 0 0 5px var(--primary-white);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 /* Answers Grid */
@@ -178,8 +179,8 @@
 .answer-option {
     padding: 1.5rem;
     background-color: rgba(255, 255, 255, 0.03);
-    border: 2px solid var(--border-white);
-    color: var(--primary-white);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
     text-align: left;
     cursor: pointer;
     transition: all 0.3s;
@@ -189,21 +190,21 @@
 }
 
     .answer-option:hover {
-        border-color: var(--accent-red);
+        border-color: #ff0033;
         background-color: rgba(255, 0, 51, 0.1);
         box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
         transform: translateX(10px);
     }
 
     .answer-option.selected {
-        border-color: var(--accent-red);
+        border-color: #ff0033;
         background-color: rgba(255, 0, 51, 0.2);
         box-shadow: 0 0 20px rgba(255, 0, 51, 0.4);
     }
 
     .answer-option::before {
         content: '▸ ';
-        color: var(--accent-red);
+        color: #ff0033;
         margin-right: 0.5rem;
     }
 
@@ -224,15 +225,15 @@
 }
 
     .results-content h2 {
-        color: var(--neon-white);
+        color: #ffffff;
         font-size: 2rem;
         margin-bottom: 2rem;
-        text-shadow: 0 0 10px var(--primary-white);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
 .result-card {
-    background-color: var(--bg-card);
-    border: 3px solid var(--accent-red);
+    background-color: #1a1a1a;
+    border: 3px solid #ff0033;
     padding: 3rem;
     margin-bottom: 2rem;
     box-shadow: 0 0 30px rgba(255, 0, 51, 0.3);
@@ -240,18 +241,18 @@
 
 .result-icon {
     font-size: 5rem;
-    margin-bottom: 1rem;
+    color: #ffffff;
 }
 
 .result-card h3 {
-    color: var(--accent-red);
+    color: #ff0033;
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 15px var(--accent-red);
+    text-shadow: 0 0 15px #ff0033;
 }
 
 .result-role {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 1.1rem;
     letter-spacing: 2px;
     margin-bottom: 2rem;
@@ -259,7 +260,7 @@
 }
 
 .result-description {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 2rem;
@@ -268,14 +269,14 @@
 
 .result-traits {
     background-color: rgba(255, 0, 51, 0.05);
-    border-left: 4px solid var(--accent-red);
+    border-left: 4px solid #ff0033;
     padding: 1.5rem;
     margin: 2rem 0;
     text-align: left;
 }
 
     .result-traits h4 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 1rem;
         letter-spacing: 2px;
         margin-bottom: 1rem;
@@ -290,26 +291,26 @@
 .trait-tag {
     padding: 0.5rem 1rem;
     background-color: rgba(255, 0, 51, 0.2);
-    border: 1px solid var(--accent-red);
-    color: var(--accent-red);
+    border: 1px solid #ff0033;
+    color: #ff0033;
     font-size: 0.9rem;
     font-weight: bold;
 }
 
 .result-quote {
-    color: var(--primary-white);
+    color: #ffffff;
     font-size: 1.2rem;
     font-style: italic;
     margin-top: 2rem;
     padding: 1.5rem;
-    border-top: 1px solid var(--border-white);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
     position: relative;
 }
 
     .result-quote::before,
     .result-quote::after {
         content: '"';
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 3rem;
         opacity: 0.3;
     }

@@ -56,17 +56,17 @@
 
 /* Audio Control Section */
 .audio-control-section {
-    background-color: var(--bg-dark);
-    border-top: 2px solid var(--accent-red);
-    border-bottom: 2px solid var(--accent-red);
+    background-color: #111111;
+    border-top: 2px solid #ff0033;
+    border-bottom: 2px solid #ff0033;
     padding: 3rem 2rem;
 }
 
 .control-panel {
     max-width: 800px;
     margin: 0 auto;
-    background-color: var(--bg-card);
-    border: 2px solid var(--accent-red);
+    background-color: #1a1a1a;
+    border: 2px solid #ff0033;
     padding: 2rem;
 }
 
@@ -76,11 +76,11 @@
     align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-white);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
     .panel-header h3 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 1.3rem;
         letter-spacing: 2px;
     }
@@ -92,25 +92,25 @@
 }
 
 .freq-value {
-    color: var(--neon-white);
+    color: #ffffff;
     font-size: 3rem;
     font-weight: bold;
-    text-shadow: 0 0 15px var(--accent-red);
+    text-shadow: 0 0 15px #ff0033;
     animation: freq-pulse 2s ease-in-out infinite;
 }
 
 @keyframes freq-pulse {
     0%, 100% {
-        text-shadow: 0 0 15px var(--accent-red);
+        text-shadow: 0 0 15px #ff0033;
     }
 
     50% {
-        text-shadow: 0 0 30px var(--accent-red);
+        text-shadow: 0 0 30px #ff0033;
     }
 }
 
 .freq-unit {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 1.2rem;
 }
 
@@ -124,8 +124,8 @@
 
 .audio-btn {
     padding: 1.5rem;
-    background-color: var(--accent-red);
-    border: 2px solid var(--accent-red);
+    background-color: #ff0033;
+    border: 2px solid #ff0033;
     color: white;
     font-family: 'Courier New', monospace;
     font-weight: bold;
@@ -136,11 +136,11 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    box-shadow: 0 0 20px var(--accent-red);
+    box-shadow: 0 0 20px #ff0033;
 }
 
     .audio-btn:hover {
-        box-shadow: 0 0 40px var(--accent-red);
+        box-shadow: 0 0 40px #ff0033;
         transform: scale(1.02);
     }
 
@@ -150,11 +150,11 @@
 
 @keyframes audio-playing {
     0%, 100% {
-        box-shadow: 0 0 20px var(--accent-red);
+        box-shadow: 0 0 20px #ff0033;
     }
 
     50% {
-        box-shadow: 0 0 50px var(--accent-red);
+        box-shadow: 0 0 50px #ff0033;
     }
 }
 
@@ -169,7 +169,7 @@
 }
 
     .volume-control label {
-        color: var(--accent-red);
+        color: #ff0033;
         font-weight: bold;
         letter-spacing: 1px;
     }
@@ -177,8 +177,8 @@
 #volume-slider {
     flex: 1;
     height: 8px;
-    background: var(--bg-dark);
-    border: 1px solid var(--accent-red);
+    background: #111111;
+    border: 1px solid #ff0033;
     outline: none;
     -webkit-appearance: none;
 }
@@ -187,21 +187,21 @@
         -webkit-appearance: none;
         width: 20px;
         height: 20px;
-        background: var(--accent-red);
+        background: #ff0033;
         cursor: pointer;
-        box-shadow: 0 0 10px var(--accent-red);
+        box-shadow: 0 0 10px #ff0033;
     }
 
     #volume-slider::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background: var(--accent-red);
+        background: #ff0033;
         cursor: pointer;
-        box-shadow: 0 0 10px var(--accent-red);
+        box-shadow: 0 0 10px #ff0033;
     }
 
 #volume-value {
-    color: var(--primary-white);
+    color: #ffffff;
     font-weight: bold;
     min-width: 50px;
 }
@@ -212,11 +212,11 @@
     gap: 1rem;
     padding: 1rem;
     background-color: rgba(255, 0, 51, 0.1);
-    border-left: 3px solid var(--accent-red);
+    border-left: 3px solid #ff0033;
 }
 
     .warning-message p {
-        color: var(--dark-white);
+        color: #cccccc;
         font-size: 0.9rem;
         line-height: 1.6;
         margin: 0;
@@ -231,8 +231,8 @@
 
 .visualizer-container {
     position: relative;
-    background-color: var(--bg-card);
-    border: 2px solid var(--accent-red);
+    background-color: #1a1a1a;
+    border: 2px solid #ff0033;
     padding: 2rem;
     min-height: 400px;
 }
@@ -241,7 +241,7 @@
     width: 100%;
     height: 350px;
     background-color: #000000;
-    border: 1px solid var(--border-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .visualizer-overlay {
@@ -249,7 +249,7 @@
     top: 2rem;
     right: 2rem;
     background-color: rgba(10, 10, 10, 0.9);
-    border: 1px solid var(--accent-red);
+    border: 1px solid #ff0033;
     padding: 1rem;
     backdrop-filter: blur(10px);
 }
@@ -267,13 +267,13 @@
 }
 
 .data-label {
-    color: var(--accent-red);
+    color: #ff0033;
     font-size: 0.85rem;
     letter-spacing: 1px;
 }
 
 .data-value {
-    color: var(--primary-white);
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -282,7 +282,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 5rem 2rem;
-    background-color: var(--bg-dark);
+    background-color: #111111;
 }
 
 .decoder-content {
@@ -292,8 +292,8 @@
 }
 
 .cipher-display {
-    background-color: var(--bg-card);
-    border: 2px solid var(--accent-red);
+    background-color: #1a1a1a;
+    border: 2px solid #ff0033;
     padding: 2rem;
 }
 
@@ -303,21 +303,21 @@
     align-items: center;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-white);
-    color: var(--accent-red);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ff0033;
     font-weight: bold;
     letter-spacing: 2px;
 }
 
 .cipher-progress {
-    color: var(--neon-white);
+    color: #ffffff;
 }
 
 .cipher-text {
     font-family: monospace;
     font-size: 1.2rem;
     line-height: 2;
-    color: var(--primary-white);
+    color: #ffffff;
     word-break: break-all;
     animation: cipher-flicker 0.5s infinite;
 }
@@ -334,19 +334,19 @@
 
 /* Decoder Interface */
 .decoder-interface {
-    background-color: var(--bg-card);
-    border: 2px solid var(--border-white);
+    background-color: #1a1a1a;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     padding: 2rem;
 }
 
     .decoder-interface h3 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 1.5rem;
         margin-bottom: 1rem;
     }
 
 .decoder-hint {
-    color: var(--dark-white);
+    color: #cccccc;
     font-style: italic;
     margin-bottom: 2rem;
 }
@@ -361,18 +361,19 @@
 .symbol-item {
     aspect-ratio: 1;
     background-color: rgba(255, 0, 51, 0.1);
-    border: 1px solid var(--accent-red);
+    border: 1px solid #ff0033;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.3s;
+    color: #ffffff;
 }
 
     .symbol-item:hover {
         background-color: rgba(255, 0, 51, 0.3);
-        box-shadow: 0 0 15px var(--accent-red);
+        box-shadow: 0 0 15px #ff0033;
         transform: scale(1.1);
     }
 
@@ -383,7 +384,7 @@
 }
 
     .decoder-input label {
-        color: var(--accent-red);
+        color: #ff0033;
         font-weight: bold;
         letter-spacing: 1px;
     }
@@ -392,9 +393,9 @@
         width: 100%;
         min-height: 150px;
         padding: 1rem;
-        background-color: var(--bg-dark);
-        border: 2px solid var(--border-white);
-        color: var(--primary-white);
+        background-color: #111111;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #ffffff;
         font-family: 'Courier New', monospace;
         font-size: 1rem;
         resize: vertical;
@@ -402,7 +403,7 @@
 
         .decoder-input textarea:focus {
             outline: none;
-            border-color: var(--accent-red);
+            border-color: #ff0033;
             box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
         }
 
@@ -434,7 +435,7 @@
 }
 
 #acknowledgment-text {
-    color: var(--dark-white);
+    color: #cccccc;
     line-height: 1.8;
     margin-bottom: 2rem;
 }
@@ -453,7 +454,7 @@
     }
 
 .decoded-text {
-    color: var(--primary-white);
+    color: #ffffff;
     font-size: 1.3rem;
     font-style: italic;
     line-height: 1.8;
@@ -473,26 +474,26 @@
 }
 
 .lore-panel {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-white);
+    background-color: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 2rem;
     transition: all 0.3s;
 }
 
     .lore-panel:hover {
-        border-color: var(--accent-red);
+        border-color: #ff0033;
         box-shadow: 0 0 20px rgba(255, 0, 51, 0.3);
     }
 
     .lore-panel h3 {
-        color: var(--accent-red);
+        color: #ff0033;
         font-size: 1.2rem;
         margin-bottom: 1rem;
         letter-spacing: 2px;
     }
 
     .lore-panel p {
-        color: var(--dark-white);
+        color: #cccccc;
         line-height: 1.8;
     }
 

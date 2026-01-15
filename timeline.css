@@ -4,9 +4,9 @@
 
 /* Timeline Navigation */
 .timeline-nav {
-    background-color: var(--bg-dark);
-    border-top: 2px solid var(--accent-red);
-    border-bottom: 2px solid var(--accent-red);
+    background-color: #111111;
+    border-top: 2px solid #ff0033;
+    border-bottom: 2px solid #ff0033;
     padding: 2rem;
     position: sticky;
     top: 0;
@@ -26,8 +26,8 @@
 .timeline-filter {
     padding: 0.8rem 1.5rem;
     background-color: transparent;
-    border: 2px solid var(--border-white);
-    color: var(--primary-white);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
     font-family: 'Courier New', monospace;
     font-weight: bold;
     cursor: pointer;
@@ -36,9 +36,9 @@
 
     .timeline-filter:hover,
     .timeline-filter.active {
-        border-color: var(--accent-red);
+        border-color: #ff0033;
         background-color: rgba(255, 0, 51, 0.1);
-        color: var(--accent-red);
+        color: #ff0033;
         box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
     }
 
@@ -57,7 +57,7 @@
     top: 0;
     width: 4px;
     height: 100%;
-    background: linear-gradient( to bottom, var(--accent-red) 0%, var(--accent-red) 90%, transparent 100% );
+    background: linear-gradient( to bottom, #ff0033 0%, #ff0033 90%, transparent 100% );
     transform: translateX(-50%);
     z-index: 0;
 }
@@ -89,33 +89,33 @@
 
 .marker-year {
     display: block;
-    color: var(--accent-red);
+    color: #ff0033;
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 10px var(--accent-red);
+    text-shadow: 0 0 10px #ff0033;
 }
 
 .marker-dot {
     width: 20px;
     height: 20px;
-    background-color: var(--accent-red);
-    border: 4px solid var(--bg-black);
+    background-color: #ff0033;
+    border: 4px solid #0a0a0a;
     border-radius: 50%;
     margin: 0 auto;
-    box-shadow: 0 0 20px var(--accent-red);
+    box-shadow: 0 0 20px #ff0033;
     animation: pulse-dot 2s ease-in-out infinite;
 }
 
 @keyframes pulse-dot {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 20px var(--accent-red);
+        box-shadow: 0 0 20px #ff0033;
     }
 
     50% {
         transform: scale(1.2);
-        box-shadow: 0 0 30px var(--accent-red);
+        box-shadow: 0 0 30px #ff0033;
     }
 }
 
@@ -155,8 +155,8 @@
 /* Event Card */
 .event-card {
     width: calc(50% - 50px);
-    background-color: var(--bg-card);
-    border: 2px solid var(--border-white);
+    background-color: #1a1a1a;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     padding: 2rem;
     position: relative;
     transition: all 0.3s;
@@ -172,7 +172,7 @@
 }
 
 .event-card:hover {
-    border-color: var(--accent-red);
+    border-color: #ff0033;
     box-shadow: 0 0 30px rgba(255, 0, 51, 0.3);
     transform: translateY(-5px);
 }
@@ -218,13 +218,13 @@
     align-items: center;
     margin-bottom: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-white);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
     .event-header h3 {
-        color: var(--neon-white);
+        color: #ffffff;
         font-size: 1.3rem;
-        text-shadow: 0 0 5px var(--primary-white);
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
 
 .event-tag {
@@ -236,8 +236,8 @@
 
 .war-tag {
     background-color: rgba(255, 0, 51, 0.2);
-    border: 1px solid var(--accent-red);
-    color: var(--accent-red);
+    border: 1px solid #ff0033;
+    color: #ff0033;
 }
 
 .brigade-tag {
@@ -266,7 +266,7 @@
 
 /* Event Date */
 .event-date {
-    color: var(--dark-white);
+    color: #cccccc;
     font-size: 0.9rem;
     font-style: italic;
     margin-bottom: 1rem;
@@ -274,7 +274,7 @@
 
 /* Event Description */
 .event-description {
-    color: var(--dark-white);
+    color: #cccccc;
     line-height: 1.8;
     margin-bottom: 1.5rem;
 }
@@ -295,7 +295,7 @@
 }
 
 .redacted-inline {
-    background-color: var(--bg-black);
+    background-color: #0a0a0a;
     color: transparent;
     padding: 0 0.3rem;
     cursor: help;
@@ -324,18 +324,18 @@
     gap: 0.5rem;
     padding: 1rem;
     background-color: rgba(255, 0, 51, 0.05);
-    border-left: 3px solid var(--accent-red);
+    border-left: 3px solid #ff0033;
 }
 
 .impact-label {
-    color: var(--accent-red);
+    color: #ff0033;
     font-weight: bold;
     font-size: 0.85rem;
     letter-spacing: 1px;
 }
 
 .impact-text {
-    color: var(--primary-white);
+    color: #ffffff;
     font-style: italic;
 }
 
