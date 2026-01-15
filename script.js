@@ -69,7 +69,7 @@ function showMusicNoticeIfIndex() {
     requestAnimationFrame(() => notice.style.opacity = '1');
 
     setTimeout(() => notice.style.opacity = '0', 4000);
-    setTimeout(() => notice.remove(), 5500);
+    setTimeout(() => notice.remove(), 4000);
 
     sessionStorage.setItem('musicNoticeShown', 'true');
 }
