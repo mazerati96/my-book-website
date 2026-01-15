@@ -350,6 +350,25 @@
         left: 1rem;
         max-width: none;
     }
+    /*Scrollbad for info panel*/
+    .info-panel::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .info-panel::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .info-panel::-webkit-scrollbar-thumb {
+        background: #ff0033;
+        border-radius: 4px;
+    }
+
+        .info-panel::-webkit-scrollbar-thumb:hover {
+            background: #ff3355;
+            box-shadow: 0 0 10px #ff0033;
+        }
+
 
     .frequency-indicator {
         right: 1rem;
