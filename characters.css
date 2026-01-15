@@ -1,0 +1,380 @@
+/* ============================================
+   CHARACTERS PAGE - DOSSIER STYLES
+   ============================================ */
+
+/* Classified Stamp */
+.classified-stamp {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transform: rotate(15deg);
+    padding: 1rem 2rem;
+    border: 4px solid var(--accent-red);
+    color: var(--accent-red);
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Warning Notice */
+.warning-notice {
+    background-color: rgba(255, 0, 51, 0.1);
+    border-top: 2px solid var(--accent-red);
+    border-bottom: 2px solid var(--accent-red);
+    padding: 2rem;
+}
+
+.warning-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.warning-icon {
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.warning-content p {
+    color: var(--dark-white);
+    line-height: 1.7;
+}
+
+.warning-content strong {
+    color: var(--accent-red);
+}
+
+/* Characters Section */
+.characters-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+}
+
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 3rem;
+}
+
+/* Dossier Card */
+.dossier-card {
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-white);
+    padding: 2rem;
+    position: relative;
+    transition: all 0.4s;
+}
+
+    .dossier-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--accent-red);
+    }
+
+    .dossier-card.android-card::before {
+        background: #00ff88;
+    }
+
+    .dossier-card:hover {
+        border-color: var(--accent-red);
+        box-shadow: 0 0 30px rgba(255, 0, 51, 0.3);
+        transform: translateY(-5px);
+    }
+
+    .dossier-card.android-card:hover {
+        border-color: #00ff88;
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    }
+
+/* Dossier Header */
+.dossier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-white);
+}
+
+.dossier-stamp {
+    color: var(--accent-red);
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: 0.3rem 0.8rem;
+    border: 2px solid var(--accent-red);
+    transform: rotate(-2deg);
+}
+
+.dossier-id {
+    color: var(--dark-white);
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+/* Character Portrait */
+.character-portrait {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.portrait-frame {
+    width: 120px;
+    height: 120px;
+    background-color: var(--bg-dark);
+    border: 3px solid var(--accent-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.android-card .portrait-frame {
+    border-color: #00ff88;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.portrait-icon {
+    font-size: 4rem;
+}
+
+.status-badge {
+    padding: 0.4rem 1rem;
+    background-color: rgba(255, 0, 51, 0.2);
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+    .status-badge.android {
+        background-color: rgba(0, 255, 136, 0.2);
+        border-color: #00ff88;
+        color: #00ff88;
+    }
+
+    .status-badge.locked {
+        background-color: rgba(128, 128, 128, 0.2);
+        border-color: #808080;
+        color: #808080;
+    }
+
+/* Character Name */
+.character-name {
+    color: var(--neon-white);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    text-shadow: 0 0 5px var(--primary-white);
+}
+
+.character-subtitle {
+    color: var(--dark-white);
+    font-size: 0.9rem;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-white);
+}
+
+.stat-box {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-white);
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.stat-label {
+    color: var(--dark-white);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    color: var(--accent-red);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+    .stat-value.android-text {
+        color: #00ff88;
+        text-shadow: 0 0 5px #00ff88;
+    }
+
+/* Character Bio */
+.character-bio {
+    color: var(--dark-white);
+    line-height: 1.7;
+}
+
+    .character-bio h4 {
+        color: var(--accent-red);
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        margin: 1.5rem 0 0.8rem 0;
+    }
+
+.android-card .character-bio h4 {
+    color: #00ff88;
+}
+
+.character-bio p {
+    margin-bottom: 1rem;
+}
+
+.android-text {
+    color: #00ff88 !important;
+}
+
+/* Redacted Text */
+.redacted {
+    background-color: var(--bg-black);
+    color: transparent;
+    padding: 0 0.3rem;
+    cursor: help;
+    position: relative;
+    transition: all 0.3s;
+}
+
+    .redacted::before {
+        content: '█████';
+        position: absolute;
+        left: 0;
+        color: var(--accent-red);
+        transition: opacity 0.3s;
+    }
+
+    .redacted.decrypt:hover {
+        background-color: transparent;
+        color: var(--accent-red);
+    }
+
+        .redacted.decrypt:hover::before {
+            opacity: 0;
+        }
+
+.android-card .redacted::before {
+    color: #00ff88;
+}
+
+.android-card .redacted.decrypt:hover {
+    color: #00ff88;
+}
+
+/* Decrypt Button */
+.decrypt-btn {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    background-color: transparent;
+    border: 2px solid var(--accent-red);
+    color: var(--accent-red);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+    .decrypt-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+        transition: left 0.5s;
+    }
+
+    .decrypt-btn:hover::before {
+        left: 100%;
+    }
+
+    .decrypt-btn:hover {
+        background-color: var(--accent-red);
+        color: white;
+        box-shadow: 0 0 20px var(--accent-red);
+    }
+
+.android-card .decrypt-btn {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+    .android-card .decrypt-btn:hover {
+        background-color: #00ff88;
+        color: var(--bg-black);
+        box-shadow: 0 0 20px #00ff88;
+    }
+
+    .android-card .decrypt-btn::before {
+        background: linear-gradient(90deg, transparent, #00ff88, transparent);
+    }
+
+.decrypt-btn.disabled {
+    border-color: #808080;
+    color: #808080;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+    .decrypt-btn.disabled:hover {
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+/* Coming Soon Card */
+.coming-soon-card {
+    opacity: 0.7;
+}
+
+    .coming-soon-card .character-bio {
+        text-align: center;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .characters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .classified-stamp {
+        font-size: 1.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .warning-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

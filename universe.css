@@ -1,0 +1,353 @@
+/* ============================================
+   UNIVERSE PAGE - 3D STAR MAP
+   ============================================ */
+
+/* 3D Container */
+#star-field-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%);
+}
+
+/* UI Overlay */
+.universe-ui {
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+}
+
+    .universe-ui > * {
+        pointer-events: auto;
+    }
+
+/* Header */
+.universe-header {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 100;
+    pointer-events: none;
+}
+
+    .universe-header h1 {
+        font-size: 3rem;
+        color: var(--primary-white);
+        text-shadow: 0 0 10px var(--primary-white), 0 0 20px var(--primary-white), 0 0 30px var(--accent-red);
+        margin-bottom: 0.5rem;
+    }
+
+.subtitle {
+    color: var(--dark-white);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+/* Controls Panel */
+.controls-panel {
+    position: fixed;
+    top: 220px;
+    left: 2rem;
+    background-color: rgba(10, 10, 10, 0.9);
+    border: 2px solid var(--accent-red);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.control-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 0.8rem;
+    color: var(--primary-white);
+}
+
+    .control-item:last-child {
+        margin-bottom: 0;
+    }
+
+.control-label {
+    color: var(--accent-red);
+    font-weight: bold;
+}
+
+.control-value {
+    color: var(--dark-white);
+}
+
+/* Locations List */
+.locations-list {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    background-color: rgba(10, 10, 10, 0.9);
+    border: 2px solid var(--accent-red);
+    padding: 1.5rem;
+    max-width: 350px;
+    backdrop-filter: blur(10px);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+    .locations-list h3 {
+        color: var(--accent-red);
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+        border-bottom: 1px solid var(--border-white);
+        padding-bottom: 0.5rem;
+    }
+
+.location-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-white);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+    .location-item:hover {
+        border-color: var(--accent-red);
+        background-color: rgba(255, 0, 51, 0.1);
+        box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
+        transform: translateX(5px);
+    }
+
+.location-icon {
+    font-size: 1.5rem;
+    min-width: 30px;
+}
+
+.location-name {
+    color: var(--primary-white);
+    font-weight: bold;
+    flex: 1;
+}
+
+.location-distance {
+    color: var(--dark-white);
+    font-size: 0.85rem;
+}
+
+/* Info Panel */
+.info-panel {
+    position: fixed;
+    top: 50%;
+    right: 2rem;
+    transform: translateY(-50%);
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 2px solid var(--accent-red);
+    padding: 2rem;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(255, 0, 51, 0.4);
+    animation: slideInRight 0.4s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateY(-50%) translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(-50%) translateX(0);
+        opacity: 1;
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--accent-red);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+    .close-btn:hover {
+        transform: rotate(90deg);
+        color: var(--primary-white);
+    }
+
+.info-panel h2 {
+    color: var(--neon-white);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px var(--primary-white);
+}
+
+.info-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-white);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.stat-label {
+    color: var(--accent-red);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    color: var(--primary-white);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.info-description {
+    color: var(--dark-white);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+    .info-description p {
+        margin-bottom: 1rem;
+    }
+
+.info-relevance {
+    background-color: rgba(255, 0, 51, 0.05);
+    border-left: 3px solid var(--accent-red);
+    padding: 1rem;
+}
+
+    .info-relevance h4 {
+        color: var(--accent-red);
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    .info-relevance p {
+        color: var(--dark-white);
+        line-height: 1.6;
+    }
+
+/* Frequency Indicator */
+.frequency-indicator {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: rgba(10, 10, 10, 0.9);
+    border: 2px solid var(--accent-red);
+    padding: 1rem 1.5rem;
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+    .frequency-indicator.active {
+        display: flex;
+    }
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 10px var(--accent-red);
+    }
+
+    50% {
+        box-shadow: 0 0 30px var(--accent-red);
+    }
+}
+
+.frequency-wave {
+    width: 40px;
+    height: 30px;
+    background: repeating-linear-gradient( 90deg, var(--accent-red) 0px, var(--accent-red) 2px, transparent 2px, transparent 8px );
+    animation: wave-pulse 1s ease-in-out infinite;
+}
+
+@keyframes wave-pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scaleY(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scaleY(1.2);
+    }
+}
+
+.frequency-text {
+    color: var(--accent-red);
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--accent-red);
+}
+
+/* Scrollbar for locations list */
+.locations-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.locations-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.locations-list::-webkit-scrollbar-thumb {
+    background: var(--accent-red);
+    border-radius: 4px;
+}
+
+    .locations-list::-webkit-scrollbar-thumb:hover {
+        background: var(--neon-white);
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .universe-header h1 {
+        font-size: 2rem;
+    }
+
+    .controls-panel,
+    .locations-list {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+    }
+
+    .controls-panel {
+        top: 180px;
+    }
+
+    .locations-list {
+        bottom: 1rem;
+        max-height: 200px;
+    }
+
+    .info-panel {
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+
+    .frequency-indicator {
+        right: 1rem;
+        bottom: auto;
+        top: 320px;
+    }
+}

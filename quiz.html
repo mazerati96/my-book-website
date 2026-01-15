@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Which Brigade Member Are You?</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition"></div>
+
+    <!-- Animated Background -->
+    <div class="matrix-style-bg"></div>
+    
+    <!-- Hamburger Menu -->
+    <button class="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo-bracket">[</span>
+            <h2>NAVIGATION</h2>
+            <span class="logo-bracket">]</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="trilogy.html" class="nav-link">The Trilogy</a></li>
+            <li><a href="book-one.html" class="nav-link">Book One</a></li>
+            <li><a href="book-two.html" class="nav-link">Book Two</a></li>
+            <li><a href="book-three.html" class="nav-link">Book Three</a></li>
+            <li><a href="characters.html" class="nav-link">Characters</a></li>
+            <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+            <li><a href="universe.html" class="nav-link">Universe</a></li>
+            <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+            <li><a href="signal.html" class="nav-link">The Signal</a></li>
+            <li><a href="quiz.html" class="nav-link active">Quiz</a></li>
+            <li><a href="authors.html" class="nav-link">Authors</a></li>
+            <li><a href="contact.html" class="nav-link cta-nav">Contact</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-bar">
+                <span class="status-indicator"></span>
+                <span>SYSTEM ONLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="scan-line"></div>
+        <div class="hero-content">
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text="PERSONALITY ANALYSIS">PERSONALITY ANALYSIS</h1>
+            </div>
+            <p class="typing-text">Which Brigade member are you?</p>
+        </div>
+    </section>
+
+    <!-- Quiz Container -->
+    <section class="quiz-section">
+        <!-- Start Screen -->
+        <div id="quiz-start" class="quiz-screen active">
+            <div class="start-content">
+                <h2>BRIGADE COMPATIBILITY ASSESSMENT</h2>
+                <p class="quiz-intro">The Brigade needs people who can make impossible choices under pressure. This psychological assessment will determine which crew member you're most compatible with.</p>
+                <div class="warning-box">
+                    <span class="warning-icon">⚠️</span>
+                    <p><strong>WARNING:</strong> Answer honestly. The Brigade has no room for pretense.</p>
+                </div>
+                <button id="start-quiz-btn" class="quiz-btn primary">
+                    <span>BEGIN ASSESSMENT</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="quiz-questions" class="quiz-screen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+                <span class="progress-text" id="progress-text">QUESTION 1 / 8</span>
+            </div>
+
+            <div class="question-container">
+                <h3 class="question-text" id="question-text"></h3>
+                <div class="answers-grid" id="answers-grid"></div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button id="prev-btn" class="quiz-btn secondary" disabled>
+                    <span>← PREVIOUS</span>
+                </button>
+                <button id="next-btn" class="quiz-btn secondary" disabled>
+                    <span>NEXT →</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="quiz-results" class="quiz-screen">
+            <div class="results-content">
+                <h2>ASSESSMENT COMPLETE</h2>
+                <div class="result-card" id="result-card">
+                    <div class="result-icon" id="result-icon"></div>
+                    <h3 id="result-name">Loading...</h3>
+                    <div class="result-role" id="result-role"></div>
+                    <div class="result-description" id="result-description"></div>
+                    <div class="result-traits">
+                        <h4>YOUR KEY TRAITS:</h4>
+                        <div class="traits-list" id="traits-list"></div>
+                    </div>
+                    <div class="result-quote" id="result-quote"></div>
+                </div>
+                <div class="results-actions">
+                    <button id="retake-btn" class="quiz-btn secondary">
+                        <span>RETAKE ASSESSMENT</span>
+                    </button>
+                    <button id="share-btn" class="quiz-btn primary">
+                        <span>SHARE RESULT</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">Personality Assessment</p>
+            </div>
+            <div class="footer-links">
+                <a href="characters.html">Characters</a>
+                <span>|</span>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-decoration"></div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>

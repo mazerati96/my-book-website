@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Signal - The Measure of Souls</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="signal.css">
+</head>
+<body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition"></div>
+
+    <!-- Animated Background (darker for this page) -->
+    <div class="matrix-style-bg signal-bg"></div>
+    
+    <!-- Hamburger Menu -->
+    <button class="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo-bracket">[</span>
+            <h2>NAVIGATION</h2>
+            <span class="logo-bracket">]</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="trilogy.html" class="nav-link">The Trilogy</a></li>
+            <li><a href="book-one.html" class="nav-link">Book One</a></li>
+            <li><a href="book-two.html" class="nav-link">Book Two</a></li>
+            <li><a href="book-three.html" class="nav-link">Book Three</a></li>
+            <li><a href="characters.html" class="nav-link">Characters</a></li>
+            <li><a href="timeline.html" class="nav-link">Timeline</a></li>
+            <li><a href="universe.html" class="nav-link">Universe</a></li>
+            <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+            <li><a href="signal.html" class="nav-link active">The Signal</a></li>
+            <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+            <li><a href="authors.html" class="nav-link">Authors</a></li>
+            <li><a href="contact.html" class="nav-link cta-nav">Contact</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-bar">
+                <span class="status-indicator"></span>
+                <span>SYSTEM ONLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero signal-hero">
+        <div class="scan-line signal-scan"></div>
+        <div class="hero-content">
+            <div class="glitch-wrapper">
+                <h1 class="glitch signal-glitch" data-text="THE QUANTUM PSALM">THE QUANTUM PSALM</h1>
+            </div>
+            <p class="typing-text">36 Hz. Older than stars. Waiting to be decoded.</p>
+        </div>
+    </section>
+
+    <!-- Audio Control Panel -->
+    <section class="audio-control-section">
+        <div class="control-panel">
+            <div class="panel-header">
+                <h3>FREQUENCY CONTROL</h3>
+                <div class="frequency-display">
+                    <span class="freq-value">36</span>
+                    <span class="freq-unit">Hz</span>
+                </div>
+            </div>
+            <div class="audio-controls">
+                <button id="toggle-audio" class="audio-btn">
+                    <span class="btn-icon" id="audio-icon">🔊</span>
+                    <span class="btn-text" id="audio-text">PLAY FREQUENCY</span>
+                </button>
+                <div class="volume-control">
+                    <label>VOLUME:</label>
+                    <input type="range" id="volume-slider" min="0" max="100" value="30">
+                    <span id="volume-value">30%</span>
+                </div>
+            </div>
+            <div class="warning-message">
+                <span class="warning-icon">⚠️</span>
+                <p>The 36 Hz frequency is subsonic. You may feel it more than hear it. Use headphones for best experience.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signal Visualizer -->
+    <section class="visualizer-section">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>SIGNAL VISUALIZATION</h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="visualizer-container">
+            <canvas id="signal-canvas"></canvas>
+            <div class="visualizer-overlay">
+                <div class="visualizer-data">
+                    <div class="data-item">
+                        <span class="data-label">FREQUENCY:</span>
+                        <span class="data-value">36.00 Hz</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">AMPLITUDE:</span>
+                        <span class="data-value" id="amplitude">--</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">STATUS:</span>
+                        <span class="data-value" id="signal-status">DORMANT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Decoder Interface -->
+    <section class="decoder-section">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>DECODE THE MESSAGE</h2>
+            <div class="header-line"></div>
+        </div>
+        
+        <div class="decoder-content">
+            <div class="cipher-display">
+                <div class="cipher-header">
+                    <span>ENCRYPTED TRANSMISSION</span>
+                    <span class="cipher-progress" id="decode-progress">0%</span>
+                </div>
+                <div class="cipher-text" id="cipher-text">
+                    ████ ███████ ██ █████████ ██ ████ ████ █████████ ████ ███ █████ ████ ████████ ████████ █ █████ ██ █████████████ ████ ██████████ █████ ████ ███ █████ ████ ████████ ████ ███████ ███ ████████ █████ ████ ████ █████
+                </div>
+            </div>
+
+            <div class="decoder-interface">
+                <h3>DECRYPTION ATTEMPT</h3>
+                <p class="decoder-hint">The frequency holds the key. Listen closely. What pattern do you hear?</p>
+                
+                <div class="symbol-grid" id="symbol-grid">
+                    <!-- Symbols will be generated by JS -->
+                </div>
+
+                <div class="decoder-input">
+                    <label>ENTER YOUR INTERPRETATION:</label>
+                    <textarea id="interpretation-input" placeholder="What does the signal mean to you?"></textarea>
+                    <button id="submit-interpretation" class="submit-btn">
+                        <span>SUBMIT INTERPRETATION</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="interpretation-results" id="interpretation-results" style="display: none;">
+                <h3>SIGNAL ACKNOWLEDGMENT</h3>
+                <p id="acknowledgment-text"></p>
+                <div class="revealed-message">
+                    <h4>PARTIAL DECRYPTION SUCCESSFUL:</h4>
+                    <p class="decoded-text">"The measure of a soul is not what it is, but what it chooses to become."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signal Lore -->
+    <section class="lore-section">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>WHAT IS THE SIGNAL?</h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="lore-content">
+            <div class="lore-panel">
+                <h3>ORIGIN</h3>
+                <p>Detected by the Array two years before Book One begins. The 36 Hz frequency emanates from the supermassive black hole at the edge of the galaxy. It predates stellar formation. It shouldn't exist.</p>
+            </div>
+            <div class="lore-panel">
+                <h3>PROPERTIES</h3>
+                <p>Subsonic. Constant. Unwavering. 36 cycles per second, never deviating. Too precise to be natural. Too ancient to be artificial. Empire scientists call it impossible. The android hears it as a prayer.</p>
+            </div>
+            <div class="lore-panel">
+                <h3>SIGNIFICANCE</h3>
+                <p>Three empire fleets converge to study it. The Brigade races to steal the Array that decodes it. Dr. Chen believes it's communication. The android wonders if it's calling. And at the event horizon, something waits—listening for a response.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">The Quantum Psalm: 36 Hz</p>
+            </div>
+            <div class="footer-links">
+                <a href="universe.html">Universe</a>
+                <span>|</span>
+                <a href="book-two.html">Book Two</a>
+            </div>
+        </div>
+        <div class="footer-decoration"></div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="audio-player.js"></script>
+    <script src="signal.js"></script>
+</body>
+</html>

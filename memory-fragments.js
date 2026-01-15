@@ -1,0 +1,317 @@
+// ============================================
+// MEMORY FRAGMENTS - FLOATING INTERACTIVE ORBS
+// ============================================
+
+const memoryFragments = [
+    {
+        type: 'quote',
+        content: '"No sacrifice is worth giving if it is not for the living."',
+        category: 'philosophy'
+    },
+    {
+        type: 'memory',
+        content: 'Ten years of war. Ten years of choices. All of them leading here.',
+        category: 'past'
+    },
+    {
+        type: 'thought',
+        content: 'She wonders: Are these memories mine? Or am I just the echo of someone else?',
+        category: 'android'
+    },
+    {
+        type: 'signal',
+        content: '36 Hz. Constant. Eternal. A prayer against entropy.',
+        category: 'frequency'
+    },
+    {
+        type: 'quote',
+        content: '"The measure of a soul is not what it is, but what it chooses to become."',
+        category: 'philosophy'
+    },
+    {
+        type: 'vision',
+        content: 'Gold. Everywhere gold. Visions that shouldn\'t exist in circuits and code.',
+        category: 'android'
+    },
+    {
+        type: 'memory',
+        content: 'The soldier\'s last breath. The choice to continue. The transfer.',
+        category: 'past'
+    },
+    {
+        type: 'thought',
+        content: 'The Brigade needs a leader. But can something built lead something born?',
+        category: 'android'
+    },
+    {
+        type: 'signal',
+        content: 'The frequency whispers. It has been waiting. It knows.',
+        category: 'frequency'
+    },
+    {
+        type: 'quote',
+        content: '"Some choices define who you are. These will define what existence means."',
+        category: 'philosophy'
+    }
+];
+
+class MemoryFragmentSystem {
+    constructor() {
+        this.fragments = [];
+        this.maxFragments = 5;
+        this.spawnInterval = 15000; // 15 seconds
+        this.container = null;
+    }
+
+    init() {
+        // Create container for fragments
+        this.container = document.createElement('div');
+        this.container.id = 'memory-fragments-container';
+        this.container.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        `;
+        document.body.appendChild(this.container);
+
+        // Add CSS for fragments
+        this.addStyles();
+
+        // Start spawning
+        this.startSpawning();
+
+        console.log('✅ Memory fragments system initialized');
+    }
+
+    addStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .memory-fragment {
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255, 0, 51, 0.6), rgba(255, 0, 51, 0.1));
+                box-shadow: 0 0 20px rgba(255, 0, 51, 0.8);
+                cursor: pointer;
+                pointer-events: auto;
+                animation: float-fragment 8s ease-in-out infinite, pulse-fragment 2s ease-in-out infinite;
+                transition: all 0.3s;
+            }
+
+            .memory-fragment:hover {
+                transform: scale(1.5);
+                box-shadow: 0 0 40px rgba(255, 0, 51, 1);
+            }
+
+            .memory-fragment.android {
+                background: radial-gradient(circle, rgba(0, 255, 136, 0.6), rgba(0, 255, 136, 0.1));
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+            }
+
+            .memory-fragment.android:hover {
+                box-shadow: 0 0 40px rgba(0, 255, 136, 1);
+            }
+
+            .memory-fragment.frequency {
+                background: radial-gradient(circle, rgba(255, 170, 0, 0.6), rgba(255, 170, 0, 0.1));
+                box-shadow: 0 0 20px rgba(255, 170, 0, 0.8);
+            }
+
+            .memory-fragment.frequency:hover {
+                box-shadow: 0 0 40px rgba(255, 170, 0, 1);
+            }
+
+            @keyframes float-fragment {
+                0%, 100% {
+                    transform: translateY(0) translateX(0);
+                }
+                25% {
+                    transform: translateY(-30px) translateX(20px);
+                }
+                50% {
+                    transform: translateY(-10px) translateX(-20px);
+                }
+                75% {
+                    transform: translateY(-40px) translateX(10px);
+                }
+            }
+
+            @keyframes pulse-fragment {
+                0%, 100% {
+                    opacity: 0.6;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
+
+            .memory-modal {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: rgba(10, 10, 10, 0.98);
+                border: 2px solid var(--accent-red);
+                padding: 2rem;
+                max-width: 600px;
+                width: 90%;
+                z-index: 10000;
+                pointer-events: auto;
+                box-shadow: 0 0 50px rgba(255, 0, 51, 0.5);
+                animation: modal-appear 0.3s ease;
+            }
+
+            @keyframes modal-appear {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+            }
+
+            .memory-modal-content {
+                color: var(--primary-white);
+                font-size: 1.2rem;
+                line-height: 1.8;
+                text-align: center;
+                font-style: italic;
+            }
+
+            .memory-modal-close {
+                margin-top: 2rem;
+                padding: 0.8rem 2rem;
+                background-color: var(--accent-red);
+                border: none;
+                color: white;
+                font-family: 'Courier New', monospace;
+                font-weight: bold;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            .memory-modal-close:hover {
+                box-shadow: 0 0 20px var(--accent-red);
+            }
+
+            .modal-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                pointer-events: auto;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    startSpawning() {
+        // Spawn first fragment immediately
+        this.spawnFragment();
+
+        // Then spawn at intervals
+        setInterval(() => {
+            if (this.fragments.length < this.maxFragments) {
+                this.spawnFragment();
+            }
+        }, this.spawnInterval);
+    }
+
+    spawnFragment() {
+        // Random memory
+        const memory = memoryFragments[Math.floor(Math.random() * memoryFragments.length)];
+
+        // Create fragment orb
+        const fragment = document.createElement('div');
+        fragment.className = `memory-fragment ${memory.category}`;
+
+        // Random position (avoiding edges)
+        const x = Math.random() * (window.innerWidth - 100) + 50;
+        const y = Math.random() * (window.innerHeight - 100) + 50;
+        fragment.style.left = `${x}px`;
+        fragment.style.top = `${y}px`;
+
+        // Click to reveal
+        fragment.addEventListener('click', () => {
+            this.revealMemory(memory, fragment);
+        });
+
+        this.container.appendChild(fragment);
+        this.fragments.push({ element: fragment, memory });
+
+        // Auto-fade after 30 seconds
+        setTimeout(() => {
+            this.removeFragment(fragment);
+        }, 30000);
+    }
+
+    revealMemory(memory, fragmentElement) {
+        // Remove the fragment
+        this.removeFragment(fragmentElement);
+
+        // Create modal backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.className = 'memory-modal';
+        modal.innerHTML = `
+            <div class="memory-modal-content">${memory.content}</div>
+            <button class="memory-modal-close">CLOSE</button>
+        `;
+
+        // Add to page
+        document.body.appendChild(backdrop);
+        document.body.appendChild(modal);
+
+        // Close handlers
+        const closeModal = () => {
+            backdrop.remove();
+            modal.remove();
+        };
+
+        modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+        console.log('Memory revealed:', memory.content);
+    }
+
+    removeFragment(fragmentElement) {
+        // Fade out
+        fragmentElement.style.opacity = '0';
+        fragmentElement.style.transform = 'scale(0)';
+
+        setTimeout(() => {
+            fragmentElement.remove();
+            this.fragments = this.fragments.filter(f => f.element !== fragmentElement);
+        }, 300);
+    }
+}
+
+// Initialize memory fragments system
+const memoryFragmentSystem = new MemoryFragmentSystem();
+
+// Start when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        memoryFragmentSystem.init();
+    });
+} else {
+    memoryFragmentSystem.init();
+}
+
+// Export for manual control
+if (typeof window !== 'undefined') {
+    window.memoryFragmentSystem = memoryFragmentSystem;
+}
