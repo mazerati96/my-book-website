@@ -39,44 +39,7 @@ function initPageTransition() {
 // ============================================
 // HAMBURGER MENU FUNCTIONALITY
 // ============================================
-function initHamburgerMenu() {
-    const hamburger = document.querySelector('.hamburger');
-    const sidebar = document.querySelector('.sidebar');
 
-    if (!hamburger || !sidebar) return;
-
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        sidebar.classList.toggle('active');
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !sidebar.contains(e.target)) {
-            hamburger.classList.remove('active');
-            sidebar.classList.remove('active');
-        }
-    });
-
-    // Close menu when clicking a link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            sidebar.classList.remove('active');
-        });
-    });
-
-    // Set active state based on current page
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-link').forEach(link => {
-        const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
-}
 
 // ============================================
 // FALLING ASH EFFECT
