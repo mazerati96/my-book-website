@@ -6,7 +6,6 @@ if (localStorage.getItem('ambientMusicEnabled') === null) {
 }
 
 initPersistentAudio();
-
 let isTransitioning = false;
 
 
@@ -446,14 +445,7 @@ function initPersistentAudio() {
     audioIframe.src = '/audio-player.html';
     audioIframe.style.display = 'none';
 
-    audioIframe.onload = () => {
-        if (localStorage.getItem('ambientMusicEnabled') === 'true' && audioUnlocked) {
-            sendAudioCommand('PLAY');
-        }
-    };
-
     document.body.appendChild(audioIframe);
-
 
     createMusicToggle();
 }
