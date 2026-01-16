@@ -12,46 +12,31 @@
     }
 }
 
-/* Noise flicker effect */
+/* Noise flicker effect - slower, more subtle */
 @keyframes noise-flicker {
     0%, 100% {
         transform: translate(0, 0);
-    }
-
-    10% {
-        transform: translate(-2%, -2%);
+        opacity: 1;
     }
 
     20% {
-        transform: translate(2%, 2%);
-    }
-
-    30% {
-        transform: translate(-2%, 2%);
+        transform: translate(-1%, -1%);
+        opacity: 0.95;
     }
 
     40% {
-        transform: translate(2%, -2%);
-    }
-
-    50% {
-        transform: translate(-1%, 1%);
+        transform: translate(1%, 1%);
+        opacity: 0.98;
     }
 
     60% {
-        transform: translate(1%, -1%);
-    }
-
-    70% {
-        transform: translate(-1%, -1%);
+        transform: translate(-0.5%, 0.5%);
+        opacity: 0.96;
     }
 
     80% {
-        transform: translate(1%, 1%);
-    }
-
-    90% {
-        transform: translate(-1%, 0);
+        transform: translate(0.5%, -0.5%);
+        opacity: 0.97;
     }
 }
 
