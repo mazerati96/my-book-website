@@ -1,5 +1,5 @@
 /* ============================================
-   QUANTUM ENTANGLEMENT WIDGET
+   QUANTUM ENTANGLEMENT WIDGET + CHAT
    ============================================ */
 
 .quantum-widget {
@@ -10,12 +10,15 @@
     background: rgba(26, 26, 26, 0.95);
     border: 2px solid #00d4ff;
     padding: 1rem;
-    min-width: 300px;
-    max-width: 350px;
+    min-width: 320px;
+    max-width: 380px;
+    max-height: 600px;
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
     backdrop-filter: blur(10px);
     animation: slideIn 0.5s ease;
     font-family: 'Courier New', monospace;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes slideIn {
@@ -145,8 +148,8 @@
     border-left: 3px solid #00d4ff;
     padding: 0.8rem;
     margin-top: 1rem;
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-size: 0.8rem;
+    line-height: 1.5;
     color: #cccccc;
     font-style: italic;
     animation: messageReveal 0.8s ease;
@@ -166,7 +169,7 @@
 
 .message-id {
     color: #00d4ff;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     margin-top: 0.5rem;
     opacity: 0.6;
 }
@@ -211,6 +214,130 @@
         transform: rotate(90deg);
     }
 
+/* ============================================
+   QUANTUM CHAT
+   ============================================ */
+.quantum-chat {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(0, 212, 255, 0.3);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+}
+
+.chat-header {
+    color: #00d4ff;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 200px;
+    margin-bottom: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.chat-msg {
+    margin-bottom: 0.8rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.msg-sender {
+    color: #00d4ff;
+    font-size: 0.65rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.05em;
+}
+
+.msg-text {
+    color: #cccccc;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    background: rgba(0, 212, 255, 0.05);
+    padding: 0.5rem;
+    border-left: 2px solid rgba(0, 212, 255, 0.3);
+}
+
+.chat-msg.me .msg-sender {
+    color: #00ff88;
+}
+
+.chat-msg.me .msg-text {
+    background: rgba(0, 255, 136, 0.05);
+    border-left-color: rgba(0, 255, 136, 0.3);
+}
+
+.chat-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#chatInput {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    color: #00d4ff;
+    padding: 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+    #chatInput:focus {
+        outline: none;
+        border-color: #00d4ff;
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+#sendBtn {
+    background: transparent;
+    border: 2px solid #00d4ff;
+    color: #00d4ff;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+    #sendBtn:hover {
+        background: #00d4ff;
+        color: #0a0a0a;
+        box-shadow: 0 0 10px #00d4ff;
+    }
+
+/* Scrollbar for chat */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #00d4ff;
+    border-radius: 3px;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .quantum-widget {
@@ -219,5 +346,9 @@
         left: 10px;
         min-width: auto;
         max-width: none;
+    }
+
+    .chat-messages {
+        max-height: 150px;
     }
 }

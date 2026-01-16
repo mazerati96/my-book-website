@@ -1,5 +1,5 @@
 // ============================================
-// QUANTUM ENTANGLEMENT - FIREBASE LIVE VERSION
+// QUANTUM ENTANGLEMENT - FIXED + CHAT FEATURE
 // ============================================
 
 // YOUR Firebase configuration
@@ -36,7 +36,8 @@ class QuantumEntanglement {
         this.userRef = null;
         this.isConnected = false;
         this.currentMessageId = null;
-        this.partnerListener = null;
+        this.messageListener = null;
+        this.chatListener = null;
     }
 
     generateUserId() {
@@ -66,6 +67,9 @@ class QuantumEntanglement {
 
         // Search for partner
         this.searchForPartner();
+
+        // Listen for partner updates
+        this.listenForPartnerUpdates();
 
         // Cleanup on page unload
         window.addEventListener('beforeunload', () => this.cleanup());
@@ -118,35 +122,53 @@ class QuantumEntanglement {
         this.userRef.onDisconnect().remove();
     }
 
+    listenForPartnerUpdates() {
+        // Listen for when OUR user data changes (when someone pairs with us)
+        this.userRef.on('value', async (snapshot) => {
+            const userData = snapshot.val();
+            if (userData && userData.partnerId && !this.isConnected) {
+                // We got paired!
+                this.partnerId = userData.partnerId;
+                this.isConnected = true;
+                this.showConnectedState();
+                this.startSharedMessages();
+                this.startChat();
+            }
+        });
+    }
+
     searchForPartner() {
         const usersRef = this.db.ref('activeUsers');
 
-        usersRef.on('child_added', async (snapshot) => {
-            const otherUserId = snapshot.key;
-            const otherUserData = snapshot.val();
+        usersRef.once('value', async (snapshot) => {
+            const users = snapshot.val();
+            if (!users) return;
 
-            // Don't pair with self or if already connected
-            if (otherUserId === this.userId || this.isConnected) return;
+            // Find someone who's looking
+            for (const otherUserId in users) {
+                const otherUserData = users[otherUserId];
 
-            // Don't pair if other user already has a partner
-            if (otherUserData.partnerId) return;
+                // Don't pair with self or if already connected
+                if (otherUserId === this.userId || this.isConnected) continue;
 
-            // Found a partner!
-            this.partnerId = otherUserId;
-            this.isConnected = true;
+                // Found someone looking!
+                if (otherUserData.looking && !otherUserData.partnerId) {
+                    this.partnerId = otherUserId;
+                    this.isConnected = true;
 
-            // Update both users' partner IDs
-            await this.userRef.update({ partnerId: this.partnerId, looking: false });
-            await this.db.ref('activeUsers/' + this.partnerId).update({
-                partnerId: this.userId,
-                looking: false
-            });
+                    // Update BOTH users atomically
+                    await this.userRef.update({ partnerId: this.partnerId, looking: false });
+                    await this.db.ref('activeUsers/' + this.partnerId).update({
+                        partnerId: this.userId,
+                        looking: false
+                    });
 
-            // Show connected state
-            this.showConnectedState();
-
-            // Start shared message system
-            this.startSharedMessages();
+                    this.showConnectedState();
+                    this.startSharedMessages();
+                    this.startChat();
+                    return;
+                }
+            }
         });
     }
 
@@ -167,7 +189,28 @@ class QuantumEntanglement {
             </div>
 
             <div id="sharedMessage"></div>
+
+            <!-- Chat Interface -->
+            <div class="quantum-chat">
+                <div class="chat-header">
+                    <span>// QUANTUM CHANNEL</span>
+                </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-wrapper">
+                    <input type="text" id="chatInput" placeholder="Type message..." maxlength="100">
+                    <button id="sendBtn">></button>
+                </div>
+            </div>
         `;
+
+        // Setup chat handlers
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        sendBtn.addEventListener('click', () => this.sendChatMessage());
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendChatMessage();
+        });
     }
 
     startSharedMessages() {
@@ -176,7 +219,7 @@ class QuantumEntanglement {
         const messageRef = this.db.ref('messages/' + pairId);
 
         // Listen for new messages
-        messageRef.on('value', (snapshot) => {
+        this.messageListener = messageRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && data.message) {
                 this.displayMessage(data.message, data.messageId);
@@ -189,7 +232,9 @@ class QuantumEntanglement {
 
             // Send new message every 30 seconds
             setInterval(() => {
-                this.sendNewMessage(messageRef);
+                if (this.isConnected) {
+                    this.sendNewMessage(messageRef);
+                }
             }, 30000);
         }
     }
@@ -224,15 +269,85 @@ class QuantumEntanglement {
         this.playMessageSound();
     }
 
-    cleanup() {
-        if (this.userRef) {
-            this.userRef.remove();
-        }
-        if (this.partnerListener) {
-            this.partnerListener.off();
+    // ============================================
+    // CHAT FUNCTIONALITY
+    // ============================================
+    startChat() {
+        const pairId = [this.userId, this.partnerId].sort().join('_');
+        const chatRef = this.db.ref('chat/' + pairId);
+
+        // Listen for new chat messages
+        this.chatListener = chatRef.on('child_added', (snapshot) => {
+            const msg = snapshot.val();
+            this.displayChatMessage(msg.userId, msg.text, msg.timestamp);
+        });
+    }
+
+    sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+
+        if (!text) return;
+
+        const pairId = [this.userId, this.partnerId].sort().join('_');
+        const chatRef = this.db.ref('chat/' + pairId);
+
+        chatRef.push({
+            userId: this.userId,
+            text: text,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+
+        input.value = '';
+        this.playTypingSound();
+    }
+
+    displayChatMessage(senderId, text, timestamp) {
+        const chatMessages = document.getElementById('chatMessages');
+        if (!chatMessages) return;
+
+        const isMe = senderId === this.userId;
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-msg ${isMe ? 'me' : 'them'}`;
+
+        msgDiv.innerHTML = `
+            <div class="msg-sender">${isMe ? 'YOU' : this.partnerId}:</div>
+            <div class="msg-text">${this.escapeHtml(text)}</div>
+        `;
+
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        if (!isMe) {
+            this.playMessageSound();
         }
     }
 
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ============================================
+    // CLEANUP
+    // ============================================
+    cleanup() {
+        if (this.userRef) {
+            this.userRef.off();
+            this.userRef.remove();
+        }
+        if (this.messageListener) {
+            this.messageListener.off();
+        }
+        if (this.chatListener) {
+            this.chatListener.off();
+        }
+    }
+
+    // ============================================
+    // SOUND EFFECTS
+    // ============================================
     playConnectionSound() {
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -270,6 +385,26 @@ class QuantumEntanglement {
 
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.2);
+        } catch (e) { }
+    }
+
+    playTypingSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 400;
+            oscillator.type = 'square';
+
+            gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.05);
         } catch (e) { }
     }
 }
