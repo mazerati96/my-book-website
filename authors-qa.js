@@ -41,10 +41,10 @@ function initAuthorQA() {
             // Log for now (you can hook up email/backend later)
             console.log('Question submitted:', { userName, question, timestamp: new Date().toISOString() });
 
-            // TODO: Send to your email or backend
+            // TODO: Send to email or backend
             // Example with email service (you'd need to set this up):
             /*
-            fetch('YOUR_EMAIL_ENDPOINT', {
+            fetch('EMAIL_ENDPOINT', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userName, question })

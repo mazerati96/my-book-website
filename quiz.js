@@ -7,88 +7,88 @@ const quizData = {
         {
             question: "A battle is lost. Your squad is trapped. You have one escape pod. What do you do?",
             answers: [
-                { text: "Give the pod to the youngest soldier. They have more life ahead.", points: { reyes: 2, android: 1 } },
-                { text: "Calculate survival odds for each person. Send whoever has the best chance.", points: { android: 3, chen: 1 } },
-                { text: "Draw lots. Let fate decide who survives.", points: { reyes: 1, pilot: 2 } },
-                { text: "Stay behind yourself. Let others escape.", points: { reyes: 3, android: 2 } }
+                { text: "Give the pod to the youngest soldier. They have more life ahead.", points: { hart: 2, elpida: 1 } },
+                { text: "Calculate survival odds for each person. Send whoever has the best chance.", points: { elpida: 3, ciel: 1 } },
+                { text: "Draw lots. Let fate decide who survives.", points: { hart: 1, tahani: 2 } },
+                { text: "Stay behind yourself. Let others escape.", points: { hart: 3, elpida: 2 } }
             ]
         },
         {
             question: "You discover your commanding officer is committing war crimes. What's your move?",
             answers: [
-                { text: "Desert immediately. I won't be part of this.", points: { reyes: 3, pilot: 1 } },
-                { text: "Report it through proper channels and hope for justice.", points: { chen: 1 } },
-                { text: "Document everything. Build an airtight case before acting.", points: { chen: 3, android: 2 } },
-                { text: "Confront them directly. Demand they stop or face consequences.", points: { reyes: 2, pilot: 2 } }
+                { text: "Desert immediately. I won't be part of this.", points: { hart: 3, tahani: 1 } },
+                { text: "Report it through proper channels and hope for justice.", points: { ciel: 1 } },
+                { text: "Document everything. Build an airtight case before acting.", points: { ciel: 3, elpida: 2 } },
+                { text: "Confront them directly. Demand they stop or face consequences.", points: { hart: 2, tahani: 2 } }
             ]
         },
         {
             question: "The Brigade needs supplies. The only option is stealing from a civilian colony. Do you?",
             answers: [
-                { text: "Yes, but only what we absolutely need. Minimize harm.", points: { reyes: 2, pilot: 2 } },
-                { text: "No. Find another way, even if it takes longer.", points: { chen: 2, android: 1 } },
-                { text: "Yes. Survival comes first. Apologize later.", points: { pilot: 3, reyes: 1 } },
-                { text: "Negotiate. Offer something in exchange.", points: { android: 3, chen: 2 } }
+                { text: "Yes, but only what we absolutely need. Minimize harm.", points: { hart: 2, tahani: 2 } },
+                { text: "No. Find another way, even if it takes longer.", points: { ciel: 2, elpida: 1 } },
+                { text: "Yes. Survival comes first. Apologize later.", points: { tahani: 3, hart: 1 } },
+                { text: "Negotiate. Offer something in exchange.", points: { elpida: 3, ciel: 2 } }
             ]
         },
         {
             question: "You hear a strange frequency—36 Hz, humming beneath reality. It won't stop. What do you do?",
             answers: [
-                { text: "Ignore it. Focus on the mission.", points: { reyes: 2, pilot: 1 } },
-                { text: "Study it obsessively. It means something.", points: { chen: 3, android: 2 } },
-                { text: "Report it to command. Let them figure it out.", points: { pilot: 1 } },
-                { text: "Wonder if it's trying to communicate.", points: { android: 3, chen: 1 } }
+                { text: "Ignore it. Focus on the mission.", points: { hart: 2, tahani: 1 } },
+                { text: "Study it obsessively. It means something.", points: { ciel: 3, elpida: 2 } },
+                { text: "Report it to command. Let them figure it out.", points: { tahani: 1 } },
+                { text: "Wonder if it's trying to communicate.", points: { elpida: 3, ciel: 1 } }
             ]
         },
         {
             question: "A crewmate is dying. They offer to transfer their consciousness into a machine. Do you accept?",
             answers: [
-                { text: "Yes. If they're willing, honor their choice.", points: { chen: 3, android: 2 } },
-                { text: "No. Some lines shouldn't be crossed.", points: { reyes: 2, pilot: 1 } },
-                { text: "Ask them if they're sure. Then respect their decision.", points: { reyes: 2, android: 2 } },
-                { text: "Build the machine. Make it perfect.", points: { chen: 3 } }
+                { text: "Yes. If they're willing, honor their choice.", points: { ciel: 3, elpida: 2 } },
+                { text: "No. Some lines shouldn't be crossed.", points: { hart: 2, tahani: 1 } },
+                { text: "Ask them if they're sure. Then respect their decision.", points: { hart: 2, elpida: 2 } },
+                { text: "Build the machine. Make it perfect.", points: { ciel: 3 } }
             ]
         },
         {
             question: "The mission is impossible. The odds are 1%. What's your approach?",
             answers: [
-                { text: "Find the 1% and bet everything on it.", points: { android: 3, reyes: 2 } },
-                { text: "Reframe the mission. Change the impossible to unlikely.", points: { chen: 3, android: 1 } },
-                { text: "Trust my instincts. Numbers don't capture everything.", points: { pilot: 3, reyes: 1 } },
-                { text: "Prepare for failure but execute anyway.", points: { reyes: 3, pilot: 2 } }
+                { text: "Find the 1% and bet everything on it.", points: { elpida: 3, hart: 2 } },
+                { text: "Reframe the mission. Change the impossible to unlikely.", points: { ciel: 3, elpida: 1 } },
+                { text: "Trust my instincts. Numbers don't capture everything.", points: { tahani: 3, hart: 1 } },
+                { text: "Prepare for failure but execute anyway.", points: { hart: 3, tahani: 2 } }
             ]
         },
         {
             question: "Someone asks: 'What makes you human?' How do you respond?",
             answers: [
-                { text: "Choices. The decisions we make define us.", points: { android: 3, reyes: 2 } },
-                { text: "Memories. We are what we've experienced.", points: { android: 2, chen: 1 } },
-                { text: "Biology. DNA. The physical reality of existence.", points: { chen: 2 } },
-                { text: "I don't know. Maybe nothing does.", points: { android: 3 } }
+                { text: "Choices. The decisions we make define us.", points: { elpida: 3, hart: 2 } },
+                { text: "Memories. We are what we've experienced.", points: { elpida: 2, ciel: 1 } },
+                { text: "Biology. DNA. The physical reality of existence.", points: { ciel: 2 } },
+                { text: "I don't know. Maybe nothing does.", points: { elpida: 3 } }
             ]
         },
         {
             question: "You're offered a way home—but only if you abandon the Brigade. Do you take it?",
             answers: [
-                { text: "Never. The Brigade is my home now.", points: { reyes: 3, pilot: 2 } },
-                { text: "Depends. Can I come back for them?", points: { chen: 2, android: 1 } },
-                { text: "Calculate if one person leaving helps the others survive.", points: { android: 3, chen: 1 } },
-                { text: "I left home once. I can't go back.", points: { reyes: 2, pilot: 3 } }
+                { text: "Never. The Brigade is my home now.", points: { hart: 3, tahani: 2 } },
+                { text: "Depends. Can I come back for them?", points: { ciel: 2, elpida: 1 } },
+                { text: "Calculate if one person leaving helps the others survive.", points: { elpida: 3, ciel: 1 } },
+                { text: "I left home once. I can't go back.", points: { hart: 2, tahani: 3 } }
             ]
         }
     ],
     results: {
-        android: {
-            name: "THE ANDROID",
-            role: "Strategic Commander",
+        elpida: {
+            name: "ELPIDA",
+            role: "Strategic Android",
             icon: "🤖",
-            description: "You think in probabilities, calculate impossible odds, and make decisions no one else can stomach. Like the android, you carry the weight of borrowed memories and wonder if your consciousness is real or constructed. You lead not because you want to, but because someone has to—and you're the only one who can see all the angles.",
+            description: "You think in probabilities, calculate impossible odds, and make decisions no one else can stomach. Like the elpida, you carry the weight of borrowed memories and wonder if your consciousness is real or constructed. You lead not because you want to, but because someone has to—and you're the only one who can see all the angles.",
             traits: ["Strategic", "Analytical", "Selfless", "Existential", "Calculating"],
             quote: "Some choices define who you are. These will define what existence means.",
-            cssClass: "android-result"
+            cssClass: "elpida-result"
         },
-        reyes: {
-            name: "COMMANDER REYES",
+        hart: {
+            name: "COMMANDER GEO HART",
             role: "Tactical Officer",
             icon: "⚔️",
             description: "You deserted an empire because you couldn't live with what they asked you to do. Like Reyes, you lead with conscience—even when it costs you everything. You've made impossible choices and carry the guilt, but you'd make them again if it meant protecting the people you care about. Duty meant something once. Now, your crew means everything.",
@@ -96,8 +96,8 @@ const quizData = {
             quote: "I didn't leave the empire. I left what it made me become.",
             cssClass: ""
         },
-        chen: {
-            name: "DR. KIRA CHEN",
+        ciel: {
+            name: "CIEL FLEUR",
             role: "Chief Engineer",
             icon: "🔧",
             description: "You're brilliant, obsessive, and willing to push boundaries others won't cross. Like Dr. Chen, you see consciousness as code waiting to be cracked. You build impossible things because someone has to, even if it means wrestling with the ethics later. You hear patterns others miss—frequencies, connections, meanings hidden in the noise.",
@@ -105,9 +105,9 @@ const quizData = {
             quote: "I didn't create consciousness. I just gave it a different form.",
             cssClass: ""
         },
-        pilot: {
-            name: "THE PILOT",
-            role: "Navigation Specialist",
+        tahani: {
+            name: "TAHANI MAZER",
+            role: "Navigation Specialist, Pilot",
             icon: "🚀",
             description: "You trust your gut over calculations, your instincts over algorithms. Like the Brigade's best pilot, you navigate by feel—reading currents others can't see, making split-second calls that shouldn't work but somehow do. You deserted because freedom mattered more than safety. You stay because the crew became family.",
             traits: ["Instinctive", "Bold", "Independent", "Adaptive", "Free-Spirited"],
@@ -119,7 +119,7 @@ const quizData = {
 
 let currentQuestion = 0;
 let answers = [];
-let scores = { android: 0, reyes: 0, chen: 0, pilot: 0 };
+let scores = { elpida: 0, hart: 0, ciel: 0, tahani: 0 };
 
 // Initialize quiz
 function initQuiz() {
@@ -139,7 +139,7 @@ function startQuiz() {
     showScreen('quiz-questions');
     currentQuestion = 0;
     answers = [];
-    scores = { android: 0, reyes: 0, chen: 0, pilot: 0 };
+    scores = { elpida: 0, hart: 0, ciel: 0, tahani: 0 };
     displayQuestion();
 }
 
@@ -223,7 +223,7 @@ function calculateResults() {
     });
 
     // Find highest score
-    let topCharacter = 'android';
+    let topCharacter = 'elpida';
     let topScore = 0;
 
     Object.keys(scores).forEach(character => {
@@ -267,7 +267,7 @@ function displayResults(character) {
 function resetQuiz() {
     currentQuestion = 0;
     answers = [];
-    scores = { android: 0, reyes: 0, chen: 0, pilot: 0 };
+    scores = { elpida: 0, hart: 0, ciel: 0, tahani: 0 };
     showScreen('quiz-start');
 }
 
