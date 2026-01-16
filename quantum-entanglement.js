@@ -1,5 +1,5 @@
 // ============================================
-// QUANTUM ENTANGLEMENT - FIXED + CHAT FEATURE
+// QUANTUM ENTANGLEMENT - ULTIMATE VERSION
 // ============================================
 
 // YOUR Firebase configuration
@@ -34,10 +34,14 @@ class QuantumEntanglement {
         this.partnerId = null;
         this.db = null;
         this.userRef = null;
+        this.partnerRef = null;
         this.isConnected = false;
         this.currentMessageId = null;
         this.messageListener = null;
         this.chatListener = null;
+        this.partnerDisconnectListener = null;
+        this.isMinimized = false;
+        this.unreadCount = 0;
     }
 
     generateUserId() {
@@ -77,36 +81,102 @@ class QuantumEntanglement {
 
     createWidget() {
         const widget = document.createElement('div');
-        widget.className = 'quantum-widget';
+        widget.className = 'quantum-widget rainbow-pulse';
         widget.id = 'quantumWidget';
         widget.innerHTML = `
-            <button class="close-btn" id="closeWidget">×</button>
+            <button class="minimize-btn" id="minimizeBtn" title="Minimize">−</button>
+            <button class="close-btn" id="closeWidget" title="Close">×</button>
             
-            <div class="quantum-header">
-                <div class="quantum-icon">⚛️</div>
-                <div class="quantum-title">QUANTUM ENTANGLEMENT</div>
-            </div>
-
-            <div class="entanglement-status">
-                <div class="status-label">YOUR QUANTUM ID:</div>
-                <div class="partner-id" id="yourId">USER_XXXX</div>
-            </div>
-
-            <div id="partnerSection">
-                <div class="entanglement-status">
-                    <div class="status-label">SEARCHING FOR PARTNER:</div>
-                    <div class="searching">Scanning quantum field...</div>
+            <div class="widget-content" id="widgetContent">
+                <div class="quantum-header">
+                    <div class="quantum-icon">⚛️</div>
+                    <div class="quantum-title">QUANTUM ENTANGLEMENT</div>
                 </div>
+
+                <div class="entanglement-status">
+                    <div class="status-label">YOUR QUANTUM ID:</div>
+                    <div class="partner-id" id="yourId">USER_XXXX</div>
+                </div>
+
+                <div id="partnerSection">
+                    <div class="entanglement-status">
+                        <div class="status-label">SEARCHING FOR PARTNER:</div>
+                        <div class="searching">Scanning quantum field...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minimized State -->
+            <div class="minimized-state" id="minimizedState" style="display: none;">
+                <div class="quantum-icon-mini">⚛️</div>
+                <span id="partnerIdMini">QUANTUM</span>
+                <span class="unread-badge" id="unreadBadge" style="display: none;">0</span>
             </div>
         `;
 
         document.body.appendChild(widget);
 
-        // Close button handler
-        document.getElementById('closeWidget').addEventListener('click', () => {
-            widget.style.display = 'none';
+        // Setup button handlers
+        this.setupButtonHandlers();
+    }
+
+    setupButtonHandlers() {
+        const closeBtn = document.getElementById('closeWidget');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+        const minimizedState = document.getElementById('minimizedState');
+
+        // Close with warning
+        closeBtn.addEventListener('click', () => {
+            if (this.isConnected) {
+                const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. Continue?');
+                if (!confirmed) return;
+            }
+            document.getElementById('quantumWidget').style.display = 'none';
             this.cleanup();
         });
+
+        // Minimize toggle
+        minimizeBtn.addEventListener('click', () => {
+            this.toggleMinimize();
+        });
+
+        minimizedState.addEventListener('click', () => {
+            this.toggleMinimize();
+        });
+    }
+
+    toggleMinimize() {
+        const widget = document.getElementById('quantumWidget');
+        const content = document.getElementById('widgetContent');
+        const minimized = document.getElementById('minimizedState');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+
+        this.isMinimized = !this.isMinimized;
+
+        if (this.isMinimized) {
+            content.style.display = 'none';
+            minimized.style.display = 'flex';
+            widget.style.minWidth = 'auto';
+            widget.style.width = '200px';
+            widget.style.height = '60px';
+            minimizeBtn.style.display = 'none';
+
+            // Update minimized text
+            if (this.partnerId) {
+                document.getElementById('partnerIdMini').textContent = this.partnerId;
+            }
+        } else {
+            content.style.display = 'block';
+            minimized.style.display = 'none';
+            widget.style.minWidth = '320px';
+            widget.style.width = 'auto';
+            widget.style.height = 'auto';
+            minimizeBtn.style.display = 'flex';
+
+            // Clear unread count
+            this.unreadCount = 0;
+            document.getElementById('unreadBadge').style.display = 'none';
+        }
     }
 
     async registerUser() {
@@ -115,10 +185,11 @@ class QuantumEntanglement {
         await this.userRef.set({
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             looking: true,
-            partnerId: null
+            partnerId: null,
+            online: true
         });
 
-        // Auto-remove after 5 minutes of inactivity
+        // Auto-remove after disconnect
         this.userRef.onDisconnect().remove();
     }
 
@@ -133,8 +204,46 @@ class QuantumEntanglement {
                 this.showConnectedState();
                 this.startSharedMessages();
                 this.startChat();
+                this.monitorPartnerStatus();
             }
         });
+    }
+
+    monitorPartnerStatus() {
+        if (!this.partnerId) return;
+
+        this.partnerRef = this.db.ref('activeUsers/' + this.partnerId);
+
+        this.partnerDisconnectListener = this.partnerRef.on('value', (snapshot) => {
+            const partnerData = snapshot.val();
+
+            // Partner disconnected
+            if (!partnerData) {
+                this.showPartnerDisconnected();
+            }
+        });
+    }
+
+    showPartnerDisconnected() {
+        const partnerSection = document.getElementById('partnerSection');
+        if (!partnerSection) return;
+
+        // Show disconnection notice
+        const disconnectNotice = document.createElement('div');
+        disconnectNotice.className = 'disconnect-notice';
+        disconnectNotice.innerHTML = `
+            <div style="color: #ff0033; font-weight: bold; margin-bottom: 0.5rem;">⚠️ ENTANGLEMENT SEVERED</div>
+            <div style="color: #cccccc; font-size: 0.85rem;">${this.partnerId} has left the quantum field.</div>
+        `;
+
+        partnerSection.appendChild(disconnectNotice);
+
+        // Alert user
+        this.playDisconnectSound();
+
+        // Reset connection state
+        this.isConnected = false;
+        this.partnerId = null;
     }
 
     searchForPartner() {
@@ -166,6 +275,7 @@ class QuantumEntanglement {
                     this.showConnectedState();
                     this.startSharedMessages();
                     this.startChat();
+                    this.monitorPartnerStatus();
                     return;
                 }
             }
@@ -280,6 +390,11 @@ class QuantumEntanglement {
         this.chatListener = chatRef.on('child_added', (snapshot) => {
             const msg = snapshot.val();
             this.displayChatMessage(msg.userId, msg.text, msg.timestamp);
+
+            // Show notification if minimized
+            if (this.isMinimized && msg.userId !== this.userId) {
+                this.showNewMessageNotification();
+            }
         });
     }
 
@@ -320,6 +435,44 @@ class QuantumEntanglement {
 
         if (!isMe) {
             this.playMessageSound();
+
+            // Browser notification if supported
+            this.showBrowserNotification(text);
+        }
+    }
+
+    showNewMessageNotification() {
+        this.unreadCount++;
+        const badge = document.getElementById('unreadBadge');
+        badge.textContent = this.unreadCount;
+        badge.style.display = 'block';
+
+        // Pulse the widget
+        const widget = document.getElementById('quantumWidget');
+        widget.style.animation = 'none';
+        setTimeout(() => {
+            widget.style.animation = 'pulse-notify 0.5s ease 3';
+        }, 10);
+    }
+
+    showBrowserNotification(text) {
+        if (!("Notification" in window)) return;
+
+        if (Notification.permission === "granted") {
+            new Notification(`Message from ${this.partnerId}`, {
+                body: text,
+                icon: '⚛️',
+                tag: 'quantum-message'
+            });
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification(`Message from ${this.partnerId}`, {
+                        body: text,
+                        icon: '⚛️'
+                    });
+                }
+            });
         }
     }
 
@@ -337,11 +490,16 @@ class QuantumEntanglement {
             this.userRef.off();
             this.userRef.remove();
         }
+        if (this.partnerRef && this.partnerDisconnectListener) {
+            this.partnerRef.off('value', this.partnerDisconnectListener);
+        }
         if (this.messageListener) {
-            this.messageListener.off();
+            const pairId = [this.userId, this.partnerId].sort().join('_');
+            this.db.ref('messages/' + pairId).off('value', this.messageListener);
         }
         if (this.chatListener) {
-            this.chatListener.off();
+            const pairId = [this.userId, this.partnerId].sort().join('_');
+            this.db.ref('chat/' + pairId).off('child_added', this.chatListener);
         }
     }
 
@@ -405,6 +563,26 @@ class QuantumEntanglement {
 
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.05);
+        } catch (e) { }
+    }
+
+    playDisconnectSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 200;
+            oscillator.type = 'sawtooth';
+
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
         } catch (e) { }
     }
 }

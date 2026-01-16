@@ -1,5 +1,5 @@
 /* ============================================
-   QUANTUM ENTANGLEMENT WIDGET + CHAT
+   QUANTUM ENTANGLEMENT WIDGET - ULTIMATE
    ============================================ */
 
 .quantum-widget {
@@ -19,6 +19,66 @@
     font-family: 'Courier New', monospace;
     display: flex;
     flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+/* RAINBOW PULSE EFFECT */
+.rainbow-pulse {
+    animation: rainbow-border 10s linear infinite, pulse-glow-rainbow 4s ease-in-out infinite;
+}
+
+@keyframes rainbow-border {
+    0% {
+        border-color: #ff0033;
+        box-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
+    }
+
+    14% {
+        border-color: #ff7700;
+        box-shadow: 0 0 30px rgba(255, 119, 0, 0.5);
+    }
+
+    28% {
+        border-color: #ffdd00;
+        box-shadow: 0 0 30px rgba(255, 221, 0, 0.5);
+    }
+
+    42% {
+        border-color: #00ff88;
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+    }
+
+    57% {
+        border-color: #00d4ff;
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+    }
+
+    71% {
+        border-color: #0088ff;
+        box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
+    }
+
+    85% {
+        border-color: #aa00ff;
+        box-shadow: 0 0 30px rgba(170, 0, 255, 0.5);
+    }
+
+    100% {
+        border-color: #ff0033;
+        box-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
+    }
+}
+
+@keyframes pulse-glow-rainbow {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.01);
+        filter: brightness(1.2);
+    }
 }
 
 @keyframes slideIn {
@@ -30,6 +90,17 @@
     to {
         transform: translateX(0);
         opacity: 1;
+    }
+}
+
+/* Notification pulse */
+@keyframes pulse-notify {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
     }
 }
 
@@ -191,10 +262,19 @@
     }
 }
 
-.close-btn {
+/* Disconnect Notice */
+.disconnect-notice {
+    background: rgba(255, 0, 51, 0.1);
+    border: 1px solid #ff0033;
+    padding: 1rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Buttons */
+.close-btn, .minimize-btn {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
     background: transparent;
     border: 1px solid #ff0033;
     color: #ff0033;
@@ -206,13 +286,67 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    font-weight: bold;
 }
 
-    .close-btn:hover {
-        background: #ff0033;
-        color: white;
-        transform: rotate(90deg);
+.close-btn {
+    right: 0.5rem;
+}
+
+.minimize-btn {
+    right: 2rem;
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.close-btn:hover {
+    background: #ff0033;
+    color: white;
+    transform: rotate(90deg);
+}
+
+.minimize-btn:hover {
+    background: #00d4ff;
+    color: #0a0a0a;
+}
+
+/* Minimized State */
+.minimized-state {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.quantum-icon-mini {
+    font-size: 1.2rem;
+    animation: rotate 4s linear infinite;
+}
+
+.unread-badge {
+    background: #ff0033;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    animation: pulse-badge 1s infinite;
+}
+
+@keyframes pulse-badge {
+    0%, 100% {
+        transform: scale(1);
     }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
 
 /* ============================================
    QUANTUM CHAT
