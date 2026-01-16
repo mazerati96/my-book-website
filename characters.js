@@ -4,8 +4,8 @@
 
 // Character data
 const characterData = {
-    android: {
-        name: "ANDROID UNIT",
+    elpida: {
+        name: "ELPIDA",
         subtitle: "BRIGADE COMMANDER",
         id: "FILE: A-001",
         stamp: "CONFIDENTIAL",
@@ -28,8 +28,8 @@ const characterData = {
             <p>Built to lead the Brigade to the Array and beyond. Only one capable of calculating the impossible odds of stealing humanity's most valuable technology while three empire fleets converge. But her purpose may extend far beyond what her creators intended.</p>
         `
     },
-    reyes: {
-        name: "COMMANDER REYES",
+    geo: {
+        name: "COMMANDER GEO HART",
         subtitle: "BRIGADE TACTICAL OFFICER",
         id: "FILE: B-047",
         stamp: "CONFIDENTIAL",
@@ -37,7 +37,7 @@ const characterData = {
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
-            "AGE": "42",
+            "AGE": "32",
             "SERVICE": "10 YEARS",
             "SPECIALIZATION": "TACTICS"
         },
@@ -52,8 +52,8 @@ const characterData = {
             <p>Supports the android commander while wrestling with guilt over creating something that carries his friend's consciousness without their consent.</p>
         `
     },
-    chen: {
-        name: "DR. KIRA CHEN",
+    ciel: {
+        name: "CIEL FLEUR",
         subtitle: "CHIEF ENGINEER",
         id: "FILE: B-089",
         stamp: "CONFIDENTIAL",
@@ -63,14 +63,14 @@ const characterData = {
             "STATUS": "ACTIVE",
             "AGE": "38",
             "SERVICE": "8 YEARS",
-            "SPECIALIZATION": "ANDROID TECH"
+            "SPECIALIZATION": "ENGINEERING, ANDROID TECH"
         },
         bio: `
             <h4>BACKGROUND:</h4>
             <p>Brilliant engineer who designed the android's neural interface. Obsessed with consciousness transfer technology. Left empire after ethics violations over human experimentation.</p>
             
             <h4>RELATIONSHIP WITH ANDROID:</h4>
-            <p>Views the android as both her greatest achievement and her deepest moral failure. Questions whether creating synthetic consciousness was an act of creation or violation.</p>
+            <p>Views the android as both his greatest achievement and her deepest moral failure. Questions whether creating synthetic consciousness was an act of creation or violation.</p>
             
             <h4>HIDDEN AGENDA:</h4>
             <p>Secretly studies the 36 Hz frequency. Believes it's not random noise but a form of communication. Has not shared this with the crew.</p>
