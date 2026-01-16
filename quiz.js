@@ -91,7 +91,7 @@ const quizData = {
             name: "COMMANDER GEO HART",
             role: "Tactical Officer",
             icon: "⚔️",
-            description: "You deserted an empire because you couldn't live with what they asked you to do. Like Reyes, you lead with conscience—even when it costs you everything. You've made impossible choices and carry the guilt, but you'd make them again if it meant protecting the people you care about. Duty meant something once. Now, your crew means everything.",
+            description: "You deserted an empire because you couldn't live with what they asked you to do. Like Geo, you lead with conscience—even when it costs you everything. You've made impossible choices and carry the guilt, but you'd make them again if it meant protecting the people you care about. Duty meant something once. Now, your crew means everything.",
             traits: ["Principled", "Protective", "Tactical", "Haunted", "Loyal"],
             quote: "I didn't leave the empire. I left what it made me become.",
             cssClass: ""
@@ -157,7 +157,7 @@ function startQuiz() {
     showScreen('quiz-questions');
     currentQuestion = 0;
     answers = [];
-    scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0 };
+    scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0, scout: 0, cinder: 0 };
     displayQuestion();
 }
 
