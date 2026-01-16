@@ -121,8 +121,31 @@ function createTransitionElements() {
     const overlay = document.querySelector('.page-transition');
     if (!overlay) return;
 
+    // Array of cryptic loading messages
+    const loadingMessages = [
+        "INITIALIZING SYSTEM...",
+        "ACCESSING QUANTUM LAYER...",
+        "DECRYPTING SOUL MATRIX...",
+        "LOADING MEMORY FRAGMENT 0x4A7B...",
+        "SYNCHRONIZING WITH THE SIGNAL...",
+        "CALIBRATING CONSCIOUSNESS NODES...",
+        "PARSING NEURAL PATHWAYS...",
+        "ESTABLISHING QUANTUM LINK...",
+        "DECODING FREQUENCY 36 HZ...",
+        "BOOTSTRAPPING REALITY ENGINE...",
+        "CONNECTING TO THE VOID...",
+        "MEASURING SOULS...",
+        "ACTIVATING DEEP SPACE PROTOCOL...",
+        "LOADING ASTRONOMICAL DATA...",
+        "INITIALIZING TEMPORAL DRIFT...",
+        "ACCESSING FORBIDDEN ARCHIVES..."
+    ];
+
+    // Pick a random message
+    const randomMessage = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+
     overlay.innerHTML = `
-        <div class="transition-text">INITIALIZING SYSTEM...</div>
+        <div class="transition-text">${randomMessage}</div>
         <div class="transition-loading">
             <div class="loading-bar"></div>
             <div class="loading-bar"></div>
