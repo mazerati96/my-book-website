@@ -7,73 +7,73 @@ const quizData = {
         {
             question: "A battle is lost. Your squad is trapped. You have one escape pod. What do you do?",
             answers: [
-                { text: "Give the pod to the youngest soldier. They have more life ahead.", points: { hart: 2, elpida: 1 } },
-                { text: "Calculate survival odds for each person. Send whoever has the best chance.", points: { elpida: 3, ciel: 1 } },
-                { text: "Draw lots. Let fate decide who survives.", points: { hart: 1, tahani: 2 } },
-                { text: "Stay behind yourself. Let others escape.", points: { hart: 3, elpida: 2 } }
+                { text: "Give the pod to the youngest soldier. They have more life ahead.", points: { geo: 2, elpida: 1 , scout: 3, cinder: 1 } },
+                { text: "Calculate survival odds for each person. Send whoever has the best chance.", points: { elpida: 3, ciel: 1, tahani: 1, cinder: 3 } },
+                { text: "Draw lots. Let fate decide who survives.", points: { geo: 1, tahani: 2, scout: 2 } },
+                { text: "Stay behind yourself. Let others escape.", points: { geo: 3, elpida: 2, scout: 3, cinder: 1} }
             ]
         },
         {
             question: "You discover your commanding officer is committing war crimes. What's your move?",
             answers: [
-                { text: "Desert immediately. I won't be part of this.", points: { hart: 3, tahani: 1 } },
-                { text: "Report it through proper channels and hope for justice.", points: { ciel: 1 } },
-                { text: "Document everything. Build an airtight case before acting.", points: { ciel: 3, elpida: 2 } },
-                { text: "Confront them directly. Demand they stop or face consequences.", points: { hart: 2, tahani: 2 } }
+                { text: "Desert immediately. I won't be part of this.", points: { geo: 3, tahani: 1, scout: 2 } },
+                { text: "Report it through proper channels and hope for justice.", points: { ciel: 1, cinder: 2 } },
+                { text: "Document everything. Build an airtight case before acting.", points: { ciel: 3, elpida: 2, cinder: 3, scout: 2 } },
+                { text: "Confront them directly. Demand they stop or face consequences.", points: { geo: 2, tahani: 2, scout: 3 } }
             ]
         },
         {
             question: "The Brigade needs supplies. The only option is stealing from a civilian colony. Do you?",
             answers: [
-                { text: "Yes, but only what we absolutely need. Minimize harm.", points: { hart: 2, tahani: 2 } },
-                { text: "No. Find another way, even if it takes longer.", points: { ciel: 2, elpida: 1 } },
-                { text: "Yes. Survival comes first. Apologize later.", points: { tahani: 3, hart: 1 } },
-                { text: "Negotiate. Offer something in exchange.", points: { elpida: 3, ciel: 2 } }
+                { text: "Yes, but only what we absolutely need. Minimize harm.", points: { geo: 2, tahani: 2, scout: 2 } },
+                { text: "No. Find another way, even if it takes longer.", points: { ciel: 2, elpida: 1, cinder: 2, scout: 1 } },
+                { text: "Yes. Survival comes first. Apologize later.", points: { tahani: 3, geo: 1, scout: 3, cinder: 1 } },
+                { text: "Negotiate. Offer something in exchange.", points: { elpida: 3, ciel: 2, cinder: 3 } }
             ]
         },
         {
             question: "You hear a strange frequency—36 Hz, humming beneath reality. It won't stop. What do you do?",
             answers: [
-                { text: "Ignore it. Focus on the mission.", points: { hart: 2, tahani: 1 } },
-                { text: "Study it obsessively. It means something.", points: { ciel: 3, elpida: 2 } },
-                { text: "Report it to command. Let them figure it out.", points: { tahani: 1 } },
-                { text: "Wonder if it's trying to communicate.", points: { elpida: 3, ciel: 1 } }
+                { text: "Ignore it. Focus on the mission.", points: { geo: 2, tahani: 1, scout: 1 } },
+                { text: "Study it obsessively. It means something.", points: { ciel: 3, elpida: 2, cinder: 3 } },
+                { text: "Report it to command. Let them figure it out.", points: { tahani: 1, scout: 3 } },
+                { text: "Wonder if it's trying to communicate.", points: { elpida: 3, ciel: 1, cinder: 3 } }
             ]
         },
         {
-            question: "A crewmate is dying. They offer to transfer their consciousness into a machine. Do you accept?",
+            question: "A crewmate is dying. They offer to transfer their consciousness into a machine, a totally new experimental procedure that may not work. Do you accept?",
             answers: [
-                { text: "Yes. If they're willing, honor their choice.", points: { ciel: 3, elpida: 2 } },
-                { text: "No. Some lines shouldn't be crossed.", points: { hart: 2, tahani: 1 } },
-                { text: "Ask them if they're sure. Then respect their decision.", points: { hart: 2, elpida: 2 } },
-                { text: "Build the machine. Make it perfect.", points: { ciel: 3 } }
+                { text: "Yes. If they're willing, honor their choice.", points: { ciel: 3, elpida: 2, cinder: 2, scout: 2 } },
+                { text: "No. Some lines shouldn't be crossed.", points: { geo: 2, tahani: 1, scout: 1 } },
+                { text: "Ask them if they're sure. Then respect their decision.", points: { geo: 2, elpida: 2, cinder: 2, scout: 3 } },
+                { text: "Build the machine. Make it perfect.", points: { ciel: 3, cinder: 3, scout: 2 } }
             ]
         },
         {
             question: "The mission is impossible. The odds are 1%. What's your approach?",
             answers: [
-                { text: "Find the 1% and bet everything on it.", points: { elpida: 3, hart: 2 } },
-                { text: "Reframe the mission. Change the impossible to unlikely.", points: { ciel: 3, elpida: 1 } },
-                { text: "Trust my instincts. Numbers don't capture everything.", points: { tahani: 3, hart: 1 } },
-                { text: "Prepare for failure but execute anyway.", points: { hart: 3, tahani: 2 } }
+                { text: "Find the 1% and bet everything on it.", points: { elpida: 3, geo: 2, scout: 3 } },
+                { text: "Reframe the mission. Change the impossible to unlikely.", points: { ciel: 3, elpida: 1, cinder: 3 } },
+                { text: "Trust my instincts. Numbers don't capture everything.", points: { tahani: 3, geo: 1, swcout: 2 } },
+                { text: "Prepare for failure but execute anyway.", points: { geo: 3, tahani: 2, cinder: 2 } }
             ]
         },
         {
             question: "Someone asks: 'What makes you human?' How do you respond?",
             answers: [
-                { text: "Choices. The decisions we make define us.", points: { elpida: 3, hart: 2 } },
-                { text: "Memories. We are what we've experienced.", points: { elpida: 2, ciel: 1 } },
-                { text: "Biology. DNA. The physical reality of existence.", points: { ciel: 2 } },
-                { text: "I don't know. Maybe nothing does.", points: { elpida: 3 } }
+                { text: "Choices. The decisions we make define us.", points: { elpida: 3, geo: 2, scout: 3 } },
+                { text: "Memories. We are what we've experienced.", points: { elpida: 2, ciel: 1, cinder: 1 } },
+                { text: "Biology. DNA. The physical reality of existence.", points: { ciel: 2, cinder: 2 } },
+                { text: "I don't know. Maybe nothing does.", points: { elpida: 3, tahani: 3, scout: 2, cinder: 3 } }
             ]
         },
         {
             question: "You're offered a way home—but only if you abandon the Brigade. Do you take it?",
             answers: [
-                { text: "Never. The Brigade is my home now.", points: { hart: 3, tahani: 2 } },
-                { text: "Depends. Can I come back for them?", points: { ciel: 2, elpida: 1 } },
-                { text: "Calculate if one person leaving helps the others survive.", points: { elpida: 3, ciel: 1 } },
-                { text: "I left home once. I can't go back.", points: { hart: 2, tahani: 3 } }
+                { text: "Never. The Brigade is my home now.", points: { geo: 3, tahani: 2, scout: 3 } },
+                { text: "Depends. Can I come back for them?", points: { ciel: 2, elpida: 1, cinder: 1 } },
+                { text: "Calculate if one person leaving helps the others survive.", points: { elpida: 3, ciel: 1, cinder: 3 } },
+                { text: "I left home once. I can't go back.", points: { geo: 2, tahani: 3, scout: 2, cinder: 2 } }
             ]
         }
     ],
@@ -87,7 +87,7 @@ const quizData = {
             quote: "Some choices define who you are. These will define what existence means.",
             cssClass: "elpida-result"
         },
-        hart: {
+        geo: {
             name: "COMMANDER GEO HART",
             role: "Tactical Officer",
             icon: "⚔️",
@@ -113,13 +113,31 @@ const quizData = {
             traits: ["Instinctive", "Bold", "Independent", "Adaptive", "Free-Spirited"],
             quote: "I don't need to know the odds. I just need to know the way out.",
             cssClass: ""
+        },
+        scout: {
+            name: "SCOUT HAWKINS",
+            role: "Weapons and Combat Specialist",
+            icon: "🎯",
+            description: "You are precise, focused, and excel in high-pressure situations. Like Scout Hawkins, you thrive on action and have a keen eye for detail. Your loyalty to your team is unwavering, and you are always ready to step up when the situation demands it.",
+            traits: ["Precise", "Focused", "Loyal", "Action-Oriented", "Reliable"],
+            quote: "Here in the Brigade, we bow to no one. That applies to you as well.",
+            cssCLass: ""
+        },
+        cinder: {
+            name: "CINDER HART",
+            role: "Tactical Expert",
+            icon: "🔥",
+            description: "You are fiery, passionate, and unafraid to challenge authority. Like Cinder Hart, you have a strong sense of justice and are willing to fight for what you believe in. Your tactical mind allows you to see opportunities where others see obstacles.",
+            traits: ["Fiery", "Passionate", "Just", "Tactical", "Resilient"],
+            quote: "Make it yours.",
+            cssClass: ""
         }
     }
 };
 
 let currentQuestion = 0;
 let answers = [];
-let scores = { elpida: 0, hart: 0, ciel: 0, tahani: 0 };
+let scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0, scout: 0, cinder: 0 };
 
 // Initialize quiz
 function initQuiz() {
@@ -139,7 +157,7 @@ function startQuiz() {
     showScreen('quiz-questions');
     currentQuestion = 0;
     answers = [];
-    scores = { elpida: 0, hart: 0, ciel: 0, tahani: 0 };
+    scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0 };
     displayQuestion();
 }
 
@@ -267,7 +285,7 @@ function displayResults(character) {
 function resetQuiz() {
     currentQuestion = 0;
     answers = [];
-    scores = { elpida: 0, hart: 0, ciel: 0, tahani: 0 };
+    scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0 };
     showScreen('quiz-start');
 }
 
