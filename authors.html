@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Authors - The Measure of Souls</title>
     <link rel="stylesheet" href="base.css">
-<link rel="stylesheet" href="navigation.css">
-<link rel="stylesheet" href="layout.css">
-<link rel="stylesheet" href="animations.css">
-<link rel="stylesheet" href="components.css">
-<link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="authors-qa.css">
+    <link rel="stylesheet" href="quantum-widget.css">
 </head>
 <body>
     <!-- Page Transition Overlay -->
@@ -17,8 +19,7 @@
 
     <!-- Animated Background -->
     <div class="matrix-style-bg"></div>
-    
-  
+
     <!-- Navigation Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
@@ -169,6 +170,67 @@
         </div>
     </section>
 
+    <!-- ASK THE AUTHORS Q&A SECTION -->
+    <section class="qa-section">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>[ ASK THE AUTHORS ]</h2>
+            <div class="header-line"></div>
+        </div>
+
+        <!-- Ask Question Form -->
+        <div class="ask-form-container">
+            <h3>> SUBMIT QUESTION</h3>
+            <div class="success-message" id="successMessage">
+                ✓ QUESTION SUBMITTED SUCCESSFULLY - Awaiting author response...
+            </div>
+            <form id="qaForm">
+                <div class="form-group">
+                    <label for="userName">YOUR NAME (OPTIONAL)</label>
+                    <input type="text" id="userName" placeholder="Anonymous Reader">
+                </div>
+                <div class="form-group">
+                    <label for="userQuestion">YOUR QUESTION *</label>
+                    <textarea id="userQuestion" placeholder="What inspired the android protagonist? How does the 36 Hz frequency work? When is Book Two releasing?" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span>[ TRANSMIT QUESTION ]</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Terminal Log of Q&As -->
+        <div class="terminal-log" id="terminalLog">
+            <div class="terminal-header">
+                <div class="terminal-title">// ANSWERED QUESTIONS LOG</div>
+                <div class="terminal-status">● LIVE</div>
+            </div>
+            <div id="qaEntries">
+                <!-- Sample Q&As -->
+                <div class="qa-entry">
+                    <div class="qa-timestamp">[2026-01-16 18:32:47 UTC]</div>
+                    <div class="question">What inspired you to write about an android with transferred consciousness?</div>
+                    <div class="answer">The question that haunted me was: if you could copy someone's mind perfectly, would it still be them? The android in Book One isn't just a robot—she's carrying ten years of someone else's memories in a body that's only three days old. She has to lead a desperate mission while questioning whether she's even real. That tension between identity and purpose became the heart of the story.</div>
+                    <div class="author-signature">— Amaro</div>
+                </div>
+
+                <div class="qa-entry">
+                    <div class="qa-timestamp">[2026-01-15 14:22:15 UTC]</div>
+                    <div class="question">Is the 36 Hz frequency real or fictional?</div>
+                    <div class="answer">It's fictional, but rooted in real concepts. Subsonic frequencies can affect human perception in strange ways. In the trilogy, the 36 Hz signal is something far stranger—a frequency that predates the universe itself. Whether it's a message, a warning, or something else entirely... you'll have to read to find out. But yes, you can actually generate and hear 36 Hz if you have good speakers.</div>
+                    <div class="author-signature">— Matthew</div>
+                </div>
+
+                <div class="qa-entry">
+                    <div class="qa-timestamp">[2026-01-14 09:47:03 UTC]</div>
+                    <div class="question">When can we expect Book Two?</div>
+                    <div class="answer">Book Two is currently in progress! I'm aiming for late 2026, but I won't rush it. The story deserves to be told right. Subscribe to the newsletter for updates—you'll be the first to know when we have a release date.</div>
+                    <div class="author-signature">— Amaro & Matthew</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Call to Action -->
     <section class="cta-section">
         <div class="cta-content">
@@ -202,10 +264,19 @@
         <div class="footer-decoration"></div>
     </footer>
 
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Your existing scripts -->
     <script src="audio-player.js"></script>
     <script src="script.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
+    
+    <!-- New scripts -->
+    <script src="authors-qa.js"></script>
+    <script src="quantum-entanglement.js"></script>
 </body>
 </html>
