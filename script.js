@@ -32,6 +32,14 @@ document.addEventListener('keydown', unlockAudioOnce, { passive: true });
 document.addEventListener('wheel', unlockAudioOnce, { passive: true });
 document.addEventListener('touchstart', unlockAudioOnce, { passive: true });
 
+
+function attemptAudioResume() {
+    const enabled = localStorage.getItem('ambientMusicEnabled') === 'true';
+    if (enabled && !audioUnlocked) {
+        // Try to resume immediately (will work if user interacted on previous page)
+        sendAudioCommand('PLAY');
+    }
+}
 function showMusicNoticeIfIndex() {
     if (!location.pathname.endsWith('index.html') && location.pathname !== '/') return;
     if (sessionStorage.getItem('musicNoticeShown')) return;
@@ -614,7 +622,7 @@ function initializeAll() {
     initPersistentAudio();
     createFrequencyToggle();
     showMusicNoticeIfIndex();
-
+    attemptAudioResume();
     console.log('✅ All systems online!');
 }
 

@@ -24,11 +24,20 @@
     const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
     const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
 
+    let hasTriedAutoplay = false;
+
     audio.addEventListener('loadedmetadata', () => {
         if (savedTime > 0 && savedTime < audio.duration) {
             audio.currentTime = savedTime;
         }
-      
+
+        // Try to auto-resume if enabled
+        if (enabled && !hasTriedAutoplay) {
+            hasTriedAutoplay = true;
+            audio.play().catch(err => {
+                console.log('⏸️ Autoplay blocked - music will resume on interaction');
+            });
+        }
     });
 
     // Persist playback position
@@ -59,7 +68,6 @@
                 fadeTo(0.22, 600);
                 break;
         }
-
     });
 
     let fadeInterval = null;
@@ -83,7 +91,6 @@
             }
         }, stepTime);
     }
-
 </script>
 
 </body>
