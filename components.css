@@ -408,3 +408,126 @@
         color: var(--accent-red);
         font-weight: bold;
     }
+
+
+/* ============================================
+   ENHANCED GLOW EFFECTS FOR KEY ELEMENTS
+   Add these to your existing components.css
+   ============================================ */
+
+/* Book titles with pulsing glow */
+.preview-card h3,
+.trilogy-card h3,
+.book-card h3 {
+    animation: pulse-glow-intense 3s ease-in-out infinite;
+    color: var(--primary-white);
+}
+
+.book-one-accent h3 {
+    color: var(--accent-red);
+    text-shadow: 0 0 10px var(--accent-red);
+}
+
+.book-two-accent h3 {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.book-three-accent h3 {
+    color: var(--accent-gold);
+    text-shadow: 0 0 10px var(--accent-gold);
+}
+
+/* CTA Buttons with intense glow */
+.primary-btn,
+.cta-btn,
+.card-btn {
+    position: relative;
+    overflow: visible;
+    animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+    .primary-btn:hover,
+    .cta-btn:hover,
+    .card-btn:hover {
+        animation: pulse-glow-intense 1s ease-in-out infinite;
+        transform: translateY(-2px);
+    }
+
+/* Section headers with subtle glow */
+.section-header h2 {
+    text-shadow: 0 0 15px currentColor;
+    animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Theme cards glow on hover */
+.theme-card {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+    .theme-card:hover {
+        border-color: var(--accent-cyan);
+        box-shadow: 0 0 20px var(--accent-cyan);
+        transform: translateY(-5px);
+    }
+
+.theme-icon {
+    filter: drop-shadow(0 0 5px currentColor);
+}
+
+/* Hero title enhanced glow */
+.hero h1 {
+    text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red), 0 0 30px var(--accent-red);
+    animation: pulse-glow-intense 3s ease-in-out infinite;
+}
+
+/* Footer elements subtle glow */
+footer {
+    border-top: 1px solid var(--accent-red);
+    box-shadow: 0 -2px 20px rgba(255, 0, 51, 0.2);
+}
+
+/* Book number badges with glow */
+.book-number {
+    text-shadow: 0 0 10px currentColor;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Preview cards enhanced */
+.preview-card {
+    transition: all 0.4s ease;
+    border: 1px solid transparent;
+}
+
+    .preview-card:hover {
+        box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+        transform: translateY(-10px) scale(1.02);
+    }
+
+    .preview-card.book-one-accent:hover {
+        border-color: var(--accent-red);
+        box-shadow: 0 0 20px var(--accent-red), 0 0 40px var(--accent-red);
+    }
+
+    .preview-card.book-two-accent:hover {
+        border-color: var(--accent-cyan);
+        box-shadow: 0 0 20px var(--accent-cyan), 0 0 40px var(--accent-cyan);
+    }
+
+    .preview-card.book-three-accent:hover {
+        border-color: var(--accent-gold);
+        box-shadow: 0 0 20px var(--accent-gold), 0 0 40px var(--accent-gold);
+    }
+
+/* Scan line with glow */
+.scan-line {
+    box-shadow: 0 0 20px var(--accent-red);
+}
+
+/* Accent elements */
+.status-indicator,
+.logo-bracket,
+.header-line {
+    animation: pulse-glow 2s ease-in-out infinite;
+}

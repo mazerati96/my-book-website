@@ -1,16 +1,12 @@
 // ============================================
-// PAGE TRANSITION EFFECT with AMBIENT AUDIO
+// ENHANCED PAGE TRANSITION EFFECT
 // ============================================
 if (localStorage.getItem('ambientMusicEnabled') === null) {
     localStorage.setItem('ambientMusicEnabled', 'true');
 }
 
-
 let isTransitioning = false;
-
-
 let audioUnlocked = false;
-
 
 function unlockAudioOnce() {
     if (audioUnlocked) return;
@@ -31,12 +27,10 @@ function removeAudioUnlockListeners() {
     document.removeEventListener('touchstart', unlockAudioOnce);
 }
 
-// Listen for ANY valid user gesture
 document.addEventListener('click', unlockAudioOnce, { passive: true });
 document.addEventListener('keydown', unlockAudioOnce, { passive: true });
 document.addEventListener('wheel', unlockAudioOnce, { passive: true });
 document.addEventListener('touchstart', unlockAudioOnce, { passive: true });
-
 
 function showMusicNoticeIfIndex() {
     if (!location.pathname.endsWith('index.html') && location.pathname !== '/') return;
@@ -59,12 +53,7 @@ function showMusicNoticeIfIndex() {
     `;
 
     notice.textContent = '🎧 Music option — toggle on/off at the bottom of the page';
-
-    const footer = document.querySelector('footer');
-
     document.body.appendChild(notice);
-
-
 
     requestAnimationFrame(() => notice.style.opacity = '1');
 
@@ -74,15 +63,27 @@ function showMusicNoticeIfIndex() {
     sessionStorage.setItem('musicNoticeShown', 'true');
 }
 
+function createTransitionElements() {
+    const overlay = document.querySelector('.page-transition');
+    if (!overlay) return;
+
+    overlay.innerHTML = `
+        <div class="transition-text">INITIALIZING SYSTEM...</div>
+        <div class="transition-loading">
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+        </div>
+    `;
+}
 
 function initPageTransition() {
+    createTransitionElements();
     const overlay = document.querySelector('.page-transition');
 
-    // Handle all internal links
     document.querySelectorAll('a[href]').forEach(link => {
         const href = link.getAttribute('href');
 
-        // Only handle internal HTML links
         if (href && href.endsWith('.html') && !link.hasAttribute('data-no-transition')) {
             link.addEventListener('click', function (e) {
                 if (isTransitioning) return;
@@ -90,23 +91,122 @@ function initPageTransition() {
                 e.preventDefault();
                 isTransitioning = true;
 
-                // Trigger transition
                 overlay.classList.add('active');
                 fadeMusicDown();
 
                 setTimeout(() => {
                     window.location.href = href;
-                }, 500);
-
+                }, 800);
             });
         }
     });
 
-    // Fade out transition on page load
     setTimeout(() => {
         overlay.classList.remove('active');
         isTransitioning = false;
     }, 100);
+}
+
+// ============================================
+// ENHANCED PARALLAX SYSTEM
+// ============================================
+function initEnhancedParallax() {
+    // Create parallax layers
+    const layer1 = document.createElement('div');
+    layer1.className = 'parallax-layer parallax-layer-1';
+
+    const layer2 = document.createElement('div');
+    layer2.className = 'parallax-layer parallax-layer-2';
+
+    document.body.appendChild(layer1);
+    document.body.appendChild(layer2);
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+
+        // Hero parallax
+        const hero = document.querySelector('.hero-content');
+        if (hero && scrolled < window.innerHeight) {
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            hero.style.opacity = 1 - (scrolled / window.innerHeight);
+        }
+
+        // Background layers parallax
+        layer1.style.transform = `translateY(${scrolled * 0.2}px)`;
+        layer2.style.transform = `translateY(${scrolled * 0.3}px)`;
+
+        // Section parallax
+        document.querySelectorAll('section').forEach((section, index) => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const offset = (window.innerHeight - rect.top) * 0.1;
+                section.style.transform = `translateY(${offset}px)`;
+            }
+        });
+    });
+}
+
+// ============================================
+// HAMBURGER MENU WITH PARTICLE EFFECTS
+// ============================================
+function initHamburgerMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const sidebar = document.querySelector('.sidebar');
+    if (!hamburger || !sidebar) return;
+
+    // Create particle container
+    const particleContainer = document.createElement('div');
+    particleContainer.className = 'hamburger-particles';
+    hamburger.appendChild(particleContainer);
+
+    function createParticles(isExploding) {
+        particleContainer.innerHTML = '';
+
+        const particleCount = 12;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'hamburger-particle';
+
+            const angle = (Math.PI * 2 * i) / particleCount;
+            const distance = 30;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+
+            particle.style.cssText = `
+                --tx: ${tx}px;
+                --ty: ${ty}px;
+                left: 50%;
+                top: 50%;
+                animation: ${isExploding ? 'particle-explode' : 'particle-implode'} 0.4s ease-out forwards;
+                animation-delay: ${i * 0.02}s;
+            `;
+
+            particleContainer.appendChild(particle);
+        }
+    }
+
+    hamburger.addEventListener('click', () => {
+        const isActive = hamburger.classList.contains('active');
+
+        if (isActive) {
+            hamburger.classList.remove('active');
+            sidebar.classList.remove('active');
+            createParticles(false);
+        } else {
+            hamburger.classList.add('active');
+            sidebar.classList.add('active');
+            createParticles(true);
+        }
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && !hamburger.contains(e.target) && sidebar.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            sidebar.classList.remove('active');
+            createParticles(false);
+        }
+    });
 }
 
 // ============================================
@@ -116,7 +216,6 @@ function initializeFallingAsh() {
     console.log('🔥 Initializing falling ash effect...');
 
     const container = document.querySelector('.matrix-style-bg');
-
     if (!container) {
         console.error('❌ Container .matrix-style-bg not found!');
         return;
@@ -124,26 +223,22 @@ function initializeFallingAsh() {
 
     console.log('✅ Container found, creating particles...');
 
-    // Clear any existing particles
     const existingParticles = container.querySelectorAll('.ash-particle');
     existingParticles.forEach(p => p.remove());
 
-    // Create 120 ash particles
     const particleCount = 120;
 
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.className = 'ash-particle';
 
-        // Random properties
         const size = Math.random() * 2.5 + 1.5;
-        const startX = Math.random() * 100;            ;
+        const startX = Math.random() * 100;
         const endX = startX + (Math.random() * 40 - 20);
         const duration = Math.random() * 15 + 18;
         const delay = Math.random() * 8;
         const opacity = Math.random() * 0.4 + 0.5;
 
-        // Set inline styles
         particle.style.cssText = `
             position: fixed;
             left: ${startX}%;
@@ -157,9 +252,7 @@ function initializeFallingAsh() {
             will-change: transform, opacity;
         `;
 
-        // Create unique animation
         const animationName = `ash-fall-${i}`;
-
         const keyframeRule = `
             @keyframes ${animationName} {
                 0% {
@@ -179,14 +272,11 @@ function initializeFallingAsh() {
             }
         `;
 
-        // Inject keyframes
         const styleSheet = document.createElement('style');
         styleSheet.textContent = keyframeRule;
         document.head.appendChild(styleSheet);
 
-        // Apply animation
         particle.style.animation = `${animationName} ${duration}s linear ${delay}s infinite`;
-
         container.appendChild(particle);
     }
 
@@ -218,7 +308,7 @@ function initGlitchEffect() {
 }
 
 // ============================================
-// CONTACT FORM HANDLING - WITH EMAIL API
+// CONTACT FORM HANDLING
 // ============================================
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
@@ -231,7 +321,6 @@ function initContactForm() {
         const buttonText = button.querySelector('span');
         const originalText = buttonText.textContent;
 
-        // Get form data
         const formData = {
             name: this.querySelector('input[name="name"]').value,
             email: this.querySelector('input[name="email"]').value,
@@ -239,7 +328,6 @@ function initContactForm() {
             message: this.querySelector('textarea[name="message"]').value
         };
 
-        // Validate all fields are filled
         if (!formData.name || !formData.email || !formData.message) {
             buttonText.textContent = 'PLEASE FILL ALL FIELDS';
             button.style.backgroundColor = 'var(--accent-red)';
@@ -250,13 +338,11 @@ function initContactForm() {
             return;
         }
 
-        // Show transmitting state
         buttonText.textContent = 'TRANSMITTING...';
         button.style.opacity = '0.6';
         button.disabled = true;
 
         try {
-            // Call your Vercel serverless function
             const response = await fetch('/api/send-email', {
                 method: 'POST',
                 headers: {
@@ -268,7 +354,6 @@ function initContactForm() {
             const result = await response.json();
 
             if (response.ok && result.success) {
-                // Success!
                 buttonText.textContent = 'MESSAGE SENT!';
                 button.style.backgroundColor = '';
                 button.style.color = '';
@@ -286,7 +371,6 @@ function initContactForm() {
             }
 
         } catch (error) {
-            // Error handling
             console.error('Email send error:', error);
             buttonText.textContent = 'FAILED - TRY AGAIN';
             button.style.backgroundColor = 'var(--accent-red)';
@@ -321,7 +405,6 @@ function initScrollAnimations() {
         });
     }, fadeObserverOptions);
 
-    // Apply to all major sections except hero
     document.querySelectorAll('section:not(.hero)').forEach(section => {
         section.style.opacity = '0';
         section.style.transform = 'translateY(30px)';
@@ -331,21 +414,7 @@ function initScrollAnimations() {
 }
 
 // ============================================
-// PARALLAX EFFECT FOR HERO
-// ============================================
-function initParallax() {
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const hero = document.querySelector('.hero-content');
-        if (hero && scrolled < window.innerHeight) {
-            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-            hero.style.opacity = 1 - (scrolled / window.innerHeight);
-        }
-    });
-}
-
-// ============================================
-// SMOOTH SCROLLING FOR ANCHOR LINKS
+// SMOOTH SCROLLING
 // ============================================
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -383,7 +452,7 @@ function initTrilogyCards() {
 }
 
 // ============================================
-// EASTER EGG: KONAMI CODE
+// KONAMI CODE EASTER EGG
 // ============================================
 function initKonamiCode() {
     let konamiCode = [];
@@ -429,13 +498,11 @@ function initConsoleMessages() {
 }
 
 // ============================================
-// PERSISTENT AMBIENT AUDIO (IFRAME HOST)
+// PERSISTENT AUDIO
 // ============================================
-
 let audioIframe = null;
 
 function initPersistentAudio() {
-    // Prevent duplicate iframes
     if (document.getElementById('audio-host')) return;
 
     audioIframe = document.createElement('iframe');
@@ -444,7 +511,6 @@ function initPersistentAudio() {
     audioIframe.style.display = 'none';
 
     document.body.appendChild(audioIframe);
-
     createMusicToggle();
 }
 
@@ -474,12 +540,11 @@ function createMusicToggle() {
             🎧 Ambient Music: <strong>${enabled ? 'ON' : 'OFF'}</strong>
         </button>
         <div class="music-credit">
-            “Sci-Fi Moodtimeflow” — Ribhav Agrawal
+            "Sci-Fi Moodtimeflow" — Ribhav Agrawal
         </div>
     `;
 
     document.querySelector('footer')?.appendChild(toggle);
-
 
     const btn = toggle.querySelector('button');
 
@@ -520,27 +585,23 @@ function createFrequencyToggle() {
     });
 }
 
-
-
 // ============================================
-// INITIALIZE ASH IMMEDIATELY (NO WAIT)
+// INITIALIZE ASH IMMEDIATELY
 // ============================================
-// Fire ash ASAP - don't wait for anything
 initializeFallingAsh();
 
 // ============================================
-// INITIALIZE EVERYTHING ELSE ON DOM READY
+// INITIALIZE ALL ON DOM READY
 // ============================================
 function initializeAll() {
     console.log('🚀 Initializing The Measure of Souls website...');
 
     initPageTransition();
-    //initHamburgerMenu(); commented out for now
-    //initializeFallingAsh(); used earlier
+    initHamburgerMenu();
     initGlitchEffect();
     initContactForm();
     initScrollAnimations();
-    initParallax();
+    initEnhancedParallax();
     initSmoothScroll();
     initTrilogyCards();
     initKonamiCode();
@@ -549,26 +610,17 @@ function initializeAll() {
     createFrequencyToggle();
     showMusicNoticeIfIndex();
 
-
-
-
-
     console.log('✅ All systems online!');
-    
-
 }
 
-// Run when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeAll);
 } else {
     initializeAll();
 }
 
-// Handle page visibility for animations
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-        // Reinitialize ash if page becomes visible again
         const ashCount = document.querySelectorAll('.ash-particle').length;
         if (ashCount < 50) {
             console.log('Reinitializing ash particles...');
