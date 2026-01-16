@@ -12,23 +12,6 @@
     }
 }
 
-/* Noise flicker effect - very gentle */
-@keyframes noise-flicker {
-    0%, 100% {
-        transform: translate(0, 0);
-        opacity: 1;
-    }
-
-    33% {
-        transform: translate(-0.5%, -0.5%);
-        opacity: 0.98;
-    }
-
-    66% {
-        transform: translate(0.5%, 0.5%);
-        opacity: 0.99;
-    }
-}
 
 /* Page transition animations */
 @keyframes scan-sweep {

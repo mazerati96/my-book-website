@@ -81,23 +81,28 @@ function initPageTransition() {
     createTransitionElements();
     const overlay = document.querySelector('.page-transition');
 
-    document.querySelectorAll('a[href]').forEach(link => {
+    // Use event delegation on the document to catch all link clicks
+    document.addEventListener('click', function (e) {
+        // Find the closest <a> tag
+        const link = e.target.closest('a[href]');
+
+        if (!link) return;
+
         const href = link.getAttribute('href');
 
+        // Check if it's an HTML page link and doesn't have no-transition attribute
         if (href && href.endsWith('.html') && !link.hasAttribute('data-no-transition')) {
-            link.addEventListener('click', function (e) {
-                if (isTransitioning) return;
+            if (isTransitioning) return;
 
-                e.preventDefault();
-                isTransitioning = true;
+            e.preventDefault();
+            isTransitioning = true;
 
-                overlay.classList.add('active');
-                fadeMusicDown();
+            overlay.classList.add('active');
+            fadeMusicDown();
 
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 800);
-            });
+            setTimeout(() => {
+                window.location.href = href;
+            }, 800);
         }
     });
 
