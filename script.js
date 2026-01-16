@@ -5,8 +5,54 @@ if (localStorage.getItem('ambientMusicEnabled') === null) {
     localStorage.setItem('ambientMusicEnabled', 'true');
 }
 
+
+
 let isTransitioning = false;
 let audioUnlocked = false;
+
+// ============================================
+// SPLASH SCREEN WITH AUDIO UNLOCK
+// ============================================
+function initSplashScreen() {
+    const splash = document.getElementById('splashScreen');
+    const enterBtn = document.getElementById('enterBtn');
+
+    if (!splash || !enterBtn) return;
+
+    // Only show splash on index.html
+    if (!location.pathname.endsWith('index.html') && location.pathname !== '/') {
+        splash.style.display = 'none';
+        return;
+    }
+
+    // Check if user has already entered
+    if (sessionStorage.getItem('hasEntered')) {
+        splash.style.display = 'none';
+        return;
+    }
+
+    enterBtn.addEventListener('click', () => {
+        // Unlock audio immediately
+        const enabled = localStorage.getItem('ambientMusicEnabled') === 'true';
+        if (enabled) {
+            sendAudioCommand('PLAY');
+            audioUnlocked = true;
+        }
+
+        // Mark as entered
+        sessionStorage.setItem('hasEntered', 'true');
+
+        // Fade out splash screen
+        splash.classList.add('hidden');
+
+        // Remove from DOM after transition
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 1000);
+
+        console.log('🎵 Audio unlocked via splash screen');
+    });
+}
 
 function unlockAudioOnce() {
     if (audioUnlocked) return;
@@ -608,7 +654,7 @@ initializeFallingAsh();
 // ============================================
 function initializeAll() {
     console.log('🚀 Initializing The Measure of Souls website...');
-
+    initSplashScreen(); 
     initPageTransition();
     initHamburgerMenu();
     initGlitchEffect();
