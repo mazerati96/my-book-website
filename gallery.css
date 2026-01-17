@@ -507,6 +507,7 @@
     z-index: 99999 !important;
     min-width: 300px !important; /* 👈 ADD */
     min-height: 50px !important; /* 👈 ADD */
+    opacity: 1 !important;
 }
 
 .breadcrumb-item {
