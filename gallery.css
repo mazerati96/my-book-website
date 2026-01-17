@@ -497,15 +497,24 @@
     }
 }
 
+
+
 /* DEBUGGING - Make breadcrumbs super visible */
 .breadcrumb-container {
     background-color: red !important;
     border: 5px solid yellow !important;
     padding: 2rem !important;
     z-index: 99999 !important;
+    min-width: 300px !important; /* 👈 ADD */
+    min-height: 50px !important; /* 👈 ADD */
 }
 
 .breadcrumb-item {
     color: white !important;
     font-size: 2rem !important;
+    display: block !important; /* 👈 ADD */
+}
+
+.breadcrumb-path {
+    display: block !important; /* 👈 ADD */
 }

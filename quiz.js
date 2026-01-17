@@ -100,7 +100,7 @@ const quizData = {
             name: "CIEL FLEUR",
             role: "Chief Engineer",
             icon: "🔧",
-            description: "You're brilliant, obsessive, and willing to push boundaries others won't cross. Like Dr. Chen, you see consciousness as code waiting to be cracked. You build impossible things because someone has to, even if it means wrestling with the ethics later. You hear patterns others miss—frequencies, connections, meanings hidden in the noise.",
+            description: "You're brilliant, obsessive, and willing to push boundaries others won't cross. Like Ciel Fleur, you see consciousness as code waiting to be cracked. You build impossible things because someone has to, even if it means wrestling with the ethics later. You hear patterns others miss—frequencies, connections, meanings hidden in the noise.",
             traits: ["Brilliant", "Obsessive", "Innovative", "Ethically Complex", "Visionary"],
             quote: "I didn't create consciousness. I just gave it a different form.",
             cssClass: ""
