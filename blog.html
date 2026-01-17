@@ -258,10 +258,28 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script src="load-navigation.js"></script>
-    <script src="memory-fragments.js"></script>
-    <script src="breadcrumbs.js"></script>
+    
+   <!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-text">
+            <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+            <p class="footer-tagline">Book One: Lay Upon The Earth</p>
+        </div>
+        <div class="footer-links">
+            <a href="trilogy.html">Back to Trilogy</a>
+            <span>|</span>
+            <a href="book-two.html">Next: Book Two</a>
+        </div>
+    </div>
+    <div class="footer-decoration"></div>
+</footer>
+<script src="audio-player.js"></script>
+<script src="script.js"></script>
+<script src="load-navigation.js"></script>
+<script src="memory-fragments.js"></script>
+<script src="breadcrumbs.js"></script>
+    
     <script>
         // Load blog posts
         let allPosts = [];
@@ -284,6 +302,7 @@
                     '<p class="empty-state">Error loading transmissions.</p>';
             }
         }
+
 
         function renderPosts() {
             const grid = document.getElementById('blog-grid');
