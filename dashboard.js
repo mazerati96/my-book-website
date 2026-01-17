@@ -221,3 +221,66 @@ window.deletePost = async function (postId) {
 
 // Load posts on page load
 loadPosts('published');
+
+// Change Password Form
+const changePasswordForm = document.getElementById('change-password-form');
+if (changePasswordForm) {
+    changePasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        const errorEl = document.getElementById('password-error');
+        const successEl = document.getElementById('password-success');
+
+        // Hide previous messages
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+
+        // Validate passwords match
+        if (newPassword !== confirmPassword) {
+            errorEl.textContent = 'New passwords do not match';
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        // Validate password length
+        if (newPassword.length < 8) {
+            errorEl.textContent = 'Password must be at least 8 characters';
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/auth/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    currentPassword,
+                    newPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                successEl.textContent = '✅ Password changed successfully!';
+                successEl.style.display = 'block';
+                changePasswordForm.reset();
+
+                // Optionally scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                throw new Error(data.error || 'Failed to change password');
+            }
+        } catch (error) {
+            errorEl.textContent = error.message;
+            errorEl.style.display = 'block';
+        }
+    });
+}

@@ -37,6 +37,9 @@
                 <button class="menu-btn" data-view="drafts">
                     <span>📄</span> DRAFTS
                 </button>
+                <button class="menu-btn" data-view="change-password">
+                    <span>🔐</span> CHANGE PASSWORD
+                </button>
                 <a href="blog.html" class="menu-btn" target="_blank">
                     <span>🌐</span> VIEW BLOG
                 </a>
@@ -103,6 +106,39 @@
                     <div id="drafts-list" class="posts-list">
                         <p class="loading-text">Loading drafts...</p>
                     </div>
+                </div>
+
+                <!-- Change Password View -->
+                <div class="content-view" id="change-password-view">
+                    <h2 class="view-title">CHANGE PASSWORD</h2>
+                    <form id="change-password-form" class="post-form" style="max-width: 500px;">
+                        <div class="password-notice" style="background: rgba(0, 255, 170, 0.1); border: 1px solid var(--accent-cyan); padding: 1rem; margin-bottom: 2rem; color: var(--accent-cyan); font-size: 0.9rem;">
+                            ⚠️ Password must be at least 8 characters long
+                        </div>
+
+                        <div class="form-group">
+                            <label>CURRENT PASSWORD</label>
+                            <input type="password" id="current-password" required autocomplete="current-password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>NEW PASSWORD</label>
+                            <input type="password" id="new-password" required minlength="8" autocomplete="new-password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>CONFIRM NEW PASSWORD</label>
+                            <input type="password" id="confirm-password" required minlength="8" autocomplete="new-password">
+                        </div>
+
+                        <div id="password-error" class="error-message" style="display: none; background: rgba(255, 0, 51, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 1rem; margin-bottom: 1rem;"></div>
+                        
+                        <div id="password-success" class="success-message" style="display: none; background: rgba(0, 255, 170, 0.2); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 1rem; margin-bottom: 1rem;"></div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">UPDATE PASSWORD</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
