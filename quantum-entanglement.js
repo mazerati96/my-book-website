@@ -246,7 +246,7 @@ class QuantumEntanglement {
 
                 <div id="partnerSection">
                     <div class="entanglement-status">
-                        <div class="status-label">SEARCHING FOR PARTNER. YOU PAIR ONCE WITH ANOTHER PARTNER PER SESSION:</div>
+                        <div class="status-label">SEARCHING FOR PARTNER. YOU PAIR ONCE WITH ONE PARTNER PER SESSION:</div>
                         <div class="searching">Scanning quantum field...</div>
                     </div>
                 </div>
