@@ -2,17 +2,11 @@
   "name": "my-book-website",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "description": "The Measure of Souls Trilogy website with blog system",
   "dependencies": {
     "resend": "^3.2.0",
     "@vercel/kv": "^1.0.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build"
   }
 }

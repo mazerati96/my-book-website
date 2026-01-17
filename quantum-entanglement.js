@@ -199,7 +199,7 @@ class QuantumEntanglement {
 
     async reconnectToPartner() {
         console.log('🔄 Reconnecting to partner:', this.partnerId);
-        
+
         // Check if partner still exists
         const partnerSnapshot = await this.db.ref('activeUsers/' + this.partnerId).once('value');
         const partnerData = partnerSnapshot.val();
@@ -211,7 +211,7 @@ class QuantumEntanglement {
             this.startSharedMessages();
             this.startChat();
             this.monitorPartnerStatus();
-            
+
             // Restore minimized state
             if (this.isMinimized) {
                 this.toggleMinimize();
@@ -246,7 +246,7 @@ class QuantumEntanglement {
 
                 <div id="partnerSection">
                     <div class="entanglement-status">
-                        <div class="status-label">SEARCHING FOR PARTNER. YOU PAIR ONCE WITH ONE PARTNER PER SESSION:</div>
+                        <div class="status-label">SEARCHING FOR PARTNER:</div>
                         <div class="searching">Scanning quantum field...</div>
                     </div>
                 </div>
@@ -257,6 +257,7 @@ class QuantumEntanglement {
                 <div class="quantum-icon-mini">⚛️</div>
                 <span id="partnerIdMini">QUANTUM</span>
                 <span class="unread-badge" id="unreadBadge" style="display: none;">0</span>
+                <button class="maximize-btn" id="maximizeBtn" title="Maximize">□</button>
             </div>
         `;
 
@@ -269,6 +270,7 @@ class QuantumEntanglement {
     setupButtonHandlers() {
         const closeBtn = document.getElementById('closeWidget');
         const minimizeBtn = document.getElementById('minimizeBtn');
+        const maximizeBtn = document.getElementById('maximizeBtn');
         const minimizedState = document.getElementById('minimizedState');
 
         // Close with warning
@@ -277,14 +279,14 @@ class QuantumEntanglement {
                 const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. You can reopen it anytime from the footer. Continue?');
                 if (!confirmed) return;
             }
-            
+
             // Mark as closed
             this.isClosed = true;
             this.storeClosedState(true);
-            
+
             // Hide widget
             document.getElementById('quantumWidget').style.display = 'none';
-            
+
             // Cleanup listeners but keep user data
             this.cleanupListeners();
         });
@@ -294,8 +296,18 @@ class QuantumEntanglement {
             this.toggleMinimize();
         });
 
-        minimizedState.addEventListener('click', () => {
+        // Maximize from minimized state
+        maximizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering minimizedState click
             this.toggleMinimize();
+        });
+
+        // Click minimized widget to maximize
+        minimizedState.addEventListener('click', (e) => {
+            // Only maximize if not clicking the maximize button
+            if (!e.target.classList.contains('maximize-btn')) {
+                this.toggleMinimize();
+            }
         });
     }
 
@@ -394,14 +406,16 @@ class QuantumEntanglement {
         const partnerSection = document.getElementById('partnerSection');
         if (!partnerSection) return;
 
-        // Show disconnection notice
+        // Show disconnection notice with countdown
         const disconnectNotice = document.createElement('div');
         disconnectNotice.className = 'disconnect-notice';
         disconnectNotice.innerHTML = `
             <div style="color: #ff0033; font-weight: bold; margin-bottom: 0.5rem;">⚠️ ENTANGLEMENT SEVERED</div>
-            <div style="color: #cccccc; font-size: 0.85rem;">${this.partnerId} has left the quantum field.</div>
+            <div style="color: #cccccc; font-size: 0.85rem; margin-bottom: 0.5rem;">${this.partnerId} has left the quantum field.</div>
+            <div style="color: #00d4ff; font-size: 0.75rem;" id="reconnectCountdown">Searching for new partner in 3...</div>
         `;
 
+        partnerSection.innerHTML = '';
         partnerSection.appendChild(disconnectNotice);
 
         // Alert user
@@ -412,12 +426,40 @@ class QuantumEntanglement {
 
         // Reset connection state
         this.isConnected = false;
+        const oldPartnerId = this.partnerId;
         this.partnerId = null;
 
-        // Start searching again
+        // Countdown timer
+        let countdown = 3;
+        const countdownEl = document.getElementById('reconnectCountdown');
+
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdownEl) {
+                if (countdown > 0) {
+                    countdownEl.textContent = `Searching for new partner in ${countdown}...`;
+                } else {
+                    countdownEl.textContent = 'Scanning quantum field...';
+                }
+            }
+        }, 1000);
+
+        // Start searching again after 3 seconds
         setTimeout(() => {
+            clearInterval(countdownInterval);
+
+            // Reset to searching state
+            if (partnerSection) {
+                partnerSection.innerHTML = `
+                    <div class="entanglement-status">
+                        <div class="status-label">SEARCHING FOR PARTNER:</div>
+                        <div class="searching">Scanning quantum field...</div>
+                    </div>
+                `;
+            }
+
             this.searchForPartner();
-        }, 2000);
+        }, 3000);
     }
 
     searchForPartner() {
@@ -685,7 +727,7 @@ class QuantumEntanglement {
     cleanup() {
         // Full cleanup - remove from database
         this.cleanupListeners();
-        
+
         if (this.userRef) {
             this.userRef.remove();
         }
