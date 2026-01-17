@@ -253,7 +253,7 @@ class QuantumEntanglement {
 
             <!-- Minimized State -->
             <div class="minimized-state" id="minimizedState" style="display: none;">
-                <div class="quantum-icon-mini">⚛️</div>
+                <div class="drag-handle-mini" id="dragHandleMini" title="Drag to move">⚛️</div>
                 <span id="partnerIdMini">QUANTUM</span>
                 <span class="unread-badge" id="unreadBadge" style="display: none;">0</span>
                 <button class="maximize-btn" id="maximizeBtn" title="Maximize">□</button>
@@ -824,8 +824,9 @@ class QuantumEntanglement {
     setupDragging() {
         const widget = document.getElementById('quantumWidget');
         const dragHandle = document.getElementById('dragHandle');
+        const dragHandleMini = document.getElementById('dragHandleMini');
 
-        if (!widget || !dragHandle) return;
+        if (!widget) return;
 
         let isDragging = false;
         let currentX;
@@ -846,16 +847,7 @@ class QuantumEntanglement {
             yOffset = storedPosition.y;
         }
 
-        dragHandle.addEventListener('mousedown', dragStart);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', dragEnd);
-
-        // Touch events for mobile
-        dragHandle.addEventListener('touchstart', dragStart);
-        document.addEventListener('touchmove', drag);
-        document.addEventListener('touchend', dragEnd);
-
-        function dragStart(e) {
+        const startDrag = (e) => {
             if (e.type === 'touchstart') {
                 initialX = e.touches[0].clientX - xOffset;
                 initialY = e.touches[0].clientY - yOffset;
@@ -864,13 +856,15 @@ class QuantumEntanglement {
                 initialY = e.clientY - yOffset;
             }
 
-            if (e.target === dragHandle || dragHandle.contains(e.target)) {
+            const target = e.target;
+            if (target === dragHandle || dragHandle?.contains(target) ||
+                target === dragHandleMini || dragHandleMini?.contains(target)) {
                 isDragging = true;
                 widget.style.cursor = 'grabbing';
             }
-        }
+        };
 
-        function drag(e) {
+        const drag = (e) => {
             if (isDragging) {
                 e.preventDefault();
 
@@ -887,9 +881,9 @@ class QuantumEntanglement {
 
                 setTranslate(currentX, currentY, widget);
             }
-        }
+        };
 
-        function dragEnd(e) {
+        const endDrag = (e) => {
             if (isDragging) {
                 initialX = currentX;
                 initialY = currentY;
@@ -899,15 +893,30 @@ class QuantumEntanglement {
                 // Store position
                 this.storePosition(xOffset, yOffset);
             }
-        }.bind(this);
+        };
 
-        function setTranslate(xPos, yPos, el) {
+        const setTranslate = (xPos, yPos, el) => {
             // Remove default positioning
             el.style.right = 'auto';
             el.style.bottom = 'auto';
             el.style.left = xPos + 'px';
             el.style.top = yPos + 'px';
+        };
+
+        if (dragHandle) {
+            dragHandle.addEventListener('mousedown', startDrag);
+            dragHandle.addEventListener('touchstart', startDrag);
         }
+
+        if (dragHandleMini) {
+            dragHandleMini.addEventListener('mousedown', startDrag);
+            dragHandleMini.addEventListener('touchstart', startDrag);
+        }
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('touchend', endDrag);
     }
 
     getStoredPosition() {

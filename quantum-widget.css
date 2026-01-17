@@ -355,13 +355,26 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem;
-    cursor: pointer;
     position: relative;
 }
+
+.drag-handle-mini {
+    cursor: grab;
+    font-size: 1.2rem;
+    animation: rotate 4s linear infinite;
+    user-select: none;
+}
+
+    .drag-handle-mini:active {
+        cursor: grabbing;
+    }
 
 .quantum-icon-mini {
     font-size: 1.2rem;
     animation: rotate 4s linear infinite;
+}
+
+s linear infinite;
 }
 
 .unread-badge {
