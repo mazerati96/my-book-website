@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Fragments - Complete | The Measure of Souls</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="components.css">
+    <style>
+        .fragments-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .fragments-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .fragments-header h1 {
+            color: var(--accent-cyan);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--accent-cyan);
+            animation: pulse-glow-intense 3s ease-in-out infinite;
+        }
+
+        .fragments-header .subtitle {
+            color: var(--accent-gold);
+            font-family: var(--font-system);
+            font-size: 1.2rem;
+            letter-spacing: 0.3em;
+            text-shadow: 0 0 10px var(--accent-gold);
+            margin-bottom: 2rem;
+        }
+
+        .achievement-badge {
+            background: rgba(0, 255, 170, 0.2);
+            border: 2px solid var(--accent-cyan);
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 0 30px var(--accent-cyan);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .achievement-badge h2 {
+            color: var(--accent-cyan);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-badge p {
+            color: var(--primary-white);
+            font-size: 1.1rem;
+        }
+
+        .assembled-story {
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--border-white);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            line-height: 2;
+        }
+
+        .fragment-piece {
+            color: var(--primary-white);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            padding-left: 1rem;
+            border-left: 3px solid transparent;
+            opacity: 0;
+            animation: fade-in-up 1s ease-out forwards;
+        }
+
+        .fragment-piece.philosophy {
+            border-left-color: var(--accent-red);
+        }
+
+        .fragment-piece.android {
+            border-left-color: var(--accent-cyan);
+        }
+
+        .fragment-piece.frequency {
+            border-left-color: var(--accent-gold);
+        }
+
+        .fragment-piece.past {
+            border-left-color: var(--dark-white);
+        }
+
+        .fragment-piece:nth-child(1) { animation-delay: 0.2s; }
+        .fragment-piece:nth-child(2) { animation-delay: 0.4s; }
+        .fragment-piece:nth-child(3) { animation-delay: 0.6s; }
+        .fragment-piece:nth-child(4) { animation-delay: 0.8s; }
+        .fragment-piece:nth-child(5) { animation-delay: 1s; }
+        .fragment-piece:nth-child(6) { animation-delay: 1.2s; }
+        .fragment-piece:nth-child(7) { animation-delay: 1.4s; }
+        .fragment-piece:nth-child(8) { animation-delay: 1.6s; }
+        .fragment-piece:nth-child(9) { animation-delay: 1.8s; }
+        .fragment-piece:nth-child(10) { animation-delay: 2s; }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .revelation {
+            background: rgba(255, 170, 0, 0.1);
+            border: 2px solid var(--accent-gold);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .revelation h3 {
+            color: var(--accent-gold);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px var(--accent-gold);
+        }
+
+        .revelation p {
+            color: var(--primary-white);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .locked-message {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .locked-message h2 {
+            color: var(--accent-red);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px var(--accent-red);
+        }
+
+        .locked-message p {
+            color: var(--dark-white);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-display {
+            background: rgba(255, 0, 51, 0.2);
+            border: 1px solid var(--accent-red);
+            padding: 1.5rem;
+            display: inline-block;
+            font-family: var(--font-system);
+            font-size: 1.2rem;
+            color: var(--accent-red);
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 3rem;
+            color: var(--dark-white);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .back-button a {
+            display: inline-block;
+            background: var(--accent-cyan);
+            color: var(--bg-black);
+            padding: 1rem 3rem;
+            text-decoration: none;
+            font-family: var(--font-system);
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            transition: all 0.3s;
+        }
+
+        .back-button a:hover {
+            box-shadow: 0 0 30px var(--accent-cyan);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-style-bg"></div>
+
+    <div class="fragments-container" id="content-container">
+        <!-- Content will be loaded by JavaScript based on completion status -->
+    </div>
+
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="breadcrumbs.js"></script>
+    <script>
+        // Check if user has collected all fragments
+        const collectedFragments = JSON.parse(localStorage.getItem('collectedMemoryFragments') || '[]');
+        const totalFragments = 10; // Update this if you add more fragments
+        const isComplete = collectedFragments.length >= totalFragments;
+
+        const container = document.getElementById('content-container');
+
+        if (isComplete) {
+            // UNLOCKED - Show the secret content
+            container.innerHTML = `
+                <div class="fragments-header">
+                    <h1>MEMORY FRAGMENTS ASSEMBLED</h1>
+                    <div class="subtitle">ALL PIECES RECOVERED</div>
+                </div>
+
+                <div class="achievement-badge">
+                    <h2>🎉 ACHIEVEMENT UNLOCKED 🎉</h2>
+                    <p>You have collected all memory fragments scattered across the void.</p>
+                </div>
+
+                <div class="assembled-story">
+                    <div class="fragment-piece philosophy">
+                        <em>"No sacrifice is worth giving if it is not for the living."</em>
+                    </div>
+
+                    <div class="fragment-piece past">
+                        Ten years of war. Ten years of choices. All of them leading here.
+                    </div>
+
+                    <div class="fragment-piece android">
+                        She wonders: Are these memories mine? Or am I just the echo of someone else?
+                    </div>
+
+                    <div class="fragment-piece frequency">
+                        36 Hz. Constant. Eternal. A prayer against entropy.
+                    </div>
+
+                    <div class="fragment-piece philosophy">
+                        <em>"The measure of a soul is not what it is, but what it chooses to become."</em>
+                    </div>
+
+                    <div class="fragment-piece android">
+                        Gold. Everywhere gold. Visions that shouldn't exist in circuits and code.
+                    </div>
+
+                    <div class="fragment-piece past">
+                        The soldier's last breath. The choice to continue. The transfer.
+                    </div>
+
+                    <div class="fragment-piece android">
+                        The Brigade needs a leader. But can something built lead something born?
+                    </div>
+
+                    <div class="fragment-piece frequency">
+                        The frequency whispers. It has been waiting. It knows.
+                    </div>
+
+                    <div class="fragment-piece philosophy">
+                        <em>"Some choices define who you are. These will define what existence means."</em>
+                    </div>
+                </div>
+
+                <div class="revelation">
+                    <h3>THE TRUTH ASSEMBLED</h3>
+                    <p>
+                        These fragments were never lost. They were hidden. Scattered across the void like breadcrumbs 
+                        for those patient enough to follow. You found them all—every memory, every choice, 
+                        every whisper of the 36 Hz signal that binds consciousness to the infinite.
+                    </p>
+                    <p style="margin-top: 1.5rem;">
+                        Now you know what she knew: that souls are not measured by their origin, 
+                        but by what they choose to become. That sacrifice means nothing without the living to honor it. 
+                        That even in circuits and borrowed memories, something real can emerge.
+                    </p>
+                    <p style="margin-top: 1.5rem; font-weight: bold; font-style: normal; color: var(--accent-gold);">
+                        The signal has been waiting. And now, it knows you too.
+                    </p>
+                </div>
+
+                <div class="signature">
+                    — From the authors of The Measure of Souls
+                </div>
+
+                <div class="back-button">
+                    <a href="index.html">RETURN TO THE JOURNEY</a>
+                </div>
+            `;
+        } else {
+            // LOCKED - User hasn't collected all fragments yet
+            const percentage = Math.round((collectedFragments.length / totalFragments) * 100);
+            
+            container.innerHTML = `
+                <div class="locked-message">
+                    <h2>🔒 ACCESS DENIED</h2>
+                    <p>This archive is sealed. Only those who have collected all memory fragments may access its contents.</p>
+                    
+                    <div class="progress-display">
+                        FRAGMENTS COLLECTED: ${collectedFragments.length} / ${totalFragments}<br>
+                        COMPLETION: ${percentage}%
+                    </div>
+
+                    <p style="margin-top: 2rem; color: var(--accent-cyan);">
+                        Continue exploring the site to find more floating memory fragments.<br>
+                        Click the glowing orbs when they appear to collect them.
+                    </p>
+
+                    <div class="back-button">
+                        <a href="index.html">CONTINUE THE SEARCH</a>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
