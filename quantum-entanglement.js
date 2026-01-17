@@ -1,5 +1,5 @@
 // ============================================
-// QUANTUM ENTANGLEMENT - PERSISTENT ACROSS PAGES
+// QUANTUM ENTANGLEMENT - FINAL PERSISTENT VERSION
 // ============================================
 
 // YOUR Firebase configuration
@@ -43,6 +43,7 @@ class QuantumEntanglement {
         this.partnerDisconnectListener = null;
         this.isMinimized = this.getMinimizedState();
         this.unreadCount = 0;
+        this.isClosed = this.getClosedState();
     }
 
     // Get or create persistent User ID
@@ -79,6 +80,20 @@ class QuantumEntanglement {
         localStorage.setItem('quantumMinimized', isMinimized);
     }
 
+    // Get closed state
+    getClosedState() {
+        return localStorage.getItem('quantumClosed') === 'true';
+    }
+
+    // Store closed state
+    storeClosedState(isClosed) {
+        if (isClosed) {
+            localStorage.setItem('quantumClosed', 'true');
+        } else {
+            localStorage.removeItem('quantumClosed');
+        }
+    }
+
     generateUserId() {
         const chars = '0123456789ABCDEF';
         let id = 'USER_';
@@ -89,6 +104,13 @@ class QuantumEntanglement {
     }
 
     async initialize() {
+        // If user previously closed the widget, don't show it
+        if (this.isClosed) {
+            console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
+            this.createLaunchButton();
+            return;
+        }
+
         // Initialize Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
@@ -97,6 +119,7 @@ class QuantumEntanglement {
 
         // Create widget HTML
         this.createWidget();
+        this.createLaunchButton();
 
         // Display user's ID
         document.getElementById('yourId').textContent = this.userId;
@@ -121,9 +144,62 @@ class QuantumEntanglement {
         });
     }
 
+    createLaunchButton() {
+        // Add launch button to footer
+        const footer = document.querySelector('footer');
+        if (!footer) return;
+
+        // Remove existing button if present
+        const existingBtn = document.getElementById('qeLaunchBtn');
+        if (existingBtn) existingBtn.remove();
+
+        const launchBtn = document.createElement('button');
+        launchBtn.id = 'qeLaunchBtn';
+        launchBtn.className = 'qe-launch-btn';
+        launchBtn.innerHTML = '⚛️ QUANTUM ENTANGLEMENT';
+        launchBtn.title = 'Launch Quantum Entanglement';
+
+        launchBtn.addEventListener('click', () => {
+            this.launchWidget();
+        });
+
+        footer.appendChild(launchBtn);
+    }
+
+    async launchWidget() {
+        // Clear closed state
+        this.isClosed = false;
+        this.storeClosedState(false);
+
+        // If widget doesn't exist yet, initialize it
+        if (!document.getElementById('quantumWidget')) {
+            // Initialize Firebase if not already done
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            this.db = firebase.database();
+
+            this.createWidget();
+            document.getElementById('yourId').textContent = this.userId;
+
+            await this.registerUser();
+
+            if (this.partnerId) {
+                this.reconnectToPartner();
+            } else {
+                this.searchForPartner();
+            }
+
+            this.listenForPartnerUpdates();
+        } else {
+            // Just show existing widget
+            document.getElementById('quantumWidget').style.display = 'flex';
+        }
+    }
+
     async reconnectToPartner() {
         console.log('🔄 Reconnecting to partner:', this.partnerId);
-
+        
         // Check if partner still exists
         const partnerSnapshot = await this.db.ref('activeUsers/' + this.partnerId).once('value');
         const partnerData = partnerSnapshot.val();
@@ -135,7 +211,7 @@ class QuantumEntanglement {
             this.startSharedMessages();
             this.startChat();
             this.monitorPartnerStatus();
-
+            
             // Restore minimized state
             if (this.isMinimized) {
                 this.toggleMinimize();
@@ -198,20 +274,19 @@ class QuantumEntanglement {
         // Close with warning
         closeBtn.addEventListener('click', () => {
             if (this.isConnected) {
-                const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. Continue?');
+                const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. You can reopen it anytime from the footer. Continue?');
                 if (!confirmed) return;
             }
-
-            // Full cleanup - remove user from database
-            this.cleanup();
-
-            // Clear stored data
-            localStorage.removeItem('quantumUserId');
-            localStorage.removeItem('quantumPartnerId');
-            localStorage.removeItem('quantumMinimized');
-
+            
+            // Mark as closed
+            this.isClosed = true;
+            this.storeClosedState(true);
+            
             // Hide widget
             document.getElementById('quantumWidget').style.display = 'none';
+            
+            // Cleanup listeners but keep user data
+            this.cleanupListeners();
         });
 
         // Minimize toggle
@@ -610,7 +685,7 @@ class QuantumEntanglement {
     cleanup() {
         // Full cleanup - remove from database
         this.cleanupListeners();
-
+        
         if (this.userRef) {
             this.userRef.remove();
         }

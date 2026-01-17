@@ -496,3 +496,16 @@
         font-size: 1.2rem;
     }
 }
+
+/* DEBUGGING - Make breadcrumbs super visible */
+.breadcrumb-container {
+    background-color: red !important;
+    border: 5px solid yellow !important;
+    padding: 2rem !important;
+    z-index: 99999 !important;
+}
+
+.breadcrumb-item {
+    color: white !important;
+    font-size: 2rem !important;
+}
