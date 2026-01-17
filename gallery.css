@@ -19,6 +19,17 @@
         line-height: 1.9;
     }
 
+
+/* ============================================
+   BREADCRUMB FIX FOR GALLERY PAGE
+   ============================================ */
+
+.breadcrumb-container {
+    opacity: 1 !important;
+    animation: none !important;
+}
+
+
 /* Gallery Section */
 .gallery-section {
     max-width: 1400px;
@@ -495,27 +506,4 @@
     .lightbox-info h3 {
         font-size: 1.2rem;
     }
-}
-
-
-
-/* DEBUGGING - Make breadcrumbs super visible */
-.breadcrumb-container {
-    background-color: red !important;
-    border: 5px solid yellow !important;
-    padding: 2rem !important;
-    z-index: 99999 !important;
-    min-width: 300px !important; /* 👈 ADD */
-    min-height: 50px !important; /* 👈 ADD */
-    opacity: 1 !important;
-}
-
-.breadcrumb-item {
-    color: white !important;
-    font-size: 2rem !important;
-    display: block !important; /* 👈 ADD */
-}
-
-.breadcrumb-path {
-    display: block !important; /* 👈 ADD */
 }
