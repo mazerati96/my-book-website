@@ -9,7 +9,7 @@
     z-index: 9999;
     background: rgba(26, 26, 26, 0.95);
     border: 2px solid #00d4ff;
-    padding: 1rem;
+    padding: 0;
     min-width: 320px;
     max-width: 380px;
     max-height: 600px;
@@ -20,6 +20,40 @@
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease;
+    cursor: default;
+}
+
+/* Drag Handle */
+.drag-handle {
+    background: rgba(0, 212, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 0.8rem 1rem;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    color: #00d4ff;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    transition: background 0.3s ease;
+}
+
+    .drag-handle:hover {
+        background: rgba(0, 212, 255, 0.2);
+    }
+
+    .drag-handle:active {
+        cursor: grabbing;
+        background: rgba(0, 212, 255, 0.3);
+    }
+
+    .drag-handle span:first-child {
+        font-size: 1.2rem;
+        animation: rotate 4s linear infinite;
+    }
+
+.widget-content {
+    padding: 1rem;
 }
 
 /* RAINBOW PULSE EFFECT */
@@ -132,6 +166,10 @@
     color: #00d4ff;
     font-size: 0.85rem;
     letter-spacing: 0.1em;
+}
+
+.entanglement-status {
+    margin-bottom: 1rem;
 }
 
 .entanglement-status {
@@ -274,7 +312,7 @@
 /* Buttons */
 .close-btn, .minimize-btn {
     position: absolute;
-    top: 0.5rem;
+    top: 0.8rem;
     background: transparent;
     border: 1px solid #ff0033;
     color: #ff0033;
@@ -287,6 +325,7 @@
     justify-content: center;
     transition: all 0.3s ease;
     font-weight: bold;
+    z-index: 10;
 }
 
 .close-btn {

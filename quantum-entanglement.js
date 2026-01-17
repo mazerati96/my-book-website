@@ -230,15 +230,14 @@ class QuantumEntanglement {
         widget.className = 'quantum-widget rainbow-pulse';
         widget.id = 'quantumWidget';
         widget.innerHTML = `
+            <div class="drag-handle" id="dragHandle" title="Drag to move">
+                <span>⚛️</span>
+                <span style="font-size: 0.7rem; margin-left: 0.5rem;">QUANTUM ENTANGLEMENT</span>
+            </div>
             <button class="minimize-btn" id="minimizeBtn" title="Minimize">−</button>
             <button class="close-btn" id="closeWidget" title="Close">×</button>
             
             <div class="widget-content" id="widgetContent">
-                <div class="quantum-header">
-                    <div class="quantum-icon">⚛️</div>
-                    <div class="quantum-title">QUANTUM ENTANGLEMENT</div>
-                </div>
-
                 <div class="entanglement-status">
                     <div class="status-label">YOUR QUANTUM ID:</div>
                     <div class="partner-id" id="yourId">USER_XXXX</div>
@@ -265,6 +264,9 @@ class QuantumEntanglement {
 
         // Setup button handlers
         this.setupButtonHandlers();
+
+        // Setup dragging
+        this.setupDragging();
     }
 
     setupButtonHandlers() {
@@ -814,6 +816,107 @@ class QuantumEntanglement {
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.5);
         } catch (e) { }
+    }
+
+    // ============================================
+    // DRAGGING FUNCTIONALITY
+    // ============================================
+    setupDragging() {
+        const widget = document.getElementById('quantumWidget');
+        const dragHandle = document.getElementById('dragHandle');
+
+        if (!widget || !dragHandle) return;
+
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        // Get stored position or use default
+        const storedPosition = this.getStoredPosition();
+        if (storedPosition) {
+            widget.style.right = 'auto';
+            widget.style.bottom = 'auto';
+            widget.style.left = storedPosition.x + 'px';
+            widget.style.top = storedPosition.y + 'px';
+            xOffset = storedPosition.x;
+            yOffset = storedPosition.y;
+        }
+
+        dragHandle.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        // Touch events for mobile
+        dragHandle.addEventListener('touchstart', dragStart);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('touchend', dragEnd);
+
+        function dragStart(e) {
+            if (e.type === 'touchstart') {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+
+            if (e.target === dragHandle || dragHandle.contains(e.target)) {
+                isDragging = true;
+                widget.style.cursor = 'grabbing';
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, widget);
+            }
+        }
+
+        function dragEnd(e) {
+            if (isDragging) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+                widget.style.cursor = 'default';
+
+                // Store position
+                this.storePosition(xOffset, yOffset);
+            }
+        }.bind(this);
+
+        function setTranslate(xPos, yPos, el) {
+            // Remove default positioning
+            el.style.right = 'auto';
+            el.style.bottom = 'auto';
+            el.style.left = xPos + 'px';
+            el.style.top = yPos + 'px';
+        }
+    }
+
+    getStoredPosition() {
+        const stored = localStorage.getItem('quantumWidgetPosition');
+        return stored ? JSON.parse(stored) : null;
+    }
+
+    storePosition(x, y) {
+        localStorage.setItem('quantumWidgetPosition', JSON.stringify({ x, y }));
     }
 }
 
