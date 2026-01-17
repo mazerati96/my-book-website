@@ -1,5 +1,5 @@
 // ============================================
-// QUANTUM ENTANGLEMENT - ULTIMATE VERSION
+// QUANTUM ENTANGLEMENT - PERSISTENT ACROSS PAGES
 // ============================================
 
 // YOUR Firebase configuration
@@ -30,8 +30,9 @@ const crypticMessages = [
 
 class QuantumEntanglement {
     constructor() {
-        this.userId = this.generateUserId();
-        this.partnerId = null;
+        // PERSISTENT USER ID - stored in localStorage
+        this.userId = this.getOrCreateUserId();
+        this.partnerId = this.getStoredPartnerId();
         this.db = null;
         this.userRef = null;
         this.partnerRef = null;
@@ -40,8 +41,42 @@ class QuantumEntanglement {
         this.messageListener = null;
         this.chatListener = null;
         this.partnerDisconnectListener = null;
-        this.isMinimized = false;
+        this.isMinimized = this.getMinimizedState();
         this.unreadCount = 0;
+    }
+
+    // Get or create persistent User ID
+    getOrCreateUserId() {
+        let userId = localStorage.getItem('quantumUserId');
+        if (!userId) {
+            userId = this.generateUserId();
+            localStorage.setItem('quantumUserId', userId);
+        }
+        return userId;
+    }
+
+    // Get stored partner ID if exists
+    getStoredPartnerId() {
+        return localStorage.getItem('quantumPartnerId') || null;
+    }
+
+    // Store partner ID
+    storePartnerId(partnerId) {
+        if (partnerId) {
+            localStorage.setItem('quantumPartnerId', partnerId);
+        } else {
+            localStorage.removeItem('quantumPartnerId');
+        }
+    }
+
+    // Get minimized state
+    getMinimizedState() {
+        return localStorage.getItem('quantumMinimized') === 'true';
+    }
+
+    // Store minimized state
+    storeMinimizedState(isMinimized) {
+        localStorage.setItem('quantumMinimized', isMinimized);
     }
 
     generateUserId() {
@@ -69,14 +104,49 @@ class QuantumEntanglement {
         // Register user in database
         await this.registerUser();
 
-        // Search for partner
-        this.searchForPartner();
+        // If we have a stored partner, try to reconnect
+        if (this.partnerId) {
+            this.reconnectToPartner();
+        } else {
+            // Search for new partner
+            this.searchForPartner();
+        }
 
         // Listen for partner updates
         this.listenForPartnerUpdates();
 
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => this.cleanup());
+        // Cleanup on page unload (but don't remove from DB, just disconnect listeners)
+        window.addEventListener('beforeunload', () => {
+            this.cleanupListeners();
+        });
+    }
+
+    async reconnectToPartner() {
+        console.log('🔄 Reconnecting to partner:', this.partnerId);
+
+        // Check if partner still exists
+        const partnerSnapshot = await this.db.ref('activeUsers/' + this.partnerId).once('value');
+        const partnerData = partnerSnapshot.val();
+
+        if (partnerData && partnerData.partnerId === this.userId) {
+            // Partner still exists and is still paired with us!
+            this.isConnected = true;
+            this.showConnectedState();
+            this.startSharedMessages();
+            this.startChat();
+            this.monitorPartnerStatus();
+
+            // Restore minimized state
+            if (this.isMinimized) {
+                this.toggleMinimize();
+            }
+        } else {
+            // Partner is gone, clear stored partner and search for new one
+            console.log('⚠️ Stored partner no longer available');
+            this.storePartnerId(null);
+            this.partnerId = null;
+            this.searchForPartner();
+        }
     }
 
     createWidget() {
@@ -131,8 +201,17 @@ class QuantumEntanglement {
                 const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. Continue?');
                 if (!confirmed) return;
             }
-            document.getElementById('quantumWidget').style.display = 'none';
+
+            // Full cleanup - remove user from database
             this.cleanup();
+
+            // Clear stored data
+            localStorage.removeItem('quantumUserId');
+            localStorage.removeItem('quantumPartnerId');
+            localStorage.removeItem('quantumMinimized');
+
+            // Hide widget
+            document.getElementById('quantumWidget').style.display = 'none';
         });
 
         // Minimize toggle
@@ -152,6 +231,7 @@ class QuantumEntanglement {
         const minimizeBtn = document.getElementById('minimizeBtn');
 
         this.isMinimized = !this.isMinimized;
+        this.storeMinimizedState(this.isMinimized);
 
         if (this.isMinimized) {
             content.style.display = 'none';
@@ -184,12 +264,22 @@ class QuantumEntanglement {
 
         await this.userRef.set({
             timestamp: firebase.database.ServerValue.TIMESTAMP,
-            looking: true,
-            partnerId: null,
+            looking: this.partnerId ? false : true,
+            partnerId: this.partnerId,
             online: true
         });
 
-        // Auto-remove after disconnect
+        // Keep connection alive - update timestamp periodically
+        this.keepAliveInterval = setInterval(() => {
+            if (this.userRef) {
+                this.userRef.update({
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    online: true
+                });
+            }
+        }, 30000); // Update every 30 seconds
+
+        // Auto-remove only on actual disconnect (not page navigation)
         this.userRef.onDisconnect().remove();
     }
 
@@ -200,6 +290,7 @@ class QuantumEntanglement {
             if (userData && userData.partnerId && !this.isConnected) {
                 // We got paired!
                 this.partnerId = userData.partnerId;
+                this.storePartnerId(this.partnerId);
                 this.isConnected = true;
                 this.showConnectedState();
                 this.startSharedMessages();
@@ -241,9 +332,17 @@ class QuantumEntanglement {
         // Alert user
         this.playDisconnectSound();
 
+        // Clear stored partner
+        this.storePartnerId(null);
+
         // Reset connection state
         this.isConnected = false;
         this.partnerId = null;
+
+        // Start searching again
+        setTimeout(() => {
+            this.searchForPartner();
+        }, 2000);
     }
 
     searchForPartner() {
@@ -263,6 +362,7 @@ class QuantumEntanglement {
                 // Found someone looking!
                 if (otherUserData.looking && !otherUserData.partnerId) {
                     this.partnerId = otherUserId;
+                    this.storePartnerId(this.partnerId);
                     this.isConnected = true;
 
                     // Update BOTH users atomically
@@ -341,7 +441,7 @@ class QuantumEntanglement {
             this.sendNewMessage(messageRef);
 
             // Send new message every 30 seconds
-            setInterval(() => {
+            this.messageInterval = setInterval(() => {
                 if (this.isConnected) {
                     this.sendNewMessage(messageRef);
                 }
@@ -435,8 +535,6 @@ class QuantumEntanglement {
 
         if (!isMe) {
             this.playMessageSound();
-
-            // Browser notification if supported
             this.showBrowserNotification(text);
         }
     }
@@ -485,10 +583,10 @@ class QuantumEntanglement {
     // ============================================
     // CLEANUP
     // ============================================
-    cleanup() {
+    cleanupListeners() {
+        // Only cleanup listeners, don't remove from database
         if (this.userRef) {
             this.userRef.off();
-            this.userRef.remove();
         }
         if (this.partnerRef && this.partnerDisconnectListener) {
             this.partnerRef.off('value', this.partnerDisconnectListener);
@@ -500,6 +598,21 @@ class QuantumEntanglement {
         if (this.chatListener) {
             const pairId = [this.userId, this.partnerId].sort().join('_');
             this.db.ref('chat/' + pairId).off('child_added', this.chatListener);
+        }
+        if (this.keepAliveInterval) {
+            clearInterval(this.keepAliveInterval);
+        }
+        if (this.messageInterval) {
+            clearInterval(this.messageInterval);
+        }
+    }
+
+    cleanup() {
+        // Full cleanup - remove from database
+        this.cleanupListeners();
+
+        if (this.userRef) {
+            this.userRef.remove();
         }
     }
 
