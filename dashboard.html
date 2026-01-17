@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Dashboard - The Measure of Souls</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+    <div class="matrix-style-bg"></div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <h1 class="system-text">AUTHOR COMMAND INTERFACE</h1>
+                <p class="status-text">STATUS: <span id="auth-status">AUTHENTICATED</span></p>
+                <p class="user-text">USER: <span id="current-user"></span></p>
+            </div>
+            <button class="logout-btn" id="logout-btn">LOGOUT</button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-main">
+            <!-- Sidebar Menu -->
+            <div class="dashboard-sidebar">
+                <button class="menu-btn active" data-view="posts">
+                    <span>📝</span> MY POSTS
+                </button>
+                <button class="menu-btn" data-view="new-post">
+                    <span>➕</span> NEW POST
+                </button>
+                <button class="menu-btn" data-view="drafts">
+                    <span>📄</span> DRAFTS
+                </button>
+                <a href="blog.html" class="menu-btn" target="_blank">
+                    <span>🌐</span> VIEW BLOG
+                </a>
+            </div>
+
+            <!-- Content Views -->
+            <div class="dashboard-content">
+                <!-- Posts List View -->
+                <div class="content-view active" id="posts-view">
+                    <h2 class="view-title">MY POSTS</h2>
+                    <div id="posts-list" class="posts-list">
+                        <p class="loading-text">Loading posts...</p>
+                    </div>
+                </div>
+
+                <!-- New Post View -->
+                <div class="content-view" id="new-post-view">
+                    <h2 class="view-title">CREATE NEW POST</h2>
+                    <form id="post-form" class="post-form">
+                        <div class="form-group">
+                            <label>TITLE</label>
+                            <input type="text" id="post-title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>CATEGORY</label>
+                            <select id="post-category">
+                                <option value="Book Updates">Book Updates</option>
+                                <option value="Behind the Scenes">Behind the Scenes</option>
+                                <option value="World Building">World Building</option>
+                                <option value="Writing Process">Writing Process</option>
+                                <option value="Character Spotlight">Character Spotlight</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>CONTENT</label>
+                            <div id="editor-toolbar" class="editor-toolbar">
+                                <button type="button" data-command="bold" title="Bold">B</button>
+                                <button type="button" data-command="italic" title="Italic">I</button>
+                                <button type="button" data-command="underline" title="Underline">U</button>
+                                <span class="toolbar-separator">|</span>
+                                <button type="button" data-command="h2" title="Heading 2">H2</button>
+                                <button type="button" data-command="h3" title="Heading 3">H3</button>
+                                <span class="toolbar-separator">|</span>
+                                <button type="button" data-command="insertUnorderedList" title="Bullet List">• List</button>
+                                <button type="button" data-command="insertOrderedList" title="Numbered List">1. List</button>
+                                <span class="toolbar-separator">|</span>
+                                <button type="button" data-command="createLink" title="Insert Link">🔗</button>
+                            </div>
+                            <div id="post-content" class="editor-content" contenteditable="true"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="save-draft-btn">SAVE AS DRAFT</button>
+                            <button type="submit" class="btn-primary">PUBLISH POST</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Drafts View -->
+                <div class="content-view" id="drafts-view">
+                    <h2 class="view-title">DRAFT POSTS</h2>
+                    <div id="drafts-list" class="posts-list">
+                        <p class="loading-text">Loading drafts...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

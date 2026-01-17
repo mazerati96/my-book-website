@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - The Measure of Souls Trilogy</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="blog.css">
+    <style>
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .blog-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .blog-header h1 {
+            color: var(--accent-cyan);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--accent-cyan);
+            animation: pulse-glow-intense 3s ease-in-out infinite;
+        }
+
+        .blog-header p {
+            color: var(--dark-white);
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .blog-categories {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .category-filter {
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--border-white);
+            color: var(--primary-white);
+            padding: 0.6rem 1.2rem;
+            font-family: var(--font-system);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.1em;
+        }
+
+        .category-filter:hover,
+        .category-filter.active {
+            border-color: var(--accent-cyan);
+            background: var(--accent-cyan);
+            color: var(--bg-black);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blog-card {
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--border-white);
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px var(--accent-cyan);
+            transform: translateY(-5px);
+        }
+
+        .blog-card-category {
+            background: var(--accent-cyan);
+            color: var(--bg-black);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card h2 {
+            color: var(--primary-white);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--dark-white);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-system);
+        }
+
+        .blog-card-preview {
+            color: var(--dark-white);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card-read-more {
+            color: var(--accent-cyan);
+            font-family: var(--font-system);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Post Modal */
+        .post-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .post-modal.active {
+            display: block;
+        }
+
+        .post-modal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.98);
+            border: 2px solid var(--accent-cyan);
+            padding: 3rem;
+            box-shadow: 0 0 30px var(--accent-cyan);
+        }
+
+        .post-modal-close {
+            float: right;
+            background: var(--accent-red);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-family: var(--font-system);
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .post-modal-close:hover {
+            box-shadow: 0 0 15px var(--accent-red);
+        }
+
+        .post-modal h1 {
+            color: var(--accent-cyan);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px var(--accent-cyan);
+        }
+
+        .post-modal-meta {
+            color: var(--dark-white);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-white);
+            font-family: var(--font-system);
+        }
+
+        .post-modal-body {
+            color: var(--primary-white);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--dark-white);
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-style-bg"></div>
+
+    <!-- Breadcrumbs will be added by breadcrumbs.js -->
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo-bracket">[</span>
+            <h2>NAVIGATION</h2>
+            <span class="logo-bracket">]</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="trilogy.html" class="nav-link">The Trilogy</a></li>
+            <li><a href="signal.html" class="nav-link">The Signal</a></li>
+            <li><a href="book-one.html" class="nav-link">Book One</a></li>
+            <li><a href="book-two.html" class="nav-link">Book Two</a></li>
+            <li><a href="book-three.html" class="nav-link">Book Three</a></li>
+            <li><a href="authors.html" class="nav-link">Authors</a></li>
+            <li><a href="universe.html" class="nav-link">Universe</a></li>
+            <li><a href="blog.html" class="nav-link active">Blog</a></li>
+            <li><a href="contact.html" class="nav-link cta-nav">Contact</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-bar">
+                <span class="status-indicator"></span>
+                <span>SYSTEM ONLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Container -->
+    <div class="blog-container">
+        <div class="blog-header">
+            <h1>SIGNAL TRANSMISSIONS</h1>
+            <p class="system-text">Updates from the authors</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="blog-categories">
+            <button class="category-filter active" data-category="all">ALL</button>
+            <button class="category-filter" data-category="Book Updates">BOOK UPDATES</button>
+            <button class="category-filter" data-category="Behind the Scenes">BEHIND THE SCENES</button>
+            <button class="category-filter" data-category="World Building">WORLD BUILDING</button>
+            <button class="category-filter" data-category="Writing Process">WRITING PROCESS</button>
+            <button class="category-filter" data-category="Character Spotlight">CHARACTER SPOTLIGHT</button>
+        </div>
+
+        <!-- Blog Grid -->
+        <div class="blog-grid" id="blog-grid">
+            <p class="loading-text">Loading transmissions...</p>
+        </div>
+    </div>
+
+    <!-- Post Modal -->
+    <div class="post-modal" id="post-modal">
+        <div class="post-modal-content">
+            <button class="post-modal-close" id="close-modal">CLOSE</button>
+            <div id="modal-post-content"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="memory-fragments.js"></script>
+    <script src="breadcrumbs.js"></script>
+    <script>
+        // Load blog posts
+        let allPosts = [];
+        let currentCategory = 'all';
+
+        async function loadBlogPosts() {
+            try {
+                const response = await fetch('/api/posts/list');
+                const data = await response.json();
+
+                if (data.success) {
+                    allPosts = data.posts;
+                    renderPosts();
+                } else {
+                    document.getElementById('blog-grid').innerHTML = 
+                        '<p class="empty-state">No transmissions available yet.</p>';
+                }
+            } catch (error) {
+                document.getElementById('blog-grid').innerHTML = 
+                    '<p class="empty-state">Error loading transmissions.</p>';
+            }
+        }
+
+        function renderPosts() {
+            const grid = document.getElementById('blog-grid');
+            
+            const filtered = currentCategory === 'all' 
+                ? allPosts 
+                : allPosts.filter(p => p.category === currentCategory);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p class="empty-state">No posts in this category.</p>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(post => {
+                const preview = post.content.replace(/<[^>]*>/g, '').substring(0, 150);
+                const date = new Date(post.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                return `
+                    <div class="blog-card" onclick="openPost('${post.id}')">
+                        <div class="blog-card-category">${post.category}</div>
+                        <h2>${post.title}</h2>
+                        <div class="blog-card-meta">
+                            <span>By ${post.author}</span>
+                            <span>•</span>
+                            <span>${date}</span>
+                        </div>
+                        <div class="blog-card-preview">${preview}...</div>
+                        <div class="blog-card-read-more">READ MORE →</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Category filtering
+        document.querySelectorAll('.category-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-filter').forEach(b => 
+                    b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                currentCategory = btn.dataset.category;
+                renderPosts();
+            });
+        });
+
+        // Open post modal
+        window.openPost = function(postId) {
+            const post = allPosts.find(p => p.id === postId);
+            if (!post) return;
+
+            const date = new Date(post.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            document.getElementById('modal-post-content').innerHTML = `
+                <h1>${post.title}</h1>
+                <div class="post-modal-meta">
+                    By ${post.author} • ${date} • ${post.category}
+                </div>
+                <div class="post-modal-body">${post.content}</div>
+            `;
+
+            document.getElementById('post-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('post-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close on background click
+        document.getElementById('post-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'post-modal') {
+                document.getElementById('post-modal').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Load posts on page load
+        loadBlogPosts();
+    </script>
+</body>
+</html>
