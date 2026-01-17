@@ -20,15 +20,6 @@
     }
 
 
-/* ============================================
-   BREADCRUMB FIX FOR GALLERY PAGE
-   ============================================ */
-
-.breadcrumb-container {
-    opacity: 1 !important;
-    animation: none !important;
-}
-
 
 /* Gallery Section */
 .gallery-section {
