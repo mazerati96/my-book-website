@@ -116,27 +116,123 @@ class MemoryFragmentSystem {
         this.progressTracker = document.createElement('div');
         this.progressTracker.id = 'fragment-progress';
         this.progressTracker.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 320px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 2px solid var(--accent-cyan);
-            padding: 1rem;
-            z-index: 1000;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-cyan);
-            text-shadow: 0 0 5px var(--accent-cyan);
-            cursor: pointer;
-            transition: all 0.3s;
-            pointer-events: auto;
-        `;
+        position: fixed;
+        bottom: 20px;
+        right: 320px;
+        background: rgba(10, 10, 10, 0.95);
+        border: 2px solid var(--accent-cyan);
+        padding: 1rem;
+        z-index: 1000;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: var(--accent-cyan);
+        text-shadow: 0 0 5px var(--accent-cyan);
+        cursor: move;
+        transition: all 0.3s;
+        pointer-events: auto;
+        min-width: 180px;
+    `;
 
+        // Create button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.cssText = `
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        display: flex;
+        gap: 0.3rem;
+        z-index: 10;
+    `;
+
+        // Minimize button
+        const minimizeBtn = document.createElement('button');
+        minimizeBtn.innerHTML = '−';
+        minimizeBtn.title = 'Minimize';
+        minimizeBtn.style.cssText = `
+        background: transparent;
+        border: 1px solid var(--accent-cyan);
+        color: var(--accent-cyan);
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        font-weight: bold;
+        padding: 0;
+    `;
+
+        minimizeBtn.addEventListener('mouseenter', function () {
+            this.style.background = 'var(--accent-cyan)';
+            this.style.color = '#0a0a0a';
+        });
+
+        minimizeBtn.addEventListener('mouseleave', function () {
+            this.style.background = 'transparent';
+            this.style.color = 'var(--accent-cyan)';
+        });
+
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering showCollection
+            this.toggleMinimize();
+        });
+
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '×';
+        closeBtn.title = 'Close';
+        closeBtn.style.cssText = `
+        background: transparent;
+        border: 1px solid #ff0033;
+        color: #ff0033;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        font-weight: bold;
+        padding: 0;
+    `;
+
+        closeBtn.addEventListener('mouseenter', function () {
+            this.style.background = '#ff0033';
+            this.style.color = 'white';
+            this.style.transform = 'rotate(90deg)';
+        });
+
+        closeBtn.addEventListener('mouseleave', function () {
+            this.style.background = 'transparent';
+            this.style.color = '#ff0033';
+            this.style.transform = 'rotate(0deg)';
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering showCollection
+            this.closeTracker();
+        });
+
+        buttonContainer.appendChild(minimizeBtn);
+        buttonContainer.appendChild(closeBtn);
+
+        // Create content container
+        this.contentContainer = document.createElement('div');
+        this.contentContainer.id = 'fragment-content';
         this.updateProgressTracker();
 
-        // Click to view collection
-        this.progressTracker.addEventListener('click', () => {
-            this.showCollection();
+        this.progressTracker.appendChild(buttonContainer);
+        this.progressTracker.appendChild(this.contentContainer);
+
+        // Click to view collection (but not on buttons)
+        this.progressTracker.addEventListener('click', (e) => {
+            // Only show collection if not clicking buttons
+            if (e.target !== minimizeBtn && e.target !== closeBtn) {
+                this.showCollection();
+            }
         });
 
         this.progressTracker.addEventListener('mouseenter', function () {
@@ -233,12 +329,12 @@ class MemoryFragmentSystem {
         const total = memoryFragments.length;
         const percentage = Math.round((collected / total) * 100);
 
-        this.progressTracker.innerHTML = `
-            <div style="margin-bottom: 0.5rem;">📦 MEMORY FRAGMENTS</div>
-            <div style="font-size: 1.2rem; font-weight: bold;">${collected} / ${total}</div>
-            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.3rem;">${percentage}% Complete</div>
-            <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.5rem;">Click to view</div>
-        `;
+        this.contentContainer.innerHTML = `
+        <div style="margin-bottom: 0.5rem;">📦 MEMORY FRAGMENTS</div>
+        <div style="font-size: 1.2rem; font-weight: bold;">${collected} / ${total}</div>
+        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.3rem;">${percentage}% Complete</div>
+        <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.5rem;">Click to view</div>
+    `;
     }
 
     addStyles() {
@@ -641,6 +737,46 @@ class MemoryFragmentSystem {
             fragmentElement.remove();
             this.fragments = this.fragments.filter(f => f.element !== fragmentElement);
         }, 300);
+    }
+
+    toggleMinimize() {
+        if (this.contentContainer.style.display === 'none') {
+            // Maximize
+            this.contentContainer.style.display = 'block';
+            this.progressTracker.style.minWidth = '180px';
+            this.progressTracker.style.cursor = 'move';
+        } else {
+            // Minimize
+            this.contentContainer.style.display = 'none';
+            this.progressTracker.style.minWidth = '60px';
+            this.progressTracker.style.cursor = 'pointer';
+
+            // Show just an icon when minimized
+            const existingMini = this.progressTracker.querySelector('.minimized-indicator');
+            if (!existingMini) {
+                const miniIndicator = document.createElement('div');
+                miniIndicator.className = 'minimized-indicator';
+                miniIndicator.style.cssText = `
+                font-size: 1.5rem;
+                text-align: center;
+                padding: 0.5rem;
+            `;
+                miniIndicator.innerHTML = '📦';
+                miniIndicator.title = 'Click to restore';
+                this.progressTracker.insertBefore(miniIndicator, this.contentContainer);
+            }
+        }
+    }
+
+    closeTracker() {
+        const confirmed = confirm('Close Memory Fragment tracker? You can re-enable it by refreshing the page.');
+        if (confirmed) {
+            this.progressTracker.style.opacity = '0';
+            this.progressTracker.style.transform = 'scale(0)';
+            setTimeout(() => {
+                this.progressTracker.remove();
+            }, 300);
+        }
     }
 }
 
