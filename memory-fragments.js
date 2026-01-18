@@ -87,7 +87,7 @@ class MemoryFragmentSystem {
         this.collectedFragments = this.loadCollectedFragments();
         this.progressTracker = null;
         this.isMinimized = this.loadMinimizedState();
-        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'b', 'a'];
         this.konamiProgress = [];
         this.initKonamiListener();
     }
@@ -187,7 +187,7 @@ class MemoryFragmentSystem {
 
         console.log('✅ Memory fragments collection system initialized');
         console.log(`📊 Collected: ${this.collectedFragments.length}/${memoryFragments.length}`);
-        console.log('🎮 Konami Code enabled: ↑↑↓↓←→←→BA');
+        console.log('🎮 Konami Code enabled: ↑↑↓↓←←←←BA');
     }
 
     createProgressTracker() {
