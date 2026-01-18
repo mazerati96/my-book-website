@@ -866,4 +866,5 @@ if (document.readyState === 'loading') {
 // Export for manual control
 if (typeof window !== 'undefined') {
     window.memoryFragmentSystem = memoryFragmentSystem;
+    window.RIDDLE_PASSWORD = RIDDLE_PASSWORD; // For fragments-complete.html to check
 }
