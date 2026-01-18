@@ -73,6 +73,7 @@ class MemoryFragmentSystem {
         this.container = null;
         this.collectedFragments = this.loadCollectedFragments();
         this.progressTracker = null;
+        this.isMinimized = this.loadMinimizedState();
     }
 
     loadCollectedFragments() {
@@ -82,6 +83,14 @@ class MemoryFragmentSystem {
 
     saveCollectedFragments() {
         localStorage.setItem('collectedMemoryFragments', JSON.stringify(this.collectedFragments));
+    }
+
+    loadMinimizedState() {
+        return localStorage.getItem('fragmentTrackerMinimized') === 'true';
+    }
+
+    saveMinimizedState(isMinimized) {
+        localStorage.setItem('fragmentTrackerMinimized', isMinimized.toString());
     }
 
     init() {
@@ -116,53 +125,53 @@ class MemoryFragmentSystem {
         this.progressTracker = document.createElement('div');
         this.progressTracker.id = 'fragment-progress';
         this.progressTracker.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 320px;
-        background: rgba(10, 10, 10, 0.95);
-        border: 2px solid var(--accent-cyan);
-        padding: 1rem;
-        z-index: 1000;
-        font-family: 'Courier New', monospace;
-        font-size: 0.9rem;
-        color: var(--accent-cyan);
-        text-shadow: 0 0 5px var(--accent-cyan);
-        cursor: move;
-        transition: all 0.3s;
-        pointer-events: auto;
-        min-width: 180px;
-    `;
+            position: fixed;
+            bottom: 20px;
+            right: 320px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--accent-cyan);
+            padding: 1rem;
+            z-index: 1000;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px var(--accent-cyan);
+            cursor: move;
+            transition: all 0.3s;
+            pointer-events: auto;
+            min-width: 180px;
+        `;
 
         // Create button container
         const buttonContainer = document.createElement('div');
         buttonContainer.style.cssText = `
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        display: flex;
-        gap: 0.3rem;
-        z-index: 10;
-    `;
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.3rem;
+            z-index: 10;
+        `;
 
         // Minimize button
         const minimizeBtn = document.createElement('button');
         minimizeBtn.innerHTML = '−';
         minimizeBtn.title = 'Minimize';
         minimizeBtn.style.cssText = `
-        background: transparent;
-        border: 1px solid var(--accent-cyan);
-        color: var(--accent-cyan);
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-        font-weight: bold;
-        padding: 0;
-    `;
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-weight: bold;
+            padding: 0;
+        `;
 
         minimizeBtn.addEventListener('mouseenter', function () {
             this.style.background = 'var(--accent-cyan)';
@@ -175,7 +184,7 @@ class MemoryFragmentSystem {
         });
 
         minimizeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent triggering showCollection
+            e.stopPropagation();
             this.toggleMinimize();
         });
 
@@ -184,20 +193,20 @@ class MemoryFragmentSystem {
         closeBtn.innerHTML = '×';
         closeBtn.title = 'Close';
         closeBtn.style.cssText = `
-        background: transparent;
-        border: 1px solid #ff0033;
-        color: #ff0033;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-        font-weight: bold;
-        padding: 0;
-    `;
+            background: transparent;
+            border: 1px solid #ff0033;
+            color: #ff0033;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-weight: bold;
+            padding: 0;
+        `;
 
         closeBtn.addEventListener('mouseenter', function () {
             this.style.background = '#ff0033';
@@ -212,7 +221,7 @@ class MemoryFragmentSystem {
         });
 
         closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent triggering showCollection
+            e.stopPropagation();
             this.closeTracker();
         });
 
@@ -227,12 +236,37 @@ class MemoryFragmentSystem {
         this.progressTracker.appendChild(buttonContainer);
         this.progressTracker.appendChild(this.contentContainer);
 
-        // Click to view collection (but not on buttons)
-        this.progressTracker.addEventListener('click', (e) => {
-            // Only show collection if not clicking buttons
-            if (e.target !== minimizeBtn && e.target !== closeBtn) {
+        // Apply minimized state if needed
+        if (this.isMinimized) {
+            this.applyMinimizedState();
+        }
+
+        // Click to view collection - ONLY when not dragging
+        let clickTimeout;
+        let isDragging = false;
+
+        this.progressTracker.addEventListener('mousedown', () => {
+            isDragging = false;
+            clickTimeout = setTimeout(() => {
+                isDragging = true;
+            }, 150); // If mouse is down for more than 150ms, consider it a drag
+        });
+
+        this.progressTracker.addEventListener('mouseup', (e) => {
+            clearTimeout(clickTimeout);
+
+            // Only trigger showCollection if:
+            // 1. We're not dragging
+            // 2. Not clicking buttons
+            // 3. Not clicking on minimized indicator
+            if (!isDragging &&
+                e.target !== minimizeBtn &&
+                e.target !== closeBtn &&
+                !e.target.classList.contains('minimized-indicator')) {
                 this.showCollection();
             }
+
+            isDragging = false;
         });
 
         this.progressTracker.addEventListener('mouseenter', function () {
@@ -330,11 +364,11 @@ class MemoryFragmentSystem {
         const percentage = Math.round((collected / total) * 100);
 
         this.contentContainer.innerHTML = `
-        <div style="margin-bottom: 0.5rem;">📦 MEMORY FRAGMENTS</div>
-        <div style="font-size: 1.2rem; font-weight: bold;">${collected} / ${total}</div>
-        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.3rem;">${percentage}% Complete</div>
-        <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.5rem;">Click to view</div>
-    `;
+            <div style="margin-bottom: 0.5rem;">📦 MEMORY FRAGMENTS</div>
+            <div style="font-size: 1.2rem; font-weight: bold;">${collected} / ${total}</div>
+            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.3rem;">${percentage}% Complete</div>
+            <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.5rem;">Click to view</div>
+        `;
     }
 
     addStyles() {
@@ -686,8 +720,8 @@ class MemoryFragmentSystem {
         const modal = document.createElement('div');
         modal.className = 'memory-modal';
         modal.style.maxWidth = '900px';
-        modal.style.maxHeight = '70vh';  // ← Add this line
-        modal.style.overflowY = 'auto';   // ← Add this line
+        modal.style.maxHeight = '70vh';
+        modal.style.overflowY = 'auto';
 
         const gridHtml = memoryFragments.map(frag => {
             const isCollected = this.collectedFragments.includes(frag.id);
@@ -739,32 +773,43 @@ class MemoryFragmentSystem {
         }, 300);
     }
 
+    applyMinimizedState() {
+        this.contentContainer.style.display = 'none';
+        this.progressTracker.style.minWidth = '60px';
+        this.progressTracker.style.cursor = 'pointer';
+
+        const miniIndicator = document.createElement('div');
+        miniIndicator.className = 'minimized-indicator';
+        miniIndicator.style.cssText = `
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 0.5rem;
+        `;
+        miniIndicator.innerHTML = '📦';
+        miniIndicator.title = 'Click to restore';
+        this.progressTracker.insertBefore(miniIndicator, this.contentContainer);
+    }
+
     toggleMinimize() {
         if (this.contentContainer.style.display === 'none') {
             // Maximize
             this.contentContainer.style.display = 'block';
             this.progressTracker.style.minWidth = '180px';
             this.progressTracker.style.cursor = 'move';
+
+            // Remove minimized indicator
+            const existingMini = this.progressTracker.querySelector('.minimized-indicator');
+            if (existingMini) {
+                existingMini.remove();
+            }
+
+            this.isMinimized = false;
+            this.saveMinimizedState(false);
         } else {
             // Minimize
-            this.contentContainer.style.display = 'none';
-            this.progressTracker.style.minWidth = '60px';
-            this.progressTracker.style.cursor = 'pointer';
-
-            // Show just an icon when minimized
-            const existingMini = this.progressTracker.querySelector('.minimized-indicator');
-            if (!existingMini) {
-                const miniIndicator = document.createElement('div');
-                miniIndicator.className = 'minimized-indicator';
-                miniIndicator.style.cssText = `
-                font-size: 1.5rem;
-                text-align: center;
-                padding: 0.5rem;
-            `;
-                miniIndicator.innerHTML = '📦';
-                miniIndicator.title = 'Click to restore';
-                this.progressTracker.insertBefore(miniIndicator, this.contentContainer);
-            }
+            this.applyMinimizedState();
+            this.isMinimized = true;
+            this.saveMinimizedState(true);
         }
     }
 

@@ -77,7 +77,7 @@ class QuantumEntanglement {
 
     // Store minimized state
     storeMinimizedState(isMinimized) {
-        localStorage.setItem('quantumMinimized', isMinimized);
+        localStorage.setItem('quantumMinimized', isMinimized.toString());
     }
 
     // Get closed state
@@ -137,6 +137,14 @@ class QuantumEntanglement {
 
         // Listen for partner updates
         this.listenForPartnerUpdates();
+
+        // Apply minimized state if needed (AFTER everything is set up)
+        if (this.isMinimized) {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                this.applyMinimizedState();
+            }, 100);
+        }
 
         // Cleanup on page unload (but don't remove from DB, just disconnect listeners)
         window.addEventListener('beforeunload', () => {
@@ -211,11 +219,6 @@ class QuantumEntanglement {
             this.startSharedMessages();
             this.startChat();
             this.monitorPartnerStatus();
-
-            // Restore minimized state
-            if (this.isMinimized) {
-                this.toggleMinimize();
-            }
         } else {
             // Partner is gone, clear stored partner and search for new one
             console.log('⚠️ Stored partner no longer available');
@@ -311,6 +314,30 @@ class QuantumEntanglement {
         });
     }
 
+    applyMinimizedState() {
+        const widget = document.getElementById('quantumWidget');
+        const content = document.getElementById('widgetContent');
+        const minimized = document.getElementById('minimizedState');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+
+        if (!widget || !content || !minimized || !minimizeBtn) return;
+
+        content.style.display = 'none';
+        minimized.style.display = 'flex';
+        widget.style.minWidth = 'auto';
+        widget.style.width = '200px';
+        widget.style.height = '60px';
+        minimizeBtn.style.display = 'none';
+
+        // Update minimized text if we have a partner
+        if (this.partnerId) {
+            const partnerIdMini = document.getElementById('partnerIdMini');
+            if (partnerIdMini) {
+                partnerIdMini.textContent = this.partnerId;
+            }
+        }
+    }
+
     toggleMinimize() {
         const widget = document.getElementById('quantumWidget');
         const content = document.getElementById('widgetContent');
@@ -342,7 +369,10 @@ class QuantumEntanglement {
 
             // Clear unread count
             this.unreadCount = 0;
-            document.getElementById('unreadBadge').style.display = 'none';
+            const unreadBadge = document.getElementById('unreadBadge');
+            if (unreadBadge) {
+                unreadBadge.style.display = 'none';
+            }
         }
     }
 
@@ -659,15 +689,19 @@ class QuantumEntanglement {
     showNewMessageNotification() {
         this.unreadCount++;
         const badge = document.getElementById('unreadBadge');
-        badge.textContent = this.unreadCount;
-        badge.style.display = 'block';
+        if (badge) {
+            badge.textContent = this.unreadCount;
+            badge.style.display = 'block';
+        }
 
         // Pulse the widget
         const widget = document.getElementById('quantumWidget');
-        widget.style.animation = 'none';
-        setTimeout(() => {
-            widget.style.animation = 'pulse-notify 0.5s ease 3';
-        }, 10);
+        if (widget) {
+            widget.style.animation = 'none';
+            setTimeout(() => {
+                widget.style.animation = 'pulse-notify 0.5s ease 3';
+            }, 10);
+        }
     }
 
     showBrowserNotification(text) {
