@@ -1,5 +1,5 @@
 // ============================================
-// MEMORY FRAGMENTS - COLLECTIBLE GAME SYSTEM
+// MEMORY FRAGMENTS - ENHANCED WITH SECRETS
 // ============================================
 
 const memoryFragments = [
@@ -7,73 +7,89 @@ const memoryFragments = [
         id: 'frag-001',
         type: 'quote',
         content: '"No sacrifice is worth giving if it is not for the living."',
-        category: 'philosophy'
+        category: 'philosophy',
+        riddleClue: 'FIRST WORD: What remains when all else fades? (4 letters)'
     },
     {
         id: 'frag-002',
         type: 'memory',
         content: 'Ten years of war. Ten years of choices. All of them leading here.',
-        category: 'past'
+        category: 'past',
+        riddleClue: 'SECOND WORD: What am I if not my memories? (4 letters)'
     },
     {
         id: 'frag-003',
         type: 'thought',
         content: 'She wonders: Are these memories mine? Or am I just the echo of someone else?',
-        category: 'android'
+        category: 'android',
+        riddleClue: 'THIRD WORD: Built, not born. What defines me? (6 letters)'
     },
     {
         id: 'frag-004',
         type: 'signal',
         content: '36 Hertz. Constant. Eternal. A prayer against entropy.',
-        category: 'frequency'
+        category: 'frequency',
+        riddleClue: 'FOURTH WORD: The measure of all things. (5 letters)'
     },
     {
         id: 'frag-005',
         type: 'quote',
         content: '"The measure of a soul is not what it is, but what it chooses to become."',
-        category: 'philosophy'
+        category: 'philosophy',
+        riddleClue: 'FIFTH WORD: What you do when you decide. (6 letters)'
     },
     {
         id: 'frag-006',
         type: 'vision',
         content: 'Gold. Everywhere gold. Visions that shouldn\'t exist in circuits and code.',
-        category: 'android'
+        category: 'android',
+        riddleClue: 'SIXTH WORD: What the frequency calls to. (5 letters)'
     },
     {
         id: 'frag-007',
         type: 'memory',
         content: 'The soldier\'s last breath. The choice to continue. The transfer.',
-        category: 'past'
+        category: 'past',
+        riddleClue: 'SEVENTH WORD: Without this, no choice matters. (7 letters)'
     },
     {
         id: 'frag-008',
         type: 'thought',
         content: 'The Brigade needs a leader. But can something built lead something born?',
-        category: 'android'
+        category: 'android',
+        riddleClue: 'EIGHTH WORD: To show the way forward. (4 letters)'
     },
     {
         id: 'frag-009',
         type: 'signal',
         content: 'The frequency whispers. It has been waiting. It knows.',
-        category: 'frequency'
+        category: 'frequency',
+        riddleClue: 'NINTH WORD: Where consciousness meets circuitry. (3 letters)'
     },
     {
         id: 'frag-010',
         type: 'quote',
         content: '"Some choices define who you are. These will define what existence means."',
-        category: 'philosophy'
+        category: 'philosophy',
+        riddleClue: 'TENTH WORD: Everything that is. (9 letters)'
     }
 ];
+
+// THE ANSWER TO THE RIDDLE (lowercase for checking)
+const RIDDLE_PASSWORD = 'soul mind choice souls choose minds purpose lead her existence';
 
 class MemoryFragmentSystem {
     constructor() {
         this.fragments = [];
         this.maxFragments = 5;
-        this.spawnInterval = 15000; // 15 seconds
+        this.spawnInterval = 15000;
         this.container = null;
         this.collectedFragments = this.loadCollectedFragments();
         this.progressTracker = null;
         this.isMinimized = this.loadMinimizedState();
+        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        this.konamiProgress = [];
+        this.initKonamiListener();
     }
 
     loadCollectedFragments() {
@@ -93,8 +109,65 @@ class MemoryFragmentSystem {
         localStorage.setItem('fragmentTrackerMinimized', isMinimized.toString());
     }
 
+    // KONAMI CODE LISTENER
+    initKonamiListener() {
+        document.addEventListener('keydown', (e) => {
+            this.konamiProgress.push(e.key);
+
+            // Keep only last 10 keys
+            if (this.konamiProgress.length > 10) {
+                this.konamiProgress.shift();
+            }
+
+            // Check if konami code matches
+            if (this.konamiProgress.join(',') === this.konamiCode.join(',')) {
+                this.activateKonamiCode();
+                this.konamiProgress = []; // Reset
+            }
+        });
+    }
+
+    activateKonamiCode() {
+        // Unlock all fragments
+        const allFragmentIds = memoryFragments.map(f => f.id);
+        this.collectedFragments = allFragmentIds;
+        this.saveCollectedFragments();
+        this.updateProgressTracker();
+
+        // Show special message
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+
+        const modal = document.createElement('div');
+        modal.className = 'memory-modal';
+        modal.style.borderColor = 'var(--accent-gold)';
+        modal.innerHTML = `
+            <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
+                ⚡ DEVELOPER ACCESS GRANTED ⚡
+            </div>
+            <div class="memory-modal-content" style="font-style: normal; color: var(--accent-gold);">
+                All memory fragments have been unlocked via Konami Code.<br><br>
+                The secret page is now accessible.<br>
+                You may also see the riddle system.
+            </div>
+            <button class="memory-modal-close" style="background-color: var(--accent-gold);">ACCESS GRANTED</button>
+        `;
+
+        document.body.appendChild(backdrop);
+        document.body.appendChild(modal);
+
+        const closeModal = () => {
+            backdrop.remove();
+            modal.remove();
+        };
+
+        modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+        console.log('🎮 KONAMI CODE ACTIVATED - All fragments unlocked!');
+    }
+
     init() {
-        // Create container for fragments
         this.container = document.createElement('div');
         this.container.id = 'memory-fragments-container';
         this.container.style.cssText = `
@@ -108,17 +181,13 @@ class MemoryFragmentSystem {
         `;
         document.body.appendChild(this.container);
 
-        // Create progress tracker
         this.createProgressTracker();
-
-        // Add CSS for fragments
         this.addStyles();
-
-        // Start spawning
         this.startSpawning();
 
         console.log('✅ Memory fragments collection system initialized');
         console.log(`📊 Collected: ${this.collectedFragments.length}/${memoryFragments.length}`);
+        console.log('🎮 Konami Code enabled: ↑↑↓↓←→←→BA');
     }
 
     createProgressTracker() {
@@ -142,7 +211,6 @@ class MemoryFragmentSystem {
             min-width: 180px;
         `;
 
-        // Create button container
         const buttonContainer = document.createElement('div');
         buttonContainer.style.cssText = `
             position: absolute;
@@ -153,7 +221,6 @@ class MemoryFragmentSystem {
             z-index: 10;
         `;
 
-        // Minimize button
         const minimizeBtn = document.createElement('button');
         minimizeBtn.innerHTML = '−';
         minimizeBtn.title = 'Minimize';
@@ -188,7 +255,6 @@ class MemoryFragmentSystem {
             this.toggleMinimize();
         });
 
-        // Close button
         const closeBtn = document.createElement('button');
         closeBtn.innerHTML = '×';
         closeBtn.title = 'Close';
@@ -228,7 +294,6 @@ class MemoryFragmentSystem {
         buttonContainer.appendChild(minimizeBtn);
         buttonContainer.appendChild(closeBtn);
 
-        // Create content container
         this.contentContainer = document.createElement('div');
         this.contentContainer.id = 'fragment-content';
         this.updateProgressTracker();
@@ -236,12 +301,10 @@ class MemoryFragmentSystem {
         this.progressTracker.appendChild(buttonContainer);
         this.progressTracker.appendChild(this.contentContainer);
 
-        // Apply minimized state if needed
         if (this.isMinimized) {
             this.applyMinimizedState();
         }
 
-        // Click to view collection - ONLY when not dragging
         let clickTimeout;
         let isDragging = false;
 
@@ -249,16 +312,12 @@ class MemoryFragmentSystem {
             isDragging = false;
             clickTimeout = setTimeout(() => {
                 isDragging = true;
-            }, 150); // If mouse is down for more than 150ms, consider it a drag
+            }, 150);
         });
 
         this.progressTracker.addEventListener('mouseup', (e) => {
             clearTimeout(clickTimeout);
 
-            // Only trigger showCollection if:
-            // 1. We're not dragging
-            // 2. Not clicking buttons
-            // 3. Not clicking on minimized indicator
             if (!isDragging &&
                 e.target !== minimizeBtn &&
                 e.target !== closeBtn &&
@@ -290,7 +349,6 @@ class MemoryFragmentSystem {
         element.onmousedown = dragStart;
 
         function dragStart(e) {
-            // Prevent dragging if clicking on specific interactive elements
             if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
                 return;
             }
@@ -298,25 +356,20 @@ class MemoryFragmentSystem {
             e.preventDefault();
             isDragging = true;
 
-            // Get current computed position
             const rect = element.getBoundingClientRect();
             initialLeft = rect.left;
             initialTop = rect.top;
 
-            // Record starting mouse position
             startX = e.clientX;
             startY = e.clientY;
 
-            // Switch to top/left positioning if currently using bottom/right
             element.style.bottom = 'auto';
             element.style.right = 'auto';
             element.style.top = initialTop + 'px';
             element.style.left = initialLeft + 'px';
 
-            // Change cursor
             element.style.cursor = 'grabbing';
 
-            // Attach move and release handlers
             document.addEventListener('mousemove', dragMove);
             document.addEventListener('mouseup', dragEnd);
         }
@@ -326,22 +379,18 @@ class MemoryFragmentSystem {
 
             e.preventDefault();
 
-            // Calculate how far mouse has moved from start
             const deltaX = e.clientX - startX;
             const deltaY = e.clientY - startY;
 
-            // Calculate new position
             let newLeft = initialLeft + deltaX;
             let newTop = initialTop + deltaY;
 
-            // Keep element on screen (boundary checking)
             const maxLeft = window.innerWidth - element.offsetWidth;
             const maxTop = window.innerHeight - element.offsetHeight;
 
             newLeft = Math.max(0, Math.min(newLeft, maxLeft));
             newTop = Math.max(0, Math.min(newTop, maxTop));
 
-            // Apply new position
             element.style.left = newLeft + 'px';
             element.style.top = newTop + 'px';
         }
@@ -352,7 +401,6 @@ class MemoryFragmentSystem {
             isDragging = false;
             element.style.cursor = 'move';
 
-            // Remove event listeners
             document.removeEventListener('mousemove', dragMove);
             document.removeEventListener('mouseup', dragEnd);
         }
@@ -415,39 +463,21 @@ class MemoryFragmentSystem {
             }
 
             @keyframes sparkle {
-                0% {
-                    transform: scale(0) rotate(0deg);
-                }
-                50% {
-                    transform: scale(1.8) rotate(180deg);
-                }
-                100% {
-                    transform: scale(1) rotate(360deg);
-                }
+                0% { transform: scale(0) rotate(0deg); }
+                50% { transform: scale(1.8) rotate(180deg); }
+                100% { transform: scale(1) rotate(360deg); }
             }
 
             @keyframes float-fragment {
-                0%, 100% {
-                    transform: translateY(0) translateX(0);
-                }
-                25% {
-                    transform: translateY(-30px) translateX(20px);
-                }
-                50% {
-                    transform: translateY(-10px) translateX(-20px);
-                }
-                75% {
-                    transform: translateY(-40px) translateX(10px);
-                }
+                0%, 100% { transform: translateY(0) translateX(0); }
+                25% { transform: translateY(-30px) translateX(20px); }
+                50% { transform: translateY(-10px) translateX(-20px); }
+                75% { transform: translateY(-40px) translateX(10px); }
             }
 
             @keyframes pulse-fragment {
-                0%, 100% {
-                    opacity: 0.6;
-                }
-                50% {
-                    opacity: 1;
-                }
+                0%, 100% { opacity: 0.6; }
+                50% { opacity: 1; }
             }
 
             .memory-modal {
@@ -555,15 +585,23 @@ class MemoryFragmentSystem {
                 box-shadow: 0 0 15px var(--accent-cyan);
                 transform: translateY(-5px);
             }
+
+            .riddle-clue {
+                background: rgba(255, 170, 0, 0.1);
+                border: 1px solid var(--accent-gold);
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+                font-size: 0.7rem;
+                color: var(--accent-gold);
+                font-style: italic;
+            }
         `;
         document.head.appendChild(style);
     }
 
     startSpawning() {
-        // Spawn first fragment immediately
         this.spawnFragment();
 
-        // Then spawn at intervals
         setInterval(() => {
             if (this.fragments.length < this.maxFragments) {
                 this.spawnFragment();
@@ -572,32 +610,26 @@ class MemoryFragmentSystem {
     }
 
     spawnFragment() {
-        // Get uncollected fragments
         const uncollected = memoryFragments.filter(
             f => !this.collectedFragments.includes(f.id)
         );
 
-        // If all collected, spawn random one
         const pool = uncollected.length > 0 ? uncollected : memoryFragments;
         const memory = pool[Math.floor(Math.random() * pool.length)];
 
-        // Create fragment orb
         const fragment = document.createElement('div');
         fragment.className = `memory-fragment ${memory.category}`;
         fragment.dataset.fragmentId = memory.id;
 
-        // Add sparkle if new
         if (!this.collectedFragments.includes(memory.id)) {
             fragment.classList.add('new-fragment');
         }
 
-        // Random position (avoiding edges)
         const x = Math.random() * (window.innerWidth - 100) + 50;
         const y = Math.random() * (window.innerHeight - 100) + 50;
         fragment.style.left = `${x}px`;
         fragment.style.top = `${y}px`;
 
-        // Click to reveal
         fragment.addEventListener('click', () => {
             this.revealMemory(memory, fragment);
         });
@@ -605,20 +637,16 @@ class MemoryFragmentSystem {
         this.container.appendChild(fragment);
         this.fragments.push({ element: fragment, memory });
 
-        // Auto-fade after 30 seconds
         setTimeout(() => {
             this.removeFragment(fragment);
         }, 30000);
     }
 
     revealMemory(memory, fragmentElement) {
-        // Check if new fragment
         const isNew = !this.collectedFragments.includes(memory.id);
 
-        // Remove the fragment
         this.removeFragment(fragmentElement);
 
-        // Add to collection if new
         if (isNew) {
             this.collectedFragments.push(memory.id);
             this.saveCollectedFragments();
@@ -626,24 +654,21 @@ class MemoryFragmentSystem {
             this.checkMilestones();
         }
 
-        // Create modal backdrop
         const backdrop = document.createElement('div');
         backdrop.className = 'modal-backdrop';
 
-        // Create modal
         const modal = document.createElement('div');
         modal.className = 'memory-modal';
         modal.innerHTML = `
             ${isNew ? '<div class="new-fragment-badge">✨ NEW FRAGMENT COLLECTED!</div>' : ''}
             <div class="memory-modal-content">${memory.content}</div>
+            ${isNew ? `<div class="riddle-clue">${memory.riddleClue}</div>` : ''}
             <button class="memory-modal-close">CLOSE</button>
         `;
 
-        // Add to page
         document.body.appendChild(backdrop);
         document.body.appendChild(modal);
 
-        // Close handlers
         const closeModal = () => {
             backdrop.remove();
             modal.remove();
@@ -659,7 +684,6 @@ class MemoryFragmentSystem {
         const collected = this.collectedFragments.length;
         const total = memoryFragments.length;
 
-        // Milestone rewards
         if (collected === Math.floor(total * 0.25) || collected === Math.floor(total * 0.5) ||
             collected === Math.floor(total * 0.75) || collected === total) {
             this.showMilestoneReward(collected, total);
@@ -667,22 +691,21 @@ class MemoryFragmentSystem {
     }
 
     showMilestoneReward(collected, total) {
-        const percentage = Math.round((collected / total) * 100);
         let message = '';
         let reward = '';
 
-        if (percentage === 25) {
+        if (collected === Math.floor(total * 0.25)) {
             message = '25% COMPLETE';
             reward = 'You\'ve begun to piece together the fragments of memory...';
-        } else if (percentage === 50) {
+        } else if (collected === Math.floor(total * 0.5)) {
             message = '50% COMPLETE';
             reward = 'Half the truth revealed. But truth is never whole, is it?';
-        } else if (percentage === 75) {
+        } else if (collected === Math.floor(total * 0.75)) {
             message = '75% COMPLETE';
             reward = 'The pattern emerges. The signal strengthens.';
-        } else if (percentage === 100) {
+        } else if (collected === total) {
             message = '🎉 COLLECTION COMPLETE! 🎉';
-            reward = 'All fragments recovered. But what do they mean when assembled? Check the secret page: Fragments';
+            reward = 'All fragments recovered. The riddle is complete. Can you solve it to access the secret page?';
         }
 
         const backdrop = document.createElement('div');
@@ -733,7 +756,10 @@ class MemoryFragmentSystem {
                     <div style="font-size: 0.8rem; opacity: 0.7;">
                         ${frag.category.toUpperCase()}
                     </div>
-                    ${isCollected ? `<div style="font-size: 0.75rem; margin-top: 0.5rem; font-style: italic;">"${frag.content.substring(0, 50)}..."</div>` : ''}
+                    ${isCollected ? `
+                        <div style="font-size: 0.75rem; margin-top: 0.5rem; font-style: italic;">"${frag.content.substring(0, 50)}..."</div>
+                        <div class="riddle-clue">${frag.riddleClue}</div>
+                    ` : ''}
                 </div>
             `;
         }).join('');

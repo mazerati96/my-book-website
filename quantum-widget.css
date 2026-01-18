@@ -253,6 +253,7 @@
 }
 
 /* Buttons */
+
 .close-btn, .minimize-btn {
     position: absolute;
     top: 0.8rem;
@@ -276,7 +277,7 @@
 }
 
 .minimize-btn {
-    right: 2rem;
+    right: 2rem; /* 0.5rem + 24px + some gap */
     border-color: #00d4ff;
     color: #00d4ff;
 }
