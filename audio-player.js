@@ -27,7 +27,7 @@ class FrequencyGenerator {
         }
     }
 
-    // Start playing the 36 Hz frequency
+    // Start playing the 36 Hertz frequency
     start() {
         if (this.isPlaying) return;
 
@@ -52,7 +52,7 @@ class FrequencyGenerator {
         this.oscillator.start();
         this.isPlaying = true;
 
-        console.log(`🎵 Playing 36 Hz frequency at ${this.volume * 100}% volume`);
+        console.log(`🎵 Playing 36 Hertz frequency at ${this.volume * 100}% volume`);
     }
 
     // Stop playing
@@ -64,7 +64,7 @@ class FrequencyGenerator {
         this.oscillator = null;
         this.isPlaying = false;
 
-        console.log('🔇 36 Hz frequency stopped');
+        console.log('🔇 36 Hertz frequency stopped');
     }
 
     // Set volume (0.0 to 1.0)

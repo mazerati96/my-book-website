@@ -73,7 +73,7 @@ const characterData = {
             <p>Views the android as both his greatest achievement and his deepest moral failure. Questions whether creating synthetic consciousness was an act of creation or violation.</p>
             
             <h4>HIDDEN AGENDA:</h4>
-            <p>Secretly studies the 36 Hz frequency. Believes it's not random noise but a form of communication. Has not shared this with the crew.</p>
+            <p>Secretly studies the 36 Hertz frequency. Believes it's not random noise but a form of communication. Has not shared this with the crew.</p>
         `
     }
 };

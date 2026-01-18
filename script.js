@@ -650,7 +650,7 @@ function createFrequencyToggle() {
     toggle.className = 'music-toggle';
     toggle.innerHTML = `
         <button class="music-toggle-btn">
-            🧬 36 Hz Signal: <strong>OFF</strong>
+            🧬 36 Hertz Signal: <strong>OFF</strong>
         </button>
         <div class="music-credit">
             Subsonic frequency generator
@@ -663,7 +663,7 @@ function createFrequencyToggle() {
 
     btn.addEventListener('click', () => {
         const isPlaying = window.frequencyGenerator.toggle();
-        btn.innerHTML = `🧬 36 Hz Signal: <strong>${isPlaying ? 'ON' : 'OFF'}</strong>`;
+        btn.innerHTML = `🧬 36 Hertz Signal: <strong>${isPlaying ? 'ON' : 'OFF'}</strong>`;
     });
 }
 

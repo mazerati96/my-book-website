@@ -24,7 +24,7 @@ const memoryFragments = [
     {
         id: 'frag-004',
         type: 'signal',
-        content: '36 Hz. Constant. Eternal. A prayer against entropy.',
+        content: '36 Hertz. Constant. Eternal. A prayer against entropy.',
         category: 'frequency'
     },
     {

@@ -181,7 +181,7 @@ function incrementDecode() {
     // Partially reveal cipher text
     if (decodeProgress >= 50) {
         const cipherText = document.getElementById('cipher-text');
-        const revealed = "SOME PATTERNS EMERGE FROM THE NOISE... THE FREQUENCY CARRIES MEANING... CONSCIOUSNESS RECOGNIZES CONSCIOUSNESS...";
+        const revealed = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed. To understand. To stand.";
         cipherText.textContent = revealed;
         cipherText.style.color = '#00ff88';
     }
@@ -205,7 +205,7 @@ function submitInterpretation() {
         "Your consciousness resonates with the frequency. The pattern recognizes you.",
         "The quantum psalm hears your response. You are not alone in listening.",
         "Something ancient stirs. Your interpretation has been received.",
-        "The 36 Hz frequency pulses in recognition. You have added your voice to the chorus."
+        "The 36 Hertz frequency pulses in recognition. You have added your voice to the chorus."
     ];
 
     acknowledgmentText.textContent = responses[Math.floor(Math.random() * responses.length)];

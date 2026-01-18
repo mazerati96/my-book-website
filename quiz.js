@@ -32,7 +32,7 @@ const quizData = {
             ]
         },
         {
-            question: "You hear a strange frequency—36 Hz, humming beneath reality. It won't stop. What do you do?",
+            question: "You hear a strange frequency—36 Hertz, humming beneath reality. It won't stop. What do you do?",
             answers: [
                 { text: "Ignore it. Focus on the mission.", points: { geo: 2, tahani: 1, scout: 1 } },
                 { text: "Study it obsessively. It means something.", points: { ciel: 3, elpida: 2, cinder: 3 } },
