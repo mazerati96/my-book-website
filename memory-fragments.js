@@ -154,55 +154,77 @@ class MemoryFragmentSystem {
     }
 
     makeDraggable(element) {
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
 
-        element.style.cursor = 'move';
+        element.onmousedown = dragStart;
 
-        element.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-            // Don't drag if clicking inside the widget content
-            if (e.target !== element && !e.target.classList.contains('drag-handle')) {
+        function dragStart(e) {
+            // Prevent dragging if clicking on specific interactive elements
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
                 return;
             }
 
             e.preventDefault();
             isDragging = true;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-            element.style.cursor = 'grabbing';
-        }
 
-        function elementDrag(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+            // Get current computed position
+            const rect = element.getBoundingClientRect();
+            initialLeft = rect.left;
+            initialTop = rect.top;
 
-            // Calculate new position
-            let newTop = element.offsetTop - pos2;
-            let newLeft = element.offsetLeft - pos1;
+            // Record starting mouse position
+            startX = e.clientX;
+            startY = e.clientY;
 
-            // Keep it on screen
-            newTop = Math.max(0, Math.min(newTop, window.innerHeight - element.offsetHeight));
-            newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - element.offsetWidth));
-
-            element.style.top = newTop + "px";
-            element.style.left = newLeft + "px";
+            // Switch to top/left positioning if currently using bottom/right
             element.style.bottom = 'auto';
             element.style.right = 'auto';
+            element.style.top = initialTop + 'px';
+            element.style.left = initialLeft + 'px';
+
+            // Change cursor
+            element.style.cursor = 'grabbing';
+
+            // Attach move and release handlers
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
         }
 
-        function closeDragElement() {
+        function dragMove(e) {
+            if (!isDragging) return;
+
+            e.preventDefault();
+
+            // Calculate how far mouse has moved from start
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+
+            // Calculate new position
+            let newLeft = initialLeft + deltaX;
+            let newTop = initialTop + deltaY;
+
+            // Keep element on screen (boundary checking)
+            const maxLeft = window.innerWidth - element.offsetWidth;
+            const maxTop = window.innerHeight - element.offsetHeight;
+
+            newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+            newTop = Math.max(0, Math.min(newTop, maxTop));
+
+            // Apply new position
+            element.style.left = newLeft + 'px';
+            element.style.top = newTop + 'px';
+        }
+
+        function dragEnd() {
+            if (!isDragging) return;
+
             isDragging = false;
-            document.onmouseup = null;
-            document.onmousemove = null;
             element.style.cursor = 'move';
+
+            // Remove event listeners
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mouseup', dragEnd);
         }
     }
 
