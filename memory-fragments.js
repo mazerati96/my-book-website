@@ -118,7 +118,7 @@ class MemoryFragmentSystem {
         this.progressTracker.style.cssText = `
             position: fixed;
             bottom: 20px;
-            right: 400px;
+            right: 320px;
             background: rgba(10, 10, 10, 0.95);
             border: 2px solid var(--accent-cyan);
             padding: 1rem;
@@ -150,6 +150,60 @@ class MemoryFragmentSystem {
         });
 
         document.body.appendChild(this.progressTracker);
+        this.makeDraggable(this.progressTracker);
+    }
+
+    makeDraggable(element) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        let isDragging = false;
+
+        element.style.cursor = 'move';
+
+        element.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            // Don't drag if clicking inside the widget content
+            if (e.target !== element && !e.target.classList.contains('drag-handle')) {
+                return;
+            }
+
+            e.preventDefault();
+            isDragging = true;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+            element.style.cursor = 'grabbing';
+        }
+
+        function elementDrag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+
+            // Calculate new position
+            let newTop = element.offsetTop - pos2;
+            let newLeft = element.offsetLeft - pos1;
+
+            // Keep it on screen
+            newTop = Math.max(0, Math.min(newTop, window.innerHeight - element.offsetHeight));
+            newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - element.offsetWidth));
+
+            element.style.top = newTop + "px";
+            element.style.left = newLeft + "px";
+            element.style.bottom = 'auto';
+            element.style.right = 'auto';
+        }
+
+        function closeDragElement() {
+            isDragging = false;
+            document.onmouseup = null;
+            document.onmousemove = null;
+            element.style.cursor = 'move';
+        }
     }
 
     updateProgressTracker() {
