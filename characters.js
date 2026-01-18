@@ -150,7 +150,7 @@ const characterData = {
 
             `
     }
-
+};
 // Canvas and context
 
 let canvas, ctx;
