@@ -93,7 +93,7 @@ class MemoryFragmentSystem {
             top: 0;
             left: 0;
             width: 100%;
-            height: 75%; // Limit to upper 75% of screen
+            height: 100%;
             pointer-events: none;
             z-index: 999;
         `;
@@ -376,7 +376,7 @@ class MemoryFragmentSystem {
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 100%;
+                height: 75%; // Adjusted to not cover bottom UI
                 background-color: rgba(0, 0, 0, 0.8);
                 z-index: 9999;
                 pointer-events: auto;
