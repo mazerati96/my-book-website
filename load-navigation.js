@@ -10,8 +10,19 @@
             // Highlight active page
             highlightActivePage();
 
-            // Initialize hamburger menu
-            initHamburgerMenu();
+            // Prefer the global initializer (which contains particle logic).
+            // Fall back to the local init if the global isn't available.
+            if (typeof window.initHamburgerMenu === 'function') {
+                try {
+                    window.initHamburgerMenu();
+                    console.log('✅ Global initHamburgerMenu() invoked.');
+                } catch (err) {
+                    console.error('❌ Error calling global initHamburgerMenu(), falling back to local:', err);
+                    initHamburgerMenu();
+                }
+            } else {
+                initHamburgerMenu();
+            }
         })
         .catch(error => {
             console.error('Error loading navigation:', error);
@@ -32,7 +43,7 @@
         });
     }
 
-    // Initialize hamburger menu
+    // Local fallback initializer: minimal toggling in case global isn't present
     function initHamburgerMenu() {
         const hamburger = document.querySelector('.hamburger');
         const sidebar = document.querySelector('.sidebar');
@@ -57,6 +68,6 @@
             }
         };
 
-        console.log('✅ Navigation loaded and initialized!');
+        console.log('✅ Navigation loaded and initialized (fallback).');
     }
 })();
