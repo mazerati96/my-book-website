@@ -126,19 +126,19 @@ function createTransitionElements() {
         "INITIALIZING SYSTEM...",
         "ACCESSING QUANTUM LAYER...",
         "DECRYPTING SOUL MATRIX...",
-        "LOADING MEMORY FRAGMENT 0x4A7B...",
+        "LOADING MEMORY FRAGMENT...",
         "SYNCHRONIZING WITH THE SIGNAL...",
-        "CALIBRATING CONSCIOUSNESS NODES...",
+        "CALIBRATING CONSCIOUSNESS...",
         "PARSING NEURAL PATHWAYS...",
         "ESTABLISHING QUANTUM LINK...",
-        "DECODING FREQUENCY 36 HZ...",
+        "DECODING 36 HERTZ FREQUENCY...",
         "BOOTSTRAPPING REALITY ENGINE...",
         "CONNECTING TO THE VOID...",
         "MEASURING SOULS...",
         "ACTIVATING DEEP SPACE PROTOCOL...",
         "LOADING ASTRONOMICAL DATA...",
         "INITIALIZING TEMPORAL DRIFT...",
-        "ACCESSING FORBIDDEN ARCHIVES..."
+        "ACCESSING ARCHIVES..."
     ];
 
     // Pick a random message
@@ -231,7 +231,7 @@ function initEnhancedParallax() {
 // ============================================
 // HAMBURGER MENU WITH PARTICLE EFFECTS
 // ============================================
-function initHamburgerMenu() {
+function initHamburgerMenu() {  //THIS FUNCTION DOESNT WORK
     const hamburger = document.querySelector('.hamburger');
     const sidebar = document.querySelector('.sidebar');
     if (!hamburger || !sidebar) return;
