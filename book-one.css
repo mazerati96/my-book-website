@@ -151,7 +151,7 @@ footer {
     padding: 3rem 2rem;
 }
 
-.quote-mark-large {
+/*.quote-mark-large {
     font-size: 5rem;
     color: #00ff88;
     opacity: 0.3;
@@ -162,7 +162,7 @@ footer {
     .quote-mark-large.closing {
         transform: rotate(180deg);
         display: inline-block;
-    }
+    }*/ /*commented out for webpage*/
 
 .epigraph-text {
     font-size: 1.8rem;
