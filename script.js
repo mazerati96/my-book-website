@@ -271,13 +271,15 @@ function initHamburgerMenu() {  //THIS FUNCTION DOESNT WORK
         const isActive = hamburger.classList.contains('active');
 
         if (isActive) {
-            hamburger.classList.remove('active');
+            hamburger.classList.remove('active', 'hide-bars');
             sidebar.classList.remove('active');
             createParticles(false);
         } else {
-            hamburger.classList.add('active');
+            hamburger.classList.add('active', 'hide-bars');
             sidebar.classList.add('active');
             createParticles(true);
+            // Optionally, remove 'hide-bars' after the animation
+            setTimeout(() => hamburger.classList.remove('hide-bars'), 400);
         }
     });
 

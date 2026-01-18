@@ -33,6 +33,11 @@
         position: relative;
     }
 
+.hamburger.hide-bars span {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
 /* Particle container */
 
 .hamburger-particles {
