@@ -376,7 +376,7 @@ class MemoryFragmentSystem {
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 75%; // Adjusted to not cover bottom UI
+                height: 100%;
                 background-color: rgba(0, 0, 0, 0.8);
                 z-index: 9999;
                 pointer-events: auto;
@@ -552,7 +552,7 @@ class MemoryFragmentSystem {
             reward = 'The pattern emerges. The signal strengthens.';
         } else if (percentage === 100) {
             message = '🎉 COLLECTION COMPLETE! 🎉';
-            reward = 'All fragments recovered. But what do they mean when assembled? Check the secret page: /fragments-complete.html';
+            reward = 'All fragments recovered. But what do they mean when assembled? Check the secret page: Fragments;
         }
 
         const backdrop = document.createElement('div');
@@ -589,7 +589,9 @@ class MemoryFragmentSystem {
 
         const modal = document.createElement('div');
         modal.className = 'memory-modal';
-        modal.style.maxWidth = '700px'; // less wide for collection view
+        modal.style.maxWidth = '900px';
+        modal.style.maxHeight = '70vh';  // ← Add this line
+        modal.style.overflowY = 'auto';   // ← Add this line
 
         const gridHtml = memoryFragments.map(frag => {
             const isCollected = this.collectedFragments.includes(frag.id);
