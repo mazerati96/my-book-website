@@ -589,7 +589,7 @@ class MemoryFragmentSystem {
 
         const modal = document.createElement('div');
         modal.className = 'memory-modal';
-        modal.style.maxWidth = '900px';
+        modal.style.maxWidth = '700px'; // less wide for collection view
 
         const gridHtml = memoryFragments.map(frag => {
             const isCollected = this.collectedFragments.includes(frag.id);
