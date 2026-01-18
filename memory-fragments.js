@@ -143,7 +143,7 @@ class MemoryFragmentSystem {
         modal.style.borderColor = 'var(--accent-gold)';
         modal.innerHTML = `
             <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
-                ⚡ DEVELOPER ACCESS GRANTED ⚡
+                ⚡DEVELOPER ACCESS GRANTED⚡
             </div>
             <div class="memory-modal-content" style="font-style: normal; color: var(--accent-gold);">
                 All memory fragments have been unlocked via Konami Code.<br><br>

@@ -75,8 +75,83 @@ const characterData = {
             <h4>HIDDEN AGENDA:</h4>
             <p>Secretly studies the 36 Hertz frequency. Believes it's not random noise but a form of communication. Has not shared this with the crew.</p>
         `
+    },
+    tahani: {
+        name: "TAHANI MAZER",
+        subtitle: "PILOT",
+        id: "FILE: C-112",
+        stamp: "CONFIDENTIAL",
+        icon: "🚀",
+        status: "HUMAN",
+        stats: {
+            "STATUS": "ACTIVE",
+            "AGE": "29",
+            "SERVICE": "5 YEARS",
+            "SPECIALIZATION": "PILOTING AND COMBAT"
+        },
+        bio: `
+            <h4>BACKGROUND:</h4>
+            <p>Former stunt pilot turned military aviator. Known for daring maneuvers and unorthodox tactics. Joined the Brigade seeking purpose beyond thrill-seeking.</p>
+
+            <h4>RELATIONSHIP WITH ANDROID:</h4>
+            <p>Initially skeptical of the android commander but grew to respect her leadership. Finds solace in her unwavering focus amidst the chaos of their mission.</p>
+
+            <h4>PERSONAL MOTIVATIONS:</h4>
+            <p>Haunted by the loss of her younger brother in an empire raid. Determined to see the mission succeed to prevent others from suffering similar losses.</p>
+            `
+    },
+    cinder: {
+        name: "CINDER HART",
+        subtitle: "COMBAT AND TACTICAL EXPERT",
+        id: "FILE: D-205",
+        stamp: "CONFIDENTIAL",
+        icon: "🔥",
+        status: "HUMAN",
+        stats: {
+            "STATUS": "ACTIVE",
+            "AGE": "30",
+            "SERVICE": "7 YEARS",
+            "SPECIALIZATION": "TACTICAL STRATEGY, COMBAT, WEAPONS, ENGINEERING SUPPORT"
+        },
+        bio: `
+            <h4>BACKGROUND:</h4>
+            <p>Ex-empire special forces operative turned mercenary. Known for ruthless efficiency and tactical brilliance. Recruited by Geo Hart for the Brigade.</p>
+
+            <h4>RELATIONSHIP WITH ANDROID:</h4>
+            <p>Respects the android's capabilities but remains wary of its synthetic nature. Often challenges its decisions, leading to tense but productive exchanges.</p>
+
+            <h4>PERSONAL MOTIVATIONS:</h4>
+            <p>Driven by a desire for redemption after a failed mission that led to civilian casualties. Seeks to atone through the success of the Brigade's mission.</p>
+
+            `
+    },
+    scout: {
+        name: "SCOUT",
+        subtitle: "WEAPONS AND COMBAT EXPERT",
+        id: "FILE: E-309",
+        stamp: "CONFIDENTIAL",
+        icon: "🎯",
+        status: "HUMAN",
+        stats: {
+            "STATUS": "ACTIVE",
+            "AGE": "27",
+            "SERVICE": "4 YEARS",
+            "SPECIALIZATION": "WEAPONS, COMBAT, RECONNAISSANCE"
+        },
+        bio: `
+            <h4>BACKGROUND:</h4>
+            <p>Former bounty hunter with a reputation for precision and stealth. Joined the Brigade seeking a cause greater than personal gain.</p>
+
+            <h4>RELATIONSHIP WITH ANDROID:</h4>
+            <p>Initially distrustful of the android commander but gradually came to see its value in combat situations. Values its unemotional decision-making.</p>
+
+            <h4>PERSONAL MOTIVATIONS:</h4>
+            <p>Haunted by a past mission that went wrong, leading to the loss of a close friend. Committed to ensuring the Brigade's success to prevent further loss.</p>
+
+            `
     }
-};
+
+// Canvas and context
 
 let canvas, ctx;
 let nodes = [];
