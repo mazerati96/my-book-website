@@ -45,22 +45,44 @@
     left: 0; top: 0;
     width: 100%; height: 100%;
     pointer-events: none;
+    overflow: visible;
 }
 .hamburger-particle {
     position: absolute;
-    width: 6px; height: 6px;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
     background: #fff;
     border-radius: 50%;
-    transform: translate(var(--tx,0), var(--ty,0));
     opacity: 0.8;
+    /* start centered inside the hamburger */
+    transform: translate(-50%, -50%);
+    will-change: transform, opacity;
 }
+
+/* animate from center (-50%,-50%) out to the target offset (var(--tx),var(--ty)) */
 @keyframes particle-explode {
-    from { transform: translate(0,0); opacity: 1; }
-    to { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+    from {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty)));
+        opacity: 0;
+    }
 }
+
+/* animate from offset back to center */
 @keyframes particle-implode {
-    from { transform: translate(var(--tx), var(--ty)); opacity: 0; }
-    to { transform: translate(0,0); opacity: 1; }
+    from {
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty)));
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
 }
 
 /* Active state - X formation with glitch */

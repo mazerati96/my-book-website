@@ -245,26 +245,34 @@ function initHamburgerMenu() {  //THIS FUNCTION DOESNT WORK
         particleContainer.innerHTML = '';
 
         const particleCount = 12;
+        const durationMs = 400; // match 0.4s in CSS animation
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.className = 'hamburger-particle';
 
             const angle = (Math.PI * 2 * i) / particleCount;
             const distance = 30;
-            const tx = Math.cos(angle) * distance;
-            const ty = Math.sin(angle) * distance;
+            const tx = Math.cos(angle) * distance + 'px';
+            const ty = Math.sin(angle) * distance + 'px';
 
-            particle.style.cssText = `
-                --tx: ${tx}px;
-                --ty: ${ty}px;
-                left: 50%;
-                top: 50%;
-                animation: ${isExploding ? 'particle-explode' : 'particle-implode'} 0.4s ease-out forwards;
-                animation-delay: ${i * 0.02}s;
-            `;
+            // set CSS variables for keyframes to use
+            particle.style.setProperty('--tx', tx);
+            particle.style.setProperty('--ty', ty);
+
+            // positioning and animation
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.animation = `${isExploding ? 'particle-explode' : 'particle-implode'} 0.4s ease-out forwards`;
+            particle.style.animationDelay = `${i * 0.02}s`;
 
             particleContainer.appendChild(particle);
         }
+
+        // remove particles after animation completes so DOM stays clean
+        const totalDelay = 400 + (particleCount * 20); // ms (duration + maximum delay)
+        setTimeout(() => {
+            particleContainer.innerHTML = '';
+        }, totalDelay + 50);
     }
 
     hamburger.addEventListener('click', () => {
