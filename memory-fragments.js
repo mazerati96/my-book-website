@@ -552,7 +552,7 @@ class MemoryFragmentSystem {
             reward = 'The pattern emerges. The signal strengthens.';
         } else if (percentage === 100) {
             message = '🎉 COLLECTION COMPLETE! 🎉';
-            reward = 'All fragments recovered. But what do they mean when assembled? Check the secret page: Fragments;
+            reward = 'All fragments recovered. But what do they mean when assembled? Check the secret page: Fragments';
         }
 
         const backdrop = document.createElement('div');
