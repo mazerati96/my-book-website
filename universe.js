@@ -175,46 +175,106 @@ function createStarField() {
 
 // Create black hole with glow
 function createBlackHole() {
-    // Black hole sphere
+    // Central black sphere (event horizon)
     const geometry = new THREE.SphereGeometry(80, 32, 32);
     const material = new THREE.MeshBasicMaterial({
         color: 0x000000,
         transparent: true,
-        opacity: 0.9
+        opacity: 1.0
     });
     blackHole = new THREE.Mesh(geometry, material);
     blackHole.position.set(-500, 200, -1500);
     scene.add(blackHole);
 
-    // Accretion disk glow
-    const glowGeometry = new THREE.RingGeometry(100, 200, 64);
+    // Create multi-layered accretion disk with color gradients
+    const diskLayers = [];
+
+    // Layer 1: Inner hot region (blue-white)
+    const innerDisk = new THREE.RingGeometry(85, 120, 64);
+    const innerMaterial = new THREE.MeshBasicMaterial({
+        color: 0x88ccff,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.8
+    });
+    const innerRing = new THREE.Mesh(innerDisk, innerMaterial);
+    innerRing.position.copy(blackHole.position);
+    innerRing.rotation.x = Math.PI / 2;
+    scene.add(innerRing);
+    diskLayers.push(innerRing);
+
+    // Layer 2: Mid region (cyan-green transition)
+    const midDisk1 = new THREE.RingGeometry(120, 160, 64);
+    const midMaterial1 = new THREE.MeshBasicMaterial({
+        color: 0x00ffaa,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.6
+    });
+    const midRing1 = new THREE.Mesh(midDisk1, midMaterial1);
+    midRing1.position.copy(blackHole.position);
+    midRing1.rotation.x = Math.PI / 2;
+    scene.add(midRing1);
+    diskLayers.push(midRing1);
+
+    // Layer 3: Mid-outer region (yellow-orange)
+    const midDisk2 = new THREE.RingGeometry(160, 200, 64);
+    const midMaterial2 = new THREE.MeshBasicMaterial({
+        color: 0xffaa00,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.5
+    });
+    const midRing2 = new THREE.Mesh(midDisk2, midMaterial2);
+    midRing2.position.copy(blackHole.position);
+    midRing2.rotation.x = Math.PI / 2;
+    scene.add(midRing2);
+    diskLayers.push(midRing2);
+
+    // Layer 4: Outer region (orange-red)
+    const outerDisk = new THREE.RingGeometry(200, 240, 64);
+    const outerMaterial = new THREE.MeshBasicMaterial({
+        color: 0xff3300,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.4
+    });
+    const outerRing = new THREE.Mesh(outerDisk, outerMaterial);
+    outerRing.position.copy(blackHole.position);
+    outerRing.rotation.x = Math.PI / 2;
+    scene.add(outerRing);
+    diskLayers.push(outerRing);
+
+    // Layer 5: Outermost faint glow (deep red/purple)
+    const glowDisk = new THREE.RingGeometry(240, 300, 64);
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: 0xff0033,
+        color: 0xaa0066,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.2
+    });
+    const glowRing = new THREE.Mesh(glowDisk, glowMaterial);
+    glowRing.position.copy(blackHole.position);
+    glowRing.rotation.x = Math.PI / 2;
+    scene.add(glowRing);
+    diskLayers.push(glowRing);
+
+    // Add a subtle gravitational lensing effect (light bending visualization)
+    const lensGeometry = new THREE.RingGeometry(75, 85, 64);
+    const lensMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.3
     });
-    const accretionDisk = new THREE.Mesh(glowGeometry, glowMaterial);
-    accretionDisk.position.copy(blackHole.position);
-    accretionDisk.rotation.x = Math.PI / 2;
-    scene.add(accretionDisk);
-
-    // Outer glow
-    const outerGlowGeometry = new THREE.RingGeometry(200, 300, 64);
-    const outerGlowMaterial = new THREE.MeshBasicMaterial({
-        color: 0xff0033,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.1
-    });
-    const outerGlow = new THREE.Mesh(outerGlowGeometry, outerGlowMaterial);
-    outerGlow.position.copy(blackHole.position);
-    outerGlow.rotation.x = Math.PI / 2;
-    scene.add(outerGlow);
+    const photonRing = new THREE.Mesh(lensGeometry, lensMaterial);
+    photonRing.position.copy(blackHole.position);
+    photonRing.rotation.x = Math.PI / 2;
+    scene.add(photonRing);
 
     // Store for animation
-    blackHole.accretionDisk = accretionDisk;
-    blackHole.outerGlow = outerGlow;
+    blackHole.diskLayers = diskLayers;
+    blackHole.photonRing = photonRing;
 
     blackHole.userData.locationId = 'Charybdis Prime';
     blackHole.userData.type = 'location';
@@ -262,14 +322,27 @@ function animate() {
         rotationVelocity.y *= 0.95;
     }
 
-    // Animate black hole
-    if (blackHole) {
-        blackHole.accretionDisk.rotation.z += 0.002;
-        blackHole.outerGlow.rotation.z -= 0.001;
+    // Animate black hole accretion disk
+    if (blackHole && blackHole.diskLayers) {
+        const time = Date.now() * 0.001;
 
-        // Pulse effect
-        const pulse = Math.sin(Date.now() * 0.001) * 0.1 + 1;
-        blackHole.accretionDisk.material.opacity = 0.2 + pulse * 0.1;
+        // Rotate each layer at different speeds (differential rotation)
+        blackHole.diskLayers.forEach((layer, index) => {
+            // Inner layers rotate faster (like a real accretion disk)
+            const speed = 0.003 - (index * 0.0005);
+            layer.rotation.z += speed;
+
+            // Subtle pulsing effect
+            const pulse = Math.sin(time + index) * 0.1 + 0.9;
+            layer.material.opacity = (0.8 - index * 0.1) * pulse;
+        });
+
+        // Photon ring pulse (light bending effect)
+        if (blackHole.photonRing) {
+            const photonPulse = Math.sin(time * 2) * 0.2 + 0.3;
+            blackHole.photonRing.material.opacity = photonPulse;
+            blackHole.photonRing.rotation.z += 0.01;
+        }
     }
 
     // Pulse location markers
@@ -280,7 +353,6 @@ function animate() {
 
     renderer.render(scene, camera);
 }
-
 // Mouse controls
 function onMouseDown(e) {
     isDragging = true;
