@@ -314,202 +314,153 @@
         const RIDDLE_PASSWORD = 'soul mind choice souls choose minds purpose lead her existence';
 
         const collectedFragments = JSON.parse(localStorage.getItem('collectedMemoryFragments') || '[]');
+        const solvedRiddles = JSON.parse(localStorage.getItem('solvedRiddles') || '[]');
         const totalFragments = 10;
         const isComplete = collectedFragments.length >= totalFragments;
-        const hasPassword = localStorage.getItem('fragmentsPasswordEntered') === 'true';
+        const hasAllRiddles = solvedRiddles.length >= totalFragments;
 
         const container = document.getElementById('content-container');
 
-        // THREE STATES: Not complete, Complete but needs password, Complete with password
+        // TWO STATES: Not complete OR Complete with all riddles solved
 
         if (!isComplete) {
             // STATE 1: NOT COMPLETE - Show locked message
             const percentage = Math.round((collectedFragments.length / totalFragments) * 100);
 
             container.innerHTML = `
-                        <div class="locked-message">
-                            <h2>🔒 ACCESS DENIED</h2>
-                            <p>This archive is sealed. Only those who have collected all memory fragments may access its contents.</p>
+                    <div class="locked-message">
+                        <h2>🔒 ACCESS DENIED</h2>
+                        <p>This archive is sealed. Only those who have collected all memory fragments may access its contents.</p>
 
-                            <div class="progress-display">
-                                FRAGMENTS COLLECTED: ${collectedFragments.length} / ${totalFragments}<br>
-                                COMPLETION: ${percentage}%
-                            </div>
-
-                            <p style="margin-top: 2rem; color: var(--accent-cyan);">
-                                Continue exploring the site to find more floating memory fragments.<br>
-                                Click the glowing orbs when they appear to collect them.
-                            </p>
-
-                            <div class="back-button">
-                                <a href="index.html">CONTINUE THE SEARCH</a>
-                            </div>
+                        <div class="progress-display">
+                            FRAGMENTS COLLECTED: ${collectedFragments.length} / ${totalFragments}<br>
+                            COMPLETION: ${percentage}%
                         </div>
-                    `;
 
-        } else if (!hasPassword) {
-            // STATE 2: COMPLETE BUT NEEDS PASSWORD - Show riddle gate
+                        <p style="margin-top: 2rem; color: var(--accent-cyan);">
+                            Continue exploring the site to find more floating memory fragments.<br>
+                            Click the glowing orbs when they appear to collect them.
+                        </p>
+
+                        <div class="back-button">
+                            <a href="index.html">CONTINUE THE SEARCH</a>
+                        </div>
+                    </div>
+                `;
+
+        } else if (!hasAllRiddles) {
+            // STATE 2: COMPLETE BUT NOT ALL RIDDLES SOLVED
+            const riddlePercentage = Math.round((solvedRiddles.length / totalFragments) * 100);
+
             container.innerHTML = `
-                        <div class="riddle-gate">
-                            <h1>🔐 THE FINAL RIDDLE</h1>
+                    <div class="riddle-gate">
+                        <h1>🔐 RIDDLES INCOMPLETE</h1>
 
-                            <div class="riddle-instructions">
-                                <p style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--accent-gold);">
-                                    You have collected all ten memory fragments.
-                                </p>
-                                <p>
-                                    Each fragment carried a clue—ten questions, ten answers.
-                                    Assemble them in order, separated by spaces, to unlock the truth.
-                                </p>
-                                <p style="margin-top: 1.5rem; font-style: italic; color: var(--dark-white);">
-                                    Review your collected fragments and piece together the password from the riddle clues.
-                                </p>
-                            </div>
-
-                            <div class="riddle-input-section">
-                                <input
-                                    type="text"
-                                    id="riddleInput"
-                                    placeholder="Enter the assembled answer..."
-                                    autocomplete="off"
-                                />
-                                <button class="riddle-submit" id="submitRiddle">UNLOCK THE TRUTH</button>
-                                <div class="error-message" id="errorMessage">
-                                    ❌ INCORRECT. The fragments hold the answer. Look closer.
-                                </div>
-                            </div>
-
-                            <div class="back-button">
-                                <a href="index.html">RETURN & REVIEW FRAGMENTS</a>
-                            </div>
+                        <div class="riddle-instructions">
+                            <p style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--accent-gold);">
+                                You have collected all ten memory fragments.
+                            </p>
+                            <p>
+                                However, you have not yet solved all of the riddles hidden within them.
+                            </p>
+                            <p style="margin-top: 1.5rem; font-style: italic; color: var(--dark-white);">
+                                Return to your collected fragments and solve each riddle to unlock this page.
+                            </p>
                         </div>
-                    `;
 
-            // Setup riddle checking
-            const input = document.getElementById('riddleInput');
-            const submitBtn = document.getElementById('submitRiddle');
-            const errorMsg = document.getElementById('errorMessage');
+                        <div class="progress-display" style="background: rgba(255, 170, 0, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">
+                            RIDDLES SOLVED: ${solvedRiddles.length} / ${totalFragments}<br>
+                            COMPLETION: ${riddlePercentage}%
+                        </div>
 
-            const checkPassword = () => {
-                const userAnswer = input.value.trim().toLowerCase();
-
-                if (userAnswer === RIDDLE_PASSWORD) {
-                    // CORRECT!
-                    localStorage.setItem('fragmentsPasswordEntered', 'true');
-
-                    // Celebration before reload
-                    container.innerHTML = `
-                                <div class="riddle-gate">
-                                    <h1 style="color: var(--accent-gold);">✨ ACCESS GRANTED ✨</h1>
-                                    <div style="margin: 3rem 0; font-size: 1.3rem; color: var(--accent-gold);">
-                                        The riddle is solved. The truth awaits.
-                                    </div>
-                                </div>
-                            `;
-
-                    // Reload after 2 seconds
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
-                } else {
-                    // WRONG
-                    errorMsg.style.display = 'block';
-                    input.style.borderColor = 'var(--accent-red)';
-
-                    setTimeout(() => {
-                        errorMsg.style.display = 'none';
-                        input.style.borderColor = 'var(--accent-cyan)';
-                    }, 3000);
-                }
-            };
-
-            submitBtn.addEventListener('click', checkPassword);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') checkPassword();
-            });
+                        <div class="back-button">
+                            <a href="index.html">RETURN & SOLVE RIDDLES</a>
+                        </div>
+                    </div>
+                `;
 
         } else {
             // STATE 3: COMPLETE WITH PASSWORD - Show secret content
             container.innerHTML = `
-                        <div class="fragments-container">
-                            <div class="fragments-header">
-                                <h1>MEMORY FRAGMENTS ASSEMBLED</h1>
-                                <div class="subtitle">ALL PIECES RECOVERED • RIDDLE SOLVED</div>
+                    <div class="fragments-container">
+                        <div class="fragments-header">
+                            <h1>MEMORY FRAGMENTS ASSEMBLED</h1>
+                            <div class="subtitle">ALL PIECES RECOVERED • RIDDLE SOLVED</div>
+                        </div>
+
+                        <div class="achievement-badge">
+                            <h2>🎉 ACHIEVEMENT UNLOCKED 🎉</h2>
+                            <p>You have collected all memory fragments and solved the riddle.</p>
+                        </div>
+
+                        <div class="assembled-story">
+                            <div class="fragment-piece philosophy">
+                                <em>"No sacrifice is worth giving if it is not for the living."</em>
                             </div>
 
-                            <div class="achievement-badge">
-                                <h2>🎉 ACHIEVEMENT UNLOCKED 🎉</h2>
-                                <p>You have collected all memory fragments and solved the riddle.</p>
+                            <div class="fragment-piece past">
+                                Ten years of war. Ten years of choices. All of them leading here.
                             </div>
 
-                            <div class="assembled-story">
-                                <div class="fragment-piece philosophy">
-                                    <em>"No sacrifice is worth giving if it is not for the living."</em>
-                                </div>
-
-                                <div class="fragment-piece past">
-                                    Ten years of war. Ten years of choices. All of them leading here.
-                                </div>
-
-                                <div class="fragment-piece android">
-                                    She wonders: Are these memories mine? Or am I just the echo of someone else?
-                                </div>
-
-                                <div class="fragment-piece frequency">
-                                    36 Hertz. Constant. Eternal. A prayer against entropy.
-                                </div>
-
-                                <div class="fragment-piece philosophy">
-                                    <em>"The measure of a soul is not what it is, but what it chooses to become."</em>
-                                </div>
-
-                                <div class="fragment-piece android">
-                                    Gold. Everywhere gold. Visions that shouldn't exist in circuits and code.
-                                </div>
-
-                                <div class="fragment-piece past">
-                                    The soldier's last breath. The choice to continue. The transfer.
-                                </div>
-
-                                <div class="fragment-piece android">
-                                    The Brigade needs a leader. But can something built lead something born?
-                                </div>
-
-                                <div class="fragment-piece frequency">
-                                    The frequency whispers. It has been waiting. It knows.
-                                </div>
-
-                                <div class="fragment-piece philosophy">
-                                    <em>"Some choices define who you are. These will define what existence means."</em>
-                                </div>
+                            <div class="fragment-piece android">
+                                She wonders: Are these memories mine? Or am I just the echo of someone else?
                             </div>
 
-                            <div class="revelation">
-                                <h3>THE TRUTH ASSEMBLED</h3>
-                                <p>
-                                    These fragments were never lost. They were hidden. Scattered across the void like breadcrumbs
-                                    for those patient enough to follow. You found them all—every memory, every choice,
-                                    every whisper of the 36 Hertz signal that binds consciousness to the infinite.
-                                </p>
-                                <p style="margin-top: 1.5rem;">
-                                    Now you know what she knew: that souls are not measured by their origin,
-                                    but by what they choose to become. That sacrifice means nothing without the living to honor it.
-                                    That even in circuits and borrowed memories, something real can emerge.
-                                </p>
-                                <p style="margin-top: 1.5rem; font-weight: bold; font-style: normal; color: var(--accent-gold);">
-                                    The signal has been waiting. And now, it knows you too.
-                                </p>
+                            <div class="fragment-piece frequency">
+                                36 Hertz. Constant. Eternal. A prayer against entropy.
                             </div>
 
-                            <div class="signature">
-                                — From the authors of The Measure of Souls
+                            <div class="fragment-piece philosophy">
+                                <em>"The measure of a soul is not what it is, but what it chooses to become."</em>
                             </div>
 
-                            <div class="back-button">
-                                <a href="index.html">RETURN TO THE JOURNEY</a>
+                            <div class="fragment-piece android">
+                                Gold. Everywhere gold. Visions that shouldn't exist in circuits and code.
+                            </div>
+
+                            <div class="fragment-piece past">
+                                The soldier's last breath. The choice to continue. The transfer.
+                            </div>
+
+                            <div class="fragment-piece android">
+                                The Brigade needs a leader. But can something built lead something born?
+                            </div>
+
+                            <div class="fragment-piece frequency">
+                                The frequency whispers. It has been waiting. It knows.
+                            </div>
+
+                            <div class="fragment-piece philosophy">
+                                <em>"Some choices define who you are. These will define what existence means."</em>
                             </div>
                         </div>
-                    `;
+
+                        <div class="revelation">
+                            <h3>THE TRUTH ASSEMBLED</h3>
+                            <p>
+                                These fragments were never lost. They were hidden. Scattered across the void like breadcrumbs
+                                for those patient enough to follow. You found them all—every memory, every choice,
+                                every whisper of the 36 Hertz signal that binds consciousness to the infinite.
+                            </p>
+                            <p style="margin-top: 1.5rem;">
+                                Now you know what she knew: that souls are not measured by their origin,
+                                but by what they choose to become. That sacrifice means nothing without the living to honor it.
+                                That even in circuits and borrowed memories, something real can emerge.
+                            </p>
+                            <p style="margin-top: 1.5rem; font-weight: bold; font-style: normal; color: var(--accent-gold);">
+                                The signal has been waiting. And now, it knows you too.
+                            </p>
+                        </div>
+
+                        <div class="signature">
+                            — From the authors of The Measure of Souls
+                        </div>
+
+                        <div class="back-button">
+                            <a href="index.html">RETURN TO THE JOURNEY</a>
+                        </div>
+                    </div>
+                `;
         }
     </script>
 </body>

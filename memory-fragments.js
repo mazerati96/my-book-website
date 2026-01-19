@@ -8,70 +8,90 @@ const memoryFragments = [
         type: 'quote',
         content: '"No sacrifice is worth giving if it is not for the living."',
         category: 'philosophy',
-        riddleClue: 'FIRST WORD: What remains when all else fades? (4 letters)'
+        riddleClue: 'What remains when all else fades?',
+        riddleAnswer: 'soul',
+        riddleHint: '(4 letters)'
     },
     {
         id: 'frag-002',
         type: 'memory',
         content: 'Ten years of war. Ten years of choices. All of them leading here.',
         category: 'past',
-        riddleClue: 'SECOND WORD: What am I if not my memories? (4 letters)'
+        riddleClue: 'What am I if not my memories?',
+        riddleAnswer: 'mind',
+        riddleHint: '(4 letters)'
     },
     {
         id: 'frag-003',
         type: 'thought',
         content: 'She wonders: Are these memories mine? Or am I just the echo of someone else?',
         category: 'android',
-        riddleClue: 'THIRD WORD: Built, not born. What defines me? (6 letters)'
+        riddleClue: 'Built, not born. What defines me?',
+        riddleAnswer: 'choice',
+        riddleHint: '(6 letters)'
     },
     {
         id: 'frag-004',
         type: 'signal',
         content: '36 Hertz. Constant. Eternal. A prayer against entropy.',
         category: 'frequency',
-        riddleClue: 'FOURTH WORD: The measure of all things. (5 letters)'
+        riddleClue: 'The measure of all things.',
+        riddleAnswer: 'souls',
+        riddleHint: '(5 letters)'
     },
     {
         id: 'frag-005',
         type: 'quote',
         content: '"The measure of a soul is not what it is, but what it chooses to become."',
         category: 'philosophy',
-        riddleClue: 'FIFTH WORD: What you do when you decide. (6 letters)'
+        riddleClue: 'What you do when you decide.',
+        riddleAnswer: 'choose',
+        riddleHint: '(6 letters)'
     },
     {
         id: 'frag-006',
         type: 'vision',
         content: 'Gold. Everywhere gold. Visions that shouldn\'t exist in circuits and code.',
         category: 'android',
-        riddleClue: 'SIXTH WORD: What the frequency calls to. (5 letters)'
+        riddleClue: 'What the frequency calls to.',
+        riddleAnswer: 'minds',
+        riddleHint: '(5 letters)'
     },
     {
         id: 'frag-007',
         type: 'memory',
         content: 'The soldier\'s last breath. The choice to continue. The transfer.',
         category: 'past',
-        riddleClue: 'SEVENTH WORD: Without this, no choice matters. (7 letters)'
+        riddleClue: 'Without this, no choice matters.',
+        riddleAnswer: 'purpose',
+        riddleHint: '(7 letters)'
     },
     {
         id: 'frag-008',
         type: 'thought',
         content: 'The Brigade needs a leader. But can something built lead something born?',
         category: 'android',
-        riddleClue: 'EIGHTH WORD: To show the way forward. (4 letters)'
+        riddleClue: 'To show the way forward.',
+        riddleAnswer: 'lead',
+        riddleHint: '(4 letters)'
     },
     {
         id: 'frag-009',
         type: 'signal',
         content: 'The frequency whispers. It has been waiting. It knows.',
         category: 'frequency',
-        riddleClue: 'NINTH WORD: Where consciousness meets circuitry. (3 letters)'
+        riddleClue: 'Where consciousness meets circuitry.',
+        riddleAnswer: 'her',
+        riddleHint: '(3 letters)'
     },
     {
         id: 'frag-010',
         type: 'quote',
         content: '"Some choices define who you are. These will define what existence means."',
         category: 'philosophy',
-        riddleClue: 'TENTH WORD: Everything that is. (9 letters)'
+        riddleClue: 'Everything that is.',
+        riddleAnswer: 'existence',
+        riddleHint: '(9 letters)'
     }
 ];
 
@@ -85,6 +105,7 @@ class MemoryFragmentSystem {
         this.spawnInterval = 15000;
         this.container = null;
         this.collectedFragments = this.loadCollectedFragments();
+        this.solvedRiddles = this.loadSolvedRiddles();
         this.progressTracker = null;
         this.isMinimized = this.loadMinimizedState();
         this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'b', 'a'];
@@ -99,6 +120,15 @@ class MemoryFragmentSystem {
 
     saveCollectedFragments() {
         localStorage.setItem('collectedMemoryFragments', JSON.stringify(this.collectedFragments));
+    }
+
+    loadSolvedRiddles() {
+        const saved = localStorage.getItem('solvedRiddles');
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    saveSolvedRiddles() {
+        localStorage.setItem('solvedRiddles', JSON.stringify(this.solvedRiddles));
     }
 
     loadMinimizedState() {
@@ -128,10 +158,12 @@ class MemoryFragmentSystem {
     }
 
     activateKonamiCode() {
-        // Unlock all fragments
+        // Unlock all fragments AND riddles
         const allFragmentIds = memoryFragments.map(f => f.id);
         this.collectedFragments = allFragmentIds;
+        this.solvedRiddles = allFragmentIds;
         this.saveCollectedFragments();
+        this.saveSolvedRiddles();
         this.updateProgressTracker();
 
         // Show special message
@@ -143,12 +175,12 @@ class MemoryFragmentSystem {
         modal.style.borderColor = 'var(--accent-gold)';
         modal.innerHTML = `
             <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
-                ⚡DEVELOPER ACCESS GRANTED⚡
+                ⚡ DEVELOPER ACCESS GRANTED ⚡
             </div>
             <div class="memory-modal-content" style="font-style: normal; color: var(--accent-gold);">
                 All memory fragments have been unlocked via Konami Code.<br><br>
-                The secret page is now accessible.<br>
-                You may also see the riddle system.
+                All riddles have been solved automatically.<br>
+                The secret page is now accessible.
             </div>
             <button class="memory-modal-close" style="background-color: var(--accent-gold);">ACCESS GRANTED</button>
         `;
@@ -196,7 +228,7 @@ class MemoryFragmentSystem {
         this.progressTracker.style.cssText = `
             position: fixed;
             bottom: 20px;
-            right: 380px;
+            right: 320px;
             background: rgba(10, 10, 10, 0.95);
             border: 2px solid var(--accent-cyan);
             padding: 1rem;
@@ -409,12 +441,14 @@ class MemoryFragmentSystem {
     updateProgressTracker() {
         const collected = this.collectedFragments.length;
         const total = memoryFragments.length;
+        const solvedCount = this.solvedRiddles.length;
         const percentage = Math.round((collected / total) * 100);
 
         this.contentContainer.innerHTML = `
             <div style="margin-bottom: 0.5rem;">📦 MEMORY FRAGMENTS</div>
             <div style="font-size: 1.2rem; font-weight: bold;">${collected} / ${total}</div>
             <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.3rem;">${percentage}% Complete</div>
+            <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.3rem;">🔐 Riddles: ${solvedCount}/${total}</div>
             <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.5rem;">Click to view</div>
         `;
     }
@@ -586,14 +620,85 @@ class MemoryFragmentSystem {
                 transform: translateY(-5px);
             }
 
-            .riddle-clue {
+            .riddle-section {
                 background: rgba(255, 170, 0, 0.1);
                 border: 1px solid var(--accent-gold);
-                padding: 0.5rem;
-                margin-top: 0.5rem;
-                font-size: 0.7rem;
+                padding: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .riddle-question {
                 color: var(--accent-gold);
+                font-size: 0.9rem;
+                margin-bottom: 0.8rem;
                 font-style: italic;
+            }
+
+            .riddle-input-wrapper {
+                display: flex;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .riddle-input {
+                flex: 1;
+                background: rgba(0, 0, 0, 0.5);
+                border: 1px solid var(--accent-gold);
+                color: var(--accent-gold);
+                padding: 0.5rem;
+                font-family: 'Courier New', monospace;
+                text-align: center;
+            }
+
+            .riddle-input:focus {
+                outline: none;
+                box-shadow: 0 0 10px var(--accent-gold);
+            }
+
+            .riddle-submit {
+                background: var(--accent-gold);
+                color: var(--bg-black);
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+
+            .riddle-submit:hover {
+                box-shadow: 0 0 15px var(--accent-gold);
+            }
+
+            .riddle-feedback {
+                font-size: 0.8rem;
+                margin-top: 0.5rem;
+                font-weight: bold;
+                display: none;
+            }
+
+            .riddle-feedback.correct {
+                color: #00ff88;
+                display: block;
+            }
+
+            .riddle-feedback.wrong {
+                color: #ff0033;
+                display: block;
+            }
+
+            .riddle-solved {
+                background: rgba(0, 255, 136, 0.2);
+                border: 1px solid #00ff88;
+                padding: 1rem;
+                margin-top: 1.5rem;
+                text-align: center;
+            }
+
+            .riddle-answer-display {
+                color: #00ff88;
+                font-size: 1.1rem;
+                font-weight: bold;
+                margin-top: 0.5rem;
             }
         `;
         document.head.appendChild(style);
@@ -644,6 +749,7 @@ class MemoryFragmentSystem {
 
     revealMemory(memory, fragmentElement) {
         const isNew = !this.collectedFragments.includes(memory.id);
+        const isSolved = this.solvedRiddles.includes(memory.id);
 
         this.removeFragment(fragmentElement);
 
@@ -659,11 +765,114 @@ class MemoryFragmentSystem {
 
         const modal = document.createElement('div');
         modal.className = 'memory-modal';
+
+        let riddleSection = '';
+
+        if (isSolved) {
+            // Already solved - show the answer
+            riddleSection = `
+                <div class="riddle-solved">
+                    <div style="color: #00ff88; font-weight: bold; margin-bottom: 0.5rem;">✓ RIDDLE SOLVED</div>
+                    <div style="color: var(--dark-white); font-size: 0.85rem; margin-bottom: 0.5rem;">${memory.riddleClue}</div>
+                    <div class="riddle-answer-display">${memory.riddleAnswer.toUpperCase()}</div>
+                </div>
+            `;
+        } else {
+            // Not solved - show riddle input
+            riddleSection = `
+                <div class="riddle-section">
+                    <div class="riddle-question">🔐 ${memory.riddleClue} ${memory.riddleHint}</div>
+                    <div class="riddle-input-wrapper">
+                        <input type="text" class="riddle-input" id="riddleInput-${memory.id}" placeholder="Your answer..." autocomplete="off">
+                        <button class="riddle-submit" id="riddleSubmit-${memory.id}">CHECK</button>
+                    </div>
+                    <div class="riddle-feedback" id="riddleFeedback-${memory.id}"></div>
+                </div>
+            `;
+        }
+
         modal.innerHTML = `
             ${isNew ? '<div class="new-fragment-badge">✨ NEW FRAGMENT COLLECTED!</div>' : ''}
             <div class="memory-modal-content">${memory.content}</div>
-            ${isNew ? `<div class="riddle-clue">${memory.riddleClue}</div>` : ''}
+            ${riddleSection}
             <button class="memory-modal-close">CLOSE</button>
+        `;
+
+        document.body.appendChild(backdrop);
+        document.body.appendChild(modal);
+
+        // Setup riddle checking if not solved
+        if (!isSolved) {
+            const input = document.getElementById(`riddleInput-${memory.id}`);
+            const submitBtn = document.getElementById(`riddleSubmit-${memory.id}`);
+            const feedback = document.getElementById(`riddleFeedback-${memory.id}`);
+
+            const checkAnswer = () => {
+                const userAnswer = input.value.trim().toLowerCase();
+
+                if (userAnswer === memory.riddleAnswer.toLowerCase()) {
+                    // CORRECT!
+                    this.solvedRiddles.push(memory.id);
+                    this.saveSolvedRiddles();
+                    this.updateProgressTracker();
+
+                    feedback.className = 'riddle-feedback correct';
+                    feedback.textContent = `✓ CORRECT! The answer is: ${memory.riddleAnswer.toUpperCase()}`;
+                    input.disabled = true;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'SOLVED';
+
+                    // Check if all riddles are solved
+                    if (this.solvedRiddles.length === memoryFragments.length) {
+                        setTimeout(() => {
+                            this.showAllRiddlesSolved();
+                        }, 2000);
+                    }
+                } else {
+                    // WRONG
+                    feedback.className = 'riddle-feedback wrong';
+                    feedback.textContent = '✗ Try again. Think about the fragment\'s meaning...';
+
+                    setTimeout(() => {
+                        feedback.style.display = 'none';
+                    }, 3000);
+                }
+            };
+
+            submitBtn.addEventListener('click', checkAnswer);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkAnswer();
+            });
+        }
+
+        const closeModal = () => {
+            backdrop.remove();
+            modal.remove();
+        };
+
+        modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+        console.log(`Memory revealed: ${memory.content} ${isNew ? '(NEW!)' : '(DUPLICATE)'}`);
+    }
+
+    showAllRiddlesSolved() {
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+
+        const modal = document.createElement('div');
+        modal.className = 'memory-modal';
+        modal.style.borderColor = 'var(--accent-gold)';
+        modal.innerHTML = `
+            <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
+                🎉 ALL RIDDLES SOLVED! 🎉
+            </div>
+            <div class="memory-modal-content" style="font-style: normal; color: var(--primary-white);">
+                You have collected all memory fragments and solved every riddle.<br><br>
+                The secret page is now accessible.<br><br>
+                Visit <span style="color: var(--accent-cyan);">/fragments-complete.html</span> to see the truth assembled.
+            </div>
+            <button class="memory-modal-close" style="background-color: var(--accent-gold);">CONTINUE</button>
         `;
 
         document.body.appendChild(backdrop);
@@ -676,8 +885,6 @@ class MemoryFragmentSystem {
 
         modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
         backdrop.addEventListener('click', closeModal);
-
-        console.log(`Memory revealed: ${memory.content} ${isNew ? '(NEW!)' : '(DUPLICATE)'}`);
     }
 
     checkMilestones() {
@@ -705,7 +912,7 @@ class MemoryFragmentSystem {
             reward = 'The pattern emerges. The signal strengthens.';
         } else if (collected === total) {
             message = '🎉 COLLECTION COMPLETE! 🎉';
-            reward = 'All fragments recovered. The riddle is complete. Can you solve it to access the secret page?';
+            reward = 'All fragments recovered. Now solve the riddles to unlock the secret page.';
         }
 
         const backdrop = document.createElement('div');
@@ -748,17 +955,26 @@ class MemoryFragmentSystem {
 
         const gridHtml = memoryFragments.map(frag => {
             const isCollected = this.collectedFragments.includes(frag.id);
+            const isSolved = this.solvedRiddles.includes(frag.id);
             return `
                 <div class="collection-item ${isCollected ? 'collected' : 'locked'}">
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">
-                        ${isCollected ? '✓' : '🔒'}
+                        ${isCollected ? (isSolved ? '✓' : '🔐') : '🔒'}
                     </div>
                     <div style="font-size: 0.8rem; opacity: 0.7;">
                         ${frag.category.toUpperCase()}
                     </div>
                     ${isCollected ? `
                         <div style="font-size: 0.75rem; margin-top: 0.5rem; font-style: italic;">"${frag.content.substring(0, 50)}..."</div>
-                        <div class="riddle-clue">${frag.riddleClue}</div>
+                        ${isSolved ? `
+                            <div style="margin-top: 0.5rem; padding: 0.3rem; background: rgba(0, 255, 136, 0.2); border: 1px solid #00ff88; font-size: 0.7rem; color: #00ff88;">
+                                RIDDLE SOLVED: ${frag.riddleAnswer.toUpperCase()}
+                            </div>
+                        ` : `
+                            <div style="margin-top: 0.5rem; padding: 0.3rem; background: rgba(255, 170, 0, 0.2); border: 1px solid var(--accent-gold); font-size: 0.7rem; color: var(--accent-gold);">
+                                ${frag.riddleClue}
+                            </div>
+                        `}
                     ` : ''}
                 </div>
             `;
@@ -769,7 +985,8 @@ class MemoryFragmentSystem {
                 MEMORY FRAGMENT COLLECTION
             </div>
             <div style="text-align: center; margin-bottom: 1rem; color: var(--dark-white);">
-                ${this.collectedFragments.length} / ${memoryFragments.length} Collected
+                ${this.collectedFragments.length} / ${memoryFragments.length} Collected • 
+                ${this.solvedRiddles.length} / ${memoryFragments.length} Riddles Solved
             </div>
             <div class="collection-grid">
                 ${gridHtml}
