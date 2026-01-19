@@ -186,16 +186,16 @@ function createBlackHole() {
     blackHole.position.set(-500, 200, -1500);
     scene.add(blackHole);
 
-    // Create multi-layered accretion disk with color gradients
+    // Create VIBRANT multi-layered accretion disk
     const diskLayers = [];
 
-    // Layer 1: Inner hot region (blue-white)
+    // Layer 1: Inner BLAZING region (electric blue-white)
     const innerDisk = new THREE.RingGeometry(85, 120, 64);
     const innerMaterial = new THREE.MeshBasicMaterial({
-        color: 0x88ccff,
+        color: 0x00ffff, // BRIGHT CYAN
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.9
     });
     const innerRing = new THREE.Mesh(innerDisk, innerMaterial);
     innerRing.position.copy(blackHole.position);
@@ -203,13 +203,13 @@ function createBlackHole() {
     scene.add(innerRing);
     diskLayers.push(innerRing);
 
-    // Layer 2: Mid region (cyan-green transition)
+    // Layer 2: Mid region (NEON GREEN)
     const midDisk1 = new THREE.RingGeometry(120, 160, 64);
     const midMaterial1 = new THREE.MeshBasicMaterial({
-        color: 0x00ffaa,
+        color: 0x00ff88, // BRIGHT GREEN
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.6
+        opacity: 0.75
     });
     const midRing1 = new THREE.Mesh(midDisk1, midMaterial1);
     midRing1.position.copy(blackHole.position);
@@ -217,13 +217,13 @@ function createBlackHole() {
     scene.add(midRing1);
     diskLayers.push(midRing1);
 
-    // Layer 3: Mid-outer region (yellow-orange)
+    // Layer 3: Mid-outer region (BRIGHT GOLD)
     const midDisk2 = new THREE.RingGeometry(160, 200, 64);
     const midMaterial2 = new THREE.MeshBasicMaterial({
-        color: 0xffaa00,
+        color: 0xffaa00, // BRIGHT GOLD/ORANGE
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.65
     });
     const midRing2 = new THREE.Mesh(midDisk2, midMaterial2);
     midRing2.position.copy(blackHole.position);
@@ -231,13 +231,13 @@ function createBlackHole() {
     scene.add(midRing2);
     diskLayers.push(midRing2);
 
-    // Layer 4: Outer region (orange-red)
+    // Layer 4: Outer region (HOT PINK/RED)
     const outerDisk = new THREE.RingGeometry(200, 240, 64);
     const outerMaterial = new THREE.MeshBasicMaterial({
-        color: 0xff3300,
+        color: 0xff0066, // HOT PINK
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.4
+        opacity: 0.55
     });
     const outerRing = new THREE.Mesh(outerDisk, outerMaterial);
     outerRing.position.copy(blackHole.position);
@@ -245,13 +245,13 @@ function createBlackHole() {
     scene.add(outerRing);
     diskLayers.push(outerRing);
 
-    // Layer 5: Outermost faint glow (deep red/purple)
+    // Layer 5: Outermost PURPLE glow
     const glowDisk = new THREE.RingGeometry(240, 300, 64);
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: 0xaa0066,
+        color: 0xaa00ff, // BRIGHT PURPLE
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.2
+        opacity: 0.35
     });
     const glowRing = new THREE.Mesh(glowDisk, glowMaterial);
     glowRing.position.copy(blackHole.position);
@@ -259,22 +259,96 @@ function createBlackHole() {
     scene.add(glowRing);
     diskLayers.push(glowRing);
 
-    // Add a subtle gravitational lensing effect (light bending visualization)
+    // PHOTON RING (gravitational lensing - BRIGHT WHITE)
     const lensGeometry = new THREE.RingGeometry(75, 85, 64);
     const lensMaterial = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.6
     });
     const photonRing = new THREE.Mesh(lensGeometry, lensMaterial);
     photonRing.position.copy(blackHole.position);
     photonRing.rotation.x = Math.PI / 2;
     scene.add(photonRing);
 
-    // Store for animation
+    // ======================================
+    // PARTICLE SYSTEM - Swirling matter!
+    // ======================================
+    const particleCount = 3000;
+    const particleGeometry = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+    const particleVelocities = [];
+
+    for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+
+        // Random position in disk
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 100 + Math.random() * 200; // Between inner and outer disk
+        const height = (Math.random() - 0.5) * 20; // Slight thickness
+
+        particlePositions[i3] = Math.cos(angle) * radius;
+        particlePositions[i3 + 1] = height;
+        particlePositions[i3 + 2] = Math.sin(angle) * radius;
+
+        // Color based on distance from center (mimics disk colors)
+        if (radius < 130) {
+            // CYAN
+            particleColors[i3] = 0.0;
+            particleColors[i3 + 1] = 1.0;
+            particleColors[i3 + 2] = 1.0;
+        } else if (radius < 170) {
+            // GREEN
+            particleColors[i3] = 0.0;
+            particleColors[i3 + 1] = 1.0;
+            particleColors[i3 + 2] = 0.5;
+        } else if (radius < 210) {
+            // GOLD
+            particleColors[i3] = 1.0;
+            particleColors[i3 + 1] = 0.7;
+            particleColors[i3 + 2] = 0.0;
+        } else if (radius < 250) {
+            // PINK
+            particleColors[i3] = 1.0;
+            particleColors[i3 + 1] = 0.0;
+            particleColors[i3 + 2] = 0.4;
+        } else {
+            // PURPLE
+            particleColors[i3] = 0.7;
+            particleColors[i3 + 1] = 0.0;
+            particleColors[i3 + 2] = 1.0;
+        }
+
+        // Store velocity data for rotation
+        particleVelocities.push({
+            angle: angle,
+            radius: radius,
+            speed: 0.002 + (1 / radius) * 30 // Inner particles move faster
+        });
+    }
+
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+    const particleMaterial = new THREE.PointsMaterial({
+        size: 3,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending // Makes particles glow!
+    });
+
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    particleSystem.position.copy(blackHole.position);
+    scene.add(particleSystem);
+
+    // Store everything for animation
     blackHole.diskLayers = diskLayers;
     blackHole.photonRing = photonRing;
+    blackHole.particleSystem = particleSystem;
+    blackHole.particleVelocities = particleVelocities;
 
     blackHole.userData.locationId = 'Charybdis Prime';
     blackHole.userData.type = 'location';
@@ -329,19 +403,40 @@ function animate() {
         // Rotate each layer at different speeds (differential rotation)
         blackHole.diskLayers.forEach((layer, index) => {
             // Inner layers rotate faster (like a real accretion disk)
-            const speed = 0.003 - (index * 0.0005);
+            const speed = 0.004 - (index * 0.0007);
             layer.rotation.z += speed;
 
-            // Subtle pulsing effect
-            const pulse = Math.sin(time + index) * 0.1 + 0.9;
-            layer.material.opacity = (0.8 - index * 0.1) * pulse;
+            // VIBRANT pulsing effect
+            const pulse = Math.sin(time * 1.5 + index) * 0.15 + 0.85;
+            layer.material.opacity = (0.9 - index * 0.12) * pulse;
         });
 
-        // Photon ring pulse (light bending effect)
+        // Photon ring intense pulse
         if (blackHole.photonRing) {
-            const photonPulse = Math.sin(time * 2) * 0.2 + 0.3;
+            const photonPulse = Math.sin(time * 3) * 0.3 + 0.6;
             blackHole.photonRing.material.opacity = photonPulse;
-            blackHole.photonRing.rotation.z += 0.01;
+            blackHole.photonRing.rotation.z += 0.015;
+        }
+
+        // ANIMATE PARTICLES - Spiral motion!
+        if (blackHole.particleSystem && blackHole.particleVelocities) {
+            const positions = blackHole.particleSystem.geometry.attributes.position.array;
+
+            blackHole.particleVelocities.forEach((vel, i) => {
+                const i3 = i * 3;
+
+                // Update angle (orbital motion)
+                vel.angle += vel.speed;
+
+                // Calculate new position
+                positions[i3] = Math.cos(vel.angle) * vel.radius;
+                positions[i3 + 2] = Math.sin(vel.angle) * vel.radius;
+
+                // Add slight wobble
+                positions[i3 + 1] += Math.sin(time * 2 + i) * 0.1;
+            });
+
+            blackHole.particleSystem.geometry.attributes.position.needsUpdate = true;
         }
     }
 
@@ -353,6 +448,7 @@ function animate() {
 
     renderer.render(scene, camera);
 }
+
 // Mouse controls
 function onMouseDown(e) {
     isDragging = true;
