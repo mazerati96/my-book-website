@@ -89,13 +89,6 @@ body {
         display: none;
     }
 
-/* OPTIONAL: Remove the line above and uncomment this to DISABLE noise completely */
-/*
-.matrix-style-bg::after {
-    display: none;
-}
-*/
-
 /* Parallax layers - controlled by JS */
 .parallax-layer {
     position: fixed;
