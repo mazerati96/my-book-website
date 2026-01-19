@@ -11,6 +11,7 @@ let previousMouseX = 0;
 let rotationVelocity = { x: 0, y: 0 };
 let raycaster = new THREE.Raycaster();
 let mouseNDC = new THREE.Vector2();
+let universeGroup;
 const SIGNAL_MIN_DISTANCE = 1700;
 const SIGNAL_MAX_DISTANCE = 2600;
 
@@ -80,6 +81,10 @@ function initUniverse() {
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000000, 0.00015);
 
+    // CREATE UNIVERSE GROUP - This will hold everything we want to rotate
+    universeGroup = new THREE.Group();
+    scene.add(universeGroup);
+
     // Camera setup
     camera = new THREE.PerspectiveCamera(
         75,
@@ -122,6 +127,7 @@ function initUniverse() {
 }
 
 // Create star field
+// UPDATE createStarField() - add stars to universeGroup instead of scene:
 function createStarField() {
     const starGeometry = new THREE.BufferGeometry();
     const starCount = 15000;
@@ -129,7 +135,6 @@ function createStarField() {
     const colors = new Float32Array(starCount * 3);
 
     for (let i = 0; i < starCount * 3; i += 3) {
-        // Random position in sphere
         const radius = Math.random() * 4000 + 500;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.random() * Math.PI;
@@ -138,20 +143,16 @@ function createStarField() {
         positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
         positions[i + 2] = radius * Math.cos(phi);
 
-        // Star colors (mostly white, some colored)
         const colorChoice = Math.random();
         if (colorChoice > 0.95) {
-            // Red stars
             colors[i] = 1.0;
             colors[i + 1] = 0.3;
             colors[i + 2] = 0.3;
         } else if (colorChoice > 0.90) {
-            // Blue stars
             colors[i] = 0.3;
             colors[i + 1] = 0.5;
             colors[i + 2] = 1.0;
         } else {
-            // White stars
             const brightness = Math.random() * 0.5 + 0.5;
             colors[i] = brightness;
             colors[i + 1] = brightness;
@@ -170,7 +171,7 @@ function createStarField() {
     });
 
     starField = new THREE.Points(starGeometry, starMaterial);
-    scene.add(starField);
+    universeGroup.add(starField); // Changed from scene.add()
 }
 
 // Create black hole with glow
@@ -184,7 +185,7 @@ function createBlackHole() {
     });
     blackHole = new THREE.Mesh(geometry, material);
     blackHole.position.set(-500, 200, -1500);
-    scene.add(blackHole);
+    universeGroup.add(blackHole);
 
     // Create VIBRANT multi-layered accretion disk
     const diskLayers = [];
@@ -200,7 +201,7 @@ function createBlackHole() {
     const innerRing = new THREE.Mesh(innerDisk, innerMaterial);
     innerRing.position.copy(blackHole.position);
     innerRing.rotation.x = Math.PI / 2;
-    scene.add(innerRing);
+    universeGroup.add(innerRing);
     diskLayers.push(innerRing);
 
     // Layer 2: Mid region (NEON GREEN)
@@ -214,7 +215,7 @@ function createBlackHole() {
     const midRing1 = new THREE.Mesh(midDisk1, midMaterial1);
     midRing1.position.copy(blackHole.position);
     midRing1.rotation.x = Math.PI / 2;
-    scene.add(midRing1);
+    universeGroup.add(midRing1);
     diskLayers.push(midRing1);
 
     // Layer 3: Mid-outer region (BRIGHT GOLD)
@@ -228,7 +229,7 @@ function createBlackHole() {
     const midRing2 = new THREE.Mesh(midDisk2, midMaterial2);
     midRing2.position.copy(blackHole.position);
     midRing2.rotation.x = Math.PI / 2;
-    scene.add(midRing2);
+    universeGroup.add(midRing2);
     diskLayers.push(midRing2);
 
     // Layer 4: Outer region (HOT PINK/RED)
@@ -242,7 +243,7 @@ function createBlackHole() {
     const outerRing = new THREE.Mesh(outerDisk, outerMaterial);
     outerRing.position.copy(blackHole.position);
     outerRing.rotation.x = Math.PI / 2;
-    scene.add(outerRing);
+    universeGroup.add(outerRing);
     diskLayers.push(outerRing);
 
     // Layer 5: Outermost PURPLE glow
@@ -256,7 +257,7 @@ function createBlackHole() {
     const glowRing = new THREE.Mesh(glowDisk, glowMaterial);
     glowRing.position.copy(blackHole.position);
     glowRing.rotation.x = Math.PI / 2;
-    scene.add(glowRing);
+    universeGroup.add(glowRing);
     diskLayers.push(glowRing);
 
     // PHOTON RING (gravitational lensing - BRIGHT WHITE)
@@ -270,7 +271,7 @@ function createBlackHole() {
     const photonRing = new THREE.Mesh(lensGeometry, lensMaterial);
     photonRing.position.copy(blackHole.position);
     photonRing.rotation.x = Math.PI / 2;
-    scene.add(photonRing);
+    universeGroup.add(photonRing);
 
     // ======================================
     // PARTICLE SYSTEM - Swirling matter!
@@ -342,7 +343,7 @@ function createBlackHole() {
 
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
     particleSystem.position.copy(blackHole.position);
-    scene.add(particleSystem);
+    universeGroup.add(particleSystem);
 
     // Store everything for animation
     blackHole.diskLayers = diskLayers;
@@ -363,9 +364,6 @@ function createLocationMarkers() {
         'Colonial Authority': { x: -350, y: -150, z: -700 },
         'Sozuna Station Warzone': { x: 150, y: -250, z: -500 }
     };
-    
-    
-
 
     Object.keys(markerPositions).forEach(id => {
         const pos = markerPositions[id];
@@ -379,7 +377,7 @@ function createLocationMarkers() {
         marker.position.set(pos.x, pos.y, pos.z);
         marker.userData.locationId = id;
         marker.userData.type = 'location';
-        scene.add(marker);
+        universeGroup.add(marker); // Changed from scene.add()
         locations.push(marker);
     });
 }
@@ -388,51 +386,45 @@ function createLocationMarkers() {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Rotate star field slowly
+    // Apply momentum rotation to universe group
     if (!isDragging) {
-        starField.rotation.y += 0.0002 + rotationVelocity.y * 0.95;
-        starField.rotation.x += rotationVelocity.x * 0.95;
+        universeGroup.rotation.y += 0.0002 + rotationVelocity.y * 0.95;
+        universeGroup.rotation.x += rotationVelocity.x * 0.95;
+
+        // Clamp X rotation
+        universeGroup.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, universeGroup.rotation.x));
+
         rotationVelocity.x *= 0.95;
         rotationVelocity.y *= 0.95;
     }
 
-    // Animate black hole accretion disk
+    // Animate black hole accretion disk (keep your existing code)
     if (blackHole && blackHole.diskLayers) {
         const time = Date.now() * 0.001;
 
-        // Rotate each layer at different speeds (differential rotation)
         blackHole.diskLayers.forEach((layer, index) => {
-            // Inner layers rotate faster (like a real accretion disk)
             const speed = 0.004 - (index * 0.0007);
             layer.rotation.z += speed;
 
-            // VIBRANT pulsing effect
             const pulse = Math.sin(time * 1.5 + index) * 0.15 + 0.85;
             layer.material.opacity = (0.9 - index * 0.12) * pulse;
         });
 
-        // Photon ring intense pulse
         if (blackHole.photonRing) {
             const photonPulse = Math.sin(time * 3) * 0.3 + 0.6;
             blackHole.photonRing.material.opacity = photonPulse;
             blackHole.photonRing.rotation.z += 0.015;
         }
 
-        // ANIMATE PARTICLES - Spiral motion!
         if (blackHole.particleSystem && blackHole.particleVelocities) {
             const positions = blackHole.particleSystem.geometry.attributes.position.array;
 
             blackHole.particleVelocities.forEach((vel, i) => {
                 const i3 = i * 3;
-
-                // Update angle (orbital motion)
                 vel.angle += vel.speed;
 
-                // Calculate new position
                 positions[i3] = Math.cos(vel.angle) * vel.radius;
                 positions[i3 + 2] = Math.sin(vel.angle) * vel.radius;
-
-                // Add slight wobble
                 positions[i3 + 1] += Math.sin(time * 2 + i) * 0.1;
             });
 
@@ -461,8 +453,12 @@ function onMouseMove(e) {
         const deltaX = e.clientX - previousMouseX;
         const deltaY = e.clientY - previousMouseY;
 
-        starField.rotation.y += deltaX * 0.005;
-        starField.rotation.x += deltaY * 0.005;
+        // Rotate the ENTIRE UNIVERSE GROUP
+        universeGroup.rotation.y += deltaX * 0.005;
+        universeGroup.rotation.x += deltaY * 0.005;
+
+        // Clamp X rotation so you don't flip upside down (optional)
+        universeGroup.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, universeGroup.rotation.x));
 
         rotationVelocity.y = deltaX * 0.0001;
         rotationVelocity.x = deltaY * 0.0001;
