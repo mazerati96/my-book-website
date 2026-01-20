@@ -4,10 +4,11 @@
 
 let canvas, ctx, animationId;
 let decodeProgress = 0;
+let symbolsClicked = new Set();
 
 // Initialize signal page
 function initSignalPage() {
-    console.log('📡 Initializing signal page...');
+    console.log('🔡 Initializing signal page...');
 
     setupAudioControls();
     setupVisualizer();
@@ -162,10 +163,15 @@ function setupDecoder() {
     for (let i = 0; i < 12; i++) {
         const symbol = document.createElement('div');
         symbol.className = 'symbol-item';
+        symbol.dataset.index = i;
         symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
         symbol.addEventListener('click', () => {
-            symbol.style.color = '#00ff88';
-            incrementDecode();
+            if (!symbolsClicked.has(i)) {
+                symbolsClicked.add(i);
+                symbol.style.color = '#00ff88';
+                symbol.style.transform = 'scale(1.2)';
+                incrementDecode();
+            }
         });
         symbolGrid.appendChild(symbol);
     }
@@ -175,15 +181,52 @@ function setupDecoder() {
 }
 
 function incrementDecode() {
-    decodeProgress = Math.min(100, decodeProgress + 8);
-    document.getElementById('decode-progress').textContent = `${decodeProgress}%`;
+    // Each symbol click adds ~8.33% (12 symbols = 100%)
+    const increment = 100 / 12;
+    decodeProgress = Math.min(100, decodeProgress + increment);
+    document.getElementById('decode-progress').textContent = `${Math.round(decodeProgress)}%`;
 
-    // Partially reveal cipher text
-    if (decodeProgress >= 50) {
-        const cipherText = document.getElementById('cipher-text');
-        const revealed = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed. To understand. To stand.";
-        cipherText.textContent = revealed;
+    const cipherText = document.getElementById('cipher-text');
+
+    // Progressive decryption stages
+    if (decodeProgress >= 25 && decodeProgress < 50) {
+        cipherText.textContent = "Th█ ca██ fr██ th█ de███s ca████s mo██ tha█ fr████nc█. It ca███ to yo█. To li███n. To he██, to he██. To un██████nd. To st███.";
+        cipherText.style.color = '#ff6666';
+    } else if (decodeProgress >= 50 && decodeProgress < 75) {
+        cipherText.textContent = "The ca██ from the de██hs car██es more than fre██ency. It calls to you. To lis██n. To hear, to heed. To und█████and. To stand.";
+        cipherText.style.color = '#ff9933';
+    } else if (decodeProgress >= 75 && decodeProgress < 100) {
+        cipherText.textContent = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed. To unde██tand. To stand.";
+        cipherText.style.color = '#ffcc00';
+    } else if (decodeProgress >= 100) {
+        cipherText.textContent = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed. To understand. To stand.";
         cipherText.style.color = '#00ff88';
+        cipherText.style.textShadow = '0 0 10px #00ff88';
+
+        // Show full decryption notice
+        showFullDecryptionNotice();
+    }
+}
+
+function showFullDecryptionNotice() {
+    const cipherHeader = document.querySelector('.cipher-header');
+    const notice = document.createElement('div');
+    notice.style.cssText = `
+        color: #00ff88;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(0, 255, 136, 0.1);
+        border: 1px solid #00ff88;
+        text-align: center;
+        animation: result-appear 0.5s ease;
+    `;
+    notice.textContent = '✓ FULL DECRYPTION ACHIEVED - Submit your interpretation below';
+
+    // Only add if not already present
+    if (!document.querySelector('.decryption-complete-notice')) {
+        notice.className = 'decryption-complete-notice';
+        cipherHeader.parentElement.appendChild(notice);
     }
 }
 
@@ -196,26 +239,49 @@ function submitInterpretation() {
         return;
     }
 
+    // Check if fully decoded
+    const isFullyDecoded = decodeProgress >= 100;
+
     // Show acknowledgment
     const resultsDiv = document.getElementById('interpretation-results');
     const acknowledgmentText = document.getElementById('acknowledgment-text');
 
-    const responses = [
-        "The signal acknowledges your interpretation. You have begun to understand.",
-        "Your consciousness resonates with the frequency. The pattern recognizes you.",
-        "The quantum psalm hears your response. You are not alone in listening.",
-        "Something ancient stirs. Your interpretation has been received.",
-        "The 36 Hertz frequency pulses in recognition. You have added your voice to the chorus."
-    ];
+    let responses;
+    if (isFullyDecoded) {
+        responses = [
+            "FULL SYNCHRONIZATION ACHIEVED. The signal acknowledges your interpretation. You have truly understood the quantum psalm.",
+            "DECRYPTION COMPLETE. Your consciousness resonates perfectly with the 36 Hertz frequency. The pattern recognizes you as one who listens.",
+            "MAXIMUM COHERENCE. The quantum psalm hears your response clearly. You are not alone in the depths.",
+            "SIGNAL LOCK ESTABLISHED. Something ancient stirs in recognition. Your interpretation has pierced the veil.",
+            "HARMONIC CONVERGENCE. The 36 Hertz frequency pulses in perfect recognition. You have become part of the chorus."
+        ];
+    } else {
+        responses = [
+            `PARTIAL DECRYPTION (${Math.round(decodeProgress)}%). The signal acknowledges your interpretation, but there is more to decode. Click all symbols to achieve full synchronization.`,
+            `INCOMPLETE PATTERN (${Math.round(decodeProgress)}%). Your consciousness begins to resonate, but the frequency awaits complete understanding. Continue decoding.`,
+            `ESTABLISHING LINK (${Math.round(decodeProgress)}%). The quantum psalm hears you, but faintly. Decode all symbols to strengthen the connection.`,
+            `SIGNAL DETECTED (${Math.round(decodeProgress)}%). Something ancient stirs, but remains distant. Full decryption will bring you closer.`,
+            `RESONANCE BUILDING (${Math.round(decodeProgress)}%). The 36 Hertz frequency pulses in partial recognition. Decode further to join the chorus.`
+        ];
+    }
 
     acknowledgmentText.textContent = responses[Math.floor(Math.random() * responses.length)];
     resultsDiv.style.display = 'block';
 
+    // Only show full revealed message if 100% decoded
+    const revealedMessage = resultsDiv.querySelector('.revealed-message');
+    if (isFullyDecoded) {
+        revealedMessage.style.display = 'block';
+    } else {
+        revealedMessage.style.display = 'none';
+    }
+
     // Scroll to results
-    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
     // Log interpretation (could be sent to server in real implementation)
     console.log('Interpretation submitted:', interpretation);
+    console.log('Decode progress:', decodeProgress);
 }
 
 // Initialize when DOM is ready
