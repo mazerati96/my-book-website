@@ -17,8 +17,10 @@
 
     const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
     const MUSIC_TIME_KEY = 'ambientMusicTime';
+    const MUSIC_VOLUME_KEY = 'ambientMusicVolume';
 
-    audio.volume = 0.22;
+    const savedVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
+    audio.volume = savedVolume;
 
     // Restore state
     const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
@@ -47,7 +49,7 @@
 
     // Listen for commands from parent pages
     window.addEventListener('message', (event) => {
-        const { type } = event.data || {};
+        const { type, value } = event.data || {};
 
         switch (type) {
             case 'PLAY':
@@ -60,12 +62,20 @@
                 localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
                 break;
 
+            case 'SET_VOLUME':
+                if (typeof value === 'number') {
+                    audio.volume = Math.max(0, Math.min(1, value));
+                    localStorage.setItem(MUSIC_VOLUME_KEY, audio.volume.toString());
+                }
+                break;
+
             case 'FADE_DOWN':
                 fadeTo(0.05, 400);
                 break;
 
             case 'FADE_UP':
-                fadeTo(0.22, 600);
+                const targetVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
+                fadeTo(targetVolume, 600);
                 break;
         }
     });

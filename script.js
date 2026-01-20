@@ -614,11 +614,11 @@ function fadeMusicUp() {
     sendAudioCommand('FADE_UP');
 }
 
-function sendAudioCommand(type) {
+function sendAudioCommand(type, value) {
     const iframe = document.getElementById('audio-host');
     if (!iframe || !iframe.contentWindow) return;
 
-    iframe.contentWindow.postMessage({ type }, '*');
+    iframe.contentWindow.postMessage({ type, value }, '*');
 }
 
 function createMusicToggle() {
