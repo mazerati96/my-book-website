@@ -195,10 +195,10 @@ function incrementDecode() {
     } else if (decodeProgress >= 50 && decodeProgress < 75) {
         cipherText.textContent = "The ca██ from the de██hs car██es more than fre██ency. It calls to you. To lis██n. To hear, to heed. To und█████and. To stand.";
         cipherText.style.color = '#ff9933';
-    } else if (decodeProgress >= 75 && decodeProgress < 100) {
+    } else if (decodeProgress >= 75 && decodeProgress < 95) {
         cipherText.textContent = "The ca██ from the depths car██es more than frequency. It calls to you. To lis██n. To hear, to heed. To unde██tand. To stand.";
         cipherText.style.color = '#ffcc00';
-    } else if (decodeProgress >= 100) {
+    } else if (decodeProgress >= 95 && decodeProgress < 100) {
         cipherText.textContent = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed. To understand. To stand.";
         cipherText.style.color = '#00ff88';
         cipherText.style.textShadow = '0 0 10px #00ff88';
