@@ -623,6 +623,7 @@ function sendAudioCommand(type) {
 
 function createMusicToggle() {
     const enabled = localStorage.getItem('ambientMusicEnabled') === 'true';
+    const savedVolume = localStorage.getItem('ambientMusicVolume') || '0.22';
 
     const toggle = document.createElement('div');
     toggle.className = 'music-toggle signal';
@@ -631,6 +632,21 @@ function createMusicToggle() {
         <button class="music-toggle-btn">
             🎧 Ambient Music: <strong>${enabled ? 'ON' : 'OFF'}</strong>
         </button>
+        <div class="volume-control">
+            <label for="volume-slider">
+                <span class="volume-icon">🔊</span>
+                <span class="volume-label">Volume:</span>
+            </label>
+            <input 
+                type="range" 
+                id="volume-slider" 
+                min="0" 
+                max="100" 
+                value="${Math.round(parseFloat(savedVolume) * 100)}"
+                class="volume-slider"
+            >
+            <span class="volume-percent">${Math.round(parseFloat(savedVolume) * 100)}%</span>
+        </div>
         <div class="music-credit">
             "Sci-Fi Moodtimeflow" — Ribhav Agrawal
         </div>
@@ -639,7 +655,10 @@ function createMusicToggle() {
     document.querySelector('footer')?.appendChild(toggle);
 
     const btn = toggle.querySelector('button');
+    const slider = toggle.querySelector('#volume-slider');
+    const volumePercent = toggle.querySelector('.volume-percent');
 
+    // Handle toggle button
     btn.addEventListener('click', () => {
         const isOn = localStorage.getItem('ambientMusicEnabled') === 'true';
 
@@ -651,8 +670,19 @@ function createMusicToggle() {
             btn.innerHTML = '🎧 Ambient Music: <strong>ON</strong>';
         }
     });
-}
 
+    // Handle volume slider
+    slider.addEventListener('input', (e) => {
+        const volume = e.target.value / 100;
+        volumePercent.textContent = `${e.target.value}%`;
+
+        // Save to localStorage
+        localStorage.setItem('ambientMusicVolume', volume.toFixed(2));
+
+        // Send volume command to audio iframe
+        sendAudioCommand('SET_VOLUME', volume);
+    });
+}
 function createFrequencyToggle() {
     if (!window.frequencyGenerator) return;
 
