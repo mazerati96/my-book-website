@@ -857,6 +857,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (typeof firebase !== 'undefined') {
         const entanglement = new QuantumEntanglement();
         entanglement.initialize();
+        // Make instance globally accessible
+        window.quantumEntanglement = entanglement;
         console.log('%c⚛️ QUANTUM ENTANGLEMENT ACTIVE', 'color: #00d4ff; font-size: 16px; font-weight: bold;');
     } else {
         console.error('Firebase not loaded. Include Firebase scripts before quantum-entanglement.js');

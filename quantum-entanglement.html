@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Entanglement - The Measure of Souls</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="animations.css">
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Quantum Entanglement Widget -->
+    <link rel="stylesheet" href="quantum-widget.css">
+    <script src="quantum-entanglement.js"></script>
+
+    <style>
+        .qe-hero {
+            background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.2) 0%, transparent 70%);
+            min-height: 60vh;
+        }
+
+        .qe-particle {
+            display: inline-block;
+            color: #00d4ff;
+            text-shadow: 0 0 20px #00d4ff;
+            animation: particle-float 3s ease-in-out infinite;
+        }
+
+        @keyframes particle-float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .qe-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .qe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .qe-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+            .qe-card:hover {
+                border-color: #00d4ff;
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+                transform: translateY(-5px);
+            }
+
+            .qe-card h3 {
+                color: #00d4ff;
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                letter-spacing: 0.1em;
+            }
+
+            .qe-card p {
+                color: #cccccc;
+                line-height: 1.8;
+                font-size: 0.95rem;
+            }
+
+        .qe-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .launch-widget-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1.5rem 3rem;
+            background: transparent;
+            border: 3px solid #00d4ff;
+            color: #00d4ff;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+            .launch-widget-btn:hover {
+                background: #00d4ff;
+                color: #0a0a0a;
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.8);
+                transform: scale(1.05);
+            }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.6);
+            }
+        }
+
+        .rules-section {
+            background: rgba(255, 0, 51, 0.05);
+            border: 2px solid rgba(255, 0, 51, 0.3);
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+            .rules-section h3 {
+                color: #ff0033;
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+                letter-spacing: 0.1em;
+            }
+
+        .rules-list {
+            list-style: none;
+            padding: 0;
+        }
+
+            .rules-list li {
+                color: #cccccc;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                line-height: 1.6;
+            }
+
+                .rules-list li:before {
+                    content: "▸ ";
+                    color: #ff0033;
+                    font-weight: bold;
+                    margin-right: 0.5rem;
+                }
+
+                .rules-list li:last-child {
+                    border-bottom: none;
+                }
+
+        .warning-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: #cccccc;
+            line-height: 1.8;
+        }
+
+            .warning-box strong {
+                color: #00d4ff;
+            }
+
+        .connection-visual {
+            text-align: center;
+            margin: 3rem 0;
+            font-size: 1.5rem;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .particle-icon {
+            font-size: 2rem;
+            animation: particle-float 2s ease-in-out infinite;
+        }
+
+        .wave-line {
+            flex: 1;
+            max-width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .wave-line::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 50%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+                animation: wave-travel 2s linear infinite;
+            }
+
+        @keyframes wave-travel {
+            to {
+                left: 200%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition"></div>
+
+    <!-- Animated Background -->
+    <div class="matrix-style-bg"></div>
+
+    <!-- Hero Section -->
+    <section class="hero qe-hero">
+        <div class="scan-line"></div>
+        <div class="hero-content">
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text="QUANTUM ENTANGLEMENT">QUANTUM ENTANGLEMENT</h1>
+            </div>
+            <p class="typing-text" style="font-size: 1.2rem; margin-top: 2rem;">
+                Two particles. Two users. Across a possibly infinite distance, they collide.
+            </p>
+
+            <div class="connection-visual">
+                <span class="particle-icon qe-particle">⚛️</span>
+                <div class="wave-line"></div>
+                <span class="particle-icon qe-particle" style="animation-delay: 0.5s;">⚛️</span>
+            </div>
+
+            <button class="launch-widget-btn" id="launchWidgetBtn">
+                INITIATE ENTANGLEMENT
+            </button>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="qe-section">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>HOW IT WORKS</h2>
+            <div class="header-line"></div>
+        </div>
+
+        <div class="qe-grid">
+            <div class="qe-card">
+                <div class="qe-icon">🔗</div>
+                <h3>RANDOM CONNECTION</h3>
+                <p>When you activate the widget, our quantum algorithm searches the field for another consciousness seeking connection. Your pairing is completely random—stranger to stranger, soul to soul.</p>
+            </div>
+
+            <div class="qe-card">
+                <div class="qe-icon">🆔</div>
+                <h3>ANONYMOUS IDENTITY</h3>
+                <p>Each user receives a randomly generated quantum ID (e.g., USER_A4F2). Your identity remains cryptic. You are known only by your designation. No personal information is collected or stored.</p>
+            </div>
+
+            <div class="qe-card">
+                <div class="qe-icon">💬</div>
+                <h3>SHARED MESSAGES</h3>
+                <p>Once entangled, you'll receive cryptic fragments from the trilogy's universe. You can also chat with your quantum partner in real-time—a stranger connected by chance and choice.</p>
+            </div>
+
+            <div class="qe-card">
+                <div class="qe-icon">⏳</div>
+                <h3>ONE CONNECTION ONLY</h3>
+                <p>Each quantum entanglement is unique. Once your partner disconnects, the bond is severed forever. You'll be paired with someone new. You can never reconnect with a previous partner—just like particles in the quantum void.</p>
+            </div>
+
+            <div class="qe-card">
+                <div class="qe-icon">🌌</div>
+                <h3>PERSISTENT ACROSS PAGES</h3>
+                <p>Your entanglement persists as you navigate the site. The widget follows you, maintaining your connection even as you explore different corners of the universe.</p>
+            </div>
+
+            <div class="qe-card">
+                <div class="qe-icon">🔊</div>
+                <h3>AUDIO FEEDBACK</h3>
+                <p>Subtle tones alert you to new messages, connections, and disconnections. The quantum field speaks in frequencies—listen closely.</p>
+            </div>
+        </div>
+
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <strong>IMPORTANT:</strong> Quantum entanglement relies on both users staying connected. If your partner leaves, your connection is permanently severed. The system will search for a new partner automatically. Each entanglement is ephemeral—make your conversation count.
+        </div>
+    </section>
+
+    <!-- Rules Section -->
+    <section class="qe-section">
+        <div class="rules-section">
+            <h3>⚠️ COMMUNICATION PROTOCOLS</h3>
+            <ul class="rules-list">
+                <li><strong>Respect the void:</strong> Treat your quantum partner with kindness and respect. This is a shared experience between strangers.</li>
+                <li><strong>No explicit content:</strong> Keep conversations appropriate. No sexual content, graphic violence, or disturbing material.</li>
+                <li><strong>No harassment or bullying:</strong> Aggression, threats, hate speech, or targeted harassment will not be tolerated.</li>
+                <li><strong>No personal information:</strong> Do not share real names, addresses, phone numbers, social media, or any identifying details.</li>
+                <li><strong>No spam:</strong> Avoid repetitive messages, flooding, or disruptive behavior.</li>
+                <li><strong>Embrace the ephemeral:</strong> Your connection is temporary. When it ends, let it go. The quantum field will bring you someone new.</li>
+                <li><strong>Report issues:</strong> If your partner violates these rules, close the widget and report the incident via the contact page.</li>
+            </ul>
+        </div>
+
+        <div class="warning-box" style="margin-top: 2rem; border-left-color: #ff0033; background: rgba(255, 0, 51, 0.05);">
+            <strong style="color: #ff0033;">PRIVACY NOTICE:</strong> All messages are ephemeral and deleted when connections end. We do not store chat logs or personal data. Your quantum ID is randomly generated and anonymous. By using this feature, you acknowledge that you are conversing with a stranger and assume all risks associated with anonymous communication.
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="qe-section" style="text-align: center; padding-bottom: 6rem;">
+        <div class="section-header">
+            <div class="header-line"></div>
+            <h2>READY TO ENTANGLE?</h2>
+            <div class="header-line"></div>
+        </div>
+
+        <p style="color: #cccccc; font-size: 1.1rem; line-height: 1.8; margin: 2rem auto; max-width: 700px;">
+            Somewhere in the quantum field, another consciousness waits. A stranger. A reader. Someone who, like you, has ventured into the void seeking connection. Will you reach out?
+        </p>
+
+        <button class="launch-widget-btn" id="launchWidgetBtn2">
+            LAUNCH QUANTUM WIDGET
+        </button>
+
+        <p style="color: #666; font-size: 0.85rem; margin-top: 2rem; font-style: italic;">
+            The widget can also be launched from the footer button on any page.
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">Two particles. Two users. One moment.</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <span>|</span>
+                <a href="universe.html">Universe</a>
+                <span>|</span>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-decoration"></div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+
+    <script>
+        // Launch widget when buttons are clicked
+        document.getElementById('launchWidgetBtn').addEventListener('click', launchWidget);
+        document.getElementById('launchWidgetBtn2').addEventListener('click', launchWidget);
+
+        function launchWidget() {
+            // Check if quantum entanglement instance exists
+            if (window.quantumEntanglement) {
+                window.quantumEntanglement.launchWidget();
+            } else {
+                // Create and launch new instance
+                const entanglement = new QuantumEntanglement();
+                entanglement.initialize();
+                window.quantumEntanglement = entanglement;
+            }
+        }
+
+        // Store reference to quantum entanglement instance when it initializes
+        window.addEventListener('DOMContentLoaded', () => {
+            // Wait a bit for quantum-entanglement.js to create instance
+            setTimeout(() => {
+                // The instance is created in quantum-entanglement.js but not exposed
+                // We'll need to modify quantum-entanglement.js slightly to expose it
+                console.log('Quantum Entanglement page loaded');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
