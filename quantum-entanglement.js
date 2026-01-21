@@ -46,11 +46,10 @@ class QuantumEntanglement {
         this.isClosed = this.getClosedState();
     }
 
-    // Get or create persistent User ID
-    getOrCreateUserId() {
+    async getOrCreateUserId() {
         let userId = localStorage.getItem('quantumUserId');
         if (!userId) {
-            userId = this.generateUserId();
+            userId = await this.generateUserId();
             localStorage.setItem('quantumUserId', userId);
         }
         return userId;
@@ -94,7 +93,16 @@ class QuantumEntanglement {
         }
     }
 
-    generateUserId() {
+    async generateUserId() {
+        // Check if user is logged in
+        if (window.authSystem && authSystem.isLoggedIn()) {
+            const username = await authSystem.getUsername();
+            if (username) {
+                return username; // Use their account username!
+            }
+        }
+
+        // Fallback to random ID
         const chars = '0123456789ABCDEF';
         let id = 'USER_';
         for (let i = 0; i < 4; i++) {

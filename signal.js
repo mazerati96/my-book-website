@@ -206,6 +206,10 @@ function incrementDecode() {
         // Show full decryption notice
         showFullDecryptionNotice();
     }
+    // Save progress to cloud
+    if (window.authSystem && authSystem.isLoggedIn()) {
+        authSystem.saveUserProgress('signalProgress', decodeProgress);
+    }
 }
 
 function showFullDecryptionNotice() {

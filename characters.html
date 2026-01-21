@@ -49,9 +49,9 @@
     <section class="constellation-section">
         <div class="constellation-container" id="constellationMap">
             <canvas id="constellationCanvas"></canvas>
-            
+
             <!-- Character Nodes -->
-            <div class="character-node" data-character="elpida" data-locked="false" 
+            <div class="character-node" data-character="elpida" data-locked="false"
                  style="--node-x: 50%; --node-y: 30%;">
                 <div class="node-ring"></div>
                 <div class="node-core">🤖</div>
@@ -126,12 +126,15 @@
         </div>
         <div class="footer-decoration"></div>
     </footer>
-    
+
     <script src="audio-player.js"></script>
     <script src="script.js"></script>
     <script src="characters.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
+    <!-- Firebase Auth Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>

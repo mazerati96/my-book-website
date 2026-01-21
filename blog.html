@@ -199,7 +199,6 @@
     <div class="matrix-style-bg"></div>
 
     <!-- Breadcrumbs will be added by breadcrumbs.js -->
-
     <!-- Navigation Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
@@ -258,28 +257,28 @@
         </div>
     </div>
 
-    
-   <!-- Footer -->
-<footer>
-    <div class="footer-content">
-        <div class="footer-text">
-            <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
-            <p class="footer-tagline">Book One: Lay Upon The Earth</p>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">Book One: Lay Upon The Earth</p>
+            </div>
+            <div class="footer-links">
+                <a href="trilogy.html">Back to Trilogy</a>
+                <span>|</span>
+                <a href="book-two.html">Next: Book Two</a>
+            </div>
         </div>
-        <div class="footer-links">
-            <a href="trilogy.html">Back to Trilogy</a>
-            <span>|</span>
-            <a href="book-two.html">Next: Book Two</a>
-        </div>
-    </div>
-    <div class="footer-decoration"></div>
-</footer>
-<script src="audio-player.js"></script>
-<script src="script.js"></script>
-<script src="load-navigation.js"></script>
-<script src="memory-fragments.js"></script>
-<script src="breadcrumbs.js"></script>
-    
+        <div class="footer-decoration"></div>
+    </footer>
+    <script src="audio-player.js"></script>
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="memory-fragments.js"></script>
+    <script src="breadcrumbs.js"></script>
+
     <script>
         // Load blog posts
         let allPosts = [];
@@ -294,11 +293,11 @@
                     allPosts = data.posts;
                     renderPosts();
                 } else {
-                    document.getElementById('blog-grid').innerHTML = 
+                    document.getElementById('blog-grid').innerHTML =
                         '<p class="empty-state">No transmissions available yet.</p>';
                 }
             } catch (error) {
-                document.getElementById('blog-grid').innerHTML = 
+                document.getElementById('blog-grid').innerHTML =
                     '<p class="empty-state">Error loading transmissions.</p>';
             }
         }
@@ -306,9 +305,9 @@
 
         function renderPosts() {
             const grid = document.getElementById('blog-grid');
-            
-            const filtered = currentCategory === 'all' 
-                ? allPosts 
+
+            const filtered = currentCategory === 'all'
+                ? allPosts
                 : allPosts.filter(p => p.category === currentCategory);
 
             if (filtered.length === 0) {
@@ -325,35 +324,35 @@
                 });
 
                 return `
-                    <div class="blog-card" onclick="openPost('${post.id}')">
-                        <div class="blog-card-category">${post.category}</div>
-                        <h2>${post.title}</h2>
-                        <div class="blog-card-meta">
-                            <span>By ${post.author}</span>
-                            <span>•</span>
-                            <span>${date}</span>
+                        <div class="blog-card" onclick="openPost('${post.id}')">
+                            <div class="blog-card-category">${post.category}</div>
+                            <h2>${post.title}</h2>
+                            <div class="blog-card-meta">
+                                <span>By ${post.author}</span>
+                                <span>•</span>
+                                <span>${date}</span>
+                            </div>
+                            <div class="blog-card-preview">${preview}...</div>
+                            <div class="blog-card-read-more">READ MORE →</div>
                         </div>
-                        <div class="blog-card-preview">${preview}...</div>
-                        <div class="blog-card-read-more">READ MORE →</div>
-                    </div>
-                `;
+                    `;
             }).join('');
         }
 
         // Category filtering
         document.querySelectorAll('.category-filter').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-filter').forEach(b => 
+                document.querySelectorAll('.category-filter').forEach(b =>
                     b.classList.remove('active'));
                 btn.classList.add('active');
-                
+
                 currentCategory = btn.dataset.category;
                 renderPosts();
             });
         });
 
         // Open post modal
-        window.openPost = function(postId) {
+        window.openPost = function (postId) {
             const post = allPosts.find(p => p.id === postId);
             if (!post) return;
 
@@ -364,12 +363,12 @@
             });
 
             document.getElementById('modal-post-content').innerHTML = `
-                <h1>${post.title}</h1>
-                <div class="post-modal-meta">
-                    By ${post.author} • ${date} • ${post.category}
-                </div>
-                <div class="post-modal-body">${post.content}</div>
-            `;
+                    <h1>${post.title}</h1>
+                    <div class="post-modal-meta">
+                        By ${post.author} • ${date} • ${post.category}
+                    </div>
+                    <div class="post-modal-body">${post.content}</div>
+                `;
 
             document.getElementById('post-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -392,5 +391,8 @@
         // Load posts on page load
         loadBlogPosts();
     </script>
+    <!-- Firebase Auth Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>

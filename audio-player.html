@@ -6,102 +6,102 @@
 </head>
 <body>
 
-<audio
-    id="ambientAudio"
-    src="/audio/sci-fi-moodtimeflow.mp3"
-    loop
-></audio>
+    <audio id="ambientAudio"
+           src="/audio/sci-fi-moodtimeflow.mp3"
+           loop></audio>
 
-<script>
-    const audio = document.getElementById('ambientAudio');
+    <script>
+        const audio = document.getElementById('ambientAudio');
 
-    const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
-    const MUSIC_TIME_KEY = 'ambientMusicTime';
-    const MUSIC_VOLUME_KEY = 'ambientMusicVolume';
+        const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
+        const MUSIC_TIME_KEY = 'ambientMusicTime';
+        const MUSIC_VOLUME_KEY = 'ambientMusicVolume';
 
-    const savedVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
-    audio.volume = savedVolume;
+        const savedVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
+        audio.volume = savedVolume;
 
-    // Restore state
-    const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
-    const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
+        // Restore state
+        const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
+        const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
 
-    let hasTriedAutoplay = false;
+        let hasTriedAutoplay = false;
 
-    audio.addEventListener('loadedmetadata', () => {
-        if (savedTime > 0 && savedTime < audio.duration) {
-            audio.currentTime = savedTime;
-        }
-
-        // Try to auto-resume if enabled
-        if (enabled && !hasTriedAutoplay) {
-            hasTriedAutoplay = true;
-            audio.play().catch(err => {
-                console.log('⏸️ Autoplay blocked - music will resume on interaction');
-            });
-        }
-    });
-
-    // Persist playback position
-    audio.addEventListener('timeupdate', () => {
-        localStorage.setItem(MUSIC_TIME_KEY, audio.currentTime);
-    });
-
-    // Listen for commands from parent pages
-    window.addEventListener('message', (event) => {
-        const { type, value } = event.data || {};
-
-        switch (type) {
-            case 'PLAY':
-                audio.play().catch(() => { });
-                localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
-                break;
-
-            case 'PAUSE':
-                audio.pause();
-                localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
-                break;
-
-            case 'SET_VOLUME':
-                if (typeof value === 'number') {
-                    audio.volume = Math.max(0, Math.min(1, value));
-                    localStorage.setItem(MUSIC_VOLUME_KEY, audio.volume.toString());
-                }
-                break;
-
-            case 'FADE_DOWN':
-                fadeTo(0.05, 400);
-                break;
-
-            case 'FADE_UP':
-                const targetVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
-                fadeTo(targetVolume, 600);
-                break;
-        }
-    });
-
-    let fadeInterval = null;
-
-    function fadeTo(targetVolume, duration = 500) {
-        clearInterval(fadeInterval);
-
-        const startVolume = audio.volume;
-        const steps = 20;
-        const stepTime = duration / steps;
-        let currentStep = 0;
-
-        fadeInterval = setInterval(() => {
-            currentStep++;
-            audio.volume =
-                startVolume + (targetVolume - startVolume) * (currentStep / steps);
-
-            if (currentStep >= steps) {
-                audio.volume = targetVolume;
-                clearInterval(fadeInterval);
+        audio.addEventListener('loadedmetadata', () => {
+            if (savedTime > 0 && savedTime < audio.duration) {
+                audio.currentTime = savedTime;
             }
-        }, stepTime);
-    }
-</script>
 
+            // Try to auto-resume if enabled
+            if (enabled && !hasTriedAutoplay) {
+                hasTriedAutoplay = true;
+                audio.play().catch(err => {
+                    console.log('⏸️ Autoplay blocked - music will resume on interaction');
+                });
+            }
+        });
+
+        // Persist playback position
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem(MUSIC_TIME_KEY, audio.currentTime);
+        });
+
+        // Listen for commands from parent pages
+        window.addEventListener('message', (event) => {
+            const { type, value } = event.data || {};
+
+            switch (type) {
+                case 'PLAY':
+                    audio.play().catch(() => { });
+                    localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
+                    break;
+
+                case 'PAUSE':
+                    audio.pause();
+                    localStorage.setItem(MUSIC_ENABLED_KEY, 'false');
+                    break;
+
+                case 'SET_VOLUME':
+                    if (typeof value === 'number') {
+                        audio.volume = Math.max(0, Math.min(1, value));
+                        localStorage.setItem(MUSIC_VOLUME_KEY, audio.volume.toString());
+                    }
+                    break;
+
+                case 'FADE_DOWN':
+                    fadeTo(0.05, 400);
+                    break;
+
+                case 'FADE_UP':
+                    const targetVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
+                    fadeTo(targetVolume, 600);
+                    break;
+            }
+        });
+
+        let fadeInterval = null;
+
+        function fadeTo(targetVolume, duration = 500) {
+            clearInterval(fadeInterval);
+
+            const startVolume = audio.volume;
+            const steps = 20;
+            const stepTime = duration / steps;
+            let currentStep = 0;
+
+            fadeInterval = setInterval(() => {
+                currentStep++;
+                audio.volume =
+                    startVolume + (targetVolume - startVolume) * (currentStep / steps);
+
+                if (currentStep >= steps) {
+                    audio.volume = targetVolume;
+                    clearInterval(fadeInterval);
+                }
+            }, stepTime);
+        }
+    </script>
+    <!-- Firebase Auth Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>

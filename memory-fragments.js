@@ -100,6 +100,7 @@ const RIDDLE_PASSWORD = 'soul mind choice souls choose minds purpose lead her ex
 
 class MemoryFragmentSystem {
     constructor() {
+        this.useCloudStorage = false; // Will be set to true if user is logged in
         this.fragments = [];
         this.maxFragments = 5;
         this.spawnInterval = 15000;
@@ -120,6 +121,11 @@ class MemoryFragmentSystem {
 
     saveCollectedFragments() {
         localStorage.setItem('collectedMemoryFragments', JSON.stringify(this.collectedFragments));
+
+        // Also save to cloud if logged in
+        if (window.authSystem && authSystem.isLoggedIn() && this.useCloudStorage) {
+            authSystem.saveUserProgress('memoryFragments', this.collectedFragments);
+        }
     }
 
     loadSolvedRiddles() {
@@ -129,6 +135,11 @@ class MemoryFragmentSystem {
 
     saveSolvedRiddles() {
         localStorage.setItem('solvedRiddles', JSON.stringify(this.solvedRiddles));
+
+        // Also save to cloud if logged in
+        if (window.authSystem && authSystem.isLoggedIn() && this.useCloudStorage) {
+            authSystem.saveUserProgress('riddlesSolved', this.solvedRiddles);
+        }
     }
 
     loadMinimizedState() {
@@ -220,6 +231,29 @@ class MemoryFragmentSystem {
         console.log('✅ Memory fragments collection system initialized');
         console.log(`📊 Collected: ${this.collectedFragments.length}/${memoryFragments.length}`);
         console.log('🎮 Konami Code enabled: ↑↑↓↓←←←←BA');
+    }
+
+    async loadCloudProgress() {
+        if (!window.authSystem || !authSystem.isLoggedIn()) return;
+
+        this.useCloudStorage = true;
+
+        // Load from cloud
+        const cloudFragments = await authSystem.getUserProgress('memoryFragments');
+        const cloudRiddles = await authSystem.getUserProgress('riddlesSolved');
+
+        if (cloudFragments) {
+            this.collectedFragments = cloudFragments;
+            this.saveCollectedFragments(); // Sync to localStorage
+        }
+
+        if (cloudRiddles) {
+            this.solvedRiddles = cloudRiddles;
+            this.saveSolvedRiddles(); // Sync to localStorage
+        }
+
+        this.updateProgressTracker();
+        console.log('✅ Loaded progress from cloud');
     }
 
     createProgressTracker() {
@@ -1073,15 +1107,21 @@ const memoryFragmentSystem = new MemoryFragmentSystem();
 
 // Start when page loads
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         memoryFragmentSystem.init();
+        // Load cloud progress after auth initializes
+        if (window.authSystem) {
+            authSystem.onAuthStateChange(async (user) => {
+                if (user) {
+                    await memoryFragmentSystem.loadCloudProgress();
+                }
+            });
+        }
     });
 } else {
     memoryFragmentSystem.init();
-}
-
-// Export for manual control
-if (typeof window !== 'undefined') {
-    window.memoryFragmentSystem = memoryFragmentSystem;
-    window.RIDDLE_PASSWORD = RIDDLE_PASSWORD; // For fragments-complete.html to check
+    // Load cloud progress if already initialized
+    if (window.authSystem && authSystem.isLoggedIn()) {
+        memoryFragmentSystem.loadCloudProgress();
+    }
 }
