@@ -16,8 +16,8 @@ const firebaseConfig = {
 
 // Cryptic messages pool
 const crypticMessages = [
-    "Fragment 0x7A2C: She remembered dying. She remembered waking. Which was real?",
-    "Fragment 0x9F2E: The signal doesn't call. It's already inside you.",
+    "Fragment 0x7A2C: She remembered sunlight. She remembered waking. Which was real?",
+    "Fragment 0x9F2E: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx.",
     "Fragment 0x4B19: Consciousness is not binary. It exists in the space between.",
     "Fragment 0x8D3F: Ten years of memories. Three days of existence. What defines the soul?",
     "Fragment 0x2C7A: The frequency predates the stars. We did not discover it. It discovered us.",
