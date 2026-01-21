@@ -751,3 +751,180 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
+// ============================================
+// USER BANNER WITH LOGOUT
+// ============================================
+
+function createUserBanner() {
+    // Check if user is logged in
+    if (!window.authSystem || !authSystem.isLoggedIn()) return;
+
+    // Don't show on login/profile pages
+    if (window.location.pathname.includes('login.html') ||
+        window.location.pathname.includes('profile.html')) return;
+
+    // Create banner element
+    const banner = document.createElement('div');
+    banner.id = 'userBanner';
+    banner.className = 'user-banner';
+    banner.style.cssText = `
+        position: fixed;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1500;
+        background: rgba(10, 10, 10, 0.95);
+        border: 1px solid var(--accent-cyan);
+        padding: 0.6rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
+        opacity: 0;
+        animation: bannerSlideDown 0.5s ease 0.3s forwards;
+    `;
+
+    // Username display
+    const usernameSpan = document.createElement('span');
+    usernameSpan.style.cssText = `
+        color: var(--accent-cyan);
+        font-weight: bold;
+        text-shadow: 0 0 5px var(--accent-cyan);
+    `;
+    usernameSpan.textContent = '...';
+
+    // Load username
+    authSystem.getUsername().then(username => {
+        usernameSpan.textContent = username || 'User';
+    });
+
+    // Separator
+    const separator = document.createElement('span');
+    separator.textContent = '|';
+    separator.style.cssText = `
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 0.7rem;
+    `;
+
+    // Logout button
+    const logoutBtn = document.createElement('button');
+    logoutBtn.textContent = 'LOGOUT';
+    logoutBtn.style.cssText = `
+        background: transparent;
+        border: 1px solid var(--accent-red);
+        color: var(--accent-red);
+        padding: 0.3rem 0.8rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    `;
+
+    logoutBtn.addEventListener('mouseenter', function () {
+        this.style.background = 'var(--accent-red)';
+        this.style.color = 'white';
+        this.style.boxShadow = '0 0 10px var(--accent-red)';
+    });
+
+    logoutBtn.addEventListener('mouseleave', function () {
+        this.style.background = 'transparent';
+        this.style.color = 'var(--accent-red)';
+        this.style.boxShadow = 'none';
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+        const confirmed = confirm('Logout from your account?');
+        if (confirmed) {
+            await authSystem.signOut();
+            banner.style.opacity = '0';
+            setTimeout(() => {
+                banner.remove();
+                window.location.reload();
+            }, 300);
+        }
+    });
+
+    // Assemble banner
+    banner.appendChild(usernameSpan);
+    banner.appendChild(separator);
+    banner.appendChild(logoutBtn);
+
+    document.body.appendChild(banner);
+
+    // Add keyframe animation to document
+    if (!document.getElementById('bannerAnimationStyle')) {
+        const style = document.createElement('style');
+        style.id = 'bannerAnimationStyle';
+        style.textContent = `
+            @keyframes bannerSlideDown {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, 0);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .user-banner {
+                    top: 1rem !important;
+                    font-size: 0.7rem !important;
+                    padding: 0.5rem 0.8rem !important;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .user-banner {
+                    left: 50% !important;
+                    transform: translateX(-50%) !important;
+                    font-size: 0.65rem !important;
+                    padding: 0.4rem 0.6rem !important;
+                }
+                
+                .user-banner button {
+                    font-size: 0.65rem !important;
+                    padding: 0.2rem 0.5rem !important;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Initialize banner when auth state changes
+if (window.authSystem) {
+    authSystem.onAuthStateChange((user) => {
+        // Remove existing banner if present
+        const existingBanner = document.getElementById('userBanner');
+        if (existingBanner) {
+            existingBanner.remove();
+        }
+
+        // Create new banner if user is logged in
+        if (user) {
+            createUserBanner();
+        }
+    });
+}
+
+// Also try to create immediately if already logged in
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.authSystem && authSystem.isLoggedIn()) {
+            createUserBanner();
+        }
+    });
+} else {
+    if (window.authSystem && authSystem.isLoggedIn()) {
+        createUserBanner();
+    }
+}
+
+console.log('👤 User banner system loaded');
