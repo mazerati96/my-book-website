@@ -358,11 +358,11 @@
 
             if (requireUsername) {
                 confirmMessage.innerHTML = `
-                            ${message}
-                            <input type="text" id="confirmUsernameInput" placeholder="Enter username"
-                                style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
-                                border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
-                        `;
+                                ${message}
+                                <input type="text" id="confirmUsernameInput" placeholder="Enter username"
+                                    style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
+                                    border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
+                            `;
             } else {
                 confirmMessage.textContent = message;
             }
@@ -397,8 +397,15 @@
             }
         });
     </script>
-    <!-- Firebase Auth Scripts -->
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Firebase Config (ONE TIME INIT) -->
+    <script src="firebase-config.js"></script>
+
     <script src="auth.js"></script>
     <footer>
         <div class="footer-content">

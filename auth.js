@@ -7,11 +7,6 @@ if (!firebase.apps.length) {
     console.error('Firebase not initialized! Make sure quantum-entanglement.js loads first.');
 }
 
-// Initialize Firebase if not already done
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
 const auth = firebase.auth();
 const db = firebase.database();
 

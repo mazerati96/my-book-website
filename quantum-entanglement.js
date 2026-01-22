@@ -2,17 +2,6 @@
 // QUANTUM ENTANGLEMENT - FINAL PERSISTENT VERSION
 // ============================================
 
-// YOUR Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAoQ_UAWcmrjiU_Q-xNY8-oRRYby-ks4dw",
-    authDomain: "the-measure-of-souls.firebaseapp.com",
-    databaseURL: "https://the-measure-of-souls-default-rtdb.firebaseio.com",
-    projectId: "the-measure-of-souls",
-    storageBucket: "the-measure-of-souls.firebasestorage.app",
-    messagingSenderId: "1074047027392",
-    appId: "1:1074047027392:web:665f231e0f7e8903848525",
-    measurementId: "G-2NL4ML7M97"
-};
 
 // Cryptic messages pool
 const crypticMessages = [
@@ -119,10 +108,7 @@ class QuantumEntanglement {
             return;
         }
 
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+       
         this.db = firebase.database();
 
         // Create widget HTML
@@ -189,10 +175,7 @@ class QuantumEntanglement {
 
         // If widget doesn't exist yet, initialize it
         if (!document.getElementById('quantumWidget')) {
-            // Initialize Firebase if not already done
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
+            
             this.db = firebase.database();
 
             this.createWidget();
