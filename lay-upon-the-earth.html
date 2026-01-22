@@ -1,69 +1,300 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Lay Upon The Earth: A Mantra of Measure </title>
+    <title>Lay Upon The Earth: A Promise - The Measure of Souls</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="navigation.css">
-    <link rel="stylesheet" href="layout.css">
     <link rel="stylesheet" href="animations.css">
-    <link rel="stylesheet" href="components.css">
-    <link rel="stylesheet" href="pages.css">
 
-    <!-- Firebase Scripts 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-<!-- Quantum Entanglement Widget 
-<link rel="stylesheet" href="quantum-widget.css">
-<script src="quantum-entanglement.js"></script>
+    <!-- Quantum Entanglement Widget -->
+    <link rel="stylesheet" href="quantum-widget.css">
+
+    <style>
+        .mantra-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .mantra-content {
+            max-width: 900px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .mantra-header {
+            margin-bottom: 3rem;
+        }
+
+        .mantra-subtitle {
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--accent-red);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .mantra-title {
+            color: var(--primary-white);
+            font-size: 2.5rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .mantra-divider {
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+            margin: 2rem auto;
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .mantra-text {
+            background: rgba(26, 26, 26, 0.95);
+            border: 2px solid var(--accent-red);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 0, 51, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+            .mantra-text::before,
+            .mantra-text::after {
+                content: '"';
+                position: absolute;
+                font-size: 8rem;
+                color: var(--accent-red);
+                opacity: 0.3;
+                font-family: Georgia, serif;
+            }
+
+            .mantra-text::before {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .mantra-text::after {
+                bottom: 1rem;
+                right: 1rem;
+                content: '"';
+            }
+
+        .mantra-lines {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mantra-line {
+            color: var(--primary-white);
+            font-size: 1.4rem;
+            line-height: 2.2;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: lineReveal 0.8s ease forwards;
+        }
+
+            .mantra-line:nth-child(1) {
+                animation-delay: 0.3s;
+            }
+
+            .mantra-line:nth-child(2) {
+                animation-delay: 0.6s;
+            }
+
+            .mantra-line:nth-child(3) {
+                animation-delay: 0.9s;
+            }
+
+            .mantra-line:nth-child(4) {
+                animation-delay: 1.2s;
+            }
+
+            .mantra-line:nth-child(5) {
+                animation-delay: 1.5s;
+                color: var(--accent-red);
+                font-weight: bold;
+            }
+
+        @keyframes lineReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mantra-emphasis {
+            color: var(--accent-red);
+            text-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .mantra-footer {
+            margin-top: 3rem;
+            color: var(--dark-white);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .oath-badge {
+            display: inline-block;
+            border: 2px solid var(--accent-cyan);
+            padding: 0.8rem 2rem;
+            margin: 2rem 0;
+            color: var(--accent-cyan);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 10px var(--accent-cyan);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .brothers-tribute {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tribute-text {
+            color: var(--dark-white);
+            font-size: 1rem;
+            line-height: 1.8;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .back-link {
+            margin-top: 3rem;
+        }
+
+            .back-link a {
+                color: var(--accent-cyan);
+                text-decoration: none;
+                font-size: 0.9rem;
+                letter-spacing: 0.1em;
+                transition: all 0.3s;
+            }
+
+                .back-link a:hover {
+                    color: var(--primary-white);
+                    text-shadow: 0 0 10px var(--accent-cyan);
+                }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(255, 0, 51, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(255, 0, 51, 0.8);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mantra-title {
+                font-size: 1.8rem;
+            }
+
+            .mantra-text {
+                padding: 2rem;
+            }
+
+            .mantra-line {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            .mantra-text::before,
+            .mantra-text::after {
+                font-size: 4rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Page Transition Overlay 
+    <!-- Page Transition Overlay -->
     <div class="page-transition"></div>
 
-    <!-- Animated Background 
+    <!-- Animated Background -->
     <div class="matrix-style-bg"></div>
 
-    <!-- Hero Section 
-    <section class="hero book-hero">
-        <div class="scan-line"></div>
-        <div class="hero-content">
-            <div class="book-label">An Oath</div>
-            <div class="glitch-wrapper">
-                <h1 class="glitch" data-text="LAY UPON THE EARTH UNTIL YOU ARE BURIED IN IT">LAY UPON THE EARTH UNTIL YOU ARE BURIED IN IT</h1>
+    <!-- Mantra Container -->
+    <div class="mantra-container">
+        <div class="mantra-content">
+            <div class="mantra-header">
+                <div class="mantra-subtitle">A PROMISE WRITTEN IN BLOOD</div>
+                <h1 class="mantra-title">Lay Upon The Earth</h1>
+                <div class="mantra-divider"></div>
             </div>
-            <p class="book-tagline-hero">A promise to serve, to protect, and to defend</p>
-            <div class="coming-soon-badge">
-                <span class="badge-text">Those we value are more to us than life, at times</span>
+
+            <div class="mantra-text">
+                <div class="mantra-lines">
+                    <div class="mantra-line">I will defend my brothers.</div>
+                    <div class="mantra-line">I will defend the weak.</div>
+                    <div class="mantra-line">I will sacrifice so that others may live.</div>
+                    <div class="mantra-line">I will pursue relentlessly all who threaten my people.</div>
+                    <div class="mantra-line">If you strike me or my brethren, you will lay upon the earth until you are buried in it.</div>
+                </div>
+            </div>
+
+            <div class="oath-badge">
+                THE BRIGADE'S OATH
+            </div>
+
+            <div class="mantra-footer">
+                <p>This oath binds the soldiers of the Brigade—those who fight not for glory, but for the ones beside them.</p>
+                <p style="margin-top: 1rem;">In <span class="mantra-emphasis">Lay Upon The Earth</span>, Commander Imani Ochoa carries this promise into the void, where choices define survival and sacrifice becomes salvation.</p>
+            </div>
+
+            <div class="brothers-tribute">
+                <div class="tribute-text">
+                    "Written in 2016, this mantra was etched into our ribs—a permanent reminder that some bonds transcend blood, and some promises outlast the flesh that carries them."
+                    <div style="margin-top: 1rem; color: var(--accent-red);">— The Brothers Stallion</div>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="book-one.html">← Back to Book One</a>
             </div>
         </div>
-    </section>
+    </div>
 
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
 
-
-    <!-- Footer 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-text">
-                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
-                <p class="footer-tagline">Book One: Lay Upon The Earth</p>
-            </div>
-            <!--<div class="footer-links">
-                <a href="trilogy.html">Back to Trilogy</a>
-                <span>|</span>     // commented out for now
-                <a href="book-two.html">Next: Book Two</a>
-            </div> 
-        </div>
-        <div class="footer-decoration"></div>
-    </footer>
-
-    <!-- Ending of code to finish later
+    <!-- Scripts -->
     <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+    <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
-</body>  WHOLE PAGE COMMENTED OUT FOR NOW
-</html> -->
+</body>
+</html>
