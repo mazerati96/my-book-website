@@ -358,11 +358,11 @@
 
             if (requireUsername) {
                 confirmMessage.innerHTML = `
-                        ${message}
-                        <input type="text" id="confirmUsernameInput" placeholder="Enter username"
-                            style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
-                            border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
-                    `;
+                            ${message}
+                            <input type="text" id="confirmUsernameInput" placeholder="Enter username"
+                                style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
+                                border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
+                        `;
             } else {
                 confirmMessage.textContent = message;
             }
@@ -400,5 +400,17 @@
     <!-- Firebase Auth Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="auth.js"></script>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+            <p class="footer-tagline">Stories That Transcend Reality</p>
+        </div>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <span>|</span>
+            <a href="#">Terms of Service</a>
+        </div>
+    </footer>
+
 </body>
 </html>

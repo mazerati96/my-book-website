@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - The Measure of Souls</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="animations.css">
+    <style>
+        .policy-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+            .policy-header h1 {
+                color: var(--accent-cyan);
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                text-shadow: 0 0 20px var(--accent-cyan);
+            }
+
+        .policy-updated {
+            color: var(--dark-white);
+            font-size: 0.9rem;
+            font-family: var(--font-system);
+        }
+
+        .policy-content {
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--border-white);
+            padding: 3rem;
+            line-height: 1.8;
+        }
+
+            .policy-content h2 {
+                color: var(--accent-cyan);
+                font-size: 1.5rem;
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+                text-shadow: 0 0 10px var(--accent-cyan);
+            }
+
+            .policy-content h3 {
+                color: var(--primary-white);
+                font-size: 1.2rem;
+                margin-top: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .policy-content p {
+                color: var(--dark-white);
+                margin-bottom: 1rem;
+            }
+
+            .policy-content ul {
+                color: var(--dark-white);
+                margin-left: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .policy-content li {
+                margin-bottom: 0.5rem;
+            }
+
+            .policy-content strong {
+                color: var(--primary-white);
+            }
+
+            .policy-content code {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 0.2rem 0.5rem;
+                border-radius: 3px;
+                font-family: var(--font-system);
+                color: var(--accent-gold);
+            }
+
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+            .policy-table th,
+            .policy-table td {
+                border: 1px solid var(--border-white);
+                padding: 1rem;
+                text-align: left;
+            }
+
+            .policy-table th {
+                background: rgba(0, 255, 170, 0.1);
+                color: var(--accent-cyan);
+                font-weight: bold;
+            }
+
+            .policy-table td {
+                color: var(--dark-white);
+            }
+
+        .back-link {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+            .back-link a {
+                display: inline-block;
+                background: var(--accent-cyan);
+                color: var(--bg-black);
+                padding: 1rem 2rem;
+                text-decoration: none;
+                font-family: var(--font-system);
+                font-weight: bold;
+                letter-spacing: 0.1em;
+                transition: all 0.3s;
+            }
+
+                .back-link a:hover {
+                    box-shadow: 0 0 25px var(--accent-cyan);
+                    transform: translateY(-3px);
+                }
+    </style>
+</head>
+<body>
+    <div class="matrix-style-bg"></div>
+
+    <div class="policy-container">
+        <div class="policy-header">
+            <h1>PRIVACY POLICY</h1>
+            <p class="policy-updated">Last Updated: January 17, 2026</p>
+        </div>
+
+        <div class="policy-content">
+            <h2>Introduction</h2>
+            <p>
+                Welcome to The Measure of Souls Trilogy website. We respect your privacy and are committed to
+                protecting your personal data. This privacy policy explains how we collect, use, and store information
+                when you visit our website.
+            </p>
+
+            <h2>What Data We Collect</h2>
+            <p>
+                Our website uses <strong>local storage</strong> (not traditional cookies) to enhance your experience.
+                We do NOT collect any personally identifiable information, email addresses, or track you across other websites.
+            </p>
+
+            <h3>Data Stored Locally on Your Device:</h3>
+            <table class="policy-table">
+                <thead>
+                    <tr>
+                        <th>Data Type</th>
+                        <th>Purpose</th>
+                        <th>Category</th>
+                        <th>Storage Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cookieConsent</code></td>
+                        <td>Remember your cookie preference choice</td>
+                        <td>Essential</td>
+                        <td>Permanent (until manually cleared)</td>
+                    </tr>
+                    <tr>
+                        <td><code>cookiePreferences</code></td>
+                        <td>Store your specific storage preferences</td>
+                        <td>Essential</td>
+                        <td>Permanent (until manually cleared)</td>
+                    </tr>
+                    <tr>
+                        <td><code>ambientMusicEnabled</code></td>
+                        <td>Remember if you want music on/off</td>
+                        <td>Preferences</td>
+                        <td>Permanent or Session (based on consent)</td>
+                    </tr>
+                    <tr>
+                        <td><code>collectedMemoryFragments</code></td>
+                        <td>Track which memory fragments you've collected</td>
+                        <td>Progress</td>
+                        <td>Permanent or Session (based on consent)</td>
+                    </tr>
+                    <tr>
+                        <td><code>authToken</code> (authors only)</td>
+                        <td>Keep authors logged in to the dashboard</td>
+                        <td>Essential</td>
+                        <td>7 days or until logout</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>How We Use This Data</h2>
+            <ul>
+                <li><strong>Enhance your experience:</strong> Remember your music preference so you don't have to set it every visit</li>
+                <li><strong>Save your progress:</strong> Keep track of memory fragments you've collected in the interactive game</li>
+                <li><strong>Respect your choices:</strong> Remember whether you accepted or rejected storage</li>
+                <li><strong>Author authentication:</strong> Allow authorized authors to manage blog content securely</li>
+            </ul>
+
+            <h2>Your Consent Choices</h2>
+            <p>
+                When you first visit our site, we ask for your consent to use local storage. You have three options:
+            </p>
+
+            <h3>Accept All</h3>
+            <p>
+                All data is saved to <strong>localStorage</strong>, which persists between sessions. Your preferences
+                and progress are remembered even after closing your browser.
+            </p>
+
+            <h3>Customize</h3>
+            <p>
+                Choose which types of data you want to save:
+            </p>
+            <ul>
+                <li><strong>Essential:</strong> Required for the site to work (cannot be disabled)</li>
+                <li><strong>Preferences:</strong> Music settings, theme preferences</li>
+                <li><strong>Progress:</strong> Memory fragment collection, game progress</li>
+                <li><strong>Analytics:</strong> Future feature (not currently implemented)</li>
+            </ul>
+
+            <h3>Reject All</h3>
+            <p>
+                Only your rejection choice is saved. All other data uses <strong>sessionStorage</strong>,
+                which is automatically deleted when you close your browser. Features still work, but your
+                progress resets each session.
+            </p>
+
+            <h2>Data Sharing</h2>
+            <p>
+                <strong>We do NOT share, sell, or transfer your data to anyone.</strong> All data stays on your device.
+                We don't have servers that collect your information. We don't use third-party analytics or tracking services.
+            </p>
+
+            <h2>Third-Party Services</h2>
+            <p>Our website uses the following third-party services:</p>
+            <ul>
+                <li><strong>Vercel:</strong> Hosting provider (does not access your localStorage)</li>
+                <li><strong>Upstash Redis:</strong> Database for blog posts (stores only post content, not user data)</li>
+                <li><strong>Spotify Embed:</strong> If you play embedded playlists (subject to Spotify's privacy policy)</li>
+            </ul>
+
+            <h2>Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li><strong>View your data:</strong> Open your browser's Developer Tools → Application → Local Storage</li>
+                <li><strong>Delete your data:</strong> Clear your browser's local storage at any time</li>
+                <li><strong>Change your consent:</strong> Modify your preferences by clearing localStorage and refreshing the page</li>
+                <li><strong>Opt-out:</strong> Choose "Reject All" or disable localStorage in your browser settings</li>
+            </ul>
+
+            <h2>How to Clear Your Data</h2>
+
+            <h3>Manually Clear Specific Data:</h3>
+            <p>Open your browser console (F12) and run:</p>
+            <code style="display: block; padding: 1rem; background: rgba(0,0,0,0.5); margin: 1rem 0;">
+                localStorage.clear(); // Clears all data<br>
+                sessionStorage.clear(); // Clears session data<br>
+                location.reload(); // Refresh page
+            </code>
+
+            <h3>Browser Settings:</h3>
+            <ul>
+                <li><strong>Chrome:</strong> Settings → Privacy and security → Clear browsing data → Cookies and site data</li>
+                <li><strong>Firefox:</strong> Settings → Privacy & Security → Cookies and Site Data → Clear Data</li>
+                <li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data → Remove All</li>
+            </ul>
+
+            <h2>Children's Privacy</h2>
+            <p>
+                Our website does not knowingly collect data from children under 13. If you are under 13,
+                please have a parent or guardian review this policy before using the site.
+            </p>
+
+            <h2>Changes to This Policy</h2>
+            <p>
+                We may update this privacy policy from time to time. The "Last Updated" date at the top will
+                reflect any changes. Continued use of the site after changes constitutes acceptance of the updated policy.
+            </p>
+
+            <h2>Contact Us</h2>
+            <p>
+                If you have questions about this privacy policy or how we handle data, please contact us through
+                our <a href="contact.html" style="color: var(--accent-cyan);">contact page</a>.
+            </p>
+
+            <h2>Technical Details</h2>
+            <h3>localStorage vs Cookies</h3>
+            <p>
+                We use <strong>localStorage</strong> instead of traditional cookies because:
+            </p>
+            <ul>
+                <li>It's not sent to our servers with every request</li>
+                <li>It's purely client-side (stays on your device)</li>
+                <li>It can store more data efficiently</li>
+                <li>You have full control over it</li>
+            </ul>
+
+            <h3>sessionStorage (When You Reject)</h3>
+            <p>
+                If you reject non-essential storage, we use <strong>sessionStorage</strong> which:
+            </p>
+            <ul>
+                <li>Works exactly like localStorage during your session</li>
+                <li>Automatically deletes when you close the browser tab</li>
+                <li>Never persists between visits</li>
+                <li>Allows features to work without saving data long-term</li>
+            </ul>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← RETURN HOME</a>
+        </div>
+    </div>
+    <script src="storage-wrapper.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="breadcrumbs.js"></script>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+            <p class="footer-tagline">Stories That Transcend Reality</p>
+        </div>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <span>|</span>
+            <a href="#">Terms of Service</a>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,5 +1,6 @@
 // ============================================
-// MEMORY FRAGMENTS - ENHANCED WITH SECRETS
+// MEMORY FRAGMENTS - ULTIMATE EDITION
+// Combines: Collection Game + Riddles + Cookie Consent + Cloud Storage + Konami Code
 // ============================================
 
 const memoryFragments = [
@@ -33,7 +34,7 @@ const memoryFragments = [
     {
         id: 'frag-004',
         type: 'signal',
-        content: '36 Hertz. Constant. Eternal. A prayer against entropy.',
+        content: '36 Hz. Constant. Eternal. A prayer against entropy.',
         category: 'frequency',
         riddleClue: 'The measure of all things.',
         riddleAnswer: 'souls',
@@ -95,12 +96,9 @@ const memoryFragments = [
     }
 ];
 
-// THE ANSWER TO THE RIDDLE (lowercase for checking)
-const RIDDLE_PASSWORD = 'soul mind choice souls choose minds purpose lead her existence';
-
 class MemoryFragmentSystem {
     constructor() {
-        this.useCloudStorage = false; // Will be set to true if user is logged in
+        this.useCloudStorage = false;
         this.fragments = [];
         this.maxFragments = 5;
         this.spawnInterval = 15000;
@@ -109,18 +107,30 @@ class MemoryFragmentSystem {
         this.solvedRiddles = this.loadSolvedRiddles();
         this.progressTracker = null;
         this.isMinimized = this.loadMinimizedState();
-        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'b', 'a'];
+        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
         this.konamiProgress = [];
         this.initKonamiListener();
     }
 
+    // ============================================
+    // STORAGE - Cookie Consent Aware + Cloud Sync
+    // ============================================
+
     loadCollectedFragments() {
-        const saved = localStorage.getItem('collectedMemoryFragments');
+        // Use consent-aware storage if available, fallback to localStorage
+        const saved = window.getProgress ?
+            window.getProgress('collectedMemoryFragments') :
+            localStorage.getItem('collectedMemoryFragments');
         return saved ? JSON.parse(saved) : [];
     }
 
     saveCollectedFragments() {
-        localStorage.setItem('collectedMemoryFragments', JSON.stringify(this.collectedFragments));
+        // Use consent-aware storage if available
+        if (window.saveProgress) {
+            window.saveProgress('collectedMemoryFragments', JSON.stringify(this.collectedFragments));
+        } else {
+            localStorage.setItem('collectedMemoryFragments', JSON.stringify(this.collectedFragments));
+        }
 
         // Also save to cloud if logged in
         if (window.authSystem && authSystem.isLoggedIn() && this.useCloudStorage) {
@@ -129,12 +139,18 @@ class MemoryFragmentSystem {
     }
 
     loadSolvedRiddles() {
-        const saved = localStorage.getItem('solvedRiddles');
+        const saved = window.getProgress ?
+            window.getProgress('solvedRiddles') :
+            localStorage.getItem('solvedRiddles');
         return saved ? JSON.parse(saved) : [];
     }
 
     saveSolvedRiddles() {
-        localStorage.setItem('solvedRiddles', JSON.stringify(this.solvedRiddles));
+        if (window.saveProgress) {
+            window.saveProgress('solvedRiddles', JSON.stringify(this.solvedRiddles));
+        } else {
+            localStorage.setItem('solvedRiddles', JSON.stringify(this.solvedRiddles));
+        }
 
         // Also save to cloud if logged in
         if (window.authSystem && authSystem.isLoggedIn() && this.useCloudStorage) {
@@ -150,26 +166,48 @@ class MemoryFragmentSystem {
         localStorage.setItem('fragmentTrackerMinimized', isMinimized.toString());
     }
 
-    // KONAMI CODE LISTENER
+    async loadCloudProgress() {
+        if (!window.authSystem || !authSystem.isLoggedIn()) return;
+
+        this.useCloudStorage = true;
+
+        const cloudFragments = await authSystem.getUserProgress('memoryFragments');
+        const cloudRiddles = await authSystem.getUserProgress('riddlesSolved');
+
+        if (cloudFragments) {
+            this.collectedFragments = cloudFragments;
+            this.saveCollectedFragments();
+        }
+
+        if (cloudRiddles) {
+            this.solvedRiddles = cloudRiddles;
+            this.saveSolvedRiddles();
+        }
+
+        this.updateProgressTracker();
+        console.log('✅ Loaded progress from cloud');
+    }
+
+    // ============================================
+    // KONAMI CODE EASTER EGG
+    // ============================================
+
     initKonamiListener() {
         document.addEventListener('keydown', (e) => {
             this.konamiProgress.push(e.key);
 
-            // Keep only last 10 keys
             if (this.konamiProgress.length > 10) {
                 this.konamiProgress.shift();
             }
 
-            // Check if konami code matches
             if (this.konamiProgress.join(',') === this.konamiCode.join(',')) {
                 this.activateKonamiCode();
-                this.konamiProgress = []; // Reset
+                this.konamiProgress = [];
             }
         });
     }
 
     activateKonamiCode() {
-        // Unlock all fragments AND riddles
         const allFragmentIds = memoryFragments.map(f => f.id);
         this.collectedFragments = allFragmentIds;
         this.solvedRiddles = allFragmentIds;
@@ -177,7 +215,6 @@ class MemoryFragmentSystem {
         this.saveSolvedRiddles();
         this.updateProgressTracker();
 
-        // Show special message
         const backdrop = document.createElement('div');
         backdrop.className = 'modal-backdrop';
 
@@ -189,9 +226,9 @@ class MemoryFragmentSystem {
                 ⚡ DEVELOPER ACCESS GRANTED ⚡
             </div>
             <div class="memory-modal-content" style="font-style: normal; color: var(--accent-gold);">
-                All memory fragments have been unlocked via Konami Code.<br><br>
-                All riddles have been solved automatically.<br>
-                The secret page is now accessible.
+                All memory fragments unlocked via Konami Code.<br><br>
+                All riddles solved automatically.<br>
+                Secret page accessible.
             </div>
             <button class="memory-modal-close" style="background-color: var(--accent-gold);">ACCESS GRANTED</button>
         `;
@@ -207,8 +244,12 @@ class MemoryFragmentSystem {
         modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
         backdrop.addEventListener('click', closeModal);
 
-        console.log('🎮 KONAMI CODE ACTIVATED - All fragments unlocked!');
+        console.log('🎮 KONAMI CODE ACTIVATED!');
     }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
 
     init() {
         this.container = document.createElement('div');
@@ -228,33 +269,15 @@ class MemoryFragmentSystem {
         this.addStyles();
         this.startSpawning();
 
-        console.log('✅ Memory fragments collection system initialized');
+        console.log('✅ Memory fragments system initialized');
         console.log(`📊 Collected: ${this.collectedFragments.length}/${memoryFragments.length}`);
-        console.log('🎮 Konami Code enabled: ↑↑↓↓←←←←BA');
+        console.log(`🔐 Riddles: ${this.solvedRiddles.length}/${memoryFragments.length}`);
+        console.log('🎮 Konami Code: ↑↑↓↓←→←→BA');
     }
 
-    async loadCloudProgress() {
-        if (!window.authSystem || !authSystem.isLoggedIn()) return;
-
-        this.useCloudStorage = true;
-
-        // Load from cloud
-        const cloudFragments = await authSystem.getUserProgress('memoryFragments');
-        const cloudRiddles = await authSystem.getUserProgress('riddlesSolved');
-
-        if (cloudFragments) {
-            this.collectedFragments = cloudFragments;
-            this.saveCollectedFragments(); // Sync to localStorage
-        }
-
-        if (cloudRiddles) {
-            this.solvedRiddles = cloudRiddles;
-            this.saveSolvedRiddles(); // Sync to localStorage
-        }
-
-        this.updateProgressTracker();
-        console.log('✅ Loaded progress from cloud');
-    }
+    // ============================================
+    // PROGRESS TRACKER UI
+    // ============================================
 
     createProgressTracker() {
         this.progressTracker = document.createElement('div');
@@ -262,7 +285,7 @@ class MemoryFragmentSystem {
         this.progressTracker.style.cssText = `
             position: fixed;
             bottom: 20px;
-            right: 380px;
+            right: 20px;
             background: rgba(10, 10, 10, 0.95);
             border: 2px solid var(--accent-cyan);
             padding: 1rem;
@@ -287,75 +310,8 @@ class MemoryFragmentSystem {
             z-index: 10;
         `;
 
-        const minimizeBtn = document.createElement('button');
-        minimizeBtn.innerHTML = '−';
-        minimizeBtn.title = 'Minimize';
-        minimizeBtn.style.cssText = `
-            background: transparent;
-            border: 1px solid var(--accent-cyan);
-            color: var(--accent-cyan);
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-weight: bold;
-            padding: 0;
-        `;
-
-        minimizeBtn.addEventListener('mouseenter', function () {
-            this.style.background = 'var(--accent-cyan)';
-            this.style.color = '#0a0a0a';
-        });
-
-        minimizeBtn.addEventListener('mouseleave', function () {
-            this.style.background = 'transparent';
-            this.style.color = 'var(--accent-cyan)';
-        });
-
-        minimizeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleMinimize();
-        });
-
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '×';
-        closeBtn.title = 'Close';
-        closeBtn.style.cssText = `
-            background: transparent;
-            border: 1px solid #ff0033;
-            color: #ff0033;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-weight: bold;
-            padding: 0;
-        `;
-
-        closeBtn.addEventListener('mouseenter', function () {
-            this.style.background = '#ff0033';
-            this.style.color = 'white';
-            this.style.transform = 'rotate(90deg)';
-        });
-
-        closeBtn.addEventListener('mouseleave', function () {
-            this.style.background = 'transparent';
-            this.style.color = '#ff0033';
-            this.style.transform = 'rotate(0deg)';
-        });
-
-        closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.closeTracker();
-        });
+        const minimizeBtn = this.createButton('−', 'Minimize', 'var(--accent-cyan)', () => this.toggleMinimize());
+        const closeBtn = this.createButton('×', 'Close', '#ff0033', () => this.closeTracker());
 
         buttonContainer.appendChild(minimizeBtn);
         buttonContainer.appendChild(closeBtn);
@@ -371,26 +327,65 @@ class MemoryFragmentSystem {
             this.applyMinimizedState();
         }
 
+        this.setupTrackerEvents();
+        document.body.appendChild(this.progressTracker);
+        this.makeDraggable(this.progressTracker);
+    }
+
+    createButton(text, title, color, onClick) {
+        const btn = document.createElement('button');
+        btn.innerHTML = text;
+        btn.title = title;
+        btn.style.cssText = `
+            background: transparent;
+            border: 1px solid ${color};
+            color: ${color};
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: ${text === '×' ? '1.1rem' : '0.9rem'};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-weight: bold;
+            padding: 0;
+        `;
+
+        btn.addEventListener('mouseenter', function () {
+            this.style.background = color;
+            this.style.color = text === '×' ? 'white' : '#0a0a0a';
+            if (text === '×') this.style.transform = 'rotate(90deg)';
+        });
+
+        btn.addEventListener('mouseleave', function () {
+            this.style.background = 'transparent';
+            this.style.color = color;
+            if (text === '×') this.style.transform = 'rotate(0deg)';
+        });
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            onClick();
+        });
+
+        return btn;
+    }
+
+    setupTrackerEvents() {
         let clickTimeout;
         let isDragging = false;
 
         this.progressTracker.addEventListener('mousedown', () => {
             isDragging = false;
-            clickTimeout = setTimeout(() => {
-                isDragging = true;
-            }, 150);
+            clickTimeout = setTimeout(() => isDragging = true, 150);
         });
 
         this.progressTracker.addEventListener('mouseup', (e) => {
             clearTimeout(clickTimeout);
-
-            if (!isDragging &&
-                e.target !== minimizeBtn &&
-                e.target !== closeBtn &&
-                !e.target.classList.contains('minimized-indicator')) {
+            if (!isDragging && e.target.tagName !== 'BUTTON' && !e.target.classList.contains('minimized-indicator')) {
                 this.showCollection();
             }
-
             isDragging = false;
         });
 
@@ -403,73 +398,6 @@ class MemoryFragmentSystem {
             this.style.boxShadow = 'none';
             this.style.transform = 'scale(1)';
         });
-
-        document.body.appendChild(this.progressTracker);
-        this.makeDraggable(this.progressTracker);
-    }
-
-    makeDraggable(element) {
-        let isDragging = false;
-        let startX, startY, initialLeft, initialTop;
-
-        element.onmousedown = dragStart;
-
-        function dragStart(e) {
-            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
-                return;
-            }
-
-            e.preventDefault();
-            isDragging = true;
-
-            const rect = element.getBoundingClientRect();
-            initialLeft = rect.left;
-            initialTop = rect.top;
-
-            startX = e.clientX;
-            startY = e.clientY;
-
-            element.style.bottom = 'auto';
-            element.style.right = 'auto';
-            element.style.top = initialTop + 'px';
-            element.style.left = initialLeft + 'px';
-
-            element.style.cursor = 'grabbing';
-
-            document.addEventListener('mousemove', dragMove);
-            document.addEventListener('mouseup', dragEnd);
-        }
-
-        function dragMove(e) {
-            if (!isDragging) return;
-
-            e.preventDefault();
-
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-
-            let newLeft = initialLeft + deltaX;
-            let newTop = initialTop + deltaY;
-
-            const maxLeft = window.innerWidth - element.offsetWidth;
-            const maxTop = window.innerHeight - element.offsetHeight;
-
-            newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-            newTop = Math.max(0, Math.min(newTop, maxTop));
-
-            element.style.left = newLeft + 'px';
-            element.style.top = newTop + 'px';
-        }
-
-        function dragEnd() {
-            if (!isDragging) return;
-
-            isDragging = false;
-            element.style.cursor = 'move';
-
-            document.removeEventListener('mousemove', dragMove);
-            document.removeEventListener('mouseup', dragEnd);
-        }
     }
 
     updateProgressTracker() {
@@ -486,6 +414,99 @@ class MemoryFragmentSystem {
             <div style="font-size: 0.7rem; opacity: 0.5; margin-top: 0.5rem;">Click to view</div>
         `;
     }
+
+    makeDraggable(element) {
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+
+        element.onmousedown = dragStart;
+
+        function dragStart(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+
+            e.preventDefault();
+            isDragging = true;
+
+            const rect = element.getBoundingClientRect();
+            initialLeft = rect.left;
+            initialTop = rect.top;
+            startX = e.clientX;
+            startY = e.clientY;
+
+            element.style.bottom = 'auto';
+            element.style.right = 'auto';
+            element.style.top = initialTop + 'px';
+            element.style.left = initialLeft + 'px';
+            element.style.cursor = 'grabbing';
+
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+
+            let newLeft = Math.max(0, Math.min(initialLeft + deltaX, window.innerWidth - element.offsetWidth));
+            let newTop = Math.max(0, Math.min(initialTop + deltaY, window.innerHeight - element.offsetHeight));
+
+            element.style.left = newLeft + 'px';
+            element.style.top = newTop + 'px';
+        }
+
+        function dragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            element.style.cursor = 'move';
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mouseup', dragEnd);
+        }
+    }
+
+    toggleMinimize() {
+        if (this.contentContainer.style.display === 'none') {
+            // Maximize
+            this.contentContainer.style.display = 'block';
+            this.progressTracker.style.minWidth = '180px';
+            this.progressTracker.style.cursor = 'move';
+            this.progressTracker.querySelector('.minimized-indicator')?.remove();
+            this.isMinimized = false;
+            this.saveMinimizedState(false);
+        } else {
+            // Minimize
+            this.applyMinimizedState();
+            this.isMinimized = true;
+            this.saveMinimizedState(true);
+        }
+    }
+
+    applyMinimizedState() {
+        this.contentContainer.style.display = 'none';
+        this.progressTracker.style.minWidth = '60px';
+        this.progressTracker.style.cursor = 'pointer';
+
+        const miniIndicator = document.createElement('div');
+        miniIndicator.className = 'minimized-indicator';
+        miniIndicator.style.cssText = 'font-size: 1.5rem; text-align: center; padding: 0.5rem;';
+        miniIndicator.innerHTML = '📦';
+        miniIndicator.title = 'Click to restore';
+        this.progressTracker.insertBefore(miniIndicator, this.contentContainer);
+    }
+
+    closeTracker() {
+        if (confirm('Close Memory Fragment tracker? Refresh page to re-enable.')) {
+            this.progressTracker.style.opacity = '0';
+            this.progressTracker.style.transform = 'scale(0)';
+            setTimeout(() => this.progressTracker.remove(), 300);
+        }
+    }
+
+    // ============================================
+    // STYLES
+    // ============================================
 
     addStyles() {
         const style = document.createElement('style');
@@ -738,9 +759,12 @@ class MemoryFragmentSystem {
         document.head.appendChild(style);
     }
 
+    // ============================================
+    // FRAGMENT SPAWNING & COLLECTION
+    // ============================================
+
     startSpawning() {
         this.spawnFragment();
-
         setInterval(() => {
             if (this.fragments.length < this.maxFragments) {
                 this.spawnFragment();
@@ -749,10 +773,7 @@ class MemoryFragmentSystem {
     }
 
     spawnFragment() {
-        const uncollected = memoryFragments.filter(
-            f => !this.collectedFragments.includes(f.id)
-        );
-
+        const uncollected = memoryFragments.filter(f => !this.collectedFragments.includes(f.id));
         const pool = uncollected.length > 0 ? uncollected : memoryFragments;
         const memory = pool[Math.floor(Math.random() * pool.length)];
 
@@ -769,16 +790,12 @@ class MemoryFragmentSystem {
         fragment.style.left = `${x}px`;
         fragment.style.top = `${y}px`;
 
-        fragment.addEventListener('click', () => {
-            this.revealMemory(memory, fragment);
-        });
+        fragment.addEventListener('click', () => this.revealMemory(memory, fragment));
 
         this.container.appendChild(fragment);
         this.fragments.push({ element: fragment, memory });
 
-        setTimeout(() => {
-            this.removeFragment(fragment);
-        }, 30000);
+        setTimeout(() => this.removeFragment(fragment), 30000);
     }
 
     revealMemory(memory, fragmentElement) {
@@ -803,7 +820,6 @@ class MemoryFragmentSystem {
         let riddleSection = '';
 
         if (isSolved) {
-            // Already solved - show the answer
             riddleSection = `
                 <div class="riddle-solved">
                     <div style="color: #00ff88; font-weight: bold; margin-bottom: 0.5rem;">✓ RIDDLE SOLVED</div>
@@ -812,7 +828,6 @@ class MemoryFragmentSystem {
                 </div>
             `;
         } else {
-            // Not solved - show riddle input
             riddleSection = `
                 <div class="riddle-section">
                     <div class="riddle-question">🔐 ${memory.riddleClue} ${memory.riddleHint}</div>
@@ -835,7 +850,6 @@ class MemoryFragmentSystem {
         document.body.appendChild(backdrop);
         document.body.appendChild(modal);
 
-        // Setup riddle checking if not solved
         if (!isSolved) {
             const input = document.getElementById(`riddleInput-${memory.id}`);
             const submitBtn = document.getElementById(`riddleSubmit-${memory.id}`);
@@ -845,7 +859,6 @@ class MemoryFragmentSystem {
                 const userAnswer = input.value.trim().toLowerCase();
 
                 if (userAnswer === memory.riddleAnswer.toLowerCase()) {
-                    // CORRECT!
                     this.solvedRiddles.push(memory.id);
                     this.saveSolvedRiddles();
                     this.updateProgressTracker();
@@ -856,20 +869,13 @@ class MemoryFragmentSystem {
                     submitBtn.disabled = true;
                     submitBtn.textContent = 'SOLVED';
 
-                    // Check if all riddles are solved
                     if (this.solvedRiddles.length === memoryFragments.length) {
-                        setTimeout(() => {
-                            this.showAllRiddlesSolved();
-                        }, 2000);
+                        setTimeout(() => this.showAllRiddlesSolved(), 2000);
                     }
                 } else {
-                    // WRONG
                     feedback.className = 'riddle-feedback wrong';
                     feedback.textContent = '✗ Try again. Think about the fragment\'s meaning...';
-
-                    setTimeout(() => {
-                        feedback.style.display = 'none';
-                    }, 3000);
+                    setTimeout(() => feedback.style.display = 'none', 3000);
                 }
             };
 
@@ -886,8 +892,6 @@ class MemoryFragmentSystem {
 
         modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
         backdrop.addEventListener('click', closeModal);
-
-        console.log(`Memory revealed: ${memory.content} ${isNew ? '(NEW!)' : '(DUPLICATE)'}`);
     }
 
     showAllRiddlesSolved() {
@@ -901,10 +905,9 @@ class MemoryFragmentSystem {
             <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
                 🎉 ALL RIDDLES SOLVED! 🎉
             </div>
-            <div class="memory-modal-content" style="font-style: normal; color: var(--primary-white);">
-                You have collected all memory fragments and solved every riddle.<br><br>
-                The secret page is now accessible.<br><br>
-                Visit <span style="color: var(--accent-cyan);">/fragments-complete.html</span> to see the truth assembled.
+            <div class="memory-modal-content" style="font-style: normal;">
+                You collected all fragments and solved every riddle.<br><br>
+                Visit <span style="color: var(--accent-cyan);">/fragments-complete.html</span>
             </div>
             <button class="memory-modal-close" style="background-color: var(--accent-gold);">CONTINUE</button>
         `;
@@ -932,12 +935,11 @@ class MemoryFragmentSystem {
     }
 
     showMilestoneReward(collected, total) {
-        let message = '';
-        let reward = '';
+        let message = '', reward = '';
 
         if (collected === Math.floor(total * 0.25)) {
             message = '25% COMPLETE';
-            reward = 'You\'ve begun to piece together the fragments of memory...';
+            reward = 'You\'ve begun to piece together the fragments...';
         } else if (collected === Math.floor(total * 0.5)) {
             message = '50% COMPLETE';
             reward = 'Half the truth revealed. But truth is never whole, is it?';
@@ -946,7 +948,7 @@ class MemoryFragmentSystem {
             reward = 'The pattern emerges. The signal strengthens.';
         } else if (collected === total) {
             message = '🎉 COLLECTION COMPLETE! 🎉';
-            reward = 'All fragments recovered. Now solve the riddles to unlock the secret page.';
+            reward = 'All fragments recovered. Now solve the riddles to unlock the secret.';
         }
 
         const backdrop = document.createElement('div');
@@ -959,9 +961,7 @@ class MemoryFragmentSystem {
             <div style="color: var(--accent-cyan); font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
                 ${message}
             </div>
-            <div class="memory-modal-content" style="font-style: normal;">
-                ${reward}
-            </div>
+            <div class="memory-modal-content" style="font-style: normal;">${reward}</div>
             <button class="memory-modal-close" style="background-color: var(--accent-cyan);">CONTINUE</button>
         `;
 
@@ -995,9 +995,7 @@ class MemoryFragmentSystem {
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">
                         ${isCollected ? (isSolved ? '✓' : '🔐') : '🔒'}
                     </div>
-                    <div style="font-size: 0.8rem; opacity: 0.7;">
-                        ${frag.category.toUpperCase()}
-                    </div>
+                    <div style="font-size: 0.8rem; opacity: 0.7;">${frag.category.toUpperCase()}</div>
                     ${isCollected ? `
                         <div style="font-size: 0.75rem; margin-top: 0.5rem; font-style: italic;">"${frag.content.substring(0, 50)}..."</div>
                         ${isSolved ? `
@@ -1022,9 +1020,7 @@ class MemoryFragmentSystem {
                 ${this.collectedFragments.length} / ${memoryFragments.length} Collected • 
                 ${this.solvedRiddles.length} / ${memoryFragments.length} Riddles Solved
             </div>
-            <div class="collection-grid">
-                ${gridHtml}
-            </div>
+            <div class="collection-grid">${gridHtml}</div>
             <button class="memory-modal-close">CLOSE</button>
         `;
 
@@ -1043,85 +1039,32 @@ class MemoryFragmentSystem {
     removeFragment(fragmentElement) {
         fragmentElement.style.opacity = '0';
         fragmentElement.style.transform = 'scale(0)';
-
         setTimeout(() => {
             fragmentElement.remove();
             this.fragments = this.fragments.filter(f => f.element !== fragmentElement);
         }, 300);
     }
-
-    applyMinimizedState() {
-        this.contentContainer.style.display = 'none';
-        this.progressTracker.style.minWidth = '60px';
-        this.progressTracker.style.cursor = 'pointer';
-
-        const miniIndicator = document.createElement('div');
-        miniIndicator.className = 'minimized-indicator';
-        miniIndicator.style.cssText = `
-            font-size: 1.5rem;
-            text-align: center;
-            padding: 0.5rem;
-        `;
-        miniIndicator.innerHTML = '📦';
-        miniIndicator.title = 'Click to restore';
-        this.progressTracker.insertBefore(miniIndicator, this.contentContainer);
-    }
-
-    toggleMinimize() {
-        if (this.contentContainer.style.display === 'none') {
-            // Maximize
-            this.contentContainer.style.display = 'block';
-            this.progressTracker.style.minWidth = '180px';
-            this.progressTracker.style.cursor = 'move';
-
-            // Remove minimized indicator
-            const existingMini = this.progressTracker.querySelector('.minimized-indicator');
-            if (existingMini) {
-                existingMini.remove();
-            }
-
-            this.isMinimized = false;
-            this.saveMinimizedState(false);
-        } else {
-            // Minimize
-            this.applyMinimizedState();
-            this.isMinimized = true;
-            this.saveMinimizedState(true);
-        }
-    }
-
-    closeTracker() {
-        const confirmed = confirm('Close Memory Fragment tracker? You can re-enable it by refreshing the page.');
-        if (confirmed) {
-            this.progressTracker.style.opacity = '0';
-            this.progressTracker.style.transform = 'scale(0)';
-            setTimeout(() => {
-                this.progressTracker.remove();
-            }, 300);
-        }
-    }
 }
 
-// Initialize memory fragments system
+// Initialize
 const memoryFragmentSystem = new MemoryFragmentSystem();
 
-// Start when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', async () => {
         memoryFragmentSystem.init();
-        // Load cloud progress after auth initializes
         if (window.authSystem) {
             authSystem.onAuthStateChange(async (user) => {
-                if (user) {
-                    await memoryFragmentSystem.loadCloudProgress();
-                }
+                if (user) await memoryFragmentSystem.loadCloudProgress();
             });
         }
     });
 } else {
     memoryFragmentSystem.init();
-    // Load cloud progress if already initialized
     if (window.authSystem && authSystem.isLoggedIn()) {
         memoryFragmentSystem.loadCloudProgress();
     }
+}
+
+if (typeof window !== 'undefined') {
+    window.memoryFragmentSystem = memoryFragmentSystem;
 }

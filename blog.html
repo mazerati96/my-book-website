@@ -266,9 +266,9 @@
                 <p class="footer-tagline">Book One: Lay Upon The Earth</p>
             </div>
             <div class="footer-links">
-                <a href="trilogy.html">Back to Trilogy</a>
+                <a href="privacy-policy.html">Privacy Policy</a>
                 <span>|</span>
-                <a href="book-two.html">Next: Book Two</a>
+                <a href="#">Terms of Service</a>
             </div>
         </div>
         <div class="footer-decoration"></div>
@@ -324,18 +324,18 @@
                 });
 
                 return `
-                        <div class="blog-card" onclick="openPost('${post.id}')">
-                            <div class="blog-card-category">${post.category}</div>
-                            <h2>${post.title}</h2>
-                            <div class="blog-card-meta">
-                                <span>By ${post.author}</span>
-                                <span>•</span>
-                                <span>${date}</span>
-                            </div>
-                            <div class="blog-card-preview">${preview}...</div>
-                            <div class="blog-card-read-more">READ MORE →</div>
-                        </div>
-                    `;
+                                <div class="blog-card" onclick="openPost('${post.id}')">
+                                    <div class="blog-card-category">${post.category}</div>
+                                    <h2>${post.title}</h2>
+                                    <div class="blog-card-meta">
+                                        <span>By ${post.author}</span>
+                                        <span>•</span>
+                                        <span>${date}</span>
+                                    </div>
+                                    <div class="blog-card-preview">${preview}...</div>
+                                    <div class="blog-card-read-more">READ MORE →</div>
+                                </div>
+                            `;
             }).join('');
         }
 
@@ -363,12 +363,12 @@
             });
 
             document.getElementById('modal-post-content').innerHTML = `
-                    <h1>${post.title}</h1>
-                    <div class="post-modal-meta">
-                        By ${post.author} • ${date} • ${post.category}
-                    </div>
-                    <div class="post-modal-body">${post.content}</div>
-                `;
+                            <h1>${post.title}</h1>
+                            <div class="post-modal-meta">
+                                By ${post.author} • ${date} • ${post.category}
+                            </div>
+                            <div class="post-modal-body">${post.content}</div>
+                        `;
 
             document.getElementById('post-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -393,6 +393,12 @@
     </script>
     <!-- Firebase Auth Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="storage-wrapper.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="memory-fragments.js"></script>
+    <script src="breadcrumbs.js"></script>
     <script src="auth.js"></script>
 </body>
 </html>
