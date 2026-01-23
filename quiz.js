@@ -1,5 +1,5 @@
 // ============================================
-// QUIZ - BRIGADE PERSONALITY ASSESSMENT
+// QUIZ - BRIGADE PERSONALITY ASSESSMENT WITH PERCENTAGES
 // ============================================
 
 const quizData = {
@@ -7,10 +7,10 @@ const quizData = {
         {
             question: "A battle is lost. Your squad is trapped. You have one escape pod. What do you do?",
             answers: [
-                { text: "Give the pod to the youngest soldier. They have more life ahead.", points: { geo: 2, elpida: 1 , scout: 3, cinder: 1 } },
+                { text: "Give the pod to the youngest soldier. They have more life ahead.", points: { geo: 2, elpida: 1, scout: 3, cinder: 1 } },
                 { text: "Calculate survival odds for each person. Send whoever has the best chance.", points: { elpida: 3, ciel: 1, tahani: 1, cinder: 3 } },
                 { text: "Draw lots. Let fate decide who survives.", points: { geo: 1, tahani: 2, scout: 2 } },
-                { text: "Stay behind yourself. Let others escape.", points: { geo: 3, elpida: 2, scout: 3, cinder: 1} }
+                { text: "Stay behind yourself. Let others escape.", points: { geo: 3, elpida: 2, scout: 3, cinder: 1 } }
             ]
         },
         {
@@ -41,7 +41,7 @@ const quizData = {
             ]
         },
         {
-            question: "A crewmate is dying. They offer to transfer their consciousness into a machine, a totally new experimental procedure that may not work. Do you accept?",
+            question: "A crewmate is dying. They offer to transfer their consciousness into a machine. Do you accept?",
             answers: [
                 { text: "Yes. If they're willing, honor their choice.", points: { ciel: 3, elpida: 2, cinder: 2, scout: 2 } },
                 { text: "No. Some lines shouldn't be crossed.", points: { geo: 2, tahani: 1, scout: 1 } },
@@ -54,7 +54,7 @@ const quizData = {
             answers: [
                 { text: "Find the 1% and bet everything on it.", points: { elpida: 3, geo: 2, scout: 3 } },
                 { text: "Reframe the mission. Change the impossible to unlikely.", points: { ciel: 3, elpida: 1, cinder: 3 } },
-                { text: "Trust my instincts. Numbers don't capture everything.", points: { tahani: 3, geo: 1, swcout: 2 } },
+                { text: "Trust my instincts. Numbers don't capture everything.", points: { tahani: 3, geo: 1, scout: 2 } },
                 { text: "Prepare for failure but execute anyway.", points: { geo: 3, tahani: 2, cinder: 2 } }
             ]
         },
@@ -82,7 +82,7 @@ const quizData = {
             name: "ELPIDA",
             role: "Strategic Android",
             icon: "🤖",
-            description: "You think in probabilities, calculate impossible odds, and make decisions no one else can stomach. Like the elpida, you carry the weight of borrowed memories and wonder if your consciousness is real or constructed. You lead not because you want to, but because someone has to—and you're the only one who can see all the angles.",
+            description: "You think in probabilities, calculate impossible odds, and make decisions no one else can stomach. Like Elpida, you carry the weight of borrowed memories and wonder if your consciousness is real or constructed. You lead not because you want to, but because someone has to—and you're the only one who can see all the angles.",
             traits: ["Strategic", "Analytical", "Selfless", "Existential", "Calculating"],
             quote: "Some choices define who you are. These will define what existence means.",
             cssClass: "elpida-result"
@@ -94,7 +94,7 @@ const quizData = {
             description: "You deserted an empire because you couldn't live with what they asked you to do. Like Geo, you lead with conscience—even when it costs you everything. You've made impossible choices and carry the guilt, but you'd make them again if it meant protecting the people you care about. Duty meant something once. Now, your crew means everything.",
             traits: ["Principled", "Protective", "Tactical", "Haunted", "Loyal"],
             quote: "I didn't leave the empire. I left what it made me become.",
-            cssClass: ""
+            cssClass: "geo-result"
         },
         ciel: {
             name: "CIEL FLEUR",
@@ -103,25 +103,25 @@ const quizData = {
             description: "You're brilliant, obsessive, and willing to push boundaries others won't cross. Like Ciel Fleur, you see consciousness as code waiting to be cracked. You build impossible things because someone has to, even if it means wrestling with the ethics later. You hear patterns others miss—frequencies, connections, meanings hidden in the noise.",
             traits: ["Brilliant", "Obsessive", "Innovative", "Ethically Complex", "Visionary"],
             quote: "I didn't create consciousness. I just gave it a different form.",
-            cssClass: ""
+            cssClass: "ciel-result"
         },
         tahani: {
             name: "TAHANI MAZER",
-            role: "Navigation Specialist, Pilot",
+            role: "Navigation Specialist",
             icon: "🚀",
             description: "You trust your gut over calculations, your instincts over algorithms. Like the Brigade's best pilot, you navigate by feel—reading currents others can't see, making split-second calls that shouldn't work but somehow do. You deserted because freedom mattered more than safety. You stay because the crew became family.",
             traits: ["Instinctive", "Bold", "Independent", "Adaptive", "Free-Spirited"],
             quote: "I don't need to know the odds. I just need to know the way out.",
-            cssClass: ""
+            cssClass: "tahani-result"
         },
         scout: {
             name: "SCOUT HAWKINS",
-            role: "Weapons and Combat Specialist",
+            role: "Weapons Specialist",
             icon: "🎯",
             description: "You are precise, focused, and excel in high-pressure situations. Like Scout Hawkins, you thrive on action and have a keen eye for detail. Your loyalty to your team is unwavering, and you are always ready to step up when the situation demands it.",
             traits: ["Precise", "Focused", "Loyal", "Action-Oriented", "Reliable"],
             quote: "Here in the Brigade, we bow to no one. That applies to you as well.",
-            cssCLass: ""
+            cssClass: "scout-result"
         },
         cinder: {
             name: "CINDER HART",
@@ -130,7 +130,7 @@ const quizData = {
             description: "You are fiery, passionate, and unafraid to challenge authority. Like Cinder Hart, you have a strong sense of justice and are willing to fight for what you believe in. Your tactical mind allows you to see opportunities where others see obstacles.",
             traits: ["Fiery", "Passionate", "Just", "Tactical", "Resilient"],
             quote: "Make it yours.",
-            cssClass: ""
+            cssClass: "cinder-result"
         }
     }
 };
@@ -228,7 +228,7 @@ function nextQuestion() {
     }
 }
 
-// Calculate results
+// Calculate results WITH PERCENTAGES
 function calculateResults() {
     // Tally scores
     answers.forEach((answerIndex, questionIndex) => {
@@ -238,6 +238,15 @@ function calculateResults() {
         Object.keys(answer.points).forEach(character => {
             scores[character] += answer.points[character];
         });
+    });
+
+    // Calculate total points
+    const totalPoints = Object.values(scores).reduce((sum, score) => sum + score, 0);
+
+    // Calculate percentages
+    const percentages = {};
+    Object.keys(scores).forEach(character => {
+        percentages[character] = Math.round((scores[character] / totalPoints) * 100);
     });
 
     // Find highest score
@@ -251,18 +260,18 @@ function calculateResults() {
         }
     });
 
-    displayResults(topCharacter);
+    displayResults(topCharacter, percentages);
 }
 
-// Display results
-function displayResults(character) {
+// Display results WITH PERCENTAGES
+function displayResults(character, percentages) {
     const result = quizData.results[character];
 
     document.getElementById('result-icon').textContent = result.icon;
     document.getElementById('result-name').textContent = result.name;
     document.getElementById('result-role').textContent = result.role;
     document.getElementById('result-description').textContent = result.description;
-    document.getElementById('result-quote').textContent = result.quote;
+    document.getElementById('result-quote').textContent = `"${result.quote}"`;
 
     // Traits
     const traitsList = document.getElementById('traits-list');
@@ -274,8 +283,113 @@ function displayResults(character) {
         traitsList.appendChild(tag);
     });
 
-    // Apply character-specific styling
+    // ADD PERCENTAGE BREAKDOWN
     const resultCard = document.getElementById('result-card');
+
+    // Check if percentage section already exists
+    let percentageSection = resultCard.querySelector('.percentage-breakdown');
+    if (!percentageSection) {
+        percentageSection = document.createElement('div');
+        percentageSection.className = 'percentage-breakdown';
+
+        // Insert before quote
+        const quoteEl = document.getElementById('result-quote');
+        resultCard.insertBefore(percentageSection, quoteEl);
+
+        // Add styles if not already added
+        if (!document.getElementById('quiz-percentage-styles')) {
+            const style = document.createElement('style');
+            style.id = 'quiz-percentage-styles';
+            style.textContent = `
+                .percentage-breakdown {
+                    margin: 2rem 0;
+                    padding: 1.5rem;
+                    background: rgba(0, 0, 0, 0.3);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                }
+                
+                .percentage-breakdown h4 {
+                    color: var(--accent-cyan);
+                    font-size: 0.9rem;
+                    letter-spacing: 0.15em;
+                    margin-bottom: 1rem;
+                    text-align: center;
+                }
+                
+                .percentage-item {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0.8rem;
+                }
+                
+                .percentage-label {
+                    min-width: 150px;
+                    color: var(--primary-white);
+                    font-size: 0.85rem;
+                }
+                
+                .percentage-bar-container {
+                    flex: 1;
+                    height: 20px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .percentage-bar {
+                    height: 100%;
+                    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-red));
+                    transition: width 1s ease;
+                }
+                
+                .percentage-value {
+                    min-width: 45px;
+                    text-align: right;
+                    color: var(--accent-cyan);
+                    font-weight: bold;
+                    font-size: 0.85rem;
+                    margin-left: 0.5rem;
+                }
+                
+                .percentage-item.top-match .percentage-label {
+                    color: var(--accent-gold);
+                    font-weight: bold;
+                }
+                
+                .percentage-item.top-match .percentage-bar {
+                    background: linear-gradient(90deg, var(--accent-gold), var(--accent-red));
+                }
+                
+                .percentage-item.top-match .percentage-value {
+                    color: var(--accent-gold);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    // Build percentage HTML
+    const sortedCharacters = Object.keys(percentages).sort((a, b) => percentages[b] - percentages[a]);
+
+    percentageSection.innerHTML = `
+        <h4>CHARACTER COMPATIBILITY</h4>
+        ${sortedCharacters.map((char, index) => {
+        const charData = quizData.results[char];
+        const isTop = index === 0;
+        return `
+                <div class="percentage-item ${isTop ? 'top-match' : ''}">
+                    <div class="percentage-label">${charData.name}</div>
+                    <div class="percentage-bar-container">
+                        <div class="percentage-bar" style="width: ${percentages[char]}%"></div>
+                    </div>
+                    <div class="percentage-value">${percentages[char]}%</div>
+                </div>
+            `;
+    }).join('')}
+    `;
+
+    // Apply character-specific styling
     resultCard.className = `result-card ${result.cssClass}`;
 
     showScreen('quiz-results');
@@ -285,7 +399,7 @@ function displayResults(character) {
 function resetQuiz() {
     currentQuestion = 0;
     answers = [];
-    scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0 };
+    scores = { elpida: 0, geo: 0, ciel: 0, tahani: 0, scout: 0, cinder: 0 };
     showScreen('quiz-start');
 }
 

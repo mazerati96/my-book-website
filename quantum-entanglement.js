@@ -297,9 +297,9 @@ class QuantumEntanglement {
 
         if (closeBtn) {
             closeBtn.addEventListener('click', async () => {
-                if (this.isConnected) {
+                if (this.isConnected && this.partnerId) {
                     const partnerName = await this.getDisplayName(this.partnerId);
-                    const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + partnerName + '. You can reopen it anytime from the footer. Continue?');
+                    const confirmed = confirm(`⚠️ WARNING: Closing will end your quantum entanglement with ${partnerName}. You can reopen it anytime from the footer. Continue?`);
                     if (!confirmed) return;
                 }
                 this.isClosed = true;

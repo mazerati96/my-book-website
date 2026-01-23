@@ -664,15 +664,18 @@ function createMusicToggle() {
     const slider = toggle.querySelector('#volume-slider');
     const volumePercent = toggle.querySelector('.volume-percent');
 
-    // Handle toggle button
     btn.addEventListener('click', () => {
-        const isOn = localStorage.getItem('ambientMusicEnabled') === 'true';
+        const isCurrentlyPlaying = localStorage.getItem('ambientMusicEnabled') === 'true';
 
-        if (isOn) {
+        if (isCurrentlyPlaying) {
+            // Stop music
             sendAudioCommand('PAUSE');
+            localStorage.setItem('ambientMusicEnabled', 'false');
             btn.innerHTML = '🎧 Ambient Music: <strong>OFF</strong>';
         } else {
+            // Start music
             sendAudioCommand('PLAY');
+            localStorage.setItem('ambientMusicEnabled', 'true');
             btn.innerHTML = '🎧 Ambient Music: <strong>ON</strong>';
         }
     });

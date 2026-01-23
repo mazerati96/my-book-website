@@ -55,7 +55,7 @@ export default async function handler(req, res) {
             });
         }
 
-        // Initialize Resend with your API key
+        // Initialize Resend with API key
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         // Send email notification to you

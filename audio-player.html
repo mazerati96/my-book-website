@@ -16,29 +16,77 @@
         const MUSIC_ENABLED_KEY = 'ambientMusicEnabled';
         const MUSIC_TIME_KEY = 'ambientMusicTime';
         const MUSIC_VOLUME_KEY = 'ambientMusicVolume';
+        const SESSION_START_KEY = 'sessionStartTime';
 
         const savedVolume = parseFloat(localStorage.getItem(MUSIC_VOLUME_KEY)) || 0.22;
         audio.volume = savedVolume;
 
-        // Restore state
-        const enabled = localStorage.getItem(MUSIC_ENABLED_KEY) === 'true';
+        // Check if this is a new session (more than 30 minutes since last visit)
+        const lastSession = localStorage.getItem(SESSION_START_KEY);
+        const now = Date.now();
+        const thirtyMinutes = 30 * 60 * 1000;
+        const isNewSession = !lastSession || (now - parseInt(lastSession)) > thirtyMinutes;
+
+        // Update session timestamp
+        localStorage.setItem(SESSION_START_KEY, now.toString());
+
+        // Default to enabled for new sessions
+        let enabled = localStorage.getItem(MUSIC_ENABLED_KEY);
+        if (enabled === null || isNewSession) {
+            // First time or new session - default to ON
+            enabled = 'true';
+            localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
+        } else {
+            enabled = enabled === 'true';
+        }
+
         const savedTime = parseFloat(localStorage.getItem(MUSIC_TIME_KEY)) || 0;
 
         let hasTriedAutoplay = false;
+        let audioUnlocked = false;
 
         audio.addEventListener('loadedmetadata', () => {
-            if (savedTime > 0 && savedTime < audio.duration) {
+            // Restore playback position only if not a new session
+            if (!isNewSession && savedTime > 0 && savedTime < audio.duration) {
                 audio.currentTime = savedTime;
             }
 
             // Try to auto-resume if enabled
             if (enabled && !hasTriedAutoplay) {
                 hasTriedAutoplay = true;
-                audio.play().catch(err => {
+                audio.play().then(() => {
+                    audioUnlocked = true;
+                    console.log('🎵 Audio auto-started successfully');
+                }).catch(err => {
                     console.log('⏸️ Autoplay blocked - music will resume on interaction');
+                    audioUnlocked = false;
+                    // Set up one-time unlock listeners
+                    setupAutoplayUnlock();
                 });
             }
         });
+
+        // Setup listeners to unlock audio on first interaction
+        function setupAutoplayUnlock() {
+            const unlockAudio = () => {
+                if (!audioUnlocked && enabled) {
+                    audio.play().then(() => {
+                        audioUnlocked = true;
+                        console.log('🎵 Audio unlocked via user interaction');
+                        // Remove listeners after success
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('keydown', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    }).catch(() => {
+                        // Keep trying on next interaction
+                    });
+                }
+            };
+
+            document.addEventListener('click', unlockAudio, { once: false });
+            document.addEventListener('keydown', unlockAudio, { once: false });
+            document.addEventListener('touchstart', unlockAudio, { once: false });
+        }
 
         // Persist playback position
         audio.addEventListener('timeupdate', () => {
@@ -51,7 +99,9 @@
 
             switch (type) {
                 case 'PLAY':
-                    audio.play().catch(() => { });
+                    audio.play().then(() => {
+                        audioUnlocked = true;
+                    }).catch(() => { });
                     localStorage.setItem(MUSIC_ENABLED_KEY, 'true');
                     break;
 
@@ -90,8 +140,7 @@
 
             fadeInterval = setInterval(() => {
                 currentStep++;
-                audio.volume =
-                    startVolume + (targetVolume - startVolume) * (currentStep / steps);
+                audio.volume = startVolume + (targetVolume - startVolume) * (currentStep / steps);
 
                 if (currentStep >= steps) {
                     audio.volume = targetVolume;
@@ -99,23 +148,14 @@
                 }
             }, stepTime);
         }
+
+        // Log status for debugging
+        console.log('🎵 Audio Player Status:', {
+            enabled: enabled,
+            isNewSession: isNewSession,
+            volume: audio.volume,
+            savedTime: savedTime
+        });
     </script>
-    <!-- At the bottom of <body>, BEFORE closing </body> tag -->
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <!-- Initialize Firebase ONCE -->
-    <script src="firebase-config.js"></script>
-
-    <!-- Your scripts -->
-    <script src="audio-player.js"></script>
-    <script src="quantum-entanglement.js"></script>
-    <script src="auth.js"></script>
-    <script src="script.js"></script>
-    <script src="load-navigation.js"></script>
-    <script src="memory-fragments.js"></script>
-    <script src="breadcrumbs.js"></script>
 </body>
 </html>

@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Author Login - The Measure of Souls</title>
-   <link rel="stylesheet" href="base.css">
-<link rel="stylesheet" href="navigation.css">
-<link rel="stylesheet" href="layout.css">
-<link rel="stylesheet" href="animations.css">
-<link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="mobile-fixes.css">
     <style>
         .login-container {
             min-height: 100vh;
@@ -33,19 +34,19 @@
             font-family: var(--font-system);
         }
 
-        .login-header h1 {
-            color: var(--accent-cyan);
-            font-size: 1.5rem;
-            letter-spacing: 0.3em;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px var(--accent-cyan);
-        }
+            .login-header h1 {
+                color: var(--accent-cyan);
+                font-size: 1.5rem;
+                letter-spacing: 0.3em;
+                margin-bottom: 0.5rem;
+                text-shadow: 0 0 10px var(--accent-cyan);
+            }
 
-        .login-header p {
-            color: var(--dark-white);
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-        }
+            .login-header p {
+                color: var(--dark-white);
+                font-size: 0.8rem;
+                letter-spacing: 0.1em;
+            }
 
         .login-form {
             display: flex;
@@ -59,29 +60,29 @@
             gap: 0.5rem;
         }
 
-        .form-group label {
-            color: var(--accent-cyan);
-            font-family: var(--font-system);
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
+            .form-group label {
+                color: var(--accent-cyan);
+                font-family: var(--font-system);
+                font-size: 0.9rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+            }
 
-        .form-group input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--accent-cyan);
-            color: var(--primary-white);
-            padding: 0.8rem;
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
+            .form-group input {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--accent-cyan);
+                color: var(--primary-white);
+                padding: 0.8rem;
+                font-family: var(--font-mono);
+                font-size: 1rem;
+                transition: all 0.3s;
+            }
 
-        .form-group input:focus {
-            outline: none;
-            box-shadow: 0 0 15px var(--accent-cyan);
-            background: rgba(255, 255, 255, 0.1);
-        }
+                .form-group input:focus {
+                    outline: none;
+                    box-shadow: 0 0 15px var(--accent-cyan);
+                    background: rgba(255, 255, 255, 0.1);
+                }
 
         .login-btn {
             background: var(--accent-cyan);
@@ -97,15 +98,15 @@
             text-transform: uppercase;
         }
 
-        .login-btn:hover {
-            box-shadow: 0 0 25px var(--accent-cyan);
-            transform: translateY(-2px);
-        }
+            .login-btn:hover {
+                box-shadow: 0 0 25px var(--accent-cyan);
+                transform: translateY(-2px);
+            }
 
-        .login-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+            .login-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
 
         .error-message {
             background: rgba(255, 0, 51, 0.2);
@@ -117,25 +118,25 @@
             display: none;
         }
 
-        .error-message.show {
-            display: block;
-        }
+            .error-message.show {
+                display: block;
+            }
 
         .back-link {
             text-align: center;
             margin-top: 2rem;
         }
 
-        .back-link a {
-            color: var(--dark-white);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
+            .back-link a {
+                color: var(--dark-white);
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: all 0.3s;
+            }
 
-        .back-link a:hover {
-            color: var(--accent-cyan);
-        }
+                .back-link a:hover {
+                    color: var(--accent-cyan);
+                }
     </style>
 </head>
 <body>

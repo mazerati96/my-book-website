@@ -398,7 +398,7 @@ function animate() {
         rotationVelocity.y *= 0.95;
     }
 
-    // Animate black hole accretion disk (keep your existing code)
+    // Animate black hole accretion disk 
     if (blackHole && blackHole.diskLayers) {
         const time = Date.now() * 0.001;
 

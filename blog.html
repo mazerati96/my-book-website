@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="blog.css">
+    <link rel="stylesheet" href="mobile-fixes.css">
     <style>
         .blog-container {
             max-width: 1200px;
@@ -22,19 +23,19 @@
             margin-bottom: 4rem;
         }
 
-        .blog-header h1 {
-            color: var(--accent-cyan);
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px var(--accent-cyan);
-            animation: pulse-glow-intense 3s ease-in-out infinite;
-        }
+            .blog-header h1 {
+                color: var(--accent-cyan);
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                text-shadow: 0 0 20px var(--accent-cyan);
+                animation: pulse-glow-intense 3s ease-in-out infinite;
+            }
 
-        .blog-header p {
-            color: var(--dark-white);
-            font-size: 1.1rem;
-            letter-spacing: 0.1em;
-        }
+            .blog-header p {
+                color: var(--dark-white);
+                font-size: 1.1rem;
+                letter-spacing: 0.1em;
+            }
 
         .blog-categories {
             display: flex;
@@ -56,13 +57,13 @@
             letter-spacing: 0.1em;
         }
 
-        .category-filter:hover,
-        .category-filter.active {
-            border-color: var(--accent-cyan);
-            background: var(--accent-cyan);
-            color: var(--bg-black);
-            box-shadow: 0 0 15px var(--accent-cyan);
-        }
+            .category-filter:hover,
+            .category-filter.active {
+                border-color: var(--accent-cyan);
+                background: var(--accent-cyan);
+                color: var(--bg-black);
+                box-shadow: 0 0 15px var(--accent-cyan);
+            }
 
         .blog-grid {
             display: grid;
@@ -79,11 +80,11 @@
             cursor: pointer;
         }
 
-        .blog-card:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px var(--accent-cyan);
-            transform: translateY(-5px);
-        }
+            .blog-card:hover {
+                border-color: var(--accent-cyan);
+                box-shadow: 0 0 20px var(--accent-cyan);
+                transform: translateY(-5px);
+            }
 
         .blog-card-category {
             background: var(--accent-cyan);
@@ -138,9 +139,9 @@
             padding: 2rem;
         }
 
-        .post-modal.active {
-            display: block;
-        }
+            .post-modal.active {
+                display: block;
+            }
 
         .post-modal-content {
             max-width: 800px;
@@ -162,9 +163,9 @@
             margin-bottom: 1rem;
         }
 
-        .post-modal-close:hover {
-            box-shadow: 0 0 15px var(--accent-red);
-        }
+            .post-modal-close:hover {
+                box-shadow: 0 0 15px var(--accent-red);
+            }
 
         .post-modal h1 {
             color: var(--accent-cyan);
@@ -367,7 +368,7 @@
     <!-- Initialize Firebase ONCE -->
     <script src="firebase-config.js"></script>
 
-    <!-- Your scripts -->
+    <!-- Le scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="audio-player.js"></script>

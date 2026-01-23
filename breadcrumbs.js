@@ -1,5 +1,5 @@
 // ============================================
-// BREADCRUMB SYSTEM PATH NAVIGATION
+// BREADCRUMB SYSTEM PATH NAVIGATION - FIXED
 // ============================================
 
 class BreadcrumbSystem {
@@ -16,7 +16,14 @@ class BreadcrumbSystem {
             'contact.html': { name: 'CONTACT', parent: 'index.html' },
             'characters.html': { name: 'CHARACTERS', parent: 'universe.html' },
             'timeline.html': { name: 'TIMELINE', parent: 'universe.html' },
-            'gallery.html': { name: 'GALLERY', parent: 'index.html' }
+            'gallery.html': { name: 'GALLERY', parent: 'index.html' },
+            // ADDED MISSING PAGES:
+            'quiz.html': { name: 'QUIZ', parent: 'index.html' },
+            'memory-fragments.html': { name: 'FRAGMENTS', parent: 'index.html' },
+            'fragments.html': { name: 'FRAGMENTS', parent: 'index.html' },
+            'blog.html': { name: 'BLOG', parent: 'index.html' },
+            'login.html': { name: 'LOGIN', parent: 'index.html' },
+            'profile.html': { name: 'PROFILE', parent: 'index.html' }
         };
     }
 
@@ -30,7 +37,13 @@ class BreadcrumbSystem {
 
         // Extract filename
         const filename = path.split('/').pop();
-        return filename || 'index.html';
+
+        // Handle empty filename (trailing slash)
+        if (!filename || filename === '') {
+            return 'index.html';
+        }
+
+        return filename;
     }
 
     buildPath(currentPage) {
@@ -58,6 +71,13 @@ class BreadcrumbSystem {
 
     init() {
         const currentPage = this.getCurrentPage();
+
+        // Don't show breadcrumbs on index/home page
+        if (currentPage === 'index.html' || currentPage === '/') {
+            console.log('⚠️ Breadcrumbs hidden on homepage');
+            return;
+        }
+
         const pathArray = this.buildPath(currentPage);
 
         // Create breadcrumb container

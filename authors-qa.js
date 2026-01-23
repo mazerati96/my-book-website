@@ -21,7 +21,7 @@ function initAuthorQA() {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>[ TRANSMITTING... ]</span>';
 
-        // Simulate sending (replace with your backend endpoint later)
+      
         setTimeout(() => {
             // Show success message
             successMessage.classList.add('show');
