@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="animations.css">
 
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <!-- Page Transition Overlay -->
@@ -153,10 +149,22 @@
 
 
     <script>
-        // ============================================
-        // LOGIN PAGE LOGIC
-        // ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait for authSystem to be created by auth.js (which requires firebase-config.js)
+    const waitForAuthSystem = (cb, interval = 40, timeout = 5000) => {
+        const start = Date.now();
+        (function poll() {
+            if (window.authSystem) return cb();
+            if (Date.now() - start > timeout) {
+                console.error('authSystem not available after timeout');
+                return;
+            }
+            setTimeout(poll, interval);
+        })();
+    };
 
+    waitForAuthSystem(() => {
+        // ---------- BEGIN: existing login page logic ----------
         // Redirect if already logged in
         authSystem.onAuthStateChange((user) => {
             if (user) {
@@ -265,19 +273,14 @@
             window.location.href = 'index.html';
         });
 
-        // Forgot password modal
+        // Forgot password modal handlers...
         const resetModal = document.getElementById('resetModal');
         const forgotBtn = document.getElementById('forgotPasswordBtn');
         const resetCancelBtn = document.getElementById('resetCancelBtn');
         const resetSendBtn = document.getElementById('resetSendBtn');
 
-        forgotBtn.addEventListener('click', () => {
-            resetModal.style.display = 'flex';
-        });
-
-        resetCancelBtn.addEventListener('click', () => {
-            resetModal.style.display = 'none';
-        });
+        forgotBtn.addEventListener('click', () => { resetModal.style.display = 'flex'; });
+        resetCancelBtn.addEventListener('click', () => { resetModal.style.display = 'none'; });
 
         resetSendBtn.addEventListener('click', async () => {
             const email = document.getElementById('resetEmail').value.trim();
@@ -300,9 +303,7 @@
 
             if (result.success) {
                 successEl.style.display = 'block';
-                setTimeout(() => {
-                    resetModal.style.display = 'none';
-                }, 3000);
+                setTimeout(() => { resetModal.style.display = 'none'; }, 3000);
             } else {
                 errorEl.textContent = result.error;
                 errorEl.style.display = 'block';
@@ -311,8 +312,10 @@
             resetSendBtn.disabled = false;
             resetSendBtn.textContent = 'Send Reset Link';
         });
-    </script>
-
+        // ---------- END: existing login page logic ----------
+    });
+});
+</script>
     <footer>
         <div class="footer-content">
             <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>

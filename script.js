@@ -158,6 +158,12 @@ function initPageTransition() {
     createTransitionElements();
     const overlay = document.querySelector('.page-transition');
 
+    // Guard: some pages don't include .page-transition
+    if (!overlay) {
+        // Nothing to do on this page
+        return;
+    }
+
     // Use event delegation on the document to catch all link clicks
     document.addEventListener('click', function (e) {
         // Find the closest <a> tag
