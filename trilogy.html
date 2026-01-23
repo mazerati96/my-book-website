@@ -182,15 +182,15 @@
         <div class="footer-decoration"></div>
     </footer>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (load once, before firebase-config.js) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-    <!-- Initialize Firebase ONCE -->
+    <!-- Initialize Firebase (single source) -->
     <script src="firebase-config.js"></script>
 
-    <!-- Le scripts -->
+    <!-- Application scripts (firebase-config.js must come before auth.js / other firebase consumers) -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="audio-player.js"></script>
@@ -200,6 +200,5 @@
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
-
 </body>
 </html>

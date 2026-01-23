@@ -22,8 +22,8 @@ const crypticMessages = [
 
 class QuantumEntanglement {
     constructor() {
-        // PERSISTENT USER ID - stored in localStorage
-        this.userId = this.getOrCreateUserId();
+        // PERSISTENT USER ID - set later during async initialize()
+        this.userId = null;
         this.partnerId = this.getStoredPartnerId();
         this.db = null;
         this.userRef = null;
@@ -38,6 +38,7 @@ class QuantumEntanglement {
         this.isClosed = this.getClosedState();
     }
 
+    // Get or create persistent User ID
     async getOrCreateUserId() {
         let userId = localStorage.getItem('quantumUserId');
         if (!userId) {
@@ -119,14 +120,18 @@ class QuantumEntanglement {
             return;
         }
 
+        // Ensure we have a concrete userId (avoid Promise leaking into DB paths)
+        this.userId = await this.getOrCreateUserId();
+
         this.db = firebase.database();
 
         // Create widget HTML
         this.createWidget();
         this.createLaunchButton();
 
-        // Display user's ID
-        document.getElementById('yourId').textContent = this.userId;
+        // Display user's ID if element exists
+        const yourIdEl = document.getElementById('yourId');
+        if (yourIdEl) yourIdEl.textContent = this.userId;
 
         // Register user in database
         await this.registerUser();
@@ -157,9 +162,8 @@ class QuantumEntanglement {
     }
 
     createLaunchButton() {
-        // Add launch button to footer
+        // Add launch button to footer (fallback to fixed body button if no footer)
         const footer = document.querySelector('footer');
-        if (!footer) return;
 
         // Remove existing button if present
         const existingBtn = document.getElementById('qeLaunchBtn');
@@ -175,7 +179,24 @@ class QuantumEntanglement {
             this.launchWidget();
         });
 
-        footer.appendChild(launchBtn);
+        if (footer) {
+            footer.appendChild(launchBtn);
+            return;
+        }
+
+        // Fallback: fixed floating-launch button (visible on pages without footer)
+        launchBtn.style.position = 'fixed';
+        launchBtn.style.right = '18px';
+        launchBtn.style.bottom = '18px';
+        launchBtn.style.zIndex = '99999';
+        launchBtn.style.padding = '10px 14px';
+        launchBtn.style.borderRadius = '8px';
+        launchBtn.style.border = 'none';
+        launchBtn.style.cursor = 'pointer';
+        launchBtn.style.background = 'linear-gradient(90deg,#00d4ff,#0066ff)';
+        launchBtn.style.color = '#000';
+        launchBtn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.35)';
+        document.body.appendChild(launchBtn);
     }
 
     async launchWidget() {
@@ -185,11 +206,22 @@ class QuantumEntanglement {
 
         // If widget doesn't exist yet, initialize it
         if (!document.getElementById('quantumWidget')) {
-            
+            // Firebase should already be initialized by firebase-config.js
+            if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
+                console.error('❌ Firebase not initialized. Include firebase-config.js before quantum-entanglement.js');
+                this.createLaunchButton();
+                return;
+            }
             this.db = firebase.database();
 
+            // Ensure we have a concrete userId
+            if (!this.userId) {
+                this.userId = await this.getOrCreateUserId();
+            }
+
             this.createWidget();
-            document.getElementById('yourId').textContent = this.userId;
+            const yourIdEl = document.getElementById('yourId');
+            if (yourIdEl) yourIdEl.textContent = this.userId;
 
             await this.registerUser();
 
@@ -277,42 +309,51 @@ class QuantumEntanglement {
         const maximizeBtn = document.getElementById('maximizeBtn');
         const minimizedState = document.getElementById('minimizedState');
 
-        // Close with warning
-        closeBtn.addEventListener('click', () => {
-            if (this.isConnected) {
-                const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. You can reopen it anytime from the footer. Continue?');
-                if (!confirmed) return;
-            }
+        if (closeBtn) {
+            // Close with warning
+            closeBtn.addEventListener('click', () => {
+                if (this.isConnected) {
+                    const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. You can reopen it anytime from the footer. Continue?');
+                    if (!confirmed) return;
+                }
 
-            // Mark as closed
-            this.isClosed = true;
-            this.storeClosedState(true);
+                // Mark as closed
+                this.isClosed = true;
+                this.storeClosedState(true);
 
-            // Hide widget
-            document.getElementById('quantumWidget').style.display = 'none';
+                // Hide widget
+                const widgetEl = document.getElementById('quantumWidget');
+                if (widgetEl) widgetEl.style.display = 'none';
 
-            // Cleanup listeners but keep user data
-            this.cleanupListeners();
-        });
+                // Cleanup listeners but keep user data
+                this.cleanupListeners();
+            });
+        }
 
-        // Minimize toggle
-        minimizeBtn.addEventListener('click', () => {
-            this.toggleMinimize();
-        });
-
-        // Maximize from minimized state
-        maximizeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent triggering minimizedState click
-            this.toggleMinimize();
-        });
-
-        // Click minimized widget to maximize
-        minimizedState.addEventListener('click', (e) => {
-            // Only maximize if not clicking the maximize button
-            if (!e.target.classList.contains('maximize-btn')) {
+        if (minimizeBtn) {
+            // Minimize toggle
+            minimizeBtn.addEventListener('click', () => {
                 this.toggleMinimize();
-            }
-        });
+            });
+        }
+
+        if (maximizeBtn) {
+            // Maximize from minimized state
+            maximizeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent triggering minimizedState click
+                this.toggleMinimize();
+            });
+        }
+
+        if (minimizedState) {
+            // Click minimized widget to maximize
+            minimizedState.addEventListener('click', (e) => {
+                // Only maximize if not clicking the maximize button
+                if (!e.target.classList.contains('maximize-btn')) {
+                    this.toggleMinimize();
+                }
+            });
+        }
     }
 
     applyMinimizedState() {
@@ -349,24 +390,29 @@ class QuantumEntanglement {
         this.storeMinimizedState(this.isMinimized);
 
         if (this.isMinimized) {
-            content.style.display = 'none';
-            minimized.style.display = 'flex';
-            widget.style.minWidth = 'auto';
-            widget.style.width = '200px';
-            widget.style.height = '60px';
-            minimizeBtn.style.display = 'none';
+            if (content) content.style.display = 'none';
+            if (minimized) minimized.style.display = 'flex';
+            if (widget) {
+                widget.style.minWidth = 'auto';
+                widget.style.width = '200px';
+                widget.style.height = '60px';
+            }
+            if (minimizeBtn) minimizeBtn.style.display = 'none';
 
             // Update minimized text
             if (this.partnerId) {
-                document.getElementById('partnerIdMini').textContent = this.partnerId;
+                const partnerMini = document.getElementById('partnerIdMini');
+                if (partnerMini) partnerMini.textContent = this.partnerId;
             }
         } else {
-            content.style.display = 'block';
-            minimized.style.display = 'none';
-            widget.style.minWidth = '320px';
-            widget.style.width = 'auto';
-            widget.style.height = 'auto';
-            minimizeBtn.style.display = 'flex';
+            if (content) content.style.display = 'block';
+            if (minimized) minimized.style.display = 'none';
+            if (widget) {
+                widget.style.minWidth = '320px';
+                widget.style.width = 'auto';
+                widget.style.height = 'auto';
+            }
+            if (minimizeBtn) minimizeBtn.style.display = 'flex';
 
             // Clear unread count
             this.unreadCount = 0;
@@ -378,6 +424,11 @@ class QuantumEntanglement {
     }
 
     async registerUser() {
+        // Ensure userId is a string
+        if (!this.userId) {
+            this.userId = await this.getOrCreateUserId();
+        }
+
         this.userRef = this.db.ref('activeUsers/' + this.userId);
 
         await this.userRef.set({
@@ -403,6 +454,8 @@ class QuantumEntanglement {
 
     listenForPartnerUpdates() {
         // Listen for when OUR user data changes (when someone pairs with us)
+        if (!this.userRef) return;
+
         this.userRef.on('value', async (snapshot) => {
             const userData = snapshot.val();
             if (userData && userData.partnerId && !this.isConnected) {
@@ -493,7 +546,7 @@ class QuantumEntanglement {
         }, 3000);
     }
 
-    searchForPartner() {
+    async searchForPartner() {
         const usersRef = this.db.ref('activeUsers');
 
         usersRef.once('value', async (snapshot) => {
@@ -534,6 +587,8 @@ class QuantumEntanglement {
         this.playConnectionSound();
 
         const partnerSection = document.getElementById('partnerSection');
+        if (!partnerSection) return;
+
         partnerSection.innerHTML = `
             <div class="entanglement-status">
                 <div class="status-label">ENTANGLED WITH:</div>
@@ -565,8 +620,8 @@ class QuantumEntanglement {
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
 
-        sendBtn.addEventListener('click', () => this.sendChatMessage());
-        chatInput.addEventListener('keypress', (e) => {
+        if (sendBtn) sendBtn.addEventListener('click', () => this.sendChatMessage());
+        if (chatInput) chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.sendChatMessage();
         });
     }
@@ -648,6 +703,7 @@ class QuantumEntanglement {
 
     sendChatMessage() {
         const input = document.getElementById('chatInput');
+        if (!input) return;
         const text = input.value.trim();
 
         if (!text) return;
@@ -743,11 +799,11 @@ class QuantumEntanglement {
         if (this.partnerRef && this.partnerDisconnectListener) {
             this.partnerRef.off('value', this.partnerDisconnectListener);
         }
-        if (this.messageListener) {
+        if (this.messageListener && this.userId && this.partnerId) {
             const pairId = [this.userId, this.partnerId].sort().join('_');
             this.db.ref('messages/' + pairId).off('value', this.messageListener);
         }
-        if (this.chatListener) {
+        if (this.chatListener && this.userId && this.partnerId) {
             const pairId = [this.userId, this.partnerId].sort().join('_');
             this.db.ref('chat/' + pairId).off('child_added', this.chatListener);
         }
@@ -854,12 +910,12 @@ class QuantumEntanglement {
 
 // Auto-initialize when page loads
 window.addEventListener('DOMContentLoaded', () => {
-    // Only initialize if Firebase is loaded (firebase-config.js must run first)
+    // Only initialize if Firebase is loaded
     if (typeof firebase !== 'undefined') {
         const entanglement = new QuantumEntanglement();
         entanglement.initialize();
         console.log('%c⚛️ QUANTUM ENTANGLEMENT ACTIVE', 'color: #00d4ff; font-size: 16px; font-weight: bold;');
     } else {
-        console.error('Firebase not loaded. Include Firebase scripts and firebase-config.js before quantum-entanglement.js');
+        console.error('Firebase not loaded. Include Firebase scripts before quantum-entanglement.js');
     }
 });

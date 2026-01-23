@@ -333,13 +333,16 @@
             <a href="#">Terms of Service</a>
         </div>
     </footer>
-    <!-- Firebase SDK -->
+
+    <!-- Firebase SDK (load once) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-    <!-- Initialize Firebase ONCE -->
+    <!-- Initialize Firebase (single source) -->
     <script src="firebase-config.js"></script>
+
+    <!-- Application scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="script.js"></script>
@@ -349,7 +352,5 @@
     <script src="quantum-entanglement.js"></script>
     <script src="auth.js"></script>
     <script src="memory-fragments.js"></script>
-
-
 </body>
 </html>
