@@ -1,13 +1,15 @@
 // ============================================
 // QUANTUM ENTANGLEMENT - FINAL PERSISTENT VERSION
 // ============================================
-// Firebase is initialized in firebase-config.js
-const db = firebase.database();
+
+// Note: firebase-config.js is the single source of truth for Firebase setup.
+// This file assumes firebase is already initialized by firebase-config.js.
+
 
 // Cryptic messages pool
 const crypticMessages = [
-    "Fragment 0x7A2C: She remembered sunlight. She remembered waking. Which was real?",
-    "Fragment 0x9F2E: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx.",
+    "Fragment 0x7A2C: She remembered dying. She remembered waking. Which was real?",
+    "Fragment 0x9F2E: The signal doesn't call. It's already inside you.",
     "Fragment 0x4B19: Consciousness is not binary. It exists in the space between.",
     "Fragment 0x8D3F: Ten years of memories. Three days of existence. What defines the soul?",
     "Fragment 0x2C7A: The frequency predates the stars. We did not discover it. It discovered us.",
@@ -109,7 +111,14 @@ class QuantumEntanglement {
             return;
         }
 
-       
+        // Ensure Firebase was initialized by firebase-config.js
+        if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
+            console.error('❌ Firebase not initialized. Include firebase-config.js before quantum-entanglement.js');
+            // Create launch button anyway so user can attempt to open widget later
+            this.createLaunchButton();
+            return;
+        }
+
         this.db = firebase.database();
 
         // Create widget HTML
@@ -845,14 +854,12 @@ class QuantumEntanglement {
 
 // Auto-initialize when page loads
 window.addEventListener('DOMContentLoaded', () => {
-    // Only initialize if Firebase is loaded
+    // Only initialize if Firebase is loaded (firebase-config.js must run first)
     if (typeof firebase !== 'undefined') {
         const entanglement = new QuantumEntanglement();
         entanglement.initialize();
-        // Make instance globally accessible
-        window.quantumEntanglement = entanglement;
         console.log('%c⚛️ QUANTUM ENTANGLEMENT ACTIVE', 'color: #00d4ff; font-size: 16px; font-weight: bold;');
     } else {
-        console.error('Firebase not loaded. Include Firebase scripts before quantum-entanglement.js');
+        console.error('Firebase not loaded. Include Firebase scripts and firebase-config.js before quantum-entanglement.js');
     }
 });
