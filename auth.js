@@ -2,13 +2,18 @@
 // FIREBASE AUTHENTICATION SYSTEM
 // ============================================
 
-// Firebase configuration (already initialized in other files)
+// ============================================
+// FIREBASE AUTHENTICATION SYSTEM
+// ============================================
+
+// Firebase is already initialized in firebase-config.js
 if (!firebase.apps.length) {
-    console.error('Firebase not initialized! Make sure quantum-entanglement.js loads first.');
+    throw new Error('❌ Firebase not initialized! Include firebase-config.js before auth.js');
 }
 
 const auth = firebase.auth();
 const db = firebase.database();
+
 
 // ============================================
 // AUTH STATE MANAGEMENT

@@ -1,7 +1,8 @@
 // ============================================
 // QUANTUM ENTANGLEMENT - FINAL PERSISTENT VERSION
 // ============================================
-
+// Firebase is initialized in firebase-config.js
+const db = firebase.database();
 
 // Cryptic messages pool
 const crypticMessages = [
