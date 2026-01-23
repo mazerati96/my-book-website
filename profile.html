@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - The Measure of Souls</title>
+    <title>Login - The Measure of Souls</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="navigation.css">
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="mobile-fixes.css">
 </head>
@@ -17,136 +17,119 @@
     <!-- Animated Background -->
     <div class="matrix-style-bg"></div>
 
-    <!-- Profile Container -->
-    <div class="profile-container">
-        <div class="profile-card">
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-card">
             <!-- Header -->
-            <div class="profile-header">
-                <div class="profile-icon">👤</div>
-                <h1>USER PROFILE</h1>
-                <button class="logout-btn" id="logoutBtn">LOGOUT</button>
+            <div class="login-header">
+                <div class="login-brackets">[</div>
+                <h1>AUTHENTICATION</h1>
+                <div class="login-brackets">]</div>
             </div>
 
-            <!-- Loading State -->
-            <div class="loading-state" id="loadingState">
-                <div class="loading-spinner"></div>
-                <p>Loading profile data...</p>
+            <div class="login-subtitle">THE MEASURE OF SOULS</div>
+
+            <!-- Tab Switcher -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="email">Email Account</button>
+                <button class="auth-tab" data-tab="anonymous">Anonymous</button>
+                <button class="auth-tab" data-tab="guest">Guest Mode</button>
             </div>
 
-            <!-- Profile Content -->
-            <div class="profile-content" id="profileContent" style="display: none;">
-
-                <!-- Account Info -->
-                <div class="profile-section">
-                    <h2 class="section-title">ACCOUNT INFORMATION</h2>
-
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">USERNAME</div>
-                            <div class="info-value" id="profileUsername">-</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label">EMAIL</div>
-                            <div class="info-value" id="profileEmail">-</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label">ACCOUNT TYPE</div>
-                            <div class="info-value" id="profileAccountType">-</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label">MEMBER SINCE</div>
-                            <div class="info-value" id="profileCreatedAt">-</div>
-                        </div>
-                    </div>
+            <!-- Email/Password Form -->
+            <div class="auth-form active" id="emailForm">
+                <div class="form-mode-toggle">
+                    <button class="mode-btn active" data-mode="login">Login</button>
+                    <button class="mode-btn" data-mode="signup">Sign Up</button>
                 </div>
 
-                <!-- Progress Stats -->
-                <div class="profile-section">
-                    <h2 class="section-title">PROGRESS STATISTICS</h2>
-
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">📦</div>
-                            <div class="stat-value" id="statFragments">0 / 10</div>
-                            <div class="stat-label">Memory Fragments</div>
-                            <div class="stat-progress">
-                                <div class="progress-bar" id="fragmentsProgress"></div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="stat-icon">🔓</div>
-                            <div class="stat-value" id="statRiddles">0 / 10</div>
-                            <div class="stat-label">Riddles Solved</div>
-                            <div class="stat-progress">
-                                <div class="progress-bar" id="riddlesProgress"></div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="stat-icon">📡</div>
-                            <div class="stat-value" id="statSignal">0%</div>
-                            <div class="stat-label">Signal Decoded</div>
-                            <div class="stat-progress">
-                                <div class="progress-bar" id="signalProgress"></div>
-                            </div>
-                        </div>
+                <form id="emailAuthForm">
+                    <!-- Username (signup only) -->
+                    <div class="form-group" id="usernameGroup" style="display: none;">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="3-15 characters, no spaces" maxlength="15">
+                        <div class="form-hint">Case-sensitive. Can use letters, numbers, _ and -</div>
                     </div>
+
+                    <!-- Email OR Username (login only) -->
+                    <div class="form-group" id="loginFieldGroup">
+                        <label for="emailOrUsername">Email or Username</label>
+                        <input type="text" id="emailOrUsername" placeholder="your@email.com or username" required>
+                        <div class="form-hint">Enter your email address or username</div>
+                    </div>
+
+                    <!-- Email (signup only) -->
+                    <div class="form-group" id="signupEmailGroup" style="display: none;">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Minimum 6 characters" required>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div class="error-message" id="emailError" style="display: none;"></div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn" id="emailSubmitBtn">
+                        <span>LOGIN</span>
+                        <div class="btn-glow"></div>
+                    </button>
+
+                    <!-- Forgot Password -->
+                    <div class="forgot-password">
+                        <button type="button" id="forgotPasswordBtn">Forgot password?</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Anonymous Form -->
+            <div class="auth-form" id="anonymousForm">
+                <div class="anonymous-info">
+                    ⚠️ Anonymous accounts have no email. If you clear browser data, you'll lose access permanently.
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="profile-section">
-                    <h2 class="section-title">QUICK ACTIONS</h2>
-
-                    <div class="actions-grid">
-                        <a href="signal.html" class="action-btn">
-                            <span class="action-icon">📡</span>
-                            <span>Continue Decoder</span>
-                        </a>
-
-                        <a href="index.html" class="action-btn">
-                            <span class="action-icon">📦</span>
-                            <span>Collect Fragments</span>
-                        </a>
-
-                        <a href="quantum-entanglement.html" class="action-btn">
-                            <span class="action-icon">⚛️</span>
-                            <span>Quantum Entangle</span>
-                        </a>
-
-                        <a href="fragments-complete.html" class="action-btn">
-                            <span class="action-icon">🔒</span>
-                            <span>Secret Page</span>
-                        </a>
+                <form id="anonymousAuthForm">
+                    <div class="form-group">
+                        <label for="anonUsername">Choose Username</label>
+                        <input type="text" id="anonUsername" placeholder="Your unique identifier" maxlength="15" required>
+                        <div class="form-hint">Case-sensitive. Can use letters, numbers, _ and -</div>
                     </div>
-                </div>
 
-                <!-- Settings -->
-                <div class="profile-section">
-                    <h2 class="section-title">SETTINGS</h2>
-
-                    <div class="settings-list">
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <div class="setting-name">Clear Local Progress</div>
-                                <div class="setting-description">Reset all memory fragments and decoder progress</div>
-                            </div>
-                            <button class="danger-btn" id="clearProgressBtn">CLEAR</button>
-                        </div>
-
-                        <div class="setting-item" id="deleteAccountSetting">
-                            <div class="setting-info">
-                                <div class="setting-name">Delete Account</div>
-                                <div class="setting-description">Permanently delete your account and all data</div>
-                            </div>
-                            <button class="danger-btn" id="deleteAccountBtn">DELETE</button>
-                        </div>
+                    <div class="form-group">
+                        <label for="anonPassword">Create Password</label>
+                        <input type="password" id="anonPassword" placeholder="Minimum 6 characters" required>
+                        <div class="form-hint">You'll need this to login, but cannot reset it</div>
                     </div>
-                </div>
 
+                    <div class="error-message" id="anonError" style="display: none;"></div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>CREATE ANONYMOUS ACCOUNT</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Guest Mode -->
+            <div class="auth-form" id="guestForm">
+                <div class="guest-info">
+                    <h3>Continue as Guest</h3>
+                    <p>Browse the site without an account. Your progress won't be saved.</p>
+                    <ul class="guest-limitations">
+                        <li>✗ Memory fragments progress not saved</li>
+                        <li>✗ Signal decoder progress not saved</li>
+                        <li>✗ Random Quantum Entanglement ID</li>
+                        <li>✓ Full site access</li>
+                    </ul>
+                    <button class="submit-btn" id="guestContinueBtn">
+                        <span>CONTINUE AS GUEST</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -156,18 +139,22 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal-overlay" id="confirmModal" style="display: none;">
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="resetModal" style="display: none;">
         <div class="modal-content">
-            <h2 id="confirmTitle">Confirm Action</h2>
-            <p id="confirmMessage">Are you sure?</p>
+            <h2>Reset Password</h2>
+            <p>Enter your email address to receive a password reset link.</p>
+            <input type="email" id="resetEmail" placeholder="your@email.com" class="form-input">
+            <div class="error-message" id="resetError" style="display: none;"></div>
+            <div class="success-message" id="resetSuccess" style="display: none;">✓ Reset email sent! Check your inbox.</div>
             <div class="modal-buttons">
-                <button class="modal-btn secondary" id="confirmCancelBtn">Cancel</button>
-                <button class="modal-btn danger" id="confirmActionBtn">Confirm</button>
+                <button class="modal-btn secondary" id="resetCancelBtn">Cancel</button>
+                <button class="modal-btn primary" id="resetSendBtn">Send Reset Link</button>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
@@ -188,7 +175,7 @@
     <!-- Initialize Firebase ONCE -->
     <script src="firebase-config.js"></script>
 
-    <!-- Le scripts -->
+    <!-- Application scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="audio-player.js"></script>
@@ -200,22 +187,13 @@
     <script src="breadcrumbs.js"></script>
 
     <script>
-        // ============================================
-        // PROFILE PAGE LOGIC - WRAPPED IN WAIT CHECK
-        // ============================================
-
         document.addEventListener('DOMContentLoaded', () => {
-            const loadingState = document.getElementById('loadingState');
-            const profileContent = document.getElementById('profileContent');
-
-            // WAIT FOR AUTHSYSTEM TO BE READY
             const waitForAuthSystem = (cb, interval = 40, timeout = 5000) => {
                 const start = Date.now();
                 (function poll() {
                     if (window.authSystem) return cb();
                     if (Date.now() - start > timeout) {
                         console.error('authSystem not available after timeout');
-                        loadingState.innerHTML = '<p style="color: var(--accent-red);">Error loading authentication system. Please refresh.</p>';
                         return;
                     }
                     setTimeout(poll, interval);
@@ -223,238 +201,198 @@
             };
 
             waitForAuthSystem(() => {
-                console.log('✅ authSystem ready on profile page');
-
-                // Redirect if not logged in
-                authSystem.onAuthStateChange(async (user) => {
-                    if (!user) {
-                        window.location.href = 'login.html';
-                        return;
+                // Redirect if already logged in
+                authSystem.onAuthStateChange((user) => {
+                    if (user) {
+                        window.location.href = 'profile.html';
                     }
-
-                    // Load profile data
-                    await loadProfileData(user);
                 });
 
-                // Check if already logged in
-                if (firebase.auth().currentUser) {
-                    loadProfileData(firebase.auth().currentUser);
-                }
-            });
+                // Tab switching
+                const authTabs = document.querySelectorAll('.auth-tab');
+                const authForms = document.querySelectorAll('.auth-form');
 
-            async function loadProfileData(user) {
-                try {
-                    console.log('Loading profile for user:', user.uid);
+                authTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetTab = tab.dataset.tab;
 
-                    // Get user profile from database
-                    const snapshot = await firebase.database().ref('users/' + user.uid).once('value');
-                    const profile = snapshot.val();
+                        authTabs.forEach(t => t.classList.remove('active'));
+                        authForms.forEach(f => f.classList.remove('active'));
 
-                    if (!profile) {
-                        console.error('Profile not found');
-                        loadingState.innerHTML = '<p style="color: var(--accent-red);">Profile not found. Please contact support.</p>';
-                        return;
-                    }
-
-                    console.log('Profile loaded:', profile);
-
-                    // Update basic info
-                    document.getElementById('profileUsername').textContent = profile.username;
-                    document.getElementById('profileEmail').textContent = profile.email || 'Anonymous Account';
-                    document.getElementById('profileAccountType').textContent =
-                        profile.accountType === 'email' ? 'Email Account' : 'Anonymous Account';
-
-                    if (profile.createdAt) {
-                        const date = new Date(profile.createdAt);
-                        document.getElementById('profileCreatedAt').textContent = date.toLocaleDateString();
-                    }
-
-                    // Load progress stats
-                    loadProgressStats(profile);
-
-                    // Show content
-                    loadingState.style.display = 'none';
-                    profileContent.style.display = 'block';
-
-                    // Hide delete account button for anonymous users (can't recover)
-                    if (profile.accountType === 'anonymous') {
-                        document.getElementById('deleteAccountSetting').style.display = 'none';
-                    }
-
-                } catch (error) {
-                    console.error('Error loading profile:', error);
-                    loadingState.innerHTML = '<p style="color: var(--accent-red);">Error loading profile. Please try again.</p>';
-                }
-            }
-
-            function loadProgressStats(profile) {
-                // Memory Fragments
-                const fragments = profile.memoryFragments || [];
-                const fragmentsCount = fragments.length;
-                const fragmentsPercent = (fragmentsCount / 10) * 100;
-                document.getElementById('statFragments').textContent = `${fragmentsCount} / 10`;
-                document.getElementById('fragmentsProgress').style.width = fragmentsPercent + '%';
-
-                // Riddles Solved
-                const riddles = profile.riddlesSolved || [];
-                const riddlesCount = riddles.length;
-                const riddlesPercent = (riddlesCount / 10) * 100;
-                document.getElementById('statRiddles').textContent = `${riddlesCount} / 10`;
-                document.getElementById('riddlesProgress').style.width = riddlesPercent + '%';
-
-                // Signal Progress
-                const signalProgress = profile.signalProgress || 0;
-                document.getElementById('statSignal').textContent = Math.round(signalProgress) + '%';
-                document.getElementById('signalProgress').style.width = signalProgress + '%';
-            }
-
-            // ============================================
-            // LOGOUT
-            // ============================================
-
-            document.getElementById('logoutBtn').addEventListener('click', async () => {
-                if (!window.authSystem) {
-                    console.error('authSystem not available');
-                    return;
-                }
-                const result = await authSystem.signOut();
-                if (result.success) {
-                    window.location.href = 'login.html';
-                }
-            });
-
-            // ============================================
-            // CLEAR PROGRESS
-            // ============================================
-
-            document.getElementById('clearProgressBtn').addEventListener('click', () => {
-                showConfirmModal(
-                    'Clear Progress',
-                    'This will reset all memory fragments and decoder progress. This cannot be undone. Continue?',
-                    clearProgress
-                );
-            });
-
-            async function clearProgress() {
-                try {
-                    const user = firebase.auth().currentUser;
-                    if (!user) return;
-
-                    // Clear in database
-                    await firebase.database().ref('users/' + user.uid).update({
-                        memoryFragments: [],
-                        riddlesSolved: [],
-                        signalProgress: 0
+                        tab.classList.add('active');
+                        document.getElementById(targetTab + 'Form').classList.add('active');
                     });
+                });
 
-                    // Clear localStorage
-                    localStorage.removeItem('collectedMemoryFragments');
-                    localStorage.removeItem('solvedRiddles');
+                // Email form mode toggle (login/signup)
+                const modeBtns = document.querySelectorAll('.mode-btn');
+                const usernameGroup = document.getElementById('usernameGroup');
+                const emailSubmitBtn = document.getElementById('emailSubmitBtn');
+                const loginFieldGroup = document.getElementById('loginFieldGroup');
+                const signupEmailGroup = document.getElementById('signupEmailGroup');
 
-                    // Reload page
-                    location.reload();
-                } catch (error) {
-                    console.error('Error clearing progress:', error);
-                    alert('Failed to clear progress. Please try again.');
-                }
-            }
+                modeBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mode = btn.dataset.mode;
 
-            // ============================================
-            // DELETE ACCOUNT
-            // ============================================
+                        modeBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
 
-            document.getElementById('deleteAccountBtn').addEventListener('click', () => {
-                showConfirmModal(
-                    'Delete Account',
-                    '⚠️ WARNING: This will permanently delete your account and ALL data. This CANNOT be undone. Type your username to confirm.',
-                    deleteAccount,
-                    true
-                );
-            });
+                        const signupEmailInput = document.getElementById('signupEmail');
+                        const emailOrUsernameInput = document.getElementById('emailOrUsername');
+                        const usernameInput = document.getElementById('username');
 
-            async function deleteAccount() {
-                try {
-                    const user = firebase.auth().currentUser;
-                    if (!user) return;
+                        if (mode === 'signup') {
+                            usernameGroup.style.display = 'block';
+                            signupEmailGroup.style.display = 'block';
+                            loginFieldGroup.style.display = 'none';
 
-                    // Delete user data from database
-                    await firebase.database().ref('users/' + user.uid).remove();
+                            // Toggle required attributes
+                            signupEmailInput.required = true;
+                            usernameInput.required = true;
+                            emailOrUsernameInput.required = false;
 
-                    // Remove username from taken list
-                    const username = await authSystem.getUsername();
-                    if (username) {
-                        await firebase.database().ref('usernames/' + username.toLowerCase()).remove();
+                            emailSubmitBtn.querySelector('span').textContent = 'SIGN UP';
+                        } else {
+                            usernameGroup.style.display = 'none';
+                            signupEmailGroup.style.display = 'none';
+                            loginFieldGroup.style.display = 'block';
+
+                            // Toggle required attributes
+                            signupEmailInput.required = false;
+                            usernameInput.required = false;
+                            emailOrUsernameInput.required = true;
+
+                            emailSubmitBtn.querySelector('span').textContent = 'LOGIN';
+                        }
+                    });
+                });
+
+                // Email form submission
+                document.getElementById('emailAuthForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const mode = document.querySelector('.mode-btn.active').dataset.mode;
+                    const errorEl = document.getElementById('emailError');
+                    const submitBtn = document.getElementById('emailSubmitBtn');
+
+                    errorEl.style.display = 'none';
+                    submitBtn.disabled = true;
+                    submitBtn.querySelector('span').textContent = 'PROCESSING...';
+
+                    let result;
+
+                    if (mode === 'signup') {
+                        const email = document.getElementById('signupEmail').value.trim();
+                        const password = document.getElementById('password').value;
+                        const username = document.getElementById('username').value.trim();
+
+                        if (!username || username.length < 3 || username.length > 15) {
+                            errorEl.textContent = 'Username must be 3-15 characters';
+                            errorEl.style.display = 'block';
+                            submitBtn.disabled = false;
+                            submitBtn.querySelector('span').textContent = 'SIGN UP';
+                            return;
+                        }
+
+                        result = await authSystem.signUpWithEmail(email, password, username);
+                    } else {
+                        // LOGIN MODE - detect if email or username
+                        const emailOrUsername = document.getElementById('emailOrUsername').value.trim();
+                        const password = document.getElementById('password').value;
+
+                        // Check if it looks like an email (contains @)
+                        const isEmail = emailOrUsername.includes('@');
+
+                        if (isEmail) {
+                            result = await authSystem.signInWithEmail(emailOrUsername, password);
+                        } else {
+                            result = await authSystem.signInWithUsername(emailOrUsername, password);
+                        }
                     }
 
-                    // Delete user account
-                    await user.delete();
+                    if (result.success) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        errorEl.textContent = result.error;
+                        errorEl.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.querySelector('span').textContent = mode === 'signup' ? 'SIGN UP' : 'LOGIN';
+                    }
+                });
 
-                    alert('Account deleted successfully');
+                // Anonymous form submission
+                document.getElementById('anonymousAuthForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const username = document.getElementById('anonUsername').value.trim();
+                    const password = document.getElementById('anonPassword').value;
+                    const errorEl = document.getElementById('anonError');
+                    const submitBtn = e.target.querySelector('.submit-btn');
+
+                    errorEl.style.display = 'none';
+                    submitBtn.disabled = true;
+                    submitBtn.querySelector('span').textContent = 'CREATING...';
+
+                    const result = await authSystem.signInAnonymously(username, password);
+
+                    if (result.success) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        errorEl.textContent = result.error;
+                        errorEl.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.querySelector('span').textContent = 'CREATE ANONYMOUS ACCOUNT';
+                    }
+                });
+
+                // Guest mode
+                document.getElementById('guestContinueBtn').addEventListener('click', () => {
+                    localStorage.setItem('guestMode', 'true');
                     window.location.href = 'index.html';
+                });
 
-                } catch (error) {
-                    console.error('Error deleting account:', error);
-                    alert('Failed to delete account. You may need to log in again first.');
-                }
-            }
+                // Forgot password modal
+                const resetModal = document.getElementById('resetModal');
+                const forgotBtn = document.getElementById('forgotPasswordBtn');
+                const resetCancelBtn = document.getElementById('resetCancelBtn');
+                const resetSendBtn = document.getElementById('resetSendBtn');
 
-            // ============================================
-            // CONFIRMATION MODAL
-            // ============================================
+                forgotBtn.addEventListener('click', () => { resetModal.style.display = 'flex'; });
+                resetCancelBtn.addEventListener('click', () => { resetModal.style.display = 'none'; });
 
-            const confirmModal = document.getElementById('confirmModal');
-            const confirmTitle = document.getElementById('confirmTitle');
-            const confirmMessage = document.getElementById('confirmMessage');
-            const confirmCancelBtn = document.getElementById('confirmCancelBtn');
-            const confirmActionBtn = document.getElementById('confirmActionBtn');
+                resetSendBtn.addEventListener('click', async () => {
+                    const email = document.getElementById('resetEmail').value.trim();
+                    const errorEl = document.getElementById('resetError');
+                    const successEl = document.getElementById('resetSuccess');
 
-            let confirmCallback = null;
+                    errorEl.style.display = 'none';
+                    successEl.style.display = 'none';
 
-            function showConfirmModal(title, message, callback, requireUsername = false) {
-                confirmTitle.textContent = title;
-
-                if (requireUsername) {
-                    confirmMessage.innerHTML = `
-                                ${message}
-                                <input type="text" id="confirmUsernameInput" placeholder="Enter username"
-                                    style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
-                                    border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
-                            `;
-                } else {
-                    confirmMessage.textContent = message;
-                }
-
-                confirmCallback = callback;
-                confirmModal.style.display = 'flex';
-            }
-
-            confirmCancelBtn.addEventListener('click', () => {
-                confirmModal.style.display = 'none';
-                confirmCallback = null;
-            });
-
-            confirmActionBtn.addEventListener('click', async () => {
-                // Check username confirmation if required
-                const usernameInput = document.getElementById('confirmUsernameInput');
-                if (usernameInput) {
-                    const enteredUsername = usernameInput.value.trim();
-                    const actualUsername = document.getElementById('profileUsername').textContent;
-
-                    if (enteredUsername !== actualUsername) {
-                        alert('Username does not match. Action cancelled.');
+                    if (!email) {
+                        errorEl.textContent = 'Please enter your email';
+                        errorEl.style.display = 'block';
                         return;
                     }
-                }
 
-                confirmModal.style.display = 'none';
+                    resetSendBtn.disabled = true;
+                    resetSendBtn.textContent = 'Sending...';
 
-                if (confirmCallback) {
-                    await confirmCallback();
-                    confirmCallback = null;
-                }
+                    const result = await authSystem.sendPasswordReset(email);
+
+                    if (result.success) {
+                        successEl.style.display = 'block';
+                        setTimeout(() => { resetModal.style.display = 'none'; }, 3000);
+                    } else {
+                        errorEl.textContent = result.error;
+                        errorEl.style.display = 'block';
+                    }
+
+                    resetSendBtn.disabled = false;
+                    resetSendBtn.textContent = 'Send Reset Link';
+                });
             });
         });
     </script>
-
 </body>
 </html>
