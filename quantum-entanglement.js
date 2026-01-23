@@ -1,5 +1,5 @@
 // ============================================
-// QUANTUM ENTANGLEMENT - FINAL PERSISTENT VERSION
+// QUANTUM ENTANGLEMENT - AUTHENTICATION REQUIRED VERSION
 // ============================================
 
 // Note: firebase-config.js is the single source of truth for Firebase setup.
@@ -21,7 +21,6 @@ const crypticMessages = [
 
 class QuantumEntanglement {
     constructor() {
-        // IDs will be resolved asynchronously in initialize()
         this.userId = null;
         this.partnerId = this.getStoredPartnerId();
 
@@ -44,18 +43,23 @@ class QuantumEntanglement {
         // Keep refs for off() if we created them
         this.messageRef = null;
         this.chatRef = null;
+
+        // Auth state listener
+        this.authUnsubscribe = null;
     }
 
     // ======================
     // ID helpers
     // ======================
     async getOrCreateUserId() {
-        let userId = localStorage.getItem('quantumUserId');
-        if (!userId) {
-            userId = await this.generateUserId();
-            localStorage.setItem('quantumUserId', userId);
+        // Use Firebase Auth UID if logged in
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser) {
+            return currentUser.uid;
         }
-        return userId;
+
+        // If not logged in, return null
+        return null;
     }
 
     getStoredPartnerId() {
@@ -68,17 +72,6 @@ class QuantumEntanglement {
         } else {
             localStorage.removeItem('quantumPartnerId');
         }
-    }
-
-    // Resolve possibly-promise ids safely (always returns string or null)
-    getResolvedIds() {
-        return Promise.all([
-            Promise.resolve(this.userId),
-            Promise.resolve(this.partnerId)
-        ]).then(([uid, pid]) => ({
-            uid: typeof uid === 'string' ? uid : null,
-            pid: typeof pid === 'string' ? pid : null
-        }));
     }
 
     // ======================
@@ -104,83 +97,76 @@ class QuantumEntanglement {
         }
     }
 
-    // Generate ID (uses auth username if available)
-    async generateUserId() {
+    // Get display name (username from auth system)
+    async getDisplayName(uid) {
+        if (!uid) return 'Unknown';
+
+        // Try to get username from auth system
         try {
-            if (window.authSystem && authSystem.isLoggedIn && authSystem.isLoggedIn()) {
-                try {
-                    const username = await authSystem.getUsername();
+            if (window.authSystem) {
+                const usernameSnapshot = await this.db.ref('usernames').orderByValue().equalTo(uid).once('value');
+                const usernames = usernameSnapshot.val();
+                if (usernames) {
+                    const username = Object.keys(usernames)[0];
                     if (username) return username;
-                } catch (e) {
-                    // Continue to fallback if retrieving username fails
                 }
             }
         } catch (e) {
-            // ignore
+            console.error('Error getting display name:', e);
         }
 
-        const chars = '0123456789ABCDEF';
-        let id = 'USER_';
-        for (let i = 0; i < 4; i++) {
-            id += chars[Math.floor(Math.random() * chars.length)];
-        }
-        return id;
+        // Fallback to shortened UID
+        return uid.substring(0, 8).toUpperCase();
     }
 
     // ======================
     // Initialization
     // ======================
     async initialize() {
-        // If user previously closed the widget, only create launch button
-        if (this.isClosed) {
-            console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
-            this.createLaunchButton();
-            return;
-        }
-
         // Ensure Firebase is initialized by firebase-config.js
         if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
             console.error('❌ Firebase not initialized. Include firebase-config.js before quantum-entanglement.js');
-            this.createLaunchButton();
             return;
         }
 
-        // Resolve userId here (prevents Promise leaking into DB path)
-        this.userId = await this.getOrCreateUserId();
-
         this.db = firebase.database();
 
-        // Create UI
-        this.createWidget();
+        // Always create launch button
         this.createLaunchButton();
 
-        // Display ID if element exists
-        const yourIdEl = document.getElementById('yourId');
-        if (yourIdEl) yourIdEl.textContent = this.userId;
+        // Listen for auth state changes
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                // User is logged in
+                this.userId = user.uid;
 
-        // Register user in DB
-        try {
-            await this.registerUser();
-        } catch (err) {
-            console.error('Error registering quantum user:', err);
+                // If widget was closed, don't auto-open
+                if (this.isClosed) {
+                    console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
+                    return;
+                }
+
+                // Auto-launch if not closed
+                await this.launchWidget();
+            } else {
+                // User logged out - cleanup
+                this.userId = null;
+                this.handleLogout();
+            }
+        });
+    }
+
+    handleLogout() {
+        // Hide widget if visible
+        const widgetEl = document.getElementById('quantumWidget');
+        if (widgetEl) {
+            widgetEl.style.display = 'none';
         }
 
-        // Reconnect or search for partner
-        if (this.partnerId) {
-            this.reconnectToPartner();
-        } else {
-            this.searchForPartner();
-        }
+        // Cleanup all listeners
+        this.cleanupListeners();
 
-        this.listenForPartnerUpdates();
-
-        // Apply minimized state after setup
-        if (this.isMinimized) {
-            setTimeout(() => this.applyMinimizedState(), 100);
-        }
-
-        // Cleanup listeners on unload
-        window.addEventListener('beforeunload', () => this.cleanupListeners());
+        console.log('⚛️ Quantum Entanglement deactivated - Login required');
     }
 
     createLaunchButton() {
@@ -218,34 +204,43 @@ class QuantumEntanglement {
     }
 
     async launchWidget() {
+        // Check if user is authenticated
+        const currentUser = firebase.auth().currentUser;
+        if (!currentUser) {
+            alert('⚛️ Quantum Entanglement requires login.\n\nPlease log in or create an account to connect with other souls across the quantum field.');
+            // Redirect to login page if it exists
+            if (document.querySelector('a[href*="login"]')) {
+                window.location.href = 'login.html';
+            }
+            return;
+        }
+
+        this.userId = currentUser.uid;
         this.isClosed = false;
         this.storeClosedState(false);
 
         if (!document.getElementById('quantumWidget')) {
-            if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
-                console.error('❌ Firebase not initialized. Include firebase-config.js before quantum-entanglement.js');
-                this.createLaunchButton();
-                return;
-            }
-            this.db = firebase.database();
-
-            if (!this.userId) {
-                this.userId = await this.getOrCreateUserId();
-            }
-
             this.createWidget();
+
+            // Display username
+            const displayName = await this.getDisplayName(this.userId);
             const yourIdEl = document.getElementById('yourId');
-            if (yourIdEl) yourIdEl.textContent = this.userId;
+            if (yourIdEl) yourIdEl.textContent = displayName;
 
             await this.registerUser();
 
             if (this.partnerId) {
-                this.reconnectToPartner();
+                await this.reconnectToPartner();
             } else {
-                this.searchForPartner();
+                await this.searchForPartner();
             }
 
             this.listenForPartnerUpdates();
+
+            // Apply minimized state after setup
+            if (this.isMinimized) {
+                setTimeout(() => this.applyMinimizedState(), 100);
+            }
         } else {
             const widgetEl = document.getElementById('quantumWidget');
             if (widgetEl) widgetEl.style.display = 'flex';
@@ -271,7 +266,7 @@ class QuantumEntanglement {
                 </div>
                 <div class="entanglement-status">
                     <div class="status-label">YOUR QUANTUM ID:</div>
-                    <div class="partner-id" id="yourId">USER_XXXX</div>
+                    <div class="partner-id" id="yourId">Loading...</div>
                 </div>
                 <div id="partnerSection">
                     <div class="entanglement-status">
@@ -289,6 +284,9 @@ class QuantumEntanglement {
         `;
         document.body.appendChild(widget);
         this.setupButtonHandlers();
+
+        // Cleanup listeners on beforeunload
+        window.addEventListener('beforeunload', () => this.cleanupListeners());
     }
 
     setupButtonHandlers() {
@@ -298,9 +296,10 @@ class QuantumEntanglement {
         const minimizedState = document.getElementById('minimizedState');
 
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
+            closeBtn.addEventListener('click', async () => {
                 if (this.isConnected) {
-                    const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + this.partnerId + '. You can reopen it anytime from the footer. Continue?');
+                    const partnerName = await this.getDisplayName(this.partnerId);
+                    const confirmed = confirm('⚠️ WARNING: Closing will end your quantum entanglement with ' + partnerName + '. You can reopen it anytime from the footer. Continue?');
                     if (!confirmed) return;
                 }
                 this.isClosed = true;
@@ -318,7 +317,7 @@ class QuantumEntanglement {
         });
     }
 
-    applyMinimizedState() {
+    async applyMinimizedState() {
         const widget = document.getElementById('quantumWidget');
         const content = document.getElementById('widgetContent');
         const minimized = document.getElementById('minimizedState');
@@ -334,12 +333,13 @@ class QuantumEntanglement {
         minimizeBtn.style.display = 'none';
 
         if (this.partnerId) {
+            const partnerName = await this.getDisplayName(this.partnerId);
             const partnerMini = document.getElementById('partnerIdMini');
-            if (partnerMini) partnerMini.textContent = this.partnerId;
+            if (partnerMini) partnerMini.textContent = partnerName;
         }
     }
 
-    toggleMinimize() {
+    async toggleMinimize() {
         const widget = document.getElementById('quantumWidget');
         const content = document.getElementById('widgetContent');
         const minimized = document.getElementById('minimizedState');
@@ -358,8 +358,9 @@ class QuantumEntanglement {
             }
             if (minimizeBtn) minimizeBtn.style.display = 'none';
             if (this.partnerId) {
+                const partnerName = await this.getDisplayName(this.partnerId);
                 const partnerMini = document.getElementById('partnerIdMini');
-                if (partnerMini) partnerMini.textContent = this.partnerId;
+                if (partnerMini) partnerMini.textContent = partnerName;
             }
         } else {
             if (content) content.style.display = 'block';
@@ -381,31 +382,33 @@ class QuantumEntanglement {
     // ======================
     async registerUser() {
         if (!this.userId) {
-            this.userId = await this.getOrCreateUserId();
+            console.error('Cannot register user: No userId');
+            return;
         }
+
         this.userRef = this.db.ref('activeUsers/' + this.userId);
 
-        await this.userRef.set({
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            looking: this.partnerId ? false : true,
-            partnerId: this.partnerId,
-            online: true
-        });
-
-        this.keepAliveInterval = setInterval(() => {
-            if (this.userRef) {
-                this.userRef.update({
-                    timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    online: true
-                });
-            }
-        }, 30000);
-
-        // Auto-remove on real disconnect
         try {
+            await this.userRef.set({
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                looking: this.partnerId ? false : true,
+                partnerId: this.partnerId || null,
+                online: true
+            });
+
+            this.keepAliveInterval = setInterval(() => {
+                if (this.userRef) {
+                    this.userRef.update({
+                        timestamp: firebase.database.ServerValue.TIMESTAMP,
+                        online: true
+                    });
+                }
+            }, 30000);
+
+            // Auto-remove on real disconnect
             this.userRef.onDisconnect().remove();
-        } catch (e) {
-            // ignore
+        } catch (err) {
+            console.error('Error registering user:', err);
         }
     }
 
@@ -418,7 +421,7 @@ class QuantumEntanglement {
                 this.partnerId = userData.partnerId;
                 this.storePartnerId(this.partnerId);
                 this.isConnected = true;
-                this.showConnectedState();
+                await this.showConnectedState();
                 this.startSharedMessages();
                 this.startChat();
                 this.monitorPartnerStatus();
@@ -436,15 +439,17 @@ class QuantumEntanglement {
         });
     }
 
-    showPartnerDisconnected() {
+    async showPartnerDisconnected() {
         const partnerSection = document.getElementById('partnerSection');
         if (!partnerSection) return;
+
+        const partnerName = await this.getDisplayName(this.partnerId);
 
         const disconnectNotice = document.createElement('div');
         disconnectNotice.className = 'disconnect-notice';
         disconnectNotice.innerHTML = `
             <div style="color: #ff0033; font-weight: bold; margin-bottom: 0.5rem;">⚠️ ENTANGLEMENT SEVERED</div>
-            <div style="color: #cccccc; font-size: 0.85rem; margin-bottom: 0.5rem;">${this.partnerId} has left the quantum field.</div>
+            <div style="color: #cccccc; font-size: 0.85rem; margin-bottom: 0.5rem;">${partnerName} has left the quantum field.</div>
             <div style="color: #00d4ff; font-size: 0.75rem;" id="reconnectCountdown">Searching for new partner in 3...</div>
         `;
 
@@ -482,6 +487,8 @@ class QuantumEntanglement {
     }
 
     async searchForPartner() {
+        if (!this.userId) return;
+
         const usersRef = this.db.ref('activeUsers');
 
         usersRef.once('value', async (snapshot) => {
@@ -503,7 +510,7 @@ class QuantumEntanglement {
                         looking: false
                     });
 
-                    this.showConnectedState();
+                    await this.showConnectedState();
                     this.startSharedMessages();
                     this.startChat();
                     this.monitorPartnerStatus();
@@ -513,16 +520,41 @@ class QuantumEntanglement {
         });
     }
 
-    showConnectedState() {
+    async reconnectToPartner() {
+        if (!this.partnerId || !this.userId) return;
+
+        // Check if partner still exists in activeUsers
+        const partnerSnapshot = await this.db.ref('activeUsers/' + this.partnerId).once('value');
+        const partnerData = partnerSnapshot.val();
+
+        if (partnerData && partnerData.partnerId === this.userId) {
+            // Partner is still there and still paired with us
+            this.isConnected = true;
+            await this.showConnectedState();
+            this.startSharedMessages();
+            this.startChat();
+            this.monitorPartnerStatus();
+        } else {
+            // Partner is gone, clear and search for new
+            this.storePartnerId(null);
+            this.partnerId = null;
+            this.isConnected = false;
+            await this.searchForPartner();
+        }
+    }
+
+    async showConnectedState() {
         this.playConnectionSound();
 
         const partnerSection = document.getElementById('partnerSection');
         if (!partnerSection) return;
 
+        const partnerName = await this.getDisplayName(this.partnerId);
+
         partnerSection.innerHTML = `
             <div class="entanglement-status">
                 <div class="status-label">ENTANGLED WITH:</div>
-                <div class="partner-id">${this.partnerId}</div>
+                <div class="partner-id">${partnerName}</div>
             </div>
             
             <div class="connection-line">
@@ -554,27 +586,25 @@ class QuantumEntanglement {
     // Shared messages channel
     // ======================
     startSharedMessages() {
-        this.getResolvedIds().then(({ uid, pid }) => {
-            if (!uid || !pid) return;
+        if (!this.userId || !this.partnerId) return;
 
-            const pairId = [uid, pid].sort().join('_');
-            this.messageRef = this.db.ref('messages/' + pairId);
+        const pairId = [this.userId, this.partnerId].sort().join('_');
+        this.messageRef = this.db.ref('messages/' + pairId);
 
-            const messageCallback = (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.message) this.displayMessage(data.message, data.messageId);
-            };
+        const messageCallback = (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.message) this.displayMessage(data.message, data.messageId);
+        };
 
-            this.messageRef.on('value', messageCallback);
-            this.messageListener = messageCallback;
+        this.messageRef.on('value', messageCallback);
+        this.messageListener = messageCallback;
 
-            if (uid < pid) {
-                this.sendNewMessage(this.messageRef);
-                this.messageInterval = setInterval(() => {
-                    if (this.isConnected) this.sendNewMessage(this.messageRef);
-                }, 30000);
-            }
-        }).catch(err => console.error('startSharedMessages error:', err));
+        if (this.userId < this.partnerId) {
+            this.sendNewMessage(this.messageRef);
+            this.messageInterval = setInterval(() => {
+                if (this.isConnected) this.sendNewMessage(this.messageRef);
+            }, 30000);
+        }
     }
 
     sendNewMessage(messageRef) {
@@ -616,39 +646,34 @@ class QuantumEntanglement {
     // Chat functionality
     // ======================
     startChat() {
-        this.getResolvedIds().then(({ uid, pid }) => {
-            if (!uid || !pid) return;
+        if (!this.userId || !this.partnerId) return;
 
-            const pairId = [uid, pid].sort().join('_');
-            this.chatRef = this.db.ref('chat/' + pairId);
+        const pairId = [this.userId, this.partnerId].sort().join('_');
+        this.chatRef = this.db.ref('chat/' + pairId);
 
-            const chatCallback = (snapshot) => {
-                const msg = snapshot.val();
-                if (!msg) return;
-                this.displayChatMessage(msg.userId, msg.text, msg.timestamp);
-                if (this.isMinimized && msg.userId !== uid) this.showNewMessageNotification();
-            };
+        const chatCallback = (snapshot) => {
+            const msg = snapshot.val();
+            if (!msg) return;
+            this.displayChatMessage(msg.userId, msg.text, msg.timestamp);
+            if (this.isMinimized && msg.userId !== this.userId) this.showNewMessageNotification();
+        };
 
-            this.chatRef.on('child_added', chatCallback);
-            this.chatListener = chatCallback;
-        }).catch(err => console.error('startChat error:', err));
+        this.chatRef.on('child_added', chatCallback);
+        this.chatListener = chatCallback;
     }
 
     async sendChatMessage() {
         const input = document.getElementById('chatInput');
         if (!input) return;
         const text = input.value.trim();
-        if (!text) return;
+        if (!text || !this.userId || !this.partnerId) return;
 
-        const { uid, pid } = await this.getResolvedIds();
-        if (!uid || !pid) return;
-
-        const pairId = [uid, pid].sort().join('_');
+        const pairId = [this.userId, this.partnerId].sort().join('_');
         const chatRef = this.db.ref('chat/' + pairId);
 
         try {
-            chatRef.push({
-                userId: uid,
+            await chatRef.push({
+                userId: this.userId,
                 text: text,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
@@ -659,16 +684,18 @@ class QuantumEntanglement {
         }
     }
 
-    displayChatMessage(senderId, text, timestamp) {
+    async displayChatMessage(senderId, text, timestamp) {
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
 
         const isMe = senderId === this.userId;
+        const senderName = isMe ? 'YOU' : await this.getDisplayName(senderId);
+
         const msgDiv = document.createElement('div');
         msgDiv.className = `chat-msg ${isMe ? 'me' : 'them'}`;
 
         msgDiv.innerHTML = `
-            <div class="msg-sender">${isMe ? 'YOU' : this.partnerId}:</div>
+            <div class="msg-sender">${senderName}:</div>
             <div class="msg-text">${this.escapeHtml(text)}</div>
         `;
 
@@ -677,7 +704,7 @@ class QuantumEntanglement {
 
         if (!isMe) {
             this.playMessageSound();
-            this.showBrowserNotification(text);
+            this.showBrowserNotification(text, senderName);
         }
     }
 
@@ -696,14 +723,14 @@ class QuantumEntanglement {
         }
     }
 
-    showBrowserNotification(text) {
+    showBrowserNotification(text, senderName) {
         if (!("Notification" in window)) return;
         if (Notification.permission === "granted") {
-            new Notification(`Message from ${this.partnerId}`, { body: text, icon: '⚛️', tag: 'quantum-message' });
+            new Notification(`Message from ${senderName}`, { body: text, icon: '⚛️', tag: 'quantum-message' });
         } else if (Notification.permission !== "denied") {
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    new Notification(`Message from ${this.partnerId}`, { body: text, icon: '⚛️' });
+                    new Notification(`Message from ${senderName}`, { body: text, icon: '⚛️' });
                 }
             });
         }
@@ -721,34 +748,20 @@ class QuantumEntanglement {
     cleanupListeners() {
         try { if (this.userRef) this.userRef.off(); } catch (e) { /*ignore*/ }
         try { if (this.partnerRef && this.partnerDisconnectListener) this.partnerRef.off('value', this.partnerDisconnectListener); } catch (e) { /*ignore*/ }
+        try { if (this.messageRef && this.messageListener) this.messageRef.off('value', this.messageListener); } catch (e) { /*ignore*/ }
+        try { if (this.chatRef && this.chatListener) this.chatRef.off('child_added', this.chatListener); } catch (e) { /*ignore*/ }
 
-        // Resolve ids before removing pair-specific listeners
-        this.getResolvedIds().then(({ uid, pid }) => {
-            try {
-                if (this.messageRef && this.messageListener && uid && pid) {
-                    this.messageRef.off('value', this.messageListener);
-                }
-            } catch (e) { /*ignore*/ }
-
-            try {
-                if (this.chatRef && this.chatListener && uid && pid) {
-                    this.chatRef.off('child_added', this.chatListener);
-                }
-            } catch (e) { /*ignore*/ }
-
-            if (this.keepAliveInterval) clearInterval(this.keepAliveInterval);
-            if (this.messageInterval) clearInterval(this.messageInterval);
-        }).catch(err => {
-            if (this.keepAliveInterval) clearInterval(this.keepAliveInterval);
-            if (this.messageInterval) clearInterval(this.messageInterval);
-            console.error('cleanupListeners id resolution error:', err);
-        });
+        if (this.keepAliveInterval) clearInterval(this.keepAliveInterval);
+        if (this.messageInterval) clearInterval(this.messageInterval);
     }
 
     cleanup() {
         this.cleanupListeners();
         if (this.userRef) {
             try { this.userRef.remove(); } catch (e) { /*ignore*/ }
+        }
+        if (this.authUnsubscribe) {
+            this.authUnsubscribe();
         }
     }
 
