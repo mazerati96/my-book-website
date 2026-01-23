@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="mobile-fixes.css">
-    <style>
-        /* styles unchanged */
-    </style>
 </head>
 <body>
     <!-- Page Transition Overlay -->
@@ -54,10 +51,17 @@
                         <div class="form-hint">Case-sensitive. Can use letters, numbers, _ and -</div>
                     </div>
 
-                    <!-- Email -->
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="your@email.com" required>
+                    <!-- Email OR Username (login only) -->
+                    <div class="form-group" id="loginFieldGroup">
+                        <label for="emailOrUsername">Email or Username</label>
+                        <input type="text" id="emailOrUsername" placeholder="your@email.com or username" required>
+                        <div class="form-hint">Enter your email address or username</div>
+                    </div>
+
+                    <!-- Email (signup only) -->
+                    <div class="form-group" id="signupEmailGroup" style="display: none;">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
                     </div>
 
                     <!-- Password -->
@@ -163,7 +167,7 @@
         </div>
     </footer>
 
-    <!-- Firebase SDK (single set) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -171,7 +175,7 @@
     <!-- Initialize Firebase ONCE -->
     <script src="firebase-config.js"></script>
 
-    <!-- Application scripts (firebase-config.js must come before auth.js) -->
+    <!-- Application scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="audio-player.js"></script>
@@ -182,180 +186,197 @@
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
 
-    <!-- Replace previous inline login logic with safe wrapper that waits for authSystem -->
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Wait for authSystem to be created by auth.js (which requires firebase-config.js)
-        const waitForAuthSystem = (cb, interval = 40, timeout = 5000) => {
-            const start = Date.now();
-            (function poll() {
-                if (window.authSystem) return cb();
-                if (Date.now() - start > timeout) {
-                    console.error('authSystem not available after timeout');
-                    return;
-                }
-                setTimeout(poll, interval);
-            })();
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const waitForAuthSystem = (cb, interval = 40, timeout = 5000) => {
+                const start = Date.now();
+                (function poll() {
+                    if (window.authSystem) return cb();
+                    if (Date.now() - start > timeout) {
+                        console.error('authSystem not available after timeout');
+                        return;
+                    }
+                    setTimeout(poll, interval);
+                })();
+            };
 
-        waitForAuthSystem(() => {
-            // ---------- BEGIN: existing login page logic ----------
-            // Redirect if already logged in
-            authSystem.onAuthStateChange((user) => {
-                if (user) {
-                    window.location.href = 'profile.html';
-                }
-            });
-
-            // Tab switching
-            const authTabs = document.querySelectorAll('.auth-tab');
-            const authForms = document.querySelectorAll('.auth-form');
-
-            authTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const targetTab = tab.dataset.tab;
-
-                    authTabs.forEach(t => t.classList.remove('active'));
-                    authForms.forEach(f => f.classList.remove('active'));
-
-                    tab.classList.add('active');
-                    document.getElementById(targetTab + 'Form').classList.add('active');
-                });
-            });
-
-            // Email form mode toggle (login/signup)
-            const modeBtns = document.querySelectorAll('.mode-btn');
-            const usernameGroup = document.getElementById('usernameGroup');
-            const emailSubmitBtn = document.getElementById('emailSubmitBtn');
-
-            modeBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const mode = btn.dataset.mode;
-
-                    modeBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    if (mode === 'signup') {
-                        usernameGroup.style.display = 'block';
-                        emailSubmitBtn.querySelector('span').textContent = 'SIGN UP';
-                    } else {
-                        usernameGroup.style.display = 'none';
-                        emailSubmitBtn.querySelector('span').textContent = 'LOGIN';
+            waitForAuthSystem(() => {
+                // Redirect if already logged in
+                authSystem.onAuthStateChange((user) => {
+                    if (user) {
+                        window.location.href = 'profile.html';
                     }
                 });
+
+                // Tab switching
+                const authTabs = document.querySelectorAll('.auth-tab');
+                const authForms = document.querySelectorAll('.auth-form');
+
+                authTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetTab = tab.dataset.tab;
+
+                        authTabs.forEach(t => t.classList.remove('active'));
+                        authForms.forEach(f => f.classList.remove('active'));
+
+                        tab.classList.add('active');
+                        document.getElementById(targetTab + 'Form').classList.add('active');
+                    });
+                });
+
+                // Email form mode toggle (login/signup)
+                const modeBtns = document.querySelectorAll('.mode-btn');
+                const usernameGroup = document.getElementById('usernameGroup');
+                const emailSubmitBtn = document.getElementById('emailSubmitBtn');
+                const loginFieldGroup = document.getElementById('loginFieldGroup');
+                const signupEmailGroup = document.getElementById('signupEmailGroup');
+
+                modeBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mode = btn.dataset.mode;
+
+                        modeBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+
+                        if (mode === 'signup') {
+                            usernameGroup.style.display = 'block';
+                            signupEmailGroup.style.display = 'block';
+                            loginFieldGroup.style.display = 'none';
+                            emailSubmitBtn.querySelector('span').textContent = 'SIGN UP';
+                        } else {
+                            usernameGroup.style.display = 'none';
+                            signupEmailGroup.style.display = 'none';
+                            loginFieldGroup.style.display = 'block';
+                            emailSubmitBtn.querySelector('span').textContent = 'LOGIN';
+                        }
+                    });
+                });
+
+                // Email form submission
+                document.getElementById('emailAuthForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const mode = document.querySelector('.mode-btn.active').dataset.mode;
+                    const errorEl = document.getElementById('emailError');
+                    const submitBtn = document.getElementById('emailSubmitBtn');
+
+                    errorEl.style.display = 'none';
+                    submitBtn.disabled = true;
+                    submitBtn.querySelector('span').textContent = 'PROCESSING...';
+
+                    let result;
+
+                    if (mode === 'signup') {
+                        const email = document.getElementById('signupEmail').value.trim();
+                        const password = document.getElementById('password').value;
+                        const username = document.getElementById('username').value.trim();
+
+                        if (!username || username.length < 3 || username.length > 15) {
+                            errorEl.textContent = 'Username must be 3-15 characters';
+                            errorEl.style.display = 'block';
+                            submitBtn.disabled = false;
+                            submitBtn.querySelector('span').textContent = 'SIGN UP';
+                            return;
+                        }
+
+                        result = await authSystem.signUpWithEmail(email, password, username);
+                    } else {
+                        // LOGIN MODE - detect if email or username
+                        const emailOrUsername = document.getElementById('emailOrUsername').value.trim();
+                        const password = document.getElementById('password').value;
+
+                        // Check if it looks like an email (contains @)
+                        const isEmail = emailOrUsername.includes('@');
+
+                        if (isEmail) {
+                            result = await authSystem.signInWithEmail(emailOrUsername, password);
+                        } else {
+                            result = await authSystem.signInWithUsername(emailOrUsername, password);
+                        }
+                    }
+
+                    if (result.success) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        errorEl.textContent = result.error;
+                        errorEl.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.querySelector('span').textContent = mode === 'signup' ? 'SIGN UP' : 'LOGIN';
+                    }
+                });
+
+                // Anonymous form submission
+                document.getElementById('anonymousAuthForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const username = document.getElementById('anonUsername').value.trim();
+                    const password = document.getElementById('anonPassword').value;
+                    const errorEl = document.getElementById('anonError');
+                    const submitBtn = e.target.querySelector('.submit-btn');
+
+                    errorEl.style.display = 'none';
+                    submitBtn.disabled = true;
+                    submitBtn.querySelector('span').textContent = 'CREATING...';
+
+                    const result = await authSystem.signInAnonymously(username, password);
+
+                    if (result.success) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        errorEl.textContent = result.error;
+                        errorEl.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.querySelector('span').textContent = 'CREATE ANONYMOUS ACCOUNT';
+                    }
+                });
+
+                // Guest mode
+                document.getElementById('guestContinueBtn').addEventListener('click', () => {
+                    localStorage.setItem('guestMode', 'true');
+                    window.location.href = 'index.html';
+                });
+
+                // Forgot password modal
+                const resetModal = document.getElementById('resetModal');
+                const forgotBtn = document.getElementById('forgotPasswordBtn');
+                const resetCancelBtn = document.getElementById('resetCancelBtn');
+                const resetSendBtn = document.getElementById('resetSendBtn');
+
+                forgotBtn.addEventListener('click', () => { resetModal.style.display = 'flex'; });
+                resetCancelBtn.addEventListener('click', () => { resetModal.style.display = 'none'; });
+
+                resetSendBtn.addEventListener('click', async () => {
+                    const email = document.getElementById('resetEmail').value.trim();
+                    const errorEl = document.getElementById('resetError');
+                    const successEl = document.getElementById('resetSuccess');
+
+                    errorEl.style.display = 'none';
+                    successEl.style.display = 'none';
+
+                    if (!email) {
+                        errorEl.textContent = 'Please enter your email';
+                        errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    resetSendBtn.disabled = true;
+                    resetSendBtn.textContent = 'Sending...';
+
+                    const result = await authSystem.sendPasswordReset(email);
+
+                    if (result.success) {
+                        successEl.style.display = 'block';
+                        setTimeout(() => { resetModal.style.display = 'none'; }, 3000);
+                    } else {
+                        errorEl.textContent = result.error;
+                        errorEl.style.display = 'block';
+                    }
+
+                    resetSendBtn.disabled = false;
+                    resetSendBtn.textContent = 'Send Reset Link';
+                });
             });
-
-            // Email form submission
-            document.getElementById('emailAuthForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const mode = document.querySelector('.mode-btn.active').dataset.mode;
-                const email = document.getElementById('email').value.trim();
-                const password = document.getElementById('password').value;
-                const username = document.getElementById('username').value.trim();
-                const errorEl = document.getElementById('emailError');
-                const submitBtn = document.getElementById('emailSubmitBtn');
-
-                if (mode === 'signup' && (!username || username.length < 3 || username.length > 15)) {
-                    errorEl.textContent = 'Username must be 3-15 characters';
-                    errorEl.style.display = 'block';
-                    return;
-                }
-
-                errorEl.style.display = 'none';
-                submitBtn.disabled = true;
-                submitBtn.querySelector('span').textContent = 'PROCESSING...';
-
-                let result;
-                if (mode === 'signup') {
-                    result = await authSystem.signUpWithEmail(email, password, username);
-                } else {
-                    result = await authSystem.signInWithEmail(email, password);
-                }
-
-                if (result.success) {
-                    window.location.href = 'profile.html';
-                } else {
-                    errorEl.textContent = result.error;
-                    errorEl.style.display = 'block';
-                    submitBtn.disabled = false;
-                    submitBtn.querySelector('span').textContent = mode === 'signup' ? 'SIGN UP' : 'LOGIN';
-                }
-            });
-
-            // Anonymous form submission
-            document.getElementById('anonymousAuthForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const username = document.getElementById('anonUsername').value.trim();
-                const errorEl = document.getElementById('anonError');
-                const submitBtn = e.target.querySelector('.submit-btn');
-
-                errorEl.style.display = 'none';
-                submitBtn.disabled = true;
-                submitBtn.querySelector('span').textContent = 'CREATING...';
-
-                const result = await authSystem.signInAnonymously(username);
-
-                if (result.success) {
-                    window.location.href = 'profile.html';
-                } else {
-                    errorEl.textContent = result.error;
-                    errorEl.style.display = 'block';
-                    submitBtn.disabled = false;
-                    submitBtn.querySelector('span').textContent = 'CREATE ANONYMOUS ACCOUNT';
-                }
-            });
-
-            // Guest mode
-            document.getElementById('guestContinueBtn').addEventListener('click', () => {
-                // Set guest mode flag
-                localStorage.setItem('guestMode', 'true');
-                window.location.href = 'index.html';
-            });
-
-            // Forgot password modal handlers...
-            const resetModal = document.getElementById('resetModal');
-            const forgotBtn = document.getElementById('forgotPasswordBtn');
-            const resetCancelBtn = document.getElementById('resetCancelBtn');
-            const resetSendBtn = document.getElementById('resetSendBtn');
-
-            forgotBtn.addEventListener('click', () => { resetModal.style.display = 'flex'; });
-            resetCancelBtn.addEventListener('click', () => { resetModal.style.display = 'none'; });
-
-            resetSendBtn.addEventListener('click', async () => {
-                const email = document.getElementById('resetEmail').value.trim();
-                const errorEl = document.getElementById('resetError');
-                const successEl = document.getElementById('resetSuccess');
-
-                errorEl.style.display = 'none';
-                successEl.style.display = 'none';
-
-                if (!email) {
-                    errorEl.textContent = 'Please enter your email';
-                    errorEl.style.display = 'block';
-                    return;
-                }
-
-                resetSendBtn.disabled = true;
-                resetSendBtn.textContent = 'Sending...';
-
-                const result = await authSystem.sendPasswordReset(email);
-
-                if (result.success) {
-                    successEl.style.display = 'block';
-                    setTimeout(() => { resetModal.style.display = 'none'; }, 3000);
-                } else {
-                    errorEl.textContent = result.error;
-                    errorEl.style.display = 'block';
-                }
-
-                resetSendBtn.disabled = false;
-                resetSendBtn.textContent = 'Send Reset Link';
-            });
-            // ---------- END: existing login page logic ----------
         });
-    });
     </script>
 </body>
 </html>
