@@ -8,16 +8,10 @@
     <link rel="stylesheet" href="navigation.css">
     <link rel="stylesheet" href="animations.css">
 
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-    <!-- Firebase Config (ONE TIME INIT) -->
-    <script src="firebase-config.js"></script>
     <!-- Quantum Entanglement Widget -->
     <link rel="stylesheet" href="quantum-widget.css">
-    <script src="quantum-entanglement.js"></script>
+    
 
     <style>
         .qe-hero {
@@ -363,9 +357,6 @@
         <div class="footer-decoration"></div>
     </footer>
 
-    <script src="script.js"></script>
-    <script src="load-navigation.js"></script>
-
     <script>
         // Launch widget when buttons are clicked
         document.getElementById('launchWidgetBtn').addEventListener('click', launchWidget);
@@ -393,14 +384,25 @@
             }, 500);
         });
     </script>
-    <!-- Firebase Auth Scripts -->
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase ONCE -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Le scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
+    <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+    <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
-    <script src="auth.js"></script>
+
 </body>
 </html>

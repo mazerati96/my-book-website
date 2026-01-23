@@ -100,8 +100,22 @@
             }, stepTime);
         }
     </script>
-    <!-- Firebase Auth Scripts -->
+    <!-- At the bottom of <body>, BEFORE closing </body> tag -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase ONCE -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Your scripts -->
+    <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
     <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="memory-fragments.js"></script>
+    <script src="breadcrumbs.js"></script>
 </body>
 </html>

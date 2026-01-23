@@ -198,34 +198,6 @@
 <body>
     <div class="matrix-style-bg"></div>
 
-    <!-- Breadcrumbs will be added by breadcrumbs.js -->
-    <!-- Navigation Sidebar -->
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <span class="logo-bracket">[</span>
-            <h2>NAVIGATION</h2>
-            <span class="logo-bracket">]</span>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="index.html" class="nav-link">Home</a></li>
-            <li><a href="trilogy.html" class="nav-link">The Trilogy</a></li>
-            <li><a href="signal.html" class="nav-link">The Signal</a></li>
-            <li><a href="book-one.html" class="nav-link">Book One</a></li>
-            <li><a href="book-two.html" class="nav-link">Book Two</a></li>
-            <li><a href="book-three.html" class="nav-link">Book Three</a></li>
-            <li><a href="authors.html" class="nav-link">Authors</a></li>
-            <li><a href="universe.html" class="nav-link">Universe</a></li>
-            <li><a href="blog.html" class="nav-link active">Blog</a></li>
-            <li><a href="contact.html" class="nav-link cta-nav">Contact</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <div class="status-bar">
-                <span class="status-indicator"></span>
-                <span>SYSTEM ONLINE</span>
-            </div>
-        </div>
-    </nav>
-
     <!-- Blog Container -->
     <div class="blog-container">
         <div class="blog-header">
@@ -273,11 +245,6 @@
         </div>
         <div class="footer-decoration"></div>
     </footer>
-    <script src="audio-player.js"></script>
-    <script src="script.js"></script>
-    <script src="load-navigation.js"></script>
-    <script src="memory-fragments.js"></script>
-    <script src="breadcrumbs.js"></script>
 
     <script>
         // Load blog posts
@@ -324,18 +291,18 @@
                 });
 
                 return `
-                                <div class="blog-card" onclick="openPost('${post.id}')">
-                                    <div class="blog-card-category">${post.category}</div>
-                                    <h2>${post.title}</h2>
-                                    <div class="blog-card-meta">
-                                        <span>By ${post.author}</span>
-                                        <span>•</span>
-                                        <span>${date}</span>
-                                    </div>
-                                    <div class="blog-card-preview">${preview}...</div>
-                                    <div class="blog-card-read-more">READ MORE →</div>
-                                </div>
-                            `;
+                                                <div class="blog-card" onclick="openPost('${post.id}')">
+                                                    <div class="blog-card-category">${post.category}</div>
+                                                    <h2>${post.title}</h2>
+                                                    <div class="blog-card-meta">
+                                                        <span>By ${post.author}</span>
+                                                        <span>•</span>
+                                                        <span>${date}</span>
+                                                    </div>
+                                                    <div class="blog-card-preview">${preview}...</div>
+                                                    <div class="blog-card-read-more">READ MORE →</div>
+                                                </div>
+                                            `;
             }).join('');
         }
 
@@ -363,12 +330,12 @@
             });
 
             document.getElementById('modal-post-content').innerHTML = `
-                            <h1>${post.title}</h1>
-                            <div class="post-modal-meta">
-                                By ${post.author} • ${date} • ${post.category}
-                            </div>
-                            <div class="post-modal-body">${post.content}</div>
-                        `;
+                                            <h1>${post.title}</h1>
+                                            <div class="post-modal-meta">
+                                                By ${post.author} • ${date} • ${post.category}
+                                            </div>
+                                            <div class="post-modal-body">${post.content}</div>
+                                        `;
 
             document.getElementById('post-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -391,14 +358,24 @@
         // Load posts on page load
         loadBlogPosts();
     </script>
-    <!-- Firebase Auth Scripts -->
+    <!-- At the bottom of <body>, BEFORE closing </body> tag -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase ONCE -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Your scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
+    <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+    <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
-    <script src="auth.js"></script>
 </body>
 </html>

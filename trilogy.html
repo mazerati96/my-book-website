@@ -10,13 +10,10 @@
 <link rel="stylesheet" href="animations.css">
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="pages.css">
-    <!-- Firebase Scripts -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <!-- Quantum Entanglement Widget -->
 <link rel="stylesheet" href="quantum-widget.css">
-<script src="quantum-entanglement.js"></script>
+
 </head>
 <body>
     <!-- Page Transition Overlay -->
@@ -24,32 +21,6 @@
 
     <!-- Animated Background -->
     <div class="matrix-style-bg"></div>
-
-
-
-    <!-- Navigation Sidebar -->
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <span class="logo-bracket">[</span>
-            <h2>NAVIGATION</h2>
-            <span class="logo-bracket">]</span>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="index.html" class="nav-link">Home</a></li>
-            <li><a href="trilogy.html" class="nav-link active">The Trilogy</a></li>
-            <li><a href="book-one.html" class="nav-link">Book One</a></li>
-            <li><a href="book-two.html" class="nav-link">Book Two</a></li>
-            <li><a href="book-three.html" class="nav-link">Book Three</a></li>
-            <li><a href="authors.html" class="nav-link">Authors</a></li>
-            <li><a href="contact.html" class="nav-link cta-nav">Contact</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <div class="status-bar">
-                <span class="status-indicator"></span>
-                <span>SYSTEM ONLINE</span>
-            </div>
-        </div>
-    </nav>
 
     <!-- Hero Section -->
     <section class="hero trilogy-hero">
@@ -210,15 +181,25 @@
         </div>
         <div class="footer-decoration"></div>
     </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase ONCE -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Le scripts -->
     <script src="storage-wrapper.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+    <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
-    <!-- Firebase Auth Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="auth.js"></script>
+
 </body>
 </html>

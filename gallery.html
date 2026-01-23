@@ -8,13 +8,10 @@
     <link rel="stylesheet" href="navigation.css">
     <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="gallery.css">
-    <!-- Firebase Scripts -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
+    
 <!-- Quantum Entanglement Widget -->
 <link rel="stylesheet" href="quantum-widget.css">
-<script src="quantum-entanglement.js"></script>
+
 </head>
 <body>
     <!-- Page Transition Overlay -->
@@ -22,7 +19,7 @@
 
     <!-- Animated Background -->
     <div class="matrix-style-bg"></div>
-    
+
 
     <!-- Hero Section -->
     <section class="hero">
@@ -97,105 +94,105 @@
         </div>
 
         <!-- Concept Art (commented out items can be uncommented when images are available)
-         <div class="gallery-category">
-             <h2 class="category-title">
-                 <span class="title-bracket">[</span>
-                 CONCEPT ART
-                 <span class="title-bracket">]</span>
-             </h2>
-             <div class="gallery-grid">
-                 <!-- Android Vision
-                 <div class="gallery-item" data-title="The Android's Gold Vision">
-                     <div class="image-container">
-                         <div class="image-placeholder android-vision">
-                             <span class="placeholder-icon">👁️</span>
-                             <span class="placeholder-text">ANDROID VISION</span>
+             <div class="gallery-category">
+                 <h2 class="category-title">
+                     <span class="title-bracket">[</span>
+                     CONCEPT ART
+                     <span class="title-bracket">]</span>
+                 </h2>
+                 <div class="gallery-grid">
+                     <!-- Android Vision
+                     <div class="gallery-item" data-title="The Android's Gold Vision">
+                         <div class="image-container">
+                             <div class="image-placeholder android-vision">
+                                 <span class="placeholder-icon">👁️</span>
+                                 <span class="placeholder-text">ANDROID VISION</span>
+                             </div>
+                             <div class="glitch-overlay gold"></div>
                          </div>
-                         <div class="glitch-overlay gold"></div>
+                         <div class="item-info">
+                             <h3>Gold Visions</h3>
+                             <p>The android's mysterious golden hallucinations</p>
+                         </div>
                      </div>
-                     <div class="item-info">
-                         <h3>Gold Visions</h3>
-                         <p>The android's mysterious golden hallucinations</p>
-                     </div>
-                 </div>
 
-                 <!-- Black Hole
-                 <div class="gallery-item" data-title="The Supermassive Black Hole">
-                     <div class="image-container">
-                         <div class="image-placeholder black-hole">
-                             <span class="placeholder-icon">⚫</span>
-                             <span class="placeholder-text">EVENT HORIZON</span>
+                     <!-- Black Hole
+                     <div class="gallery-item" data-title="The Supermassive Black Hole">
+                         <div class="image-container">
+                             <div class="image-placeholder black-hole">
+                                 <span class="placeholder-icon">⚫</span>
+                                 <span class="placeholder-text">EVENT HORIZON</span>
+                             </div>
+                             <div class="glitch-overlay"></div>
                          </div>
-                         <div class="glitch-overlay"></div>
+                         <div class="item-info">
+                             <h3>The Event Horizon</h3>
+                             <p>Source of the 36 Hertz quantum psalm</p>
+                         </div>
                      </div>
-                     <div class="item-info">
-                         <h3>The Event Horizon</h3>
-                         <p>Source of the 36 Hertz quantum psalm</p>
-                     </div>
-                 </div>
 
-                 <!-- Brigade Ship
-                 <div class="gallery-item" data-title="Brigade Fleet">
-                     <div class="image-container">
-                         <div class="image-placeholder brigade-ship">
-                             <span class="placeholder-icon">🚀</span>
-                             <span class="placeholder-text">BRIGADE FLEET</span>
+                     <!-- Brigade Ship
+                     <div class="gallery-item" data-title="Brigade Fleet">
+                         <div class="image-container">
+                             <div class="image-placeholder brigade-ship">
+                                 <span class="placeholder-icon">🚀</span>
+                                 <span class="placeholder-text">BRIGADE FLEET</span>
+                             </div>
+                             <div class="glitch-overlay"></div>
                          </div>
-                         <div class="glitch-overlay"></div>
-                     </div>
-                     <div class="item-info">
-                         <h3>The Brigade</h3>
-                         <p>Deserters. Outlaws. Survivors.</p>
-                     </div>
-                 </div>
-                 <!-- Frequency Visualization
-                 <div class="gallery-item" data-title="The 36 Hertz Frequency">
-                     <div class="image-container">
-                         <div class="image-placeholder frequency">
-                             <span class="placeholder-icon">📊</span>
-                             <span class="placeholder-text">36 Hertz SIGNAL</span>
+                         <div class="item-info">
+                             <h3>The Brigade</h3>
+                             <p>Deserters. Outlaws. Survivors.</p>
                          </div>
-                         <div class="glitch-overlay frequency-glitch"></div>
                      </div>
-                     <div class="item-info">
-                         <h3>The Quantum Psalm</h3>
-                         <p>A frequency older than stars</p>
+                     <!-- Frequency Visualization
+                     <div class="gallery-item" data-title="The 36 Hertz Frequency">
+                         <div class="image-container">
+                             <div class="image-placeholder frequency">
+                                 <span class="placeholder-icon">📊</span>
+                                 <span class="placeholder-text">36 Hertz SIGNAL</span>
+                             </div>
+                             <div class="glitch-overlay frequency-glitch"></div>
+                         </div>
+                         <div class="item-info">
+                             <h3>The Quantum Psalm</h3>
+                             <p>A frequency older than stars</p>
+                         </div>
                      </div>
-                 </div>
 
-                 <!-- The Array
-                 <div class="gallery-item" data-title="The Array Research Station">
-                     <div class="image-container">
-                         <div class="image-placeholder array">
-                             <span class="placeholder-icon">📡</span>
-                             <span class="placeholder-text">THE ARRAY</span>
+                     <!-- The Array
+                     <div class="gallery-item" data-title="The Array Research Station">
+                         <div class="image-container">
+                             <div class="image-placeholder array">
+                                 <span class="placeholder-icon">📡</span>
+                                 <span class="placeholder-text">THE ARRAY</span>
+                             </div>
+                             <div class="glitch-overlay"></div>
                          </div>
-                         <div class="glitch-overlay"></div>
+                         <div class="item-info">
+                             <h3>The Array</h3>
+                             <p>Humanity's most advanced technology</p>
+                         </div>
                      </div>
-                     <div class="item-info">
-                         <h3>The Array</h3>
-                         <p>Humanity's most advanced technology</p>
-                     </div>
-                 </div>
 
-                 <!-- Consciousness Transfer
-                 <div class="gallery-item" data-title="Memory Transfer">
-                     <div class="image-container">
-                         <div class="image-placeholder consciousness">
-                             <span class="placeholder-icon">🧠</span>
-                             <span class="placeholder-text">CONSCIOUSNESS</span>
+                     <!-- Consciousness Transfer
+                     <div class="gallery-item" data-title="Memory Transfer">
+                         <div class="image-container">
+                             <div class="image-placeholder consciousness">
+                                 <span class="placeholder-icon">🧠</span>
+                                 <span class="placeholder-text">CONSCIOUSNESS</span>
+                             </div>
+                             <div class="glitch-overlay android"></div>
                          </div>
-                         <div class="glitch-overlay android"></div>
-                     </div>
-                     <div class="item-info">
-                         <h3>The Transfer</h3>
-                         <p>When memories become code</p>
+                         <div class="item-info">
+                             <h3>The Transfer</h3>
+                             <p>When memories become code</p>
+                         </div>
                      </div>
                  </div>
              </div>
-         </div>
-     </section>
-    -->
+         </section>
+        -->
         <!-- Upload Section -->
         <!-- <section class="upload-section"> -commented out for now
         <div class="upload-content">
@@ -209,33 +206,45 @@
                 </li>
                 <li>The glitch effects will automatically apply to your images!</li>
             </ol>
+        </div>-->
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">Visual Archives</p>
+            </div>
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <span>|</span>
+                <a href="#">Terms of Service</a>
+            </div>
         </div>
-    </section> -->
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-text">
-                    <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
-                    <p class="footer-tagline">Visual Archives</p>
-                     </div>
-                <div class="footer-links">
-                    <a href="privacy-policy.html">Privacy Policy</a>
-                    <span>|</span>
-                    <a href="#">Terms of Service</a>
-                </div>
-                </div>
-                <div class="footer-decoration"></div>
-        </footer>
-        <script src="storage-wrapper.js"></script>
-        <script src="cookie-consent.js"></script>
-        <script src="audio-player.js"></script>
-        <script src="script.js"></script>
-        <script src="gallery.js"></script>
-        <script src="load-navigation.js"></script>
-        <script src="memory-fragments.js"></script>
-        <script src="breadcrumbs.js"></script>
-        <!-- Firebase Auth Scripts -->
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-        <script src="auth.js"></script>
+        <div class="footer-decoration"></div>
+    </footer>
+
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase ONCE -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Le scripts -->
+    <script src="storage-wrapper.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="memory-fragments.js"></script>
+    <script src="gallery.js"></script>
+    <script src="breadcrumbs.js"></script>
+   
+
 </body>
 </html>

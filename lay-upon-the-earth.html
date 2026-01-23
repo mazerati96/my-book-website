@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="navigation.css">
     <link rel="stylesheet" href="animations.css">
 
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <!-- Quantum Entanglement Widget -->
     <link rel="stylesheet" href="quantum-widget.css">
@@ -285,10 +281,16 @@
         </div>
     </div>
 
-    <!-- Firebase Config -->
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase ONCE -->
     <script src="firebase-config.js"></script>
 
-    <!-- Scripts -->
+    <!-- Le scripts -->
     <script src="audio-player.js"></script>
     <script src="quantum-entanglement.js"></script>
     <script src="auth.js"></script>
@@ -296,5 +298,6 @@
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
+
 </body>
 </html>
