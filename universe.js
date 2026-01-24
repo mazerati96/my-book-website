@@ -12,14 +12,11 @@ let rotationVelocity = { x: 0, y: 0 };
 let raycaster = new THREE.Raycaster();
 let mouseNDC = new THREE.Vector2();
 let universeGroup;
-const SIGNAL_MIN_DISTANCE = 1700;
-const SIGNAL_MAX_DISTANCE = 2600;
 
-const SIGNAL_CUTOFF = 0.12;
-
-
-
-
+// NEW SIGNAL SETTINGS - Based on 3D distance to black hole
+const SIGNAL_MIN_DISTANCE = 500;   // Signal at MAX volume
+const SIGNAL_MAX_DISTANCE = 1500;  // Signal fades to 0
+const SIGNAL_CUTOFF = 0.05;        // Minimum volume threshold before cutting out
 
 // Location data
 const locationData = {
@@ -127,7 +124,6 @@ function initUniverse() {
 }
 
 // Create star field
-// UPDATE createStarField() - add stars to universeGroup instead of scene:
 function createStarField() {
     const starGeometry = new THREE.BufferGeometry();
     const starCount = 15000;
@@ -171,7 +167,7 @@ function createStarField() {
     });
 
     starField = new THREE.Points(starGeometry, starMaterial);
-    universeGroup.add(starField); // Changed from scene.add()
+    universeGroup.add(starField);
 }
 
 // Create black hole with glow
@@ -193,7 +189,7 @@ function createBlackHole() {
     // Layer 1: Inner BLAZING region (electric blue-white)
     const innerDisk = new THREE.RingGeometry(85, 120, 64);
     const innerMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ffff, // BRIGHT CYAN
+        color: 0x00ffff,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.9
@@ -207,7 +203,7 @@ function createBlackHole() {
     // Layer 2: Mid region (NEON GREEN)
     const midDisk1 = new THREE.RingGeometry(120, 160, 64);
     const midMaterial1 = new THREE.MeshBasicMaterial({
-        color: 0x00ff88, // BRIGHT GREEN
+        color: 0x00ff88,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.75
@@ -221,7 +217,7 @@ function createBlackHole() {
     // Layer 3: Mid-outer region (BRIGHT GOLD)
     const midDisk2 = new THREE.RingGeometry(160, 200, 64);
     const midMaterial2 = new THREE.MeshBasicMaterial({
-        color: 0xffaa00, // BRIGHT GOLD/ORANGE
+        color: 0xffaa00,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.65
@@ -235,7 +231,7 @@ function createBlackHole() {
     // Layer 4: Outer region (HOT PINK/RED)
     const outerDisk = new THREE.RingGeometry(200, 240, 64);
     const outerMaterial = new THREE.MeshBasicMaterial({
-        color: 0xff0066, // HOT PINK
+        color: 0xff0066,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.55
@@ -249,7 +245,7 @@ function createBlackHole() {
     // Layer 5: Outermost PURPLE glow
     const glowDisk = new THREE.RingGeometry(240, 300, 64);
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: 0xaa00ff, // BRIGHT PURPLE
+        color: 0xaa00ff,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.35
@@ -273,9 +269,7 @@ function createBlackHole() {
     photonRing.rotation.x = Math.PI / 2;
     universeGroup.add(photonRing);
 
-    // ======================================
-    // PARTICLE SYSTEM - Swirling matter!
-    // ======================================
+    // Particle system - Swirling matter
     const particleCount = 3000;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -284,49 +278,40 @@ function createBlackHole() {
 
     for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
-
-        // Random position in disk
         const angle = Math.random() * Math.PI * 2;
-        const radius = 100 + Math.random() * 200; // Between inner and outer disk
-        const height = (Math.random() - 0.5) * 20; // Slight thickness
+        const radius = 100 + Math.random() * 200;
+        const height = (Math.random() - 0.5) * 20;
 
         particlePositions[i3] = Math.cos(angle) * radius;
         particlePositions[i3 + 1] = height;
         particlePositions[i3 + 2] = Math.sin(angle) * radius;
 
-        // Color based on distance from center (mimics disk colors)
         if (radius < 130) {
-            // CYAN
             particleColors[i3] = 0.0;
             particleColors[i3 + 1] = 1.0;
             particleColors[i3 + 2] = 1.0;
         } else if (radius < 170) {
-            // GREEN
             particleColors[i3] = 0.0;
             particleColors[i3 + 1] = 1.0;
             particleColors[i3 + 2] = 0.5;
         } else if (radius < 210) {
-            // GOLD
             particleColors[i3] = 1.0;
             particleColors[i3 + 1] = 0.7;
             particleColors[i3 + 2] = 0.0;
         } else if (radius < 250) {
-            // PINK
             particleColors[i3] = 1.0;
             particleColors[i3 + 1] = 0.0;
             particleColors[i3 + 2] = 0.4;
         } else {
-            // PURPLE
             particleColors[i3] = 0.7;
             particleColors[i3 + 1] = 0.0;
             particleColors[i3 + 2] = 1.0;
         }
 
-        // Store velocity data for rotation
         particleVelocities.push({
             angle: angle,
             radius: radius,
-            speed: 0.002 + (1 / radius) * 30 // Inner particles move faster
+            speed: 0.002 + (1 / radius) * 30
         });
     }
 
@@ -338,19 +323,17 @@ function createBlackHole() {
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        blending: THREE.AdditiveBlending // Makes particles glow!
+        blending: THREE.AdditiveBlending
     });
 
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
     particleSystem.position.copy(blackHole.position);
     universeGroup.add(particleSystem);
 
-    // Store everything for animation
     blackHole.diskLayers = diskLayers;
     blackHole.photonRing = photonRing;
     blackHole.particleSystem = particleSystem;
     blackHole.particleVelocities = particleVelocities;
-
     blackHole.userData.locationId = 'Charybdis Prime';
     blackHole.userData.type = 'location';
 }
@@ -377,9 +360,67 @@ function createLocationMarkers() {
         marker.position.set(pos.x, pos.y, pos.z);
         marker.userData.locationId = id;
         marker.userData.type = 'location';
-        universeGroup.add(marker); // Changed from scene.add()
+        universeGroup.add(marker);
         locations.push(marker);
     });
+}
+
+// NEW: Calculate signal strength based on 3D distance + visibility
+function updateSignalStrength() {
+    if (!blackHole) return;
+
+    const indicator = document.getElementById('frequency-indicator');
+    if (!indicator) return;
+
+    // Get black hole's world position (accounting for group rotation)
+    const blackHoleWorldPos = new THREE.Vector3();
+    blackHole.getWorldPosition(blackHoleWorldPos);
+
+    // Calculate 3D distance from camera to black hole
+    const distance = camera.position.distanceTo(blackHoleWorldPos);
+
+    // Normalize distance to 0-1 strength (closer = stronger)
+    let strength = 1 - (distance - SIGNAL_MIN_DISTANCE) / (SIGNAL_MAX_DISTANCE - SIGNAL_MIN_DISTANCE);
+    strength = THREE.MathUtils.clamp(strength, 0, 1);
+
+    // Check if black hole is visible in viewport
+    const screenPos = blackHoleWorldPos.clone().project(camera);
+    const isVisible = (
+        screenPos.x >= -1 && screenPos.x <= 1 &&
+        screenPos.y >= -1 && screenPos.y <= 1 &&
+        screenPos.z > 0 && screenPos.z < 1
+    );
+
+    // If black hole is off-screen, fade out smoothly
+    if (!isVisible) {
+        strength *= 0.2; // Reduce to 20% when off-screen (creates fade effect)
+    }
+
+    // Update visual indicator
+    if (strength > SIGNAL_CUTOFF) {
+        indicator.classList.add('active');
+        indicator.style.setProperty('--signal-strength', strength);
+    } else {
+        indicator.classList.remove('active');
+        indicator.style.setProperty('--signal-strength', 0);
+    }
+
+    // Update audio
+    if (window.frequencyGenerator) {
+        if (strength > SIGNAL_CUTOFF && !signalActive) {
+            window.frequencyGenerator.start();
+            signalActive = true;
+        }
+
+        if (strength <= SIGNAL_CUTOFF && signalActive) {
+            window.frequencyGenerator.stop();
+            signalActive = false;
+        }
+
+        if (window.frequencyGenerator.setVolume) {
+            window.frequencyGenerator.setVolume(strength > SIGNAL_CUTOFF ? strength : 0);
+        }
+    }
 }
 
 // Animation loop
@@ -391,14 +432,13 @@ function animate() {
         universeGroup.rotation.y += 0.0002 + rotationVelocity.y * 0.95;
         universeGroup.rotation.x += rotationVelocity.x * 0.95;
 
-        // Clamp X rotation
         universeGroup.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, universeGroup.rotation.x));
 
         rotationVelocity.x *= 0.95;
         rotationVelocity.y *= 0.95;
     }
 
-    // Animate black hole accretion disk 
+    // Animate black hole accretion disk
     if (blackHole && blackHole.diskLayers) {
         const time = Date.now() * 0.001;
 
@@ -438,6 +478,9 @@ function animate() {
         marker.material.opacity = pulse;
     });
 
+    // UPDATE SIGNAL EVERY FRAME
+    updateSignalStrength();
+
     renderer.render(scene, camera);
 }
 
@@ -453,11 +496,9 @@ function onMouseMove(e) {
         const deltaX = e.clientX - previousMouseX;
         const deltaY = e.clientY - previousMouseY;
 
-        // Rotate the ENTIRE UNIVERSE GROUP
         universeGroup.rotation.y += deltaX * 0.005;
         universeGroup.rotation.x += deltaY * 0.005;
 
-        // Clamp X rotation so you don't flip upside down (optional)
         universeGroup.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, universeGroup.rotation.x));
 
         rotationVelocity.y = deltaX * 0.0001;
@@ -474,52 +515,9 @@ function onMouseUp() {
 
 function onMouseWheel(e) {
     e.preventDefault();
-
     camera.position.z += e.deltaY * 0.5;
     camera.position.z = Math.max(300, Math.min(2000, camera.position.z));
-
-    const indicator = document.getElementById('frequency-indicator');
-    if (!indicator) return;
-
-    // Z-depth distance only
-    const distance = Math.abs(camera.position.z - blackHole.position.z);
-
-    // Normalize signal strength
-    let strength = 1 - (distance - SIGNAL_MIN_DISTANCE) /
-        (SIGNAL_MAX_DISTANCE - SIGNAL_MIN_DISTANCE);
-
-    strength = THREE.MathUtils.clamp(strength, 0, 1);
-
-    // Visual indicator
-    if (strength > SIGNAL_CUTOFF) {
-        indicator.classList.add('active');
-        indicator.style.setProperty('--signal-strength', strength);
-    } else {
-        indicator.classList.remove('active');
-        indicator.style.setProperty('--signal-strength', 0);
-    }
-
-
-    // Audio behavior
-    if (window.frequencyGenerator) {
-        if (strength > SIGNAL_CUTOFF && !signalActive) {
-            window.frequencyGenerator.start();
-            signalActive = true;
-        }
-
-        if (strength <= SIGNAL_CUTOFF && signalActive) {
-            window.frequencyGenerator.stop();
-            signalActive = false;
-        }
-
-        if (window.frequencyGenerator.setVolume) {
-            window.frequencyGenerator.setVolume(
-                strength > SIGNAL_CUTOFF ? strength : 0
-            );
-        }
-    }
 }
-
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -538,7 +536,6 @@ function setupLocationClicks() {
             if (marker) {
                 highlightMarker(marker);
             }
-
         });
     });
 
@@ -561,17 +558,13 @@ function showLocationInfo(locationId) {
 
     document.getElementById('info-panel').style.display = 'block';
 
-    // Focus camera on location marker
     const marker = locations.find(m => m.userData.locationId === locationId);
     if (marker) {
-        // Smooth camera movement (simplified)
         camera.position.z = 600;
     }
 }
 
-
 function highlightMarker(targetMarker) {
-    // Reset all markers
     locations.forEach(marker => {
         marker.material.color.set(0xff0033);
         marker.material.opacity = 0.8;
@@ -581,9 +574,8 @@ function highlightMarker(targetMarker) {
         blackHole.material.color.set(0x000000);
     }
 
-    // Highlight selected marker
     if (targetMarker.material) {
-        targetMarker.material.color.set(0x00ccff); // blue glow
+        targetMarker.material.color.set(0x00ccff);
         targetMarker.material.opacity = 1;
     }
 }
@@ -609,14 +601,11 @@ function onSceneClick(event) {
     }
 }
 
-
 // Initialize everything when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initUniverse();
-       // initHamburgerMenu();
     });
 } else {
     initUniverse();
-    //initHamburgerMenu();
 }
