@@ -536,10 +536,34 @@ body {
     }
 
     /* standard book cover used across pages */
-    .book-cover img {
-        width: 15px; /* displayed width for all covers */
-        height: auto; /* preserve aspect ratio */
-        display: block; /* removes inline gaps if desired */
-        object-fit: contain; /* alternative: cover to crop */
+    /* match gallery sizing for single cover */
+    .image-container {
+        position: relative;
+        width: 100%;
+        max-width: 420px; /* optional cap for single-page layout */
+        padding-top: 133.33%; /* 3:4 aspect ratio like gallery */
+        background-color: #111;
+        overflow: hidden;
+    }
+
+    .image-placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .cover1 {
+        background-image: url('images/book1-cover.png');
+    }
+    .cover2 {
+        background-image: url('images/book2-cover.png');
+    }
+    .cover3 {
+        background-image: url('images/book3-cover.png');
     }
 }
