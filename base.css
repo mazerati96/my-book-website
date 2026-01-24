@@ -537,7 +537,7 @@ body {
 
     /* standard book cover used across pages */
     .book-cover img {
-        width: 150px; /* displayed width for all covers */
+        width: 50px; /* displayed width for all covers */
         height: auto; /* preserve aspect ratio */
         display: block; /* removes inline gaps if desired */
         object-fit: contain; /* alternative: cover to crop */
