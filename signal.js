@@ -1,14 +1,44 @@
 // ============================================
-// SIGNAL PAGE - INTERACTIONS & VISUALIZER + LEADERBOARD
+// SIGNAL PAGE - ENHANCED LEADERBOARD WITH DETAILS & DELETE
 // ============================================
 
 let canvas, ctx, animationId;
 let decodeProgress = 0;
 let symbolsClicked = new Set();
+let currentUserUid = null;
+let currentUsername = null;
+let isAdmin = false;
+
+// ADMIN USERNAMES - Authors with moderation privileges
+const ADMIN_USERNAMES = ['Amaro', 'Matthew'];
 
 // Initialize signal page
 function initSignalPage() {
     console.log('📡 Initializing signal page...');
+
+    // Get current user info if logged in
+    if (window.authSystem && authSystem.isLoggedIn()) {
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUserUid = user.uid;
+                try {
+                    currentUsername = await authSystem.getUsername();
+                    isAdmin = ADMIN_USERNAMES.includes(currentUsername);
+
+                    if (isAdmin) {
+                        console.log('🛡️ Admin access granted:', currentUsername);
+                    }
+                } catch (e) {
+                    console.error('Error getting username:', e);
+                }
+
+                // Reload leaderboard to show/hide delete buttons based on admin status
+                if (document.getElementById('leaderboard-container')) {
+                    loadLeaderboard();
+                }
+            }
+        });
+    }
 
     setupAudioControls();
     setupVisualizer();
@@ -24,9 +54,8 @@ function setupAudioControls() {
     const volumeSlider = document.getElementById('volume-slider');
     const volumeValue = document.getElementById('volume-value');
 
-    if (!toggleBtn) return; // Guard for pages without audio controls
+    if (!toggleBtn) return;
 
-    // Toggle audio
     toggleBtn.addEventListener('click', () => {
         const isPlaying = window.frequencyGenerator.toggle();
 
@@ -45,7 +74,6 @@ function setupAudioControls() {
         }
     });
 
-    // Volume control
     if (volumeSlider) {
         volumeSlider.addEventListener('input', (e) => {
             const volume = e.target.value / 100;
@@ -61,12 +89,8 @@ function setupVisualizer() {
     if (!canvas) return;
 
     ctx = canvas.getContext('2d');
-
-    // Set canvas size
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
-    // Start animation
     animateWaveform();
 }
 
@@ -94,11 +118,9 @@ function animateWaveform() {
 function drawActiveWaveform() {
     const centerY = canvas.height / 2;
     const amplitude = 80 * window.frequencyGenerator.volume;
-    const frequency = 36;
     const speed = 0.02;
     const time = Date.now() * speed;
 
-    // Draw waveform
     ctx.strokeStyle = '#ff0033';
     ctx.lineWidth = 2;
     ctx.shadowBlur = 10;
@@ -107,16 +129,11 @@ function drawActiveWaveform() {
 
     for (let x = 0; x < canvas.width; x++) {
         const y = centerY + Math.sin((x * 0.02) + time) * amplitude;
-        if (x === 0) {
-            ctx.moveTo(x, y);
-        } else {
-            ctx.lineTo(x, y);
-        }
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
     }
-
     ctx.stroke();
 
-    // Draw secondary harmonic
     ctx.strokeStyle = 'rgba(255, 0, 51, 0.3)';
     ctx.lineWidth = 1;
     ctx.shadowBlur = 5;
@@ -124,16 +141,11 @@ function drawActiveWaveform() {
 
     for (let x = 0; x < canvas.width; x++) {
         const y = centerY + Math.sin((x * 0.04) + time * 2) * (amplitude * 0.5);
-        if (x === 0) {
-            ctx.moveTo(x, y);
-        } else {
-            ctx.lineTo(x, y);
-        }
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
     }
-
     ctx.stroke();
 
-    // Update amplitude display
     const amplitudeEl = document.getElementById('amplitude');
     if (amplitudeEl) {
         const currentAmplitude = (Math.abs(Math.sin(time)) * 100).toFixed(1);
@@ -143,8 +155,6 @@ function drawActiveWaveform() {
 
 function drawDormantWaveform() {
     const centerY = canvas.height / 2;
-
-    // Draw flat line with slight noise
     ctx.strokeStyle = 'rgba(255, 0, 51, 0.3)';
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -152,13 +162,9 @@ function drawDormantWaveform() {
     for (let x = 0; x < canvas.width; x++) {
         const noise = (Math.random() - 0.5) * 2;
         const y = centerY + noise;
-        if (x === 0) {
-            ctx.moveTo(x, y);
-        } else {
-            ctx.lineTo(x, y);
-        }
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
     }
-
     ctx.stroke();
 
     const amplitudeEl = document.getElementById('amplitude');
@@ -170,7 +176,6 @@ function setupDecoder() {
     const symbolGrid = document.getElementById('symbol-grid');
     if (!symbolGrid) return;
 
-    // Generate mysterious symbols
     const symbols = ['◊', '◈', '◇', '◆', '⬡', '⬢', '⬣', '⬤', '⬥', '⬦', '▲', '▼', '◀', '▶', '⟡', '⟢'];
 
     for (let i = 0; i < 12; i++) {
@@ -189,7 +194,6 @@ function setupDecoder() {
         symbolGrid.appendChild(symbol);
     }
 
-    // Submit interpretation
     const submitBtn = document.getElementById('submit-interpretation');
     if (submitBtn) {
         submitBtn.addEventListener('click', submitInterpretation);
@@ -197,19 +201,15 @@ function setupDecoder() {
 }
 
 function incrementDecode() {
-    // Each symbol click adds ~8.33% (12 symbols = 100%)
     const increment = 100 / 12;
     decodeProgress = Math.min(100, decodeProgress + increment);
 
     const progressEl = document.getElementById('decode-progress');
-    if (progressEl) {
-        progressEl.textContent = `${Math.round(decodeProgress)}%`;
-    }
+    if (progressEl) progressEl.textContent = `${Math.round(decodeProgress)}%`;
 
     const cipherText = document.getElementById('cipher-text');
     if (!cipherText) return;
 
-    // Progressive decryption stages
     if (decodeProgress >= 25 && decodeProgress < 50) {
         cipherText.innerHTML = "Th█ ca██ fr██ th█ de████s ca████s mo██ tha█ fr████nc█. It ca███ to yo█. To li███n. To he██, to he██. To un█████nd. To st███.";
         cipherText.style.color = '#ff6666';
@@ -225,12 +225,9 @@ function incrementDecode() {
         cipherText.style.textShadow = '0 0 10px #00ff88';
         cipherText.style.wordWrap = 'break-word';
         cipherText.style.whiteSpace = 'normal';
-
-        // Show full decryption notice
         showFullDecryptionNotice();
     }
 
-    // Save progress to cloud
     if (window.authSystem && authSystem.isLoggedIn()) {
         authSystem.saveUserProgress('signalProgress', decodeProgress);
     }
@@ -238,9 +235,10 @@ function incrementDecode() {
 
 function showFullDecryptionNotice() {
     const cipherHeader = document.querySelector('.cipher-header');
-    if (!cipherHeader) return;
+    if (!cipherHeader || document.querySelector('.decryption-complete-notice')) return;
 
     const notice = document.createElement('div');
+    notice.className = 'decryption-complete-notice';
     notice.style.cssText = `
         color: #00ff88;
         font-size: 0.9rem;
@@ -252,12 +250,7 @@ function showFullDecryptionNotice() {
         animation: result-appear 0.5s ease;
     `;
     notice.textContent = '✓ FULL DECRYPTION ACHIEVED - Submit your interpretation below';
-
-    // Only add if not already present
-    if (!document.querySelector('.decryption-complete-notice')) {
-        notice.className = 'decryption-complete-notice';
-        cipherHeader.parentElement.appendChild(notice);
-    }
+    cipherHeader.parentElement.appendChild(notice);
 }
 
 async function submitInterpretation() {
@@ -269,31 +262,32 @@ async function submitInterpretation() {
         return;
     }
 
-    // Get username
     let username = 'Anonymous';
+    let userUid = null;
+
     if (window.authSystem && authSystem.isLoggedIn()) {
         try {
             username = await authSystem.getUsername() || 'Anonymous';
+            const user = firebase.auth().currentUser;
+            if (user) userUid = user.uid;
         } catch (e) {
             username = 'Anonymous';
         }
     } else {
-        // Prompt for name
         const promptedName = prompt('Enter your name (or leave blank for Anonymous):');
         if (promptedName && promptedName.trim()) {
             username = promptedName.trim().substring(0, 30);
         }
     }
 
-    // Check if fully decoded
     const isFullyDecoded = decodeProgress >= 95;
 
-    // Save to Firebase
     if (typeof firebase !== 'undefined' && firebase.database) {
         try {
             const interpretationRef = firebase.database().ref('signalInterpretations');
             await interpretationRef.push({
                 username: username,
+                userUid: userUid, // Store UID for delete permissions
                 interpretation: interpretation,
                 decodeProgress: Math.round(decodeProgress),
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
@@ -305,7 +299,6 @@ async function submitInterpretation() {
         }
     }
 
-    // Show acknowledgment
     const resultsDiv = document.getElementById('interpretation-results');
     const acknowledgmentText = document.getElementById('acknowledgment-text');
 
@@ -322,50 +315,29 @@ async function submitInterpretation() {
         ];
     } else {
         responses = [
-            `PARTIAL DECRYPTION (${Math.round(decodeProgress)}%). The signal acknowledges your interpretation, but there is more to decode. Click all symbols to achieve full synchronization.`,
-            `INCOMPLETE PATTERN (${Math.round(decodeProgress)}%). Your consciousness begins to resonate, but the frequency awaits complete understanding. Continue decoding.`,
-            `ESTABLISHING LINK (${Math.round(decodeProgress)}%). The quantum psalm hears you, but faintly. Decode all symbols to strengthen the connection.`,
-            `SIGNAL DETECTED (${Math.round(decodeProgress)}%). Something ancient stirs, but remains distant. Full decryption will bring you closer.`,
-            `RESONANCE BUILDING (${Math.round(decodeProgress)}%). The 36 Hertz frequency pulses in partial recognition. Decode further to join the chorus.`
+            `PARTIAL DECRYPTION (${Math.round(decodeProgress)}%). The signal acknowledges your interpretation, but there is more to decode.`,
+            `INCOMPLETE PATTERN (${Math.round(decodeProgress)}%). Your consciousness begins to resonate, but the frequency awaits complete understanding.`,
+            `ESTABLISHING LINK (${Math.round(decodeProgress)}%). The quantum psalm hears you, but faintly. Decode all symbols to strengthen the connection.`
         ];
     }
 
     acknowledgmentText.textContent = responses[Math.floor(Math.random() * responses.length)];
     resultsDiv.style.display = 'block';
 
-    // Show full revealed message if 100% decoded
     const revealedMessage = resultsDiv.querySelector('.revealed-message');
     if (revealedMessage) {
-        if (isFullyDecoded) {
-            revealedMessage.style.display = 'block';
-            const decodedText = revealedMessage.querySelector('.decoded-text');
-            if (decodedText) {
-                decodedText.style.wordWrap = 'break-word';
-                decodedText.style.whiteSpace = 'normal';
-            }
-        } else {
-            revealedMessage.style.display = 'none';
-        }
+        revealedMessage.style.display = isFullyDecoded ? 'block' : 'none';
     }
 
-    // Reload leaderboard
     await loadLeaderboard();
-
-    // Clear input
     input.value = '';
-
-    // Scroll to results
     resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-    console.log('Interpretation submitted:', interpretation);
-    console.log('Decode progress:', decodeProgress);
 }
 
-// LEADERBOARD FUNCTIONALITY
+// ENHANCED LEADERBOARD
 async function loadLeaderboard() {
     const leaderboardContainer = document.getElementById('leaderboard-container');
     if (!leaderboardContainer) {
-        // Create leaderboard if it doesn't exist
         createLeaderboardSection();
     }
 
@@ -376,16 +348,14 @@ async function loadLeaderboard() {
 
     try {
         const interpretationsRef = firebase.database().ref('signalInterpretations');
-        const snapshot = await interpretationsRef.orderByChild('timestamp').limitToLast(10).once('value');
+        const snapshot = await interpretationsRef.orderByChild('timestamp').limitToLast(20).once('value');
 
         const interpretations = [];
         snapshot.forEach((child) => {
             interpretations.push({ id: child.key, ...child.val() });
         });
 
-        // Reverse to show newest first
         interpretations.reverse();
-
         displayLeaderboard(interpretations);
     } catch (error) {
         console.error('Error loading leaderboard:', error);
@@ -401,7 +371,7 @@ function createLeaderboardSection() {
     leaderboardSection.innerHTML = `
         <div class="section-header">
             <div class="header-line"></div>
-            <h2>RECENT INTERPRETATIONS</h2>
+            <h2>COMMUNITY INTERPRETATIONS</h2>
             <div class="header-line"></div>
         </div>
         <div id="leaderboard-container" class="leaderboard-container">
@@ -410,19 +380,25 @@ function createLeaderboardSection() {
     `;
 
     decoderSection.parentElement.insertBefore(leaderboardSection, decoderSection.nextSibling);
+    addLeaderboardStyles();
+}
 
-    // Add styles
+function addLeaderboardStyles() {
+    if (document.getElementById('leaderboard-styles')) return;
+
     const style = document.createElement('style');
+    style.id = 'leaderboard-styles';
     style.textContent = `
         .leaderboard-section {
             padding: 4rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
+            background: #0a0a0a;
         }
         
         .leaderboard-container {
             background: rgba(10, 10, 10, 0.95);
-            border: 1px solid var(--border-white);
+            border: 2px solid var(--accent-red);
             padding: 2rem;
         }
         
@@ -432,6 +408,7 @@ function createLeaderboardSection() {
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             transition: all 0.3s;
+            position: relative;
         }
         
         .interpretation-item:hover {
@@ -465,12 +442,32 @@ function createLeaderboardSection() {
             font-family: var(--font-system);
         }
         
-        .interpretation-text {
+        .interpretation-preview {
             color: var(--primary-white);
             line-height: 1.6;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             word-wrap: break-word;
             white-space: normal;
+            max-height: 3.2em;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .interpretation-preview.truncated::after {
+            content: '...';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, transparent, rgba(10, 10, 10, 0.95) 50%);
+            padding-left: 2rem;
+        }
+        
+        .interpretation-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
         
         .interpretation-timestamp {
@@ -479,17 +476,159 @@ function createLeaderboardSection() {
             opacity: 0.7;
         }
         
-        .loading-message {
+        .interpretation-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .view-details-btn, .delete-btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            border: 1px solid;
+            background: transparent;
+            transition: all 0.3s;
+            letter-spacing: 0.08em;
+        }
+        
+        .view-details-btn {
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+        
+        .view-details-btn:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-black);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        
+        .delete-btn {
+            color: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+        
+        .delete-btn:hover {
+            background: var(--accent-red);
+            color: white;
+            box-shadow: 0 0 15px var(--accent-red);
+        }
+        
+        /* Modal Styles */
+        .interpretation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .interpretation-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            border: 2px solid var(--accent-cyan);
+            padding: 2rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+            animation: modal-appear 0.3s ease;
+        }
+        
+        @keyframes modal-appear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--accent-red);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .modal-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .modal-username {
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-metadata {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--dark-white);
+        }
+        
+        .modal-metadata span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .modal-body {
+            color: var(--primary-white);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .loading-message, .no-interpretations {
             text-align: center;
             color: var(--dark-white);
             padding: 2rem;
         }
         
         .no-interpretations {
-            text-align: center;
-            color: var(--dark-white);
-            padding: 2rem;
             font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 1.5rem;
+                max-height: 90vh;
+            }
+            
+            .interpretation-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     `;
     document.head.appendChild(style);
@@ -508,19 +647,162 @@ function displayLeaderboard(interpretations) {
         const date = new Date(item.timestamp);
         const timeAgo = getTimeAgo(date);
         const fullyDecoded = item.isFullyDecoded ? 'fully-decoded' : '';
+        const preview = item.interpretation.length > 150
+            ? item.interpretation.substring(0, 150)
+            : item.interpretation;
+        const isTruncated = item.interpretation.length > 150;
+        const isOwner = currentUserUid && item.userUid === currentUserUid;
+        const canDelete = isOwner || isAdmin; // Owner OR admin can delete
 
         return `
-            <div class="interpretation-item ${fullyDecoded}">
+            <div class="interpretation-item ${fullyDecoded}" data-id="${item.id}">
                 <div class="interpretation-header">
                     <div class="interpretation-username">${escapeHtml(item.username)}</div>
                     <div class="interpretation-progress">${item.decodeProgress}% Decoded ${item.isFullyDecoded ? '✓' : ''}</div>
                 </div>
-                <div class="interpretation-text">"${escapeHtml(item.interpretation)}"</div>
-                <div class="interpretation-timestamp">${timeAgo}</div>
+                <div class="interpretation-preview ${isTruncated ? 'truncated' : ''}">"${escapeHtml(preview)}"</div>
+                <div class="interpretation-footer">
+                    <div class="interpretation-timestamp">${timeAgo}</div>
+                    <div class="interpretation-actions">
+                        <button class="view-details-btn" onclick="viewInterpretationDetails('${item.id}')">
+                            VIEW FULL
+                        </button>
+                        ${canDelete ? `<button class="delete-btn" onclick="deleteInterpretation('${item.id}', ${isAdmin}, ${isOwner})" ${isAdmin && !isOwner ? 'title="Admin: Moderating content"' : ''}>
+                            ${isAdmin && !isOwner ? '🛡️ REMOVE' : 'DELETE'}
+                        </button>` : ''}
+                    </div>
+                </div>
             </div>
         `;
     }).join('');
+
+    // Create modal if it doesn't exist
+    createModal();
 }
+
+function createModal() {
+    if (document.getElementById('interpretation-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'interpretation-modal';
+    modal.className = 'interpretation-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="modal-header">
+                <div class="modal-username" id="modal-username"></div>
+                <div class="modal-metadata">
+                    <span>📊 <span id="modal-progress"></span></span>
+                    <span>🕐 <span id="modal-timestamp"></span></span>
+                </div>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+}
+
+// Global functions for onclick handlers
+window.viewInterpretationDetails = async function (interpretationId) {
+    try {
+        const snapshot = await firebase.database().ref(`signalInterpretations/${interpretationId}`).once('value');
+        const data = snapshot.val();
+
+        if (!data) {
+            alert('Interpretation not found.');
+            return;
+        }
+
+        const modal = document.getElementById('interpretation-modal');
+        document.getElementById('modal-username').textContent = data.username;
+        document.getElementById('modal-progress').textContent = `${data.decodeProgress}% Decoded ${data.isFullyDecoded ? '✓' : ''}`;
+        document.getElementById('modal-timestamp').textContent = new Date(data.timestamp).toLocaleString();
+        document.getElementById('modal-body').textContent = `"${data.interpretation}"`;
+
+        modal.classList.add('active');
+    } catch (error) {
+        console.error('Error loading interpretation:', error);
+        alert('Failed to load interpretation details.');
+    }
+};
+
+window.closeModal = function () {
+    const modal = document.getElementById('interpretation-modal');
+    modal.classList.remove('active');
+};
+
+window.deleteInterpretation = async function (interpretationId, isAdminAction = false, isOwner = false) {
+    // Different confirmation messages for admins vs owners
+    let confirmMessage;
+    if (isAdminAction && !isOwner) {
+        confirmMessage = '🛡️ ADMIN ACTION: Are you sure you want to remove this interpretation?\n\nThis action will be logged and cannot be undone.';
+    } else {
+        confirmMessage = '⚠️ Are you sure you want to delete this interpretation? This action cannot be undone.';
+    }
+
+    const confirmed = confirm(confirmMessage);
+
+    if (!confirmed) return;
+
+    try {
+        // Get the interpretation data first
+        const snapshot = await firebase.database().ref(`signalInterpretations/${interpretationId}`).once('value');
+        const data = snapshot.val();
+
+        if (!data) {
+            alert('Interpretation not found.');
+            return;
+        }
+
+        // Check permissions
+        const userIsOwner = data.userUid === currentUserUid;
+        const userIsAdmin = isAdmin;
+
+        if (!userIsOwner && !userIsAdmin) {
+            alert('❌ You do not have permission to delete this interpretation.');
+            return;
+        }
+
+        // If admin is deleting someone else's post, log it
+        if (userIsAdmin && !userIsOwner) {
+            console.log(`🛡️ ADMIN MODERATION: ${currentUsername} removed interpretation by ${data.username}`);
+
+            // Optional: Log to Firebase for audit trail
+            await firebase.database().ref('moderationLog').push({
+                action: 'DELETE_INTERPRETATION',
+                adminUsername: currentUsername,
+                adminUid: currentUserUid,
+                targetUsername: data.username,
+                targetUid: data.userUid,
+                interpretationId: interpretationId,
+                interpretation: data.interpretation,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        // Delete the interpretation
+        await firebase.database().ref(`signalInterpretations/${interpretationId}`).remove();
+        console.log('✅ Interpretation deleted');
+
+        // Reload leaderboard
+        await loadLeaderboard();
+
+        // Different success messages
+        if (userIsAdmin && !userIsOwner) {
+            alert('✓ Interpretation removed by admin. Action logged.');
+        } else {
+            alert('✓ Interpretation deleted successfully.');
+        }
+    } catch (error) {
+        console.error('Error deleting interpretation:', error);
+        alert('❌ Failed to delete interpretation. Please try again.');
+    }
+};
 
 function getTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
