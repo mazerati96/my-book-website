@@ -179,7 +179,7 @@ footer {
         margin: 0 auto; /* extra centering if parent isn't flex */
         object-fit: contain; /* preserves whole cover without cropping */
         border: 3px solid #00ff88; /* optional styling to match page accents */
-        box-shadow: 0 0 30px rgba(0,255,136,0.12);
+        box-shadow: 0 0 30px rgba(0,212,255,0.12);
     }
 
 /* Responsive tweak */
@@ -190,11 +190,7 @@ footer {
     }
 }
 
-.cover2 {
-    background-image: url('images/book2-cover.png');
-    background-size: cover;
-    background-position: center;
-}
+
 
 .teaser-content {
     color: var(--dark-white);

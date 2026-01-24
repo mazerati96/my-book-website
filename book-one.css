@@ -155,11 +155,7 @@ footer {
   
 }
 
-.cover1 {
-    background-image: url('images/book1-cover.png');
-    background-size: cover;
-    background-position: center;
-}
+
 
 .epigraph-text {
     font-size: 1.8rem;
