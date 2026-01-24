@@ -155,11 +155,32 @@ footer {
     text-shadow: 0 0 10px #ffd700;
 }
 
-/* Teaser section */
-.teaser-section {
-    max-width: 900px;
-    margin: 0 auto;
+
+/* Epigraph section */
+.epigraph-section {
+    padding: 5rem 2rem;
+    background-color: var(--bg-dark);
+    border-top: 2px solid #ffd700;
+    border-bottom: 2px solid #ffd700;
 }
+
+.epigraph-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    padding: 3rem 2rem;
+}
+
+
+.epigraph-text {
+    font-size: 1.8rem;
+    color: var(--primary-white);
+    font-style: italic;
+    line-height: 1.6;
+    margin: 2rem 0;
+}
+
 
 /* Make book cover match gallery lightbox sizing + center it */
 .epigraph-section .book-cover {
@@ -191,6 +212,11 @@ footer {
 }
 
 
+/* Teaser section */
+.teaser-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
 
 .teaser-content {
     color: var(--dark-white);
