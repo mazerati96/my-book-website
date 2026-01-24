@@ -15,7 +15,7 @@ let universeGroup;
 
 // NEW SIGNAL SETTINGS - Based on 3D distance to black hole
 const SIGNAL_MIN_DISTANCE = 500;   // Signal at MAX volume
-const SIGNAL_MAX_DISTANCE = 1500;  // Signal fades to 0
+const SIGNAL_MAX_DISTANCE = 2500;  // Signal fades to 0
 const SIGNAL_CUTOFF = 0.05;        // Minimum volume threshold before cutting out
 
 // Location data
