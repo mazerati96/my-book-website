@@ -152,11 +152,13 @@ footer {
     position: relative;
     padding: 3rem 2rem;
     /* BOOK COVER IMAGES */
-    .cover1 {
-        background-image: url('images/book1-cover.png');
-        background-size: cover;
-        background-position: center;
-    }
+  
+}
+
+.cover1 {
+    background-image: url('images/book1-cover.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .epigraph-text {
