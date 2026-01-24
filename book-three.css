@@ -161,6 +161,35 @@ footer {
     margin: 0 auto;
 }
 
+/* Make book cover match gallery lightbox sizing + center it */
+.epigraph-section .book-cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem; /* space under teaser text */
+}
+
+    /* Display size constraint: mirrors #lightbox-image behavior */
+    .epigraph-section .book-cover .lightbox-image {
+        max-width: 420px; /* visible width cap — change to match gallery if needed */
+        width: 100%; /* lets image scale down to container on small screens */
+        max-height: 70vh; /* same vertical cap as lightbox so it never fills the screen */
+        height: auto;
+        display: block;
+        margin: 0 auto; /* extra centering if parent isn't flex */
+        object-fit: contain; /* preserves whole cover without cropping */
+        border: 3px solid #00ff88; /* optional styling to match page accents */
+        box-shadow: 0 0 30px rgba(0,255,136,0.12);
+    }
+
+/* Responsive tweak */
+@media (max-width: 480px) {
+    .epigraph-section .book-cover .lightbox-image {
+        max-width: 90%;
+        max-height: 60vh;
+    }
+}
+
 .teaser-content {
     color: var(--dark-white);
     font-size: 1.1rem;
