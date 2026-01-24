@@ -190,6 +190,12 @@ footer {
     }
 }
 
+.cover3 {
+    background-image: url('images/book3-cover.png');
+    background-size: cover;
+    background-position: center;
+}
+
 .teaser-content {
     color: var(--dark-white);
     font-size: 1.1rem;
