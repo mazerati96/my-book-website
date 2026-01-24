@@ -535,4 +535,15 @@ body {
         grid-template-columns: 1fr !important;
     }
 
+    /* reuse gallery lightbox sizing for single-cover pages */
+    .lightbox-image {
+        max-width: 100%;
+        max-height: 70vh; /* same constraint gallery uses for clicked images */
+        display: block;
+        margin: 0 auto; /* centers the image */
+        border: 3px solid #ff0033;
+        box-shadow: 0 0 50px rgba(255, 0, 51, 0.5);
+        object-fit: contain; /* ensures full image visible without cropping */
+    }
+
 }
