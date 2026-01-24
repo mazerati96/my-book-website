@@ -178,7 +178,7 @@ footer {
         display: block;
         margin: 0 auto; /* extra centering if parent isn't flex */
         object-fit: contain; /* preserves whole cover without cropping */
-        border: 3px solid #00ff88; /* optional styling to match page accents */
+        border: 3px solid #00d4ff; /* optional styling to match page accents */
         box-shadow: 0 0 30px rgba(0,212,255,0.12);
     }
 
