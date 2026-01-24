@@ -560,10 +560,6 @@ body {
     .cover1 {
         background-image: url('images/book1-cover.png');
     }
-    .cover2 {
-        background-image: url('images/book2-cover.png');
-    }
-    .cover3 {
-        background-image: url('images/book3-cover.png');
-    }
+
+
 }
