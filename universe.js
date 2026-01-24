@@ -359,7 +359,7 @@ function createBlackHole() {
 function createLocationMarkers() {
     const markerPositions = {
         'brigade-base': { x: 300, y: -100, z: -800 },
-        'Artemis Array': { x: -200, y: 150, z: -1000 },
+        'Artemis Array': { x: -100, y: 150, z: -1000 },
         'Hegemony': { x: 400, y: 200, z: -600 },
         'Colonial Authority': { x: -350, y: -150, z: -700 },
         'Sozuna Station Warzone': { x: 150, y: -250, z: -500 }
