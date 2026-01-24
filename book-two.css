@@ -162,7 +162,7 @@ footer {
 }
 
 /* Make book cover match gallery lightbox sizing + center it */
-.teaser-section .book-cover {
+.epigraph-section .book-cover {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -170,7 +170,7 @@ footer {
 }
 
     /* Display size constraint: mirrors #lightbox-image behavior */
-    .teaser-section .book-cover .lightbox-image {
+    .epigraph-section .book-cover .lightbox-image {
         max-width: 420px; /* visible width cap — change to match gallery if needed */
         width: 100%; /* lets image scale down to container on small screens */
         max-height: 70vh; /* same vertical cap as lightbox so it never fills the screen */
@@ -184,7 +184,7 @@ footer {
 
 /* Responsive tweak */
 @media (max-width: 480px) {
-    .teaser-section .book-cover .lightbox-image {
+    .epigraph-section .book-cover .lightbox-image {
         max-width: 90%;
         max-height: 60vh;
     }
