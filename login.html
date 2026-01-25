@@ -61,7 +61,7 @@
                     <!-- Email (signup only) -->
                     <div class="form-group" id="signupEmailGroup" style="display: none;">
                         <label for="signupEmail">Email</label>
-                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                        <input type="email" id="signupEmail" placeholder="your@email.com">
                     </div>
 
                     <!-- Password -->
@@ -238,15 +238,39 @@
                         modeBtns.forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
 
+                        const signupEmailInput = document.getElementById('signupEmail');
+                        const emailOrUsernameInput = document.getElementById('emailOrUsername');
+                        const usernameInput = document.getElementById('username');
+
                         if (mode === 'signup') {
                             usernameGroup.style.display = 'block';
                             signupEmailGroup.style.display = 'block';
                             loginFieldGroup.style.display = 'none';
+
+                            // Toggle required attributes
+                            signupEmailInput.required = true;
+                            usernameInput.required = true;
+                            emailOrUsernameInput.required = false;
+
+                            // Clear validation states
+                            signupEmailInput.removeAttribute('aria-invalid');
+                            emailOrUsernameInput.removeAttribute('aria-invalid');
+
                             emailSubmitBtn.querySelector('span').textContent = 'SIGN UP';
                         } else {
                             usernameGroup.style.display = 'none';
                             signupEmailGroup.style.display = 'none';
                             loginFieldGroup.style.display = 'block';
+
+                            // Toggle required attributes
+                            signupEmailInput.required = false;
+                            usernameInput.required = false;
+                            emailOrUsernameInput.required = true;
+
+                            // Clear validation states
+                            signupEmailInput.removeAttribute('aria-invalid');
+                            usernameInput.removeAttribute('aria-invalid');
+
                             emailSubmitBtn.querySelector('span').textContent = 'LOGIN';
                         }
                     });
