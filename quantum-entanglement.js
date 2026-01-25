@@ -354,11 +354,17 @@ class QuantumEntanglement {
 
         if (closeBtn) {
             closeBtn.addEventListener('click', async () => {
+                let confirmed = false;
+
                 if (this.isConnected && this.partnerId) {
                     const partnerName = await this.getDisplayName(this.partnerId);
-                    const confirmed = confirm(`⚠️ WARNING: Closing will end your quantum entanglement with ${partnerName}. You can reopen it anytime from the footer. Continue?`);
-                    if (!confirmed) return;
+                    confirmed = confirm(`⚠️ WARNING: Closing will sever your quantum entanglement with ${partnerName}.\n\nThe connection will be permanently lost. You can reopen the widget anytime from the footer button.\n\nContinue?`);
+                } else {
+                    confirmed = confirm(`⚠️ Close Quantum Entanglement?\n\nYou can reopen it anytime from the footer button.`);
                 }
+
+                if (!confirmed) return;
+
                 this.isClosed = true;
                 this.storeClosedState(true);
                 const widgetEl = document.getElementById('quantumWidget');
