@@ -2,6 +2,17 @@
    KEYFRAME ANIMATIONS - OPTIMIZED
    ============================================ */
 
+:root {
+    --animation-speed: 1;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --animation-speed: 0.7; /* 70% of normal speed */
+    }
+}
+
+
 @keyframes matrix-scroll {
     0% {
         transform: translateY(0);
@@ -11,6 +22,16 @@
         transform: translateY(50px);
     }
 }
+
+/* When you apply it */
+.matrix-character {
+    animation: matrix-scroll calc(20s * var(--animation-speed)) linear infinite;
+}
+
+.ash-particle {
+    animation: fall-down calc(15s * var(--animation-speed)) linear infinite;
+}
+
 
 /* Page transition animations */
 @keyframes scan-sweep {
