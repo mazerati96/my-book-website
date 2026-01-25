@@ -285,7 +285,7 @@ class MemoryFragmentSystem {
         this.progressTracker.style.cssText = `
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            right: 80px;
             background: rgba(10, 10, 10, 0.95);
             border: 2px solid var(--accent-cyan);
             padding: 1rem;
