@@ -1,5 +1,5 @@
 // ============================================
-// QUANTUM ENTANGLEMENT - AUTHENTICATION REQUIRED VERSION
+// QUANTUM ENTANGLEMENT - AUTHENTICATION REQUIRED VERSION (with Guest Support)
 // ============================================
 
 // Note: firebase-config.js is the single source of truth for Firebase setup.
@@ -23,6 +23,7 @@ class QuantumEntanglement {
     constructor() {
         this.userId = null;
         this.partnerId = this.getStoredPartnerId();
+        this.isGuestMode = localStorage.getItem('guestMode') === 'true';
 
         this.db = null;
         this.userRef = null;
@@ -52,14 +53,34 @@ class QuantumEntanglement {
     // ID helpers
     // ======================
     async getOrCreateUserId() {
+        // Check if guest mode
+        if (this.isGuestMode) {
+            // Create or get guest ID
+            let guestId = localStorage.getItem('guestQuantumId');
+            if (!guestId) {
+                guestId = 'GUEST_' + this.generateRandomId(8);
+                localStorage.setItem('guestQuantumId', guestId);
+            }
+            return guestId;
+        }
+
         // Use Firebase Auth UID if logged in
         const currentUser = firebase.auth().currentUser;
         if (currentUser) {
             return currentUser.uid;
         }
 
-        // If not logged in, return null
+        // If not logged in and not guest, return null
         return null;
+    }
+
+    generateRandomId(length) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
     }
 
     getStoredPartnerId() {
@@ -97,9 +118,14 @@ class QuantumEntanglement {
         }
     }
 
-    // Get display name (username from auth system)
+    // Get display name (username from auth system or guest ID)
     async getDisplayName(uid) {
         if (!uid) return 'Unknown';
+
+        // Check if it's a guest ID
+        if (uid.startsWith('GUEST_')) {
+            return uid;
+        }
 
         // Try to get username from auth system
         try {
@@ -125,7 +151,7 @@ class QuantumEntanglement {
     async initialize() {
         // Ensure Firebase is initialized by firebase-config.js
         if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
-            console.error('❌ Firebase not initialized. Include firebase-config.js before quantum-entanglement.js');
+            console.error('⚠️ Firebase not initialized. Include firebase-config.js before quantum-entanglement.js');
             return;
         }
 
@@ -134,26 +160,48 @@ class QuantumEntanglement {
         // Always create launch button
         this.createLaunchButton();
 
-        // Listen for auth state changes
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                // User is logged in
-                this.userId = user.uid;
+        // Check guest mode
+        this.isGuestMode = localStorage.getItem('guestMode') === 'true';
 
-                // If widget was closed, don't auto-open
-                if (this.isClosed) {
-                    console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
-                    return;
-                }
+        if (this.isGuestMode) {
+            // Guest mode - auto setup with guest ID
+            console.log('⚛️ Quantum Entanglement: Guest Mode Active');
 
-                // Auto-launch if not closed
-                await this.launchWidget();
-            } else {
-                // User logged out - cleanup
-                this.userId = null;
-                this.handleLogout();
+            // If widget was closed, don't auto-open
+            if (this.isClosed) {
+                console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
+                return;
             }
-        });
+
+            // Auto-launch for guest if not closed
+            // Give a small delay to let page load
+            setTimeout(() => {
+                if (!this.isClosed) {
+                    this.launchWidget();
+                }
+            }, 1000);
+        } else {
+            // Listen for auth state changes (non-guest)
+            this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    // User is logged in
+                    this.userId = user.uid;
+
+                    // If widget was closed, don't auto-open
+                    if (this.isClosed) {
+                        console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
+                        return;
+                    }
+
+                    // Auto-launch if not closed
+                    await this.launchWidget();
+                } else {
+                    // User logged out - cleanup
+                    this.userId = null;
+                    this.handleLogout();
+                }
+            });
+        }
     }
 
     handleLogout() {
@@ -204,10 +252,12 @@ class QuantumEntanglement {
     }
 
     async launchWidget() {
-        // Check if user is authenticated
+        // Check if user is authenticated OR in guest mode
         const currentUser = firebase.auth().currentUser;
-        if (!currentUser) {
-            alert('⚛️ Quantum Entanglement requires login.\n\nPlease log in or create an account to connect with other souls across the quantum field.');
+        this.isGuestMode = localStorage.getItem('guestMode') === 'true';
+
+        if (!currentUser && !this.isGuestMode) {
+            alert('⚛️ Quantum Entanglement requires login or guest mode.\n\nPlease log in, create an account, or continue as guest to connect with other souls across the quantum field.');
             // Redirect to login page if it exists
             if (document.querySelector('a[href*="login"]')) {
                 window.location.href = 'login.html';
@@ -215,7 +265,14 @@ class QuantumEntanglement {
             return;
         }
 
-        this.userId = currentUser.uid;
+        // Get or create user ID (handles both auth and guest)
+        this.userId = await this.getOrCreateUserId();
+
+        if (!this.userId) {
+            console.error('Failed to get user ID');
+            return;
+        }
+
         this.isClosed = false;
         this.storeClosedState(false);
 
@@ -279,7 +336,7 @@ class QuantumEntanglement {
                 <div class="quantum-icon-mini">⚛️</div>
                 <span id="partnerIdMini">QUANTUM</span>
                 <span class="unread-badge" id="unreadBadge" style="display: none;">0</span>
-                <button class="maximize-btn" id="maximizeBtn" title="Maximize">□</button>
+                <button class="maximize-btn" id="maximizeBtn" title="Maximize">▢</button>
             </div>
         `;
         document.body.appendChild(widget);
@@ -393,7 +450,8 @@ class QuantumEntanglement {
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
                 looking: this.partnerId ? false : true,
                 partnerId: this.partnerId || null,
-                online: true
+                online: true,
+                isGuest: this.isGuestMode
             });
 
             this.keepAliveInterval = setInterval(() => {
