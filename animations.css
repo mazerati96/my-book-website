@@ -245,19 +245,9 @@
 
 /* Disable heavy animations on mobile for performance */
 @media (max-width: 768px) {
-    * {
+    /* Only speed up specific heavy animations */
+    .parallax-layer,
+    .matrix-scroll,
+    .ash-particle {
         animation-duration: 0.5s !important;
     }
-
-    @keyframes pulse-glow-intense {
-        0%, 100% {
-            box-shadow: 0 0 5px currentColor;
-            text-shadow: 0 0 5px currentColor;
-        }
-
-        50% {
-            box-shadow: 0 0 15px currentColor;
-            text-shadow: 0 0 10px currentColor;
-        }
-    }
-}
