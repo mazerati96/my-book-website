@@ -293,6 +293,8 @@ class QuantumEntanglement {
             }
 
             this.listenForPartnerUpdates();
+            await this.searchForPartner();
+
 
             // Apply minimized state after setup
             if (this.isMinimized) {
