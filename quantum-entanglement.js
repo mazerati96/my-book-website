@@ -286,14 +286,16 @@ class QuantumEntanglement {
 
             await this.registerUser();
 
+            // ALWAYS listen first
+            this.listenForPartnerUpdates();
+
+            // THEN decide what to do
             if (this.partnerId) {
                 await this.reconnectToPartner();
             } else {
                 await this.searchForPartner();
             }
 
-            this.listenForPartnerUpdates();
-            await this.searchForPartner();
 
 
             // Apply minimized state after setup
