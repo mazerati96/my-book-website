@@ -1,5 +1,5 @@
 // ============================================
-// QUIZ - BRIGADE PERSONALITY ASSESSMENT WITH PERCENTAGES
+// QUIZ - BRIGADE PERSONALITY ASSESSMENT
 // ============================================
 
 const quizData = {
