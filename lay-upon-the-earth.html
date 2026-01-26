@@ -68,7 +68,7 @@
         }
 
             .mantra-text::before,
-            .mantra-text::after {
+            /*.mantra-text::after {
                 content: '"';
                 position: absolute;
                 font-size: 8rem;
@@ -79,19 +79,18 @@
 
             .mantra-text::before {
                 top: 1rem;
-                left: 1rem;
+                left: 1rem;         COMMENTED OUT TO GET RID OF LARGE QUOTES
             }
 
             .mantra-text::after {
                 bottom: 1rem;
                 right: 1rem;
                 content: '"';
+            }*/
+            .mantra-lines {
+                position: relative;
+                z-index: 1;
             }
-
-        .mantra-lines {
-            position: relative;
-            z-index: 1;
-        }
 
         .mantra-line {
             color: var(--primary-white);
@@ -292,12 +291,12 @@
 
     <!-- Le scripts -->
     <script src="audio-player.js"></script>
-    <script src="quantum-entanglement.js"></script>
+
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
-
+    <script src="quantum-entanglement.js"></script>
 </body>
 </html>
