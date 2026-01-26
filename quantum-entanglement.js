@@ -251,6 +251,39 @@ class QuantumEntanglement {
         document.body.appendChild(launchBtn);
     }
 
+    async severEntanglement() {
+        if (!this.userId) return;
+
+        try {
+            // Clear partner on both sides
+            if (this.partnerId) {
+                const partnerRef = this.db.ref('activeUsers/' + this.partnerId);
+                await partnerRef.update({
+                    partnerId: null,
+                    looking: true
+                });
+            }
+
+            // Remove self from activeUsers
+            if (this.userRef) {
+                await this.userRef.remove();
+            }
+
+            // Local cleanup
+            this.storePartnerId(null);
+            this.partnerId = null;
+            this.isConnected = false;
+
+            this.cleanupListeners();
+
+            console.log('⚛️ Entanglement severed');
+
+        } catch (err) {
+            console.error('Error severing entanglement:', err);
+        }
+    }
+
+
     async launchWidget() {
         // Check if user is authenticated OR in guest mode
         const currentUser = firebase.auth().currentUser;
@@ -362,20 +395,23 @@ class QuantumEntanglement {
 
                 if (this.isConnected && this.partnerId) {
                     const partnerName = await this.getDisplayName(this.partnerId);
-                    confirmed = confirm(`⚠️ WARNING: Closing will sever your quantum entanglement with ${partnerName}.\n\nThe connection will be permanently lost. You can reopen the widget anytime from the footer button.\n\nContinue?`);
+                    confirmed = confirm(`⚠️ WARNING: Closing will sever your quantum entanglement with ${partnerName}.\n\nContinue?`);
                 } else {
-                    confirmed = confirm(`⚠️ Close Quantum Entanglement?\n\nYou can reopen it anytime from the footer button.`);
+                    confirmed = confirm(`⚠️ Close Quantum Entanglement?`);
                 }
 
                 if (!confirmed) return;
 
                 this.isClosed = true;
                 this.storeClosedState(true);
+
+                await this.severEntanglement();
+
                 const widgetEl = document.getElementById('quantumWidget');
                 if (widgetEl) widgetEl.style.display = 'none';
-                this.cleanupListeners();
             });
         }
+
 
         if (minimizeBtn) minimizeBtn.addEventListener('click', () => this.toggleMinimize());
         if (maximizeBtn) maximizeBtn.addEventListener('click', (e) => { e.stopPropagation(); this.toggleMinimize(); });
