@@ -22,19 +22,19 @@ const SIGNAL_CUTOFF = 0.05;        // Minimum volume threshold before cutting ou
 const locationData = {
     'Charybdis Prime': {
         title: 'Supermassive Black Hole',
-        sector: 'Center of Galaxy',
+        sector: 'Edge of Galaxy',
         distance: '26,000 Light Years',
         status: 'ACTIVE - EMITTING SIGNAL',
-        description: 'The source of the quantum psalm frequency. A supermassive black hole at the edge of the known galaxy, broadcasting a signal that predates the formation of stars. Its event horizon marks the boundary between everything humanity knows and something far older.',
-        relevance: 'The ultimate destination. The signal emanating from this cosmic giant has been humming since before the first stars ignited—a frequency that calls to something deep within the android\'s circuits.'
+        description: 'The source of the frequency. A supermassive black hole at the edge of the known galaxy, broadcasting a signal that predates the formation of stars. Its event horizon marks the boundary between everything humanity knows and something far older.',
+        relevance: 'The ultimate destination. The signal emanating from this cosmic giant has been humming since before the first stars ignited. The frequency calls to something deep within the android\'s circuits.'
     },
     'brigade-base': {
         title: 'Brigade Position',
         sector: 'Sector 7-A',
         distance: '12,500 Light Years',
         status: 'OPERATIONAL',
-        description: 'Current position of the Brigade deserters. A mobile fleet operating in deep space, constantly on the move to avoid detection by empire forces. Their makeshift home is a collection of salvaged ships, stolen technology, and ten years of hard-won survival.',
-        relevance: 'Home base for the crew who built the android. The Brigade needs a leader to navigate them safely to the Array and beyond—someone who can calculate impossible odds and make the choices they can\'t.'
+        description: 'Current position of the Brigade deserters. A mobile unit operating in deep space, constantly on the move to avoid detection by enemy forces. Their makeshift home is a stolen, salvaged ship, stolen technology, and ten years of hard-won survival through war and worse.',
+        relevance: 'Home base for the crew who built the android. The Brigade needs a leader to navigate them safely to the Array and beyond. Someone who can calculate impossible odds and make the choices they can\'t.'
     },
     'Artemis Array': {
         title: 'The Array',
@@ -45,27 +45,27 @@ const locationData = {
         relevance: 'The Brigade\'s target. To reach the black hole, they need the Array\'s technology. But stealing it means facing three converging fleets and risking everything on one impossible heist.'
     },
     'Hegemony': {
-        title: 'Empire Fleet Alpha',
+        title: 'Hegemony Fleet',
         sector: 'Sector 3-C',
         distance: '15,200 Light Years',
         status: 'HOSTILE - CONVERGING',
-        description: 'Primary imperial battle fleet. Heavily armed, disciplined, and utterly ruthless. They\'ve been hunting the Brigade for years, but now they\'re redirecting toward the Array. Not to study the signal—to weaponize it.',
-        relevance: 'One of three factions racing toward the black hole. Empire Alpha sees the frequency as a weapon, a tool of conquest. They\'ll destroy anyone who stands between them and total control.'
+        description: 'Primary governing body on Earth\'s fleet, sent out to capture the Brigade. Heavily armed, disciplined, and utterly ruthless. They\'ve been hunting the Brigade for months, but now they\'re redirecting toward the Array. Not to study the signal, but to weaponize it.',
+        relevance: 'One of three factions racing toward the black hole. The Hegemony sees the frequency as a weapon, a tool of conquest. They\'ll destroy anyone who stands between them and total control.'
     },
     'Colonial Authority': {
-        title: 'Empire Fleet Beta',
+        title: 'Colonial Authority Fleet',
         sector: 'Sector 5-D',
         distance: '16,800 Light Years',
         status: 'HOSTILE - CONVERGING',
-        description: 'Secondary imperial fleet with experimental technology divisions. Where Alpha uses brute force, Beta uses innovation—often at the cost of ethics, safety, or sanity. Their research into the frequency has already driven several crews mad.',
-        relevance: 'The second faction in the race. Empire Beta doesn\'t just want to control the signal—they want to understand it, decode it, use it to rewrite reality itself. Their methods are desperate and dangerous.'
+        description: 'Colonial Authority, the deep space ruling government, with experimental technology divisions. Where Hegemony uses brute force, the Colonial Authority uses innovation. Often at the cost of ethics, safety, or sanity. Their research into the frequency has already driven several crews mad.',
+        relevance: 'The second faction in the race. The Colonial Authority doesn\'t just want to control the signal. They want to understand it, decode it, use it to rewrite reality itself. Their methods are desperate and dangerous.'
     },
     'Sozuna Station Warzone': {
         title: 'Former War Zone',
         sector: 'Sector 2-B',
         distance: '8,000 Light Years',
         status: 'ABANDONED - WRECKAGE DETECTED',
-        description: 'The graveyard of a ten-year war. Shattered ships, debris fields, and the ghosts of battles long finished. This is where the Brigade fought, bled, and lost friends. Where the soldier whose memories now live in the android made their final sacrifice.',
+        description: 'The graveyard of a ten-year war. Shattered ships, debris fields, and the ghosts of battles long finished. This is where the Brigade fought, bled, and lost friends.',
         relevance: 'The past that haunts the present. The android carries memories from this war—ten years of combat, trust, and trauma. Understanding this place might help her understand who she was built from, and who she\'s meant to become.'
     }
 };

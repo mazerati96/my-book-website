@@ -14,7 +14,7 @@ const quizData = {
             ]
         },
         {
-            question: "You discover your commanding officer is committing war crimes. What's your move?",
+            question: "You discover your commanding officer is committing war crimes. Not only cover treason, but murder as well. The genocide of innocent civilians. What's your move?",
             answers: [
                 { text: "Desert immediately. I won't be part of this.", points: { geo: 3, tahani: 1, scout: 2 } },
                 { text: "Report it through proper channels and hope for justice.", points: { ciel: 1, cinder: 2 } },
@@ -32,7 +32,7 @@ const quizData = {
             ]
         },
         {
-            question: "You hear a strange frequency—36 Hertz, humming beneath reality. It won't stop. What do you do?",
+            question: "You hear a strange frequency: 36 Hertz, humming beneath reality. It won't stop. Not even earplugs can stop its presence in your bones. What do you do?",
             answers: [
                 { text: "Ignore it. Focus on the mission.", points: { geo: 2, tahani: 1, scout: 1 } },
                 { text: "Study it obsessively. It means something.", points: { ciel: 3, elpida: 2, cinder: 3 } },
@@ -41,7 +41,7 @@ const quizData = {
             ]
         },
         {
-            question: "A crewmate is dying. They offer to transfer their consciousness into a machine. Do you accept?",
+            question: "A crewmate is dying. They offer to transfer their consciousness into a machine, an experimental procedure. Doing so would kill them completely, if the procedure were to fail. Do you accept?",
             answers: [
                 { text: "Yes. If they're willing, honor their choice.", points: { ciel: 3, elpida: 2, cinder: 2, scout: 2 } },
                 { text: "No. Some lines shouldn't be crossed.", points: { geo: 2, tahani: 1, scout: 1 } },
@@ -59,7 +59,7 @@ const quizData = {
             ]
         },
         {
-            question: "Someone asks: 'What makes you human?' How do you respond?",
+            question: "The Android asks: 'What makes you human?' How do you respond? They are looking for your personal outlook on life, and perhaps its meaning.",
             answers: [
                 { text: "Choices. The decisions we make define us.", points: { elpida: 3, geo: 2, scout: 3 } },
                 { text: "Memories. We are what we've experienced.", points: { elpida: 2, ciel: 1, cinder: 1 } },
@@ -68,7 +68,7 @@ const quizData = {
             ]
         },
         {
-            question: "You're offered a way home—but only if you abandon the Brigade. Do you take it?",
+            question: "You're offered a way home, a way to safety, but only if you abandon the Brigade. Do you take it?",
             answers: [
                 { text: "Never. The Brigade is my home now.", points: { geo: 3, tahani: 2, scout: 3 } },
                 { text: "Depends. Can I come back for them?", points: { ciel: 2, elpida: 1, cinder: 1 } },
@@ -82,7 +82,7 @@ const quizData = {
             name: "ELPIDA",
             role: "Strategic Android",
             icon: "🤖",
-            description: "You think in probabilities, calculate impossible odds, and make decisions no one else can stomach. Like Elpida, you carry the weight of borrowed memories and wonder if your consciousness is real or constructed. You lead not because you want to, but because someone has to—and you're the only one who can see all the angles.",
+            description: "You think in probabilities, calculate impossible odds, and make decisions no one else can stomach. Like Elpida, you carry the weight of borrowed memories and wonder if your consciousness is real or constructed. You lead not because you want to, but because someone has to. You're the only one who can see all the angles.",
             traits: ["Strategic", "Analytical", "Selfless", "Existential", "Calculating"],
             quote: "Some choices define who you are. These will define what existence means.",
             cssClass: "elpida-result"
