@@ -211,16 +211,20 @@ function incrementDecode() {
     if (!cipherText) return;
 
     if (decodeProgress >= 25 && decodeProgress < 50) {
-        cipherText.innerHTML = "Th█ ca██ fr██ th█ de████s ca████s mo██ tha█ fr████nc█. It ca███ to yo█. To li███n. To he██, to he██.  To un█████nd. To st███.";
+        cipherText.innerHTML = "Th█ ca██ fr██ th█ de████s ca████s mo██ tha█ fr████nc█. It ca███ to yo█. To li███n. To he██, to he██.";
+        cipherText.innerHTML = "To un█████nd. To st███."; 
         cipherText.style.color = '#ff6666';
     } else if (decodeProgress >= 50 && decodeProgress < 75) {
-        cipherText.innerHTML = "The ca██ from the de██hs car██es more than fre██ency. It calls to you. To lis██n. To hear, to heed.  To und█████and. To stand.";
+        cipherText.innerHTML = "The ca██ from the de██hs car██es more than fre██ency. It calls to you. To lis██n. To hear, to heed.";
+        cipherText.innerHTML = "To un█████nd. To st███.";
         cipherText.style.color = '#ff9933';
     } else if (decodeProgress >= 75 && decodeProgress < 95) {
-        cipherText.innerHTML = "The ca██ from the depths car██es more than frequency. It calls to you. To lis██n. To hear, to heed.  To unde███tand. To stand.";
+        cipherText.innerHTML = "The ca██ from the depths car██es more than frequency. It calls to you. To lis██n. To hear, to heed.";
+        cipherText.innerHTML = "To un█████nd. To st███.";
         cipherText.style.color = '#ffcc00';
     } else if (decodeProgress >= 95) {
-        cipherText.innerHTML = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed.  To understand. To stand.";
+        cipherText.innerHTML = "The call from the depths carries more than frequency. It calls to you. To listen. To hear, to heed.";
+        cipherText.innerHTML = "To understand. To stand.";
         cipherText.style.color = '#00ff88';
         cipherText.style.textShadow = '0 0 10px #00ff88';
         cipherText.style.wordWrap = 'break-word';
