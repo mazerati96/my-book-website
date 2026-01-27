@@ -5,6 +5,10 @@
 // Note: firebase-config.js is the single source of truth for Firebase setup.
 // This file assumes firebase is already initialized by firebase-config.js.
 
+const ENTANGLEMENT_TTL = 5 * 60 * 1000; // 5 minutes
+const HEARTBEAT_INTERVAL = 15000;
+
+
 // Cryptic messages pool
 const crypticMessages = [
     "Fragment 0x7A2C: She remembered dying. She remembered waking. Which was real?",
@@ -48,6 +52,39 @@ class QuantumEntanglement {
         // Auth state listener
         this.authUnsubscribe = null;
     }
+    //TIMER FOR HEARTBEAT ENTANGLEMENT
+    startEntanglementHeartbeat() {
+        this.heartbeatInterval = setInterval(() => {
+            if (this.isConnected && this.userRef) {
+                this.userRef.update({
+                    lastActive: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+        }, HEARTBEAT_INTERVAL);
+    }
+
+    monitorEntanglementDecay() {
+        this.userRef.on('value', snap => {
+            const data = snap.val();
+            if (!data || !data.lastActive) return;
+
+            const age = Date.now() - data.lastActive;
+            if (age > ENTANGLEMENT_TTL) {
+                this.severEntanglement();
+            }
+        });
+    }
+
+
+    updateConnectionVisuals(strength) {
+        const line = document.querySelector('.connection-line');
+        if (!line) return;
+
+        line.style.opacity = strength;
+        line.style.filter = `drop-shadow(0 0 ${strength * 10}px #00d4ff)`;
+        line.style.animationDuration = `${1 + (1 - strength) * 2}s`;
+    }
+
 
     // ======================
     // ID helpers
@@ -323,11 +360,19 @@ class QuantumEntanglement {
             this.listenForPartnerUpdates();
 
             // THEN decide what to do
-            if (this.partnerId) {
-                await this.reconnectToPartner();
-            } else {
-                await this.searchForPartner();
+            if (otherUserId === this.userId || this.isConnected) continue;
+
+            if (otherUserData.looking && !otherUserData.partnerId) {
+                const success = await this.attemptEntanglement(otherUserId);
+                if (success) {
+                    await this.showConnectedState();
+                    this.startSharedMessages();
+                    this.startChat();
+                    this.monitorPartnerStatus();
+                    return;
+                }
             }
+
 
 
 
@@ -514,6 +559,16 @@ class QuantumEntanglement {
         } catch (err) {
             console.error('Error registering user:', err);
         }
+
+        await this.userRef.set({
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            looking: this.partnerId ? false : true,
+            partnerId: this.partnerId || null,
+            entangled: !!this.partnerId,
+            online: true,
+            isGuest: this.isGuestMode
+        });
+
     }
 
     listenForPartnerUpdates() {
@@ -590,7 +645,11 @@ class QuantumEntanglement {
         }, 3000);
     }
 
+
+
     async searchForPartner() {
+        if (this.isConnected || this.partnerId) return;
+
         if (!this.userId) return;
 
         const usersRef = this.db.ref('activeUsers');
@@ -624,6 +683,40 @@ class QuantumEntanglement {
         });
     }
 
+    async attemptEntanglement(otherUserId) {
+        if (this.isConnected || this.partnerId) return;
+
+
+        const otherRef = this.db.ref('activeUsers/' + otherUserId);
+
+        const result = await otherRef.transaction(current => {
+            if (!current) return;
+            if (!current.looking || current.partnerId) return;
+
+            // CLAIM
+            current.partnerId = this.userId;
+            current.looking = false;
+            current.entangledAt = firebase.database.ServerValue.TIMESTAMP;
+            return current;
+        });
+
+        if (!result.committed) return false;
+
+        // Finalize self
+        await this.userRef.update({
+            partnerId: otherUserId,
+            looking: false,
+            entangledAt: firebase.database.ServerValue.TIMESTAMP
+        });
+
+        this.partnerId = otherUserId;
+        this.storePartnerId(otherUserId);
+        this.isConnected = true;
+
+        return true;
+    }
+
+
     async reconnectToPartner() {
         if (!this.partnerId || !this.userId) return;
 
@@ -648,6 +741,8 @@ class QuantumEntanglement {
     }
 
     async showConnectedState() {
+        this.startEntanglementHeartbeat();
+
         this.playConnectionSound();
 
         const partnerSection = document.getElementById('partnerSection');
