@@ -354,23 +354,18 @@ class QuantumEntanglement {
             const yourIdEl = document.getElementById('yourId');
             if (yourIdEl) yourIdEl.textContent = displayName;
 
+  
+
             await this.registerUser();
 
             // ALWAYS listen first
             this.listenForPartnerUpdates();
 
             // THEN decide what to do
-            if (otherUserId === this.userId || this.isConnected) continue;
-
-            if (otherUserData.looking && !otherUserData.partnerId) {
-                const success = await this.attemptEntanglement(otherUserId);
-                if (success) {
-                    await this.showConnectedState();
-                    this.startSharedMessages();
-                    this.startChat();
-                    this.monitorPartnerStatus();
-                    return;
-                }
+            if (this.partnerId) {
+                await this.reconnectToPartner();
+            } else {
+                await this.searchForPartner();
             }
 
 
@@ -529,39 +524,9 @@ class QuantumEntanglement {
     // Database registration & listeners
     // ======================
     async registerUser() {
-        if (!this.userId) {
-            console.error('Cannot register user: No userId');
-            return;
-        }
-
-        this.userRef = this.db.ref('activeUsers/' + this.userId);
-
-        try {
-            await this.userRef.set({
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                looking: this.partnerId ? false : true,
-                partnerId: this.partnerId || null,
-                online: true,
-                isGuest: this.isGuestMode
-            });
-
-            this.keepAliveInterval = setInterval(() => {
-                if (this.userRef) {
-                    this.userRef.update({
-                        timestamp: firebase.database.ServerValue.TIMESTAMP,
-                        online: true
-                    });
-                }
-            }, 30000);
-
-            // Auto-remove on real disconnect
-            this.userRef.onDisconnect().remove();
-        } catch (err) {
-            console.error('Error registering user:', err);
-        }
-
         await this.userRef.set({
             timestamp: firebase.database.ServerValue.TIMESTAMP,
+            lastActive: firebase.database.ServerValue.TIMESTAMP,
             looking: this.partnerId ? false : true,
             partnerId: this.partnerId || null,
             entangled: !!this.partnerId,
@@ -569,6 +534,18 @@ class QuantumEntanglement {
             isGuest: this.isGuestMode
         });
 
+        this.keepAliveInterval = setInterval(() => {
+            if (this.userRef) {
+                this.userRef.update({
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    lastActive: firebase.database.ServerValue.TIMESTAMP,
+                    online: true
+                });
+            }
+        }, 30000);
+
+        // Auto-remove on real disconnect
+        this.userRef.onDisconnect().remove();
     }
 
     listenForPartnerUpdates() {
