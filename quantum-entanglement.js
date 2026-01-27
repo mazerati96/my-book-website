@@ -345,6 +345,9 @@ class QuantumEntanglement {
 
         this.isClosed = false;
         this.storeClosedState(false);
+        // CRITICAL FIX: Initialize userRef BEFORE calling registerUser
+        this.userRef = this.db.ref('activeUsers/' + this.userId);
+
 
         if (!document.getElementById('quantumWidget')) {
             this.createWidget();
@@ -354,7 +357,7 @@ class QuantumEntanglement {
             const yourIdEl = document.getElementById('yourId');
             if (yourIdEl) yourIdEl.textContent = displayName;
 
-  
+
 
             await this.registerUser();
 
