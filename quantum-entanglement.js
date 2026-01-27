@@ -16,6 +16,10 @@ const WARNING_THRESHOLDS = {
 };
 const INTERFERENCE_CHANCE = 0.03; // 3% chance per check when unstable
 
+const RARE_EVENT_CHANCE = 0.001; // 0.1% chance of cosmic events
+const SILENCE_THRESHOLD = 60000; // 1 minute of no messages = silence mechanic
+
+
 
 
 // Cryptic messages pool
@@ -69,6 +73,18 @@ class QuantumEntanglement {
         // Quantum echoes
         this.pendingEchoes = [];
 
+        // Entanglement memory & behavioral tracking
+        this.entanglementHistory = this.loadEntanglementHistory();
+        this.lastMessageTime = Date.now();
+        this.messagesExchanged = 0;
+        this.connectionStartTime = null;
+        this.behaviorPatterns = {
+            quickDisconnects: 0,
+            longSessions: 0,
+            silentConnections: 0
+        };
+
+
     }
     //TIMER FOR HEARTBEAT ENTANGLEMENT
     startEntanglementHeartbeat() {
@@ -110,6 +126,12 @@ class QuantumEntanglement {
         if (this.connectionStrength < WARNING_THRESHOLDS.UNSTABLE) {
             this.maybeTrigerInterference();
         }
+
+        // Check silence mechanic
+        this.checkSilenceMechanic();
+
+        // Rare cosmic events
+        this.checkForRareEvents();
 
         // Sever if expired
         if (age > ENTANGLEMENT_TTL) {
@@ -380,6 +402,9 @@ class QuantumEntanglement {
 
             this.cleanupListeners();
 
+            // Record this entanglement
+            this.recordEntanglement();
+
             // Release quantum echoes
             this.releaseEchoes();
 
@@ -477,8 +502,8 @@ class QuantumEntanglement {
                 </div>
                 <div id="partnerSection">
                     <div class="entanglement-status">
-                        <div class="status-label">SEARCHING FOR PARTNER:</div>
-                        <div class="searching">Scanning quantum field...</div>
+                        <div class="status-label">LISTENING FOR PRESENCE:</div>
+                        <div class="searching">Listening for another presence...</div>
                     </div>
                 </div>
             </div>
@@ -677,7 +702,7 @@ class QuantumEntanglement {
         const countdownInterval = setInterval(() => {
             countdown--;
             if (countdownEl) {
-                countdownEl.textContent = countdown > 0 ? `Searching for new partner in ${countdown}...` : 'Scanning quantum field...';
+                countdownEl.textContent = countdown > 0 ? `Searching for new partner in ${countdown}...` : 'Listening for another presence...';
             }
         }, 1000);
 
@@ -686,8 +711,8 @@ class QuantumEntanglement {
             if (partnerSection) {
                 partnerSection.innerHTML = `
                     <div class="entanglement-status">
-                        <div class="status-label">SEARCHING FOR PARTNER:</div>
-                        <div class="searching">Scanning quantum field...</div>
+                        <div class="status-label">LISTENING FOR PRESENCE:</div>
+                        <div class="searching">Listening for another presence...</div>
                     </div>
                 `;
             }
@@ -791,8 +816,24 @@ class QuantumEntanglement {
     }
 
     async showConnectedState() {
+        this.connectionStartTime = Date.now();
+        this.messagesExchanged = 0;
+        this.lastMessageTime = Date.now();
+
         this.startEntanglementHeartbeat();
         this.prepareEchoes();
+
+        // Check if reconnection
+        if (this.hasEntangledBefore(this.partnerId)) {
+            setTimeout(() => {
+                this.displayEcho(this.getReconnectionMessage());
+            }, 2000);
+        }
+
+        // Show behavioral acknowledgment
+        setTimeout(() => {
+            this.showBehavioralAcknowledgment();
+        }, 5000);
 
         this.playConnectionSound();
 
@@ -935,6 +976,7 @@ class QuantumEntanglement {
     }
 
     async displayChatMessage(senderId, text, timestamp) {
+        this.syncLineToActivity();
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
 
@@ -992,6 +1034,284 @@ class QuantumEntanglement {
         return div.innerHTML;
     }
 
+
+
+    // ======================
+    // Entanglement Memory
+    // ======================
+    loadEntanglementHistory() {
+        const stored = localStorage.getItem('quantumEntanglementHistory');
+        if (!stored) return [];
+        try {
+            return JSON.parse(stored);
+        } catch (e) {
+            return [];
+        }
+    }
+
+    saveEntanglementHistory() {
+        try {
+            localStorage.setItem('quantumEntanglementHistory', JSON.stringify(this.entanglementHistory));
+        } catch (e) {
+            // Storage full, trim old entries
+            this.entanglementHistory = this.entanglementHistory.slice(-10);
+            localStorage.setItem('quantumEntanglementHistory', JSON.stringify(this.entanglementHistory));
+        }
+    }
+
+    recordEntanglement() {
+        if (!this.partnerId) return;
+
+        const duration = Date.now() - (this.connectionStartTime || Date.now());
+        const wasSilent = this.messagesExchanged < 3;
+
+        // Check if we've been entangled before
+        const previousConnection = this.entanglementHistory.find(e => e.partnerId === this.partnerId);
+
+        this.entanglementHistory.push({
+            partnerId: this.partnerId,
+            timestamp: Date.now(),
+            duration: duration,
+            messagesExchanged: this.messagesExchanged,
+            wasSilent: wasSilent,
+            reconnection: !!previousConnection
+        });
+
+        // Track behavior patterns
+        if (duration < 30000) {
+            this.behaviorPatterns.quickDisconnects++;
+        } else if (duration > 180000) {
+            this.behaviorPatterns.longSessions++;
+        }
+
+        if (wasSilent) {
+            this.behaviorPatterns.silentConnections++;
+        }
+
+        this.saveEntanglementHistory();
+    }
+
+    hasEntangledBefore(partnerId) {
+        return this.entanglementHistory.some(e => e.partnerId === partnerId);
+    }
+
+    getReconnectionMessage() {
+        const messages = [
+            "You have been entangled before.",
+            "This presence is familiar.",
+            "The pattern recognizes you.",
+            "An echo of a previous connection.",
+            "The quantum field remembers."
+        ];
+        return messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    // ======================
+    // Silence Mechanic
+    // ======================
+    checkSilenceMechanic() {
+        const silenceDuration = Date.now() - this.lastMessageTime;
+
+        if (silenceDuration > SILENCE_THRESHOLD) {
+            const silenceStrength = Math.min(1, silenceDuration / (SILENCE_THRESHOLD * 3));
+            this.applySilenceEffects(silenceStrength);
+        }
+    }
+
+    applySilenceEffects(strength) {
+        // Distort shared messages during silence
+        const messageEl = document.getElementById('sharedMessage');
+        if (messageEl && messageEl.textContent && strength > 0.3) {
+            messageEl.style.opacity = Math.max(0.5, 1 - strength * 0.5);
+            messageEl.style.filter = `blur(${strength * 2}px)`;
+        }
+
+        // Add silence indicator
+        if (strength > 0.6) {
+            this.showSilenceWarning(strength);
+        }
+    }
+
+    showSilenceWarning(strength) {
+        const partnerSection = document.getElementById('partnerSection');
+        if (!partnerSection) return;
+
+        const existing = partnerSection.querySelector('.silence-warning');
+        if (existing) return; // Already showing
+
+        const warning = document.createElement('div');
+        warning.className = 'silence-warning';
+        warning.innerHTML = `
+            <div style="color: #666; font-size: 0.8rem; font-style: italic; padding: 8px; text-align: center;">
+                The silence grows heavier...
+            </div>
+        `;
+
+        const statusDiv = partnerSection.querySelector('.entanglement-status');
+        if (statusDiv) {
+            statusDiv.after(warning);
+
+            // Remove after activity resumes
+            setTimeout(() => warning.remove(), 5000);
+        }
+    }
+
+    // ======================
+    // Rare Cosmic Events
+    // ======================
+    checkForRareEvents() {
+        if (Math.random() > RARE_EVENT_CHANCE) return;
+
+        this.triggerCosmicEvent();
+    }
+
+    triggerCosmicEvent() {
+        const events = [
+            {
+                name: 'Solar Interference',
+                message: 'Solar interference detected. Signal unstable.',
+                effect: 'flicker'
+            },
+            {
+                name: 'Background Radiation Spike',
+                message: 'Background radiation spike. Transmission quality degraded.',
+                effect: 'static'
+            },
+            {
+                name: 'Unknown Observer',
+                message: 'Unknown observer presence detected in quantum field.',
+                effect: 'distort'
+            },
+            {
+                name: 'Gravitational Anomaly',
+                message: 'Gravitational anomaly. Time dilation effects possible.',
+                effect: 'slow'
+            }
+        ];
+
+        const event = events[Math.floor(Math.random() * events.length)];
+
+        console.log(`🌌 COSMIC EVENT: ${event.name}`);
+        this.displayCosmicEvent(event);
+        this.applyCosmicEffect(event.effect);
+    }
+
+    displayCosmicEvent(event) {
+        const widget = document.getElementById('quantumWidget');
+        if (!widget) return;
+
+        const alert = document.createElement('div');
+        alert.className = 'cosmic-event-alert';
+        alert.innerHTML = `
+            <div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.9);
+                border: 1px solid #00d4ff;
+                padding: 20px;
+                border-radius: 8px;
+                color: #00d4ff;
+                font-size: 0.9rem;
+                text-align: center;
+                z-index: 10000;
+                animation: cosmic-fade-in 1s;
+            ">
+                <div style="font-weight: bold; margin-bottom: 8px;">⚠️ ${event.name.toUpperCase()}</div>
+                <div style="opacity: 0.8;">${event.message}</div>
+            </div>
+        `;
+
+        widget.appendChild(alert);
+
+        setTimeout(() => {
+            alert.style.animation = 'cosmic-fade-out 1s';
+            setTimeout(() => alert.remove(), 1000);
+        }, 4000);
+    }
+
+    applyCosmicEffect(effect) {
+        const line = document.querySelector('.connection-line');
+        if (!line) return;
+
+        switch (effect) {
+            case 'flicker':
+                line.style.animation = 'flicker-effect 0.5s 5';
+                break;
+            case 'static':
+                this.triggerInterference();
+                break;
+            case 'distort':
+                line.style.filter = 'hue-rotate(90deg)';
+                setTimeout(() => line.style.filter = '', 3000);
+                break;
+            case 'slow':
+                line.style.animationDuration = '8s';
+                setTimeout(() => line.style.animationDuration = '', 3000);
+                break;
+        }
+    }
+
+    // ======================
+    // Behavioral Awareness
+    // ======================
+    getBehavioralMessage() {
+        const { quickDisconnects, longSessions, silentConnections } = this.behaviorPatterns;
+
+        // System notices patterns
+        if (quickDisconnects > 5) {
+            return "You hesitate to maintain connections.";
+        }
+
+        if (longSessions > 3) {
+            return "You find comfort in sustained entanglement.";
+        }
+
+        if (silentConnections > 5) {
+            return "Presence without words. An unusual pattern.";
+        }
+
+        if (this.entanglementHistory.length > 10) {
+            return "The quantum field knows you well.";
+        }
+
+        return null;
+    }
+
+    showBehavioralAcknowledgment() {
+        const message = this.getBehavioralMessage();
+        if (!message) return;
+
+        // 10% chance to show
+        if (Math.random() > 0.1) return;
+
+        const messageEl = document.getElementById('sharedMessage');
+        if (!messageEl) return;
+
+        const ack = document.createElement('div');
+        ack.className = 'behavioral-acknowledgment';
+        ack.innerHTML = `
+            <div style="
+                padding: 12px;
+                margin: 8px 0;
+                background: rgba(100, 100, 100, 0.1);
+                border-left: 3px solid #666;
+                color: #888;
+                font-size: 0.85rem;
+                font-style: italic;
+            ">
+                ${message}
+            </div>
+        `;
+
+        messageEl.appendChild(ack);
+
+        setTimeout(() => {
+            ack.style.animation = 'fade-out 2s';
+            setTimeout(() => ack.remove(), 2000);
+        }, 8000);
+    }
 
     // ======================
     // Quantum Echoes
@@ -1302,6 +1622,22 @@ class QuantumEntanglement {
         } catch (e) { /* ignore */ }
     }
 
+
+    syncLineToActivity() {
+        const line = document.querySelector('.connection-line');
+        if (!line) return;
+
+        // Pulse on message
+        line.style.animation = 'none';
+        setTimeout(() => {
+            line.style.animation = '';
+        }, 10);
+
+        // Track message time
+        this.lastMessageTime = Date.now();
+        this.messagesExchanged++;
+    }
+
     // ======================
     // Cleanup
     // ======================
@@ -1448,6 +1784,29 @@ quantumStyles.textContent = `
     .echo-message {
         font-size: 0.9rem;
         line-height: 1.4;
+    }
+
+    
+    @keyframes cosmic-fade-in {
+        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    
+    @keyframes cosmic-fade-out {
+        from { opacity: 1; }
+        to { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+    
+    @keyframes flicker-effect {
+        0%, 100% { opacity: 1; }
+        25% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+        75% { opacity: 0.5; }
+    }
+    
+    @keyframes fade-out {
+        from { opacity: 1; }
+        to { opacity: 0; }
     }
 `;
 document.head.appendChild(quantumStyles);
