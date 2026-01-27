@@ -73,10 +73,10 @@ class BreadcrumbSystem {
         const currentPage = this.getCurrentPage();
 
         // Don't show breadcrumbs on index/home page
-        if (currentPage === 'index.html' || currentPage === '/') {
+        /*if (currentPage === 'index.html' || currentPage === '/') {
             console.log('⚠️ Breadcrumbs hidden on homepage');
-            return;
-        }
+            return;     commented out to restore breadcrumbs on homepage
+        }*/
 
         const pathArray = this.buildPath(currentPage);
 
