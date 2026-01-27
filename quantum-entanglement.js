@@ -7,6 +7,15 @@
 
 const ENTANGLEMENT_TTL = 5 * 60 * 1000; // 5 minutes
 const HEARTBEAT_INTERVAL = 15000;
+const DECAY_CHECK_INTERVAL = 5000; // Check decay every 5 seconds
+const WARNING_THRESHOLDS = {
+    STABLE: 0.7,      // Above 70% strength
+    UNSTABLE: 0.4,    // 40-70%
+    CRITICAL: 0.15,   // 15-40%
+    SEVERED: 0        // Below 15%
+};
+const INTERFERENCE_CHANCE = 0.03; // 3% chance per check when unstable
+
 
 
 // Cryptic messages pool
@@ -51,6 +60,15 @@ class QuantumEntanglement {
 
         // Auth state listener
         this.authUnsubscribe = null;
+
+        // Decay & warning system
+        this.decayCheckInterval = null;
+        this.currentWarningStage = null;
+        this.connectionStrength = 1.0;
+
+        // Quantum echoes
+        this.pendingEchoes = [];
+
     }
     //TIMER FOR HEARTBEAT ENTANGLEMENT
     startEntanglementHeartbeat() {
@@ -64,15 +82,39 @@ class QuantumEntanglement {
     }
 
     monitorEntanglementDecay() {
-        this.userRef.on('value', snap => {
-            const data = snap.val();
-            if (!data || !data.lastActive) return;
+        // Start continuous decay monitoring
+        this.decayCheckInterval = setInterval(() => {
+            this.checkConnectionDecay();
+        }, DECAY_CHECK_INTERVAL);
+    }
 
-            const age = Date.now() - data.lastActive;
-            if (age > ENTANGLEMENT_TTL) {
-                this.severEntanglement();
-            }
-        });
+    async checkConnectionDecay() {
+        if (!this.isConnected || !this.userRef) return;
+
+        const snap = await this.userRef.once('value');
+        const data = snap.val();
+        if (!data || !data.lastActive) return;
+
+        const age = Date.now() - data.lastActive;
+
+        // Calculate connection strength (1.0 = fresh, 0.0 = expired)
+        this.connectionStrength = Math.max(0, 1 - (age / ENTANGLEMENT_TTL));
+
+        // Update visuals based on strength
+        this.updateConnectionVisuals(this.connectionStrength);
+
+        // Check for stage transitions
+        this.updateWarningStage(this.connectionStrength);
+
+        // Random interference when unstable
+        if (this.connectionStrength < WARNING_THRESHOLDS.UNSTABLE) {
+            this.maybeTrigerInterference();
+        }
+
+        // Sever if expired
+        if (age > ENTANGLEMENT_TTL) {
+            await this.severEntanglement();
+        }
     }
 
 
@@ -80,9 +122,34 @@ class QuantumEntanglement {
         const line = document.querySelector('.connection-line');
         if (!line) return;
 
-        line.style.opacity = strength;
-        line.style.filter = `drop-shadow(0 0 ${strength * 10}px #00d4ff)`;
-        line.style.animationDuration = `${1 + (1 - strength) * 2}s`;
+        // Opacity fade
+        line.style.opacity = Math.max(0.2, strength);
+
+        // Glow intensity decreases
+        const glowIntensity = strength * 10;
+
+        // Color shift: blue → cyan → orange → red as it decays
+        let color = '#00d4ff'; // Stable blue
+        if (strength < WARNING_THRESHOLDS.CRITICAL) {
+            color = '#ff3366'; // Critical red
+        } else if (strength < WARNING_THRESHOLDS.UNSTABLE) {
+            color = '#ff8800'; // Unstable orange
+        } else if (strength < WARNING_THRESHOLDS.STABLE) {
+            color = '#00ffff'; // Weakening cyan
+        }
+
+        line.style.filter = `drop-shadow(0 0 ${glowIntensity}px ${color})`;
+
+        // Animation slows as connection weakens
+        const animSpeed = 1 + (1 - strength) * 3;
+        line.style.animationDuration = `${animSpeed}s`;
+
+        // Add visual jitter when critical
+        if (strength < WARNING_THRESHOLDS.CRITICAL) {
+            line.style.transform = `translateY(${Math.random() * 2 - 1}px)`;
+        } else {
+            line.style.transform = 'translateY(0)';
+        }
     }
 
 
@@ -312,6 +379,9 @@ class QuantumEntanglement {
             this.isConnected = false;
 
             this.cleanupListeners();
+
+            // Release quantum echoes
+            this.releaseEchoes();
 
             console.log('⚛️ Entanglement severed');
 
@@ -722,6 +792,7 @@ class QuantumEntanglement {
 
     async showConnectedState() {
         this.startEntanglementHeartbeat();
+        this.prepareEchoes();
 
         this.playConnectionSound();
 
@@ -921,6 +992,316 @@ class QuantumEntanglement {
         return div.innerHTML;
     }
 
+
+    // ======================
+    // Quantum Echoes
+    // ======================
+    prepareEchoes() {
+        // Create echoes when connection is established
+        if (!this.partnerId) return;
+
+        const echoMessages = [
+            'The entanglement persists in memory...',
+            'Quantum residue detected in the field...',
+            'They felt it too.',
+            'Distance is an illusion. Connection is eternal.',
+            'The signal fades, but the pattern remains.',
+            'You were never truly alone.',
+            'Something lingers in the space between.'
+        ];
+
+        const echo = echoMessages[Math.floor(Math.random() * echoMessages.length)];
+
+        this.pendingEchoes.push({
+            message: echo,
+            delay: 3000 + Math.random() * 7000
+        });
+    }
+
+    releaseEchoes() {
+        if (this.pendingEchoes.length === 0) return;
+
+        this.pendingEchoes.forEach(echo => {
+            setTimeout(() => {
+                this.displayEcho(echo.message);
+            }, echo.delay);
+        });
+
+        this.pendingEchoes = [];
+    }
+
+    displayEcho(message) {
+        const messageEl = document.getElementById('sharedMessage');
+        if (!messageEl) return;
+
+        const echo = document.createElement('div');
+        echo.className = 'quantum-echo';
+        echo.innerHTML = `
+            <div class="echo-indicator">◇ RESIDUAL SIGNAL DETECTED ◇</div>
+            <div class="echo-message">${message}</div>
+        `;
+
+        echo.style.cssText = `
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 4px;
+            color: #00d4ff;
+            font-style: italic;
+            opacity: 0;
+            animation: echo-fade-in 2s forwards;
+        `;
+
+        messageEl.appendChild(echo);
+
+        this.playEchoSound();
+
+        setTimeout(() => {
+            echo.style.animation = 'echo-fade-out 2s forwards';
+            setTimeout(() => echo.remove(), 2000);
+        }, 10000);
+    }
+
+    playEchoSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 2);
+        } catch (e) { /* ignore */ }
+    }
+
+    // ======================
+    // Signal Interference
+    // ======================
+    maybeTrigerInterference() {
+        if (Math.random() > INTERFERENCE_CHANCE) return;
+        this.triggerInterference();
+    }
+
+    triggerInterference() {
+        const duration = 1000 + Math.random() * 2000;
+
+        this.showInterferenceVisual(duration);
+        this.playInterferenceSound();
+        this.distortSharedMessage(duration);
+        this.addChatLag(duration);
+    }
+
+    showInterferenceVisual(duration) {
+        const line = document.querySelector('.connection-line');
+        if (!line) return;
+
+        line.classList.add('interference-active');
+
+        const staticEl = document.createElement('div');
+        staticEl.className = 'quantum-static';
+        staticEl.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 4px
+            );
+            animation: static-noise 0.1s infinite;
+            pointer-events: none;
+            z-index: 1000;
+        `;
+
+        const partnerSection = document.getElementById('partnerSection');
+        if (partnerSection) {
+            partnerSection.style.position = 'relative';
+            partnerSection.appendChild(staticEl);
+        }
+
+        setTimeout(() => {
+            line.classList.remove('interference-active');
+            if (staticEl.parentNode) staticEl.remove();
+        }, duration);
+    }
+
+    playInterferenceSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const bufferSize = 4096;
+            const whiteNoise = audioContext.createScriptProcessor(bufferSize, 1, 1);
+            const gainNode = audioContext.createGain();
+
+            whiteNoise.onaudioprocess = (e) => {
+                const output = e.outputBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+            };
+
+            gainNode.gain.value = 0.02;
+            whiteNoise.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            setTimeout(() => {
+                whiteNoise.disconnect();
+                gainNode.disconnect();
+            }, 200);
+        } catch (e) { /* ignore */ }
+    }
+
+    distortSharedMessage(duration) {
+        const messageEl = document.getElementById('sharedMessage');
+        if (!messageEl || !messageEl.textContent) return;
+
+        const original = messageEl.innerHTML;
+        const distorted = this.corruptText(messageEl.textContent);
+
+        messageEl.innerHTML = `<div class="corrupted-message">${distorted}</div>`;
+
+        setTimeout(() => {
+            messageEl.innerHTML = original;
+        }, duration);
+    }
+
+    corruptText(text) {
+        const glitchChars = ['█', '▓', '▒', '░', '◆', '◇', '○', '●', '□', '■'];
+        let result = '';
+
+        for (let i = 0; i < text.length; i++) {
+            if (Math.random() < 0.15) {
+                result += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+            } else {
+                result += text[i];
+            }
+        }
+
+        return result;
+    }
+
+    addChatLag(duration) {
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        if (chatInput) {
+            chatInput.disabled = true;
+            chatInput.placeholder = 'Signal degraded...';
+        }
+        if (sendBtn) sendBtn.disabled = true;
+
+        setTimeout(() => {
+            if (chatInput) {
+                chatInput.disabled = false;
+                chatInput.placeholder = 'Type message...';
+            }
+            if (sendBtn) sendBtn.disabled = false;
+        }, duration);
+    }
+
+    // ======================
+    // Multi-Stage Warning System
+    // ======================
+    updateWarningStage(strength) {
+        let newStage = null;
+
+        if (strength >= WARNING_THRESHOLDS.STABLE) {
+            newStage = 'STABLE';
+        } else if (strength >= WARNING_THRESHOLDS.UNSTABLE) {
+            newStage = 'UNSTABLE';
+        } else if (strength >= WARNING_THRESHOLDS.CRITICAL) {
+            newStage = 'CRITICAL';
+        } else {
+            newStage = 'SEVERED';
+        }
+
+        if (newStage !== this.currentWarningStage && newStage !== 'STABLE') {
+            this.currentWarningStage = newStage;
+            this.showWarning(newStage, strength);
+        }
+    }
+
+    showWarning(stage, strength) {
+        const partnerSection = document.getElementById('partnerSection');
+        if (!partnerSection) return;
+
+        const existing = partnerSection.querySelector('.quantum-warning');
+        if (existing) existing.remove();
+
+        const warning = document.createElement('div');
+        warning.className = `quantum-warning warning-${stage.toLowerCase()}`;
+
+        let message = '';
+        let icon = '';
+
+        switch (stage) {
+            case 'UNSTABLE':
+                icon = '⚠️';
+                message = 'Signal fluctuating...';
+                this.playWarningSound(600);
+                break;
+            case 'CRITICAL':
+                icon = '🔴';
+                message = 'Quantum coherence weakening';
+                this.playWarningSound(400);
+                break;
+            case 'SEVERED':
+                icon = '💀';
+                message = 'Entanglement collapse imminent';
+                this.playWarningSound(200);
+                break;
+        }
+
+        warning.innerHTML = `
+            <div class="warning-content">
+                <span class="warning-icon">${icon}</span>
+                <span class="warning-text">${message}</span>
+                <span class="warning-strength">${Math.round(strength * 100)}%</span>
+            </div>
+        `;
+
+        warning.style.cssText = `
+            padding: 8px 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff6666;
+            font-size: 0.85rem;
+            text-align: center;
+            animation: pulse-warning 1s infinite;
+        `;
+
+        const statusDiv = partnerSection.querySelector('.entanglement-status');
+        if (statusDiv) {
+            statusDiv.after(warning);
+        }
+    }
+
+    playWarningSound(frequency) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'triangle';
+            gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        } catch (e) { /* ignore */ }
+    }
+
     // ======================
     // Cleanup
     // ======================
@@ -932,6 +1313,11 @@ class QuantumEntanglement {
 
         if (this.keepAliveInterval) clearInterval(this.keepAliveInterval);
         if (this.messageInterval) clearInterval(this.messageInterval);
+        if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
+        if (this.decayCheckInterval) clearInterval(this.decayCheckInterval);
+
+        this.currentWarningStage = null;
+        this.connectionStrength = 1.0;
     }
 
     cleanup() {
@@ -1001,6 +1387,72 @@ class QuantumEntanglement {
 }
 
 
+// Add dynamic CSS for quantum effects
+const quantumStyles = document.createElement('style');
+quantumStyles.textContent = `
+    @keyframes pulse-warning {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; transform: scale(1.02); }
+    }
+    
+    @keyframes static-noise {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-10px); }
+    }
+    
+    @keyframes echo-fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 0.7; transform: translateY(0); }
+    }
+    
+    @keyframes echo-fade-out {
+        from { opacity: 0.7; }
+        to { opacity: 0; transform: translateY(-10px); }
+    }
+    
+    .connection-line.interference-active {
+        animation: glitch 0.3s infinite !important;
+    }
+    
+    @keyframes glitch {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-2px); }
+        50% { transform: translateX(2px); }
+        75% { transform: translateX(-1px); }
+        100% { transform: translateX(0); }
+    }
+    
+    .corrupted-message {
+        font-family: monospace;
+        letter-spacing: 2px;
+        color: #ff3366;
+        text-shadow: 2px 0 #00d4ff, -2px 0 #ff00ff;
+        animation: glitch-text 0.3s infinite;
+    }
+    
+    @keyframes glitch-text {
+        0% { transform: skew(0deg); }
+        25% { transform: skew(2deg); }
+        50% { transform: skew(-2deg); }
+        75% { transform: skew(1deg); }
+        100% { transform: skew(0deg); }
+    }
+    
+    .echo-indicator {
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+        opacity: 0.6;
+        letter-spacing: 2px;
+    }
+    
+    .echo-message {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+`;
+document.head.appendChild(quantumStyles);
+
+// Auto-initialize when page loads
 window.addEventListener('DOMContentLoaded', () => {
     if (typeof firebase !== 'undefined') {
         const entanglement = new QuantumEntanglement();
