@@ -1000,7 +1000,7 @@ class QuantumEntanglement {
     }
 }
 
-// Auto-initialize when page loads
+
 window.addEventListener('DOMContentLoaded', () => {
     if (typeof firebase !== 'undefined') {
         const entanglement = new QuantumEntanglement();
