@@ -1,11 +1,11 @@
 // ============================================
-// FIREBASE AUTHENTICATION SYSTEM
+// FIREBASE AUTHENTICATION SYSTEM WITH ADMIN SUPPORT
 // ============================================
 
 (function () {
     // Prevent double-initialization
     if (typeof window !== 'undefined' && window.authSystem) {
-        console.log('🔐 authSystem already initialized – skipping auth.js re-execution');
+        console.log('🔐 authSystem already initialized — skipping auth.js re-execution');
         return;
     }
 
@@ -17,6 +17,10 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
+    // ADMIN CONFIGURATION
+    const ADMIN_USERNAMES = ['Amaro', 'Matthew'];
+    const RESERVED_USERNAMES = [...ADMIN_USERNAMES]; // Usernames that cannot be taken by regular users
+
     // ============================================
     // AUTH STATE MANAGEMENT
     // ============================================
@@ -26,17 +30,26 @@
             this.currentUser = null;
             this.userProfile = null;
             this.authStateListeners = [];
+            this.isAdmin = false;
         }
 
         // Initialize auth system
         init() {
-            auth.onAuthStateChanged((user) => {
+            auth.onAuthStateChanged(async (user) => {
                 if (user) {
                     this.currentUser = user;
-                    this.loadUserProfile(user.uid);
+                    await this.loadUserProfile(user.uid);
+
+                    // Check admin status
+                    this.isAdmin = this.userProfile && ADMIN_USERNAMES.includes(this.userProfile.username);
+
+                    if (this.isAdmin) {
+                        console.log('🛡️ Admin access granted:', this.userProfile.username);
+                    }
                 } else {
                     this.currentUser = null;
                     this.userProfile = null;
+                    this.isAdmin = false;
                 }
                 this.authStateListeners.forEach(callback => callback(user));
             });
@@ -61,6 +74,34 @@
         }
 
         // ============================================
+        // ADMIN METHODS
+        // ============================================
+
+        isAdminUser() {
+            return this.isAdmin;
+        }
+
+        getAdminStatus() {
+            return {
+                isAdmin: this.isAdmin,
+                username: this.userProfile?.username || null,
+                canModerate: this.isAdmin,
+                canManageBlog: this.isAdmin
+            };
+        }
+
+        // Generate Firebase custom token for blog API authentication
+        async getFirebaseToken() {
+            if (!this.currentUser) return null;
+            try {
+                return await this.currentUser.getIdToken();
+            } catch (error) {
+                console.error('Error getting Firebase token:', error);
+                return null;
+            }
+        }
+
+        // ============================================
         // EMAIL/PASSWORD AUTHENTICATION
         // ============================================
 
@@ -74,11 +115,15 @@
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
+                // Check if this is an admin account
+                const isAdminAccount = ADMIN_USERNAMES.includes(username);
+
                 await db.ref('users/' + user.uid).set({
                     username: username,
                     email: email,
                     createdAt: firebase.database.ServerValue.TIMESTAMP,
                     accountType: 'email',
+                    isAdmin: isAdminAccount,
                     memoryFragments: [],
                     signalProgress: 0,
                     riddlesSolved: []
@@ -86,7 +131,12 @@
 
                 await db.ref('usernames/' + username.toLowerCase()).set(user.uid);
 
-                console.log('✅ Account created:', username);
+                if (isAdminAccount) {
+                    console.log('🛡️ Admin account created:', username);
+                } else {
+                    console.log('✅ Account created:', username);
+                }
+
                 return { success: true, user };
 
             } catch (error) {
@@ -107,7 +157,7 @@
         }
 
         // ============================================
-        // NEW: USERNAME/PASSWORD LOGIN
+        // USERNAME/PASSWORD LOGIN
         // ============================================
 
         async signInWithUsername(username, password) {
@@ -120,8 +170,6 @@
                 }
 
                 const uid = uidSnapshot.val();
-
-                // Get user's email (or check if anonymous)
                 const userSnapshot = await db.ref('users/' + uid).once('value');
                 const userData = userSnapshot.val();
 
@@ -129,19 +177,27 @@
                     throw new Error('User data not found');
                 }
 
-                // For anonymous accounts, we need to use a different approach
-                // Store password hash in database when creating anonymous account
+                // For anonymous accounts
                 if (userData.accountType === 'anonymous') {
-                    // Check stored password hash
                     if (!userData.passwordHash) {
                         throw new Error('Anonymous account has no password');
                     }
 
-                    // For now, return error - we need to implement custom token authentication
-                    throw new Error('Anonymous account login not yet supported. Please use email login for email accounts.');
+                    // Verify password (basic encoding - NOT SECURE for production)
+                    const hashedInput = btoa(password);
+                    if (hashedInput !== userData.passwordHash) {
+                        throw new Error('Incorrect password');
+                    }
+
+                    // Sign in anonymously then link to this account
+                    const anonCredential = await auth.signInAnonymously();
+                    // Note: This creates a new anonymous session
+                    // In production, you'd want to implement custom token authentication
+
+                    throw new Error('Anonymous account login not fully supported yet. Please use email login.');
                 }
 
-                // For email accounts, use email to login
+                // For email accounts
                 if (userData.email) {
                     return await this.signInWithEmail(userData.email, password);
                 }
@@ -155,7 +211,7 @@
         }
 
         // ============================================
-        // ANONYMOUS AUTHENTICATION (UPDATED)
+        // ANONYMOUS AUTHENTICATION
         // ============================================
 
         async signInAnonymously(username, password) {
@@ -169,14 +225,15 @@
                 const user = userCredential.user;
 
                 // Simple password hash (in production, use proper hashing)
-                const passwordHash = btoa(password); // Basic encoding - NOT SECURE for production
+                const passwordHash = btoa(password);
 
                 await db.ref('users/' + user.uid).set({
                     username: username,
                     email: null,
                     createdAt: firebase.database.ServerValue.TIMESTAMP,
                     accountType: 'anonymous',
-                    passwordHash: passwordHash, // Store for later verification
+                    passwordHash: passwordHash,
+                    isAdmin: false, // Anonymous accounts cannot be admin
                     memoryFragments: [],
                     signalProgress: 0,
                     riddlesSolved: []
@@ -194,7 +251,7 @@
         }
 
         // ============================================
-        // USERNAME VALIDATION
+        // USERNAME VALIDATION (UPDATED WITH RESERVED NAMES)
         // ============================================
 
         async validateUsername(username) {
@@ -209,6 +266,11 @@
             const validPattern = /^[a-zA-Z0-9_-]+$/;
             if (!validPattern.test(username)) {
                 return { isValid: false, error: 'Username can only contain letters, numbers, _ and -' };
+            }
+
+            // Check reserved usernames (case-insensitive)
+            if (RESERVED_USERNAMES.some(reserved => reserved.toLowerCase() === username.toLowerCase())) {
+                return { isValid: false, error: 'This username is reserved for site administrators' };
             }
 
             const snapshot = await db.ref('usernames/' + username.toLowerCase()).once('value');
@@ -306,7 +368,11 @@
                 emailEl.textContent = this.userProfile.email || 'Anonymous Account';
             }
             if (accountTypeEl) {
-                accountTypeEl.textContent = this.userProfile.accountType === 'email' ? 'Email Account' : 'Anonymous Account';
+                let accountType = this.userProfile.accountType === 'email' ? 'Email Account' : 'Anonymous Account';
+                if (this.userProfile.isAdmin) {
+                    accountType += ' 🛡️ ADMIN';
+                }
+                accountTypeEl.textContent = accountType;
             }
             if (createdAtEl && this.userProfile.createdAt) {
                 const date = new Date(this.userProfile.createdAt);
