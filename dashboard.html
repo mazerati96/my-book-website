@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Author Dashboard - The Measure of Souls</title>
+    
+    <style>
+        #auth-check-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+    </style>
+    
+    <script>
+        const token = localStorage.getItem('authToken');
+        const username = localStorage.getItem('username');
+
+        if (!token || !username) {
+            // Redirect IMMEDIATELY before page renders
+            window.location.replace('/author-login.html');
+        }
+    </script>
+
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="navigation.css">
     <link rel="stylesheet" href="animations.css">
