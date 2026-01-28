@@ -160,7 +160,7 @@
                         </div>
 
                         <div id="password-error" class="error-message" style="display: none; background: rgba(255, 0, 51, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 1rem; margin-bottom: 1rem;"></div>
-                        
+
                         <div id="password-success" class="success-message" style="display: none; background: rgba(0, 255, 170, 0.2); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 1rem; margin-bottom: 1rem;"></div>
 
                         <div class="form-actions">
@@ -172,6 +172,21 @@
         </div>
     </div>
 
+    <!-- At the bottom of dashboard.html, BEFORE closing </body> tag -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Auth system (THIS IS MISSING!) -->
+    <script src="auth.js"></script>
+
+    <!-- Dashboard logic -->
     <script src="dashboard.js"></script>
+</body>
+
 </body>
 </html>
