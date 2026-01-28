@@ -162,6 +162,8 @@
 
         async signInWithUsername(username, password) {
             try {
+                console.log('🔍 Looking up username:', username);
+
                 // Look up UID by username
                 const uidSnapshot = await db.ref('usernames/' + username.toLowerCase()).once('value');
 
@@ -170,6 +172,9 @@
                 }
 
                 const uid = uidSnapshot.val();
+                console.log('✅ Found UID for username:', uid);
+
+                // Get user data to find email
                 const userSnapshot = await db.ref('users/' + uid).once('value');
                 const userData = userSnapshot.val();
 
@@ -177,32 +182,16 @@
                     throw new Error('User data not found');
                 }
 
-                // For anonymous accounts
-                if (userData.accountType === 'anonymous') {
-                    if (!userData.passwordHash) {
-                        throw new Error('Anonymous account has no password');
-                    }
+                console.log('✅ User data found, account type:', userData.accountType);
 
-                    // Verify password (basic encoding - NOT SECURE for production)
-                    const hashedInput = btoa(password);
-                    if (hashedInput !== userData.passwordHash) {
-                        throw new Error('Incorrect password');
-                    }
-
-                    // Sign in anonymously then link to this account
-                    const anonCredential = await auth.signInAnonymously();
-                    // Note: This creates a new anonymous session
-                    // In production, you'd want to implement custom token authentication
-
-                    throw new Error('Anonymous account login not fully supported yet. Please use email login.');
-                }
-
-                // For email accounts
-                if (userData.email) {
+                // For email accounts, sign in with email
+                if (userData.accountType === 'email' && userData.email) {
+                    console.log('🔑 Signing in with email...');
                     return await this.signInWithEmail(userData.email, password);
                 }
 
-                throw new Error('Unable to login with this account');
+                // For anonymous accounts (not fully supported)
+                throw new Error('Username login only works for email accounts. Please use your email to log in.');
 
             } catch (error) {
                 console.error('Username login error:', error);

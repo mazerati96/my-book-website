@@ -1,5 +1,21 @@
 // dashboard.js
 // Wait for authSystem to be ready
+function waitForAuthSystem(callback) {
+    if (window.authSystem) {
+        callback();
+    } else {
+        console.log('⏳ Waiting for authSystem...');
+        setTimeout(() => waitForAuthSystem(callback), 100);
+    }
+}
+
+// Wait for authSystem, THEN run checkAuth
+waitForAuthSystem(() => {
+    console.log('✅ authSystem ready, checking auth...');
+    checkAuth();
+});
+
+// Check authentication
 async function checkAuth() {
     const token = localStorage.getItem('authToken');
     const username = localStorage.getItem('username');
@@ -322,6 +338,3 @@ function initDashboard() {
         });
     }
 }
-
-// Run auth check when page loads
-checkAuth();
