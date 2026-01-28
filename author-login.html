@@ -178,47 +178,80 @@
         const loginBtn = document.getElementById('login-btn');
         const errorMessage = document.getElementById('error-message');
 
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Clear previous errors
-            errorMessage.classList.remove('show');
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'AUTHENTICATING...';
-
-            try {
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Store token
-                    localStorage.setItem('authToken', data.token);
-                    localStorage.setItem('username', data.user.username);
-
-                    // Redirect to dashboard
-                    window.location.href = '/dashboard.html';
-                } else {
-                    throw new Error(data.error || 'Login failed');
-                }
-
-            } catch (error) {
-                errorMessage.textContent = error.message || 'Authentication failed. Please try again.';
-                errorMessage.classList.add('show');
-                loginBtn.disabled = false;
-                loginBtn.textContent = 'ACCESS SYSTEM';
+        // Wait for authSystem to be available
+        function waitForAuthSystem(callback) {
+            if (window.authSystem) {
+                callback();
+            } else {
+                setTimeout(() => waitForAuthSystem(callback), 100);
             }
+        }
+
+        waitForAuthSystem(() => {
+            // Check if already logged in and is admin
+            authSystem.onAuthStateChange(async (user) => {
+                if (user && authSystem.isAdminUser()) {
+                    // Already logged in as admin, redirect to dashboard
+                    window.location.href = '/dashboard.html';
+                }
+            });
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Clear previous errors
+                errorMessage.classList.remove('show');
+                loginBtn.disabled = true;
+                loginBtn.textContent = 'AUTHENTICATING...';
+
+                try {
+                    // Try to sign in with Firebase
+                    let result;
+
+                    // Check if it's an email or username
+                    if (username.includes('@')) {
+                        result = await authSystem.signInWithEmail(username, password);
+                    } else {
+                        result = await authSystem.signInWithUsername(username, password);
+                    }
+
+                    if (result.success) {
+                        // Wait for profile to load
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                        // Check if admin
+                        if (!authSystem.isAdminUser()) {
+                            await authSystem.signOut();
+                            throw new Error('Admin access required. This login is for authors only.');
+                        }
+
+                        // Get Firebase token for blog API
+                        const firebaseToken = await authSystem.getFirebaseToken();
+
+                        if (firebaseToken) {
+                            // Store Firebase token for blog API calls
+                            localStorage.setItem('firebaseAuthToken', firebaseToken);
+                        }
+
+                        // Redirect to dashboard
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        throw new Error(result.error || 'Login failed');
+                    }
+
+                } catch (error) {
+                    errorMessage.textContent = error.message || 'Authentication failed. Please try again.';
+                    errorMessage.classList.add('show');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'ACCESS SYSTEM';
+                }
+            });
         });
     </script>
+
     <!-- At the bottom of <body>, BEFORE closing </body> tag -->
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
