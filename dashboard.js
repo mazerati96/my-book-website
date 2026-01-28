@@ -4,7 +4,7 @@ const token = localStorage.getItem('authToken');
 const username = localStorage.getItem('username');
 
 if (!token || !username) {
-    window.location.href = '/dashboard.html';
+    window.location.href = '/author-login.html';
 }
 
 // Display current user
