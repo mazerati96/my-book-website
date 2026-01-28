@@ -14,7 +14,7 @@ document.getElementById('current-user').textContent = username;
 document.getElementById('logout-btn').addEventListener('click', () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('username');
-    window.location.href = '/dashboard.html';
+    window.location.href = '/author-login.html';
 });
 
 // View switching
