@@ -4,7 +4,7 @@ const token = localStorage.getItem('authToken');
 const username = localStorage.getItem('username');
 
 if (!token || !username) {
-    window.location.href = '/author-login.html';
+    window.location.href = '/dashboard.html';
 }
 
 // Display current user
@@ -14,7 +14,7 @@ document.getElementById('current-user').textContent = username;
 document.getElementById('logout-btn').addEventListener('click', () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('username');
-    window.location.href = '/author-login.html';
+    window.location.href = '/dashboard.html';
 });
 
 // View switching
