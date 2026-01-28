@@ -398,6 +398,19 @@
         getUserId() {
             return this.currentUser ? this.currentUser.uid : null;
         }
+        getCurrentUser() {
+            return new Promise((resolve) => {
+                if (this.currentUser) {
+                    resolve(this.currentUser);
+                } else {
+                    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                        unsubscribe();
+                        resolve(user);
+                    });
+                }
+            });
+        }
+
     }
 
     // Create global auth system instance
