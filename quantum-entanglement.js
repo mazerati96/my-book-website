@@ -162,6 +162,18 @@ class QuantumEntanglement {
 
         line.style.filter = `drop-shadow(0 0 ${glowIntensity}px ${color})`;
 
+        // ⭐ ADD THIS: Make the color change more visible
+        const nodes = document.querySelectorAll('.node');
+        nodes.forEach(node => {
+            node.style.background = color;
+            node.style.boxShadow = `0 0 ${glowIntensity}px ${color}`;
+        });
+
+        // Update the wave gradient too
+        line.querySelector('.connection-wave')?.style.setProperty('background',
+            `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`
+        );
+
         // Animation slows as connection weakens
         const animSpeed = 1 + (1 - strength) * 3;
         line.style.animationDuration = `${animSpeed}s`;
@@ -1664,6 +1676,14 @@ class QuantumEntanglement {
         // Track message time
         this.lastMessageTime = Date.now();
         this.messagesExchanged++;
+
+        // ⭐ ADD THIS: Refresh the lastActive timestamp on activity
+        if (this.userRef) {
+            this.userRef.update({
+                lastActive: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
     }
 
     // ======================
