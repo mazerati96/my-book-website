@@ -71,7 +71,6 @@ class BreadcrumbSystem {
 
     init() {
         const currentPage = this.getCurrentPage();
-
         const pathArray = this.buildPath(currentPage);
 
         // Create breadcrumb container
@@ -84,9 +83,11 @@ class BreadcrumbSystem {
         // Build breadcrumb items
         pathArray.forEach((item, index) => {
             const isLast = index === pathArray.length - 1;
+            const isCurrentPage = item.file === currentPage;
 
             // Create breadcrumb item
-            if (isLast) {
+            // Only make it non-clickable if it's truly the current page
+            if (isLast && isCurrentPage) {
                 const span = document.createElement('span');
                 span.className = 'breadcrumb-item active breadcrumb-typing';
                 span.textContent = item.name;
@@ -98,11 +99,13 @@ class BreadcrumbSystem {
                 link.textContent = item.name;
                 pathElement.appendChild(link);
 
-                // Add separator
-                const separator = document.createElement('span');
-                separator.className = 'breadcrumb-separator';
-                separator.textContent = ' > ';
-                pathElement.appendChild(separator);
+                // Add separator if not the last item
+                if (!isLast) {
+                    const separator = document.createElement('span');
+                    separator.className = 'breadcrumb-separator';
+                    separator.textContent = ' > ';
+                    pathElement.appendChild(separator);
+                }
             }
         });
 
