@@ -111,6 +111,23 @@
         word-wrap: break-word;
     }
 
+    /* Memory Fragment Tracker - move to top to avoid overlap */
+    #fragment-progress {
+        top: 60px !important; /* Below breadcrumbs */
+        right: 10px !important;
+        bottom: auto !important;
+        font-size: 0.7rem !important;
+        padding: 0.5rem 0.7rem !important;
+        max-width: 150px !important;
+        line-height: 1.2 !important;
+    }
+
+        #fragment-progress .progress-bar {
+            height: 4px !important;
+            margin-top: 0.3rem !important;
+        }
+
+
     /* User banner - responsive */
     .user-banner {
         top: 3.5rem !important;
@@ -162,26 +179,31 @@
     /* Quantum Widget - mobile friendly */
     .quantum-widget {
         bottom: 10px !important;
-        right: 10px !important;
-        min-width: 280px !important;
-        max-width: calc(100vw - 20px) !important;
-        font-size: 0.75rem !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        min-width: 200px !important;
+        max-width: calc(100vw - 40px) !important;
+        font-size: 0.7rem !important;
+        padding: 0.6rem !important;
     }
 
         .quantum-widget.minimized {
-            width: 150px !important;
-            height: 50px !important;
+            width: 120px !important;
+            height: 40px !important;
+            font-size: 0.65rem !important;
         }
 
-    /* Memory Fragment Tracker */
-    #fragment-progress {
-        bottom: 10px !important;
-        right: 10px !important;
-        font-size: 0.75rem !important;
-        padding: 0.7rem !important;
-        max-width: calc(100vw - 20px) !important;
+    .quantum-widget-content {
+        padding: 0.5rem !important;
     }
 
+    .quantum-id {
+        font-size: 0.65rem !important;
+        word-break: break-all !important;
+    }
+
+  
     /* Quiz page */
     .quiz-section {
         padding: 2rem 1rem !important;
@@ -337,5 +359,67 @@
 
     .symbol-grid {
         grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* WIDGET LAYOUT SYSTEM - prevent overlap */
+    @media (max-width: 768px) {
+        /* Stack widgets vertically on small screens */
+        .quantum-widget,
+        #fragment-progress,
+        .user-banner,
+        .breadcrumb-container {
+            position: fixed;
+            z-index: 100;
+        }
+
+        /* Priority order (top to bottom):
+       1. Breadcrumbs (top-left)
+       2. Fragment Tracker (top-right)  
+       3. User Banner (top-left, below breadcrumbs)
+       4. Quantum Widget (bottom-center)
+    */
+
+        /* Ensure no horizontal scroll from widgets */
+        .quantum-widget,
+        #fragment-progress,
+        .user-banner {
+            max-width: calc(100vw - 20px) !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        /* Hide widgets when sidebar is open to reduce clutter */
+        body.sidebar-open .quantum-widget,
+        body.sidebar-open #fragment-progress,
+        body.sidebar-open .user-banner {
+            opacity: 0.3 !important;
+            pointer-events: none !important;
+        }
+    }
+
+}
+
+/* Audio Player - compact mobile version */
+@media (max-width: 768px) {
+    .audio-player-container {
+        bottom: 60px !important; /* Above quantum widget */
+        left: 10px !important;
+        right: 10px !important;
+        max-width: calc(100vw - 20px) !important;
+        font-size: 0.7rem !important;
+    }
+
+        .audio-player-container.minimized {
+            width: 100px !important;
+            height: 35px !important;
+        }
+
+    .audio-controls button {
+        padding: 0.4rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .volume-slider {
+        width: 60px !important;
     }
 }

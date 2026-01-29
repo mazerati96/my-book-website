@@ -651,10 +651,20 @@ class QuantumEntanglement {
 
         this.userRef.on('value', async (snapshot) => {
             const userData = snapshot.val();
+
+            // Only trigger if we have a partner AND we're not already connected
             if (userData && userData.partnerId && !this.isConnected) {
+                console.log('📡 Partner detected via listener:', userData.partnerId);
+
                 this.partnerId = userData.partnerId;
                 this.storePartnerId(this.partnerId);
                 this.isConnected = true;
+
+                // Clean up search if it's still running
+                if (this.searchRef && this.searchCallback) {
+                    this.searchRef.off('value', this.searchCallback);
+                }
+
                 await this.showConnectedState();
                 this.startSharedMessages();
                 this.startChat();
@@ -720,64 +730,80 @@ class QuantumEntanglement {
         }, 3000);
     }
 
-
-
     async searchForPartner() {
         if (this.isConnected || this.partnerId) return;
-
         if (!this.userId) return;
 
         const usersRef = this.db.ref('activeUsers');
 
-        usersRef.once('value', async (snapshot) => {
+        // Use .on() instead of .once() to continuously monitor for new users
+        const searchCallback = async (snapshot) => {
+            // Don't search if we're already connected
+            if (this.isConnected || this.partnerId) {
+                // Clean up the listener once connected
+                usersRef.off('value', searchCallback);
+                return;
+            }
+
             const users = snapshot.val();
             if (!users) return;
 
             for (const otherUserId in users) {
                 const otherUserData = users[otherUserId];
+
+                // Skip self and stop if we already connected
                 if (otherUserId === this.userId || this.isConnected) continue;
 
+                // Check if this user is available
                 if (otherUserData.looking && !otherUserData.partnerId) {
-                    this.partnerId = otherUserId;
-                    this.storePartnerId(this.partnerId);
-                    this.isConnected = true;
+                    console.log('🔍 Found potential partner:', otherUserId);
 
-                    await this.userRef.update({ partnerId: this.partnerId, looking: false });
-                    await this.db.ref('activeUsers/' + this.partnerId).update({
-                        partnerId: this.userId,
-                        looking: false
-                    });
+                    // Use transaction to prevent race conditions
+                    const success = await this.attemptEntanglement(otherUserId);
 
-                    await this.showConnectedState();
-                    this.startSharedMessages();
-                    this.startChat();
-                    this.monitorPartnerStatus();
-                    return;
+                    if (success) {
+                        // Clean up the search listener
+                        usersRef.off('value', searchCallback);
+
+                        // Let listenForPartnerUpdates handle the connection setup
+                        // Don't call showConnectedState here to avoid duplicates
+                        console.log('✅ Entanglement claimed successfully');
+                        return;
+                    }
                 }
             }
-        });
+        };
+
+        // Start listening
+        usersRef.on('value', searchCallback);
+
+        // Store reference for cleanup
+        this.searchCallback = searchCallback;
+        this.searchRef = usersRef;
     }
 
     async attemptEntanglement(otherUserId) {
-        if (this.isConnected || this.partnerId) return;
-
+        if (this.isConnected || this.partnerId) return false;
 
         const otherRef = this.db.ref('activeUsers/' + otherUserId);
 
         const result = await otherRef.transaction(current => {
-            if (!current) return;
-            if (!current.looking || current.partnerId) return;
+            if (!current) return; // User doesn't exist
+            if (!current.looking || current.partnerId) return; // Already taken
 
-            // CLAIM
+            // CLAIM this partner
             current.partnerId = this.userId;
             current.looking = false;
             current.entangledAt = firebase.database.ServerValue.TIMESTAMP;
             return current;
         });
 
-        if (!result.committed) return false;
+        if (!result.committed) {
+            console.log('❌ Failed to claim partner (already taken)');
+            return false;
+        }
 
-        // Finalize self
+        // Successfully claimed! Now update self
         await this.userRef.update({
             partnerId: otherUserId,
             looking: false,
@@ -788,6 +814,7 @@ class QuantumEntanglement {
         this.storePartnerId(otherUserId);
         this.isConnected = true;
 
+        console.log('✅ Entanglement successful with:', otherUserId);
         return true;
     }
 
@@ -1647,6 +1674,9 @@ class QuantumEntanglement {
         try { if (this.partnerRef && this.partnerDisconnectListener) this.partnerRef.off('value', this.partnerDisconnectListener); } catch (e) { /*ignore*/ }
         try { if (this.messageRef && this.messageListener) this.messageRef.off('value', this.messageListener); } catch (e) { /*ignore*/ }
         try { if (this.chatRef && this.chatListener) this.chatRef.off('child_added', this.chatListener); } catch (e) { /*ignore*/ }
+
+        // ADD THIS: Clean up search listener
+        try { if (this.searchRef && this.searchCallback) this.searchRef.off('value', this.searchCallback); } catch (e) { /*ignore*/ }
 
         if (this.keepAliveInterval) clearInterval(this.keepAliveInterval);
         if (this.messageInterval) clearInterval(this.messageInterval);
