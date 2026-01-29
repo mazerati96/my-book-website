@@ -16,7 +16,10 @@ waitForAuthSystem(() => {
 });
 
 // Check authentication
+// Check authentication
 async function checkAuth() {
+    console.log('🔍 Starting auth check...');
+
     const token = localStorage.getItem('authToken');
     const username = localStorage.getItem('username');
 
@@ -26,16 +29,31 @@ async function checkAuth() {
         return;
     }
 
+    console.log('✅ Token and username found in localStorage');
+
+    // Give Firebase a moment to initialize auth state
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     // Wait for Firebase auth to initialize
     const currentUser = await window.authSystem.getCurrentUser();
 
     if (!currentUser) {
-        console.error('❌ No Firebase user found, redirecting to login...');
+        console.error('❌ No Firebase user found after waiting, redirecting to login...');
         localStorage.removeItem('authToken');
         localStorage.removeItem('username');
         window.location.href = '/author-login.html';
         return;
     }
+
+    console.log('✅ Firebase user confirmed:', currentUser.uid);
+
+    // Wait for profile to load if not already loaded
+    if (!window.authSystem.userProfile) {
+        console.log('⏳ Profile not loaded yet, loading now...');
+        await window.authSystem.loadUserProfile(currentUser.uid);
+    }
+
+    console.log('✅ User profile loaded:', window.authSystem.userProfile?.username);
 
     // Verify admin status
     if (!window.authSystem.isAdminUser()) {
@@ -47,11 +65,13 @@ async function checkAuth() {
         return;
     }
 
-    console.log('✅ Firebase auth confirmed:', currentUser.uid);
-    console.log('✅ Admin access confirmed');
+    console.log('✅ Admin access confirmed!');
 
     // Display current user
-    document.getElementById('current-user').textContent = username;
+    const currentUserEl = document.getElementById('current-user');
+    if (currentUserEl) {
+        currentUserEl.textContent = username;
+    }
 
     // Initialize dashboard
     initDashboard();

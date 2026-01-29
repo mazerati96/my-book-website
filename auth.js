@@ -17,6 +17,14 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+            console.log('✅ Firebase auth persistence enabled');
+        })
+        .catch((error) => {
+            console.error('❌ Failed to set auth persistence:', error);
+        });
+
     // ADMIN CONFIGURATION
     const ADMIN_USERNAMES = ['Amaro', 'Matthew'];
     const RESERVED_USERNAMES = [...ADMIN_USERNAMES]; // Usernames that cannot be taken by regular users
