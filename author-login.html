@@ -190,22 +190,21 @@
         waitForAuthSystem(() => {
             console.log('✅ authSystem loaded');
 
+            // NO onAuthStateChange listener here! Just the form handler:
+
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
 
-                // Clear previous errors
                 errorMessage.classList.remove('show');
                 loginBtn.disabled = true;
                 loginBtn.textContent = 'AUTHENTICATING...';
 
                 try {
-                    // Try to sign in with Firebase
                     let result;
 
-                    // Check if it's an email or username
                     if (username.includes('@')) {
                         console.log('🔑 Attempting email login...');
                         result = await authSystem.signInWithEmail(username, password);
@@ -220,10 +219,8 @@
 
                     console.log('✅ Firebase login successful');
 
-                    // Wait for Firebase auth state to update and profile to load
                     await new Promise(resolve => setTimeout(resolve, 1000));
 
-                    // Wait for current user confirmation
                     const currentUser = await authSystem.getCurrentUser();
 
                     if (!currentUser) {
@@ -232,7 +229,6 @@
 
                     console.log('✅ Firebase user confirmed:', currentUser.uid);
 
-                    // Wait for profile to load
                     if (!authSystem.userProfile) {
                         console.log('⏳ Waiting for profile to load...');
                         await authSystem.loadUserProfile(currentUser.uid);
@@ -240,7 +236,6 @@
 
                     console.log('✅ Profile loaded:', authSystem.userProfile?.username);
 
-                    // Check if admin
                     if (!authSystem.isAdminUser()) {
                         console.error('❌ Not an admin user');
                         await authSystem.signOut();
@@ -249,7 +244,6 @@
 
                     console.log('✅ Admin access confirmed');
 
-                    // Get Firebase token for blog API
                     const firebaseToken = await authSystem.getFirebaseToken();
 
                     if (firebaseToken) {
@@ -260,7 +254,6 @@
                         throw new Error('Failed to get Firebase token');
                     }
 
-                    // Redirect to dashboard
                     console.log('🚀 Redirecting to dashboard...');
                     window.location.href = '/dashboard.html';
 
