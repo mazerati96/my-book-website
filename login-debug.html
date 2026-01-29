@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Debug - The Measure of Souls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff88;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .debug-section {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+            .debug-section h2 {
+                color: #00ffff;
+                margin-bottom: 1rem;
+            }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .label {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .value {
+            color: #00ff88;
+        }
+
+        .error {
+            color: #ff0033;
+        }
+
+        .success {
+            color: #00ff88;
+        }
+
+        .warning {
+            color: #ffaa00;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            overflow-x: auto;
+            border: 1px solid #00ff88;
+        }
+
+        button {
+            background: #00ffff;
+            color: #0a0a0a;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0.5rem;
+            text-transform: uppercase;
+        }
+
+            button:hover {
+                box-shadow: 0 0 20px #00ffff;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 LOGIN DEBUG TOOL</h1>
+
+        <div class="debug-section">
+            <h2>📊 Authentication Status</h2>
+            <div id="auth-status">Loading...</div>
+        </div>
+
+        <div class="debug-section">
+            <h2>💾 Local Storage</h2>
+            <div id="local-storage">Loading...</div>
+        </div>
+
+        <div class="debug-section">
+            <h2>👤 User Profile</h2>
+            <div id="user-profile">Loading...</div>
+        </div>
+
+        <div class="debug-section">
+            <h2>🔑 Firebase Token</h2>
+            <div id="firebase-token">Loading...</div>
+        </div>
+
+        <div class="debug-section">
+            <h2>🛠️ Actions</h2>
+            <button onclick="testDashboardRedirect()">Test Dashboard Redirect</button>
+            <button onclick="clearStorage()">Clear All Storage</button>
+            <button onclick="signOut()">Sign Out</button>
+            <button onclick="location.reload()">Refresh Page</button>
+        </div>
+
+        <div class="debug-section">
+            <h2>📝 Full Console Log</h2>
+            <pre id="console-log">Check browser console for full logs...</pre>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+
+    <script>
+        console.log('🔍 Debug page loaded');
+
+        function displayInfo() {
+            // Auth Status
+            const authStatusEl = document.getElementById('auth-status');
+            if (window.authSystem && window.authSystem.isLoggedIn()) {
+                const adminStatus = authSystem.getAdminStatus();
+                authStatusEl.innerHTML = `
+                    <div class="info-row">
+                        <span class="label">Logged In:</span>
+                        <span class="value success">✅ YES</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">User ID:</span>
+                        <span class="value">${authSystem.getUserId() || 'N/A'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Username:</span>
+                        <span class="value">${adminStatus.username || 'N/A'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Is Admin:</span>
+                        <span class="value ${adminStatus.isAdmin ? 'success' : 'error'}">
+                            ${adminStatus.isAdmin ? '✅ YES' : '❌ NO'}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Can Moderate:</span>
+                        <span class="value ${adminStatus.canModerate ? 'success' : 'error'}">
+                            ${adminStatus.canModerate ? '✅ YES' : '❌ NO'}
+                        </span>
+                    </div>
+                `;
+            } else {
+                authStatusEl.innerHTML = '<p class="error">❌ Not logged in</p>';
+            }
+
+            // Local Storage
+            const localStorageEl = document.getElementById('local-storage');
+            const authToken = localStorage.getItem('authToken');
+            const username = localStorage.getItem('username');
+            const isAdmin = localStorage.getItem('isAdmin');
+            localStorageEl.innerHTML = `
+                <div class="info-row">
+                    <span class="label">authToken:</span>
+                    <span class="value ${authToken ? 'success' : 'error'}">
+                        ${authToken ? '✅ Present (' + authToken.substring(0, 20) + '...)' : '❌ Missing'}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="label">username:</span>
+                    <span class="value ${username ? 'success' : 'error'}">
+                        ${username || '❌ Missing'}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="label">isAdmin:</span>
+                    <span class="value ${isAdmin ? 'success' : 'error'}">
+                        ${isAdmin || '❌ Missing'}
+                    </span>
+                </div>
+            `;
+
+            // User Profile
+            const userProfileEl = document.getElementById('user-profile');
+            if (window.authSystem && authSystem.userProfile) {
+                userProfileEl.innerHTML = '<pre>' + JSON.stringify(authSystem.userProfile, null, 2) + '</pre>';
+            } else {
+                userProfileEl.innerHTML = '<p class="error">❌ Profile not loaded</p>';
+            }
+
+            // Firebase Token
+            const tokenEl = document.getElementById('firebase-token');
+            if (window.authSystem && authSystem.currentUser) {
+                authSystem.getFirebaseToken().then(token => {
+                    if (token) {
+                        tokenEl.innerHTML = `
+                            <p class="success">✅ Token retrieved successfully</p>
+                            <p>Length: ${token.length} characters</p>
+                            <p>First 50 chars: <code>${token.substring(0, 50)}...</code></p>
+                        `;
+                    } else {
+                        tokenEl.innerHTML = '<p class="error">❌ Failed to retrieve token</p>';
+                    }
+                });
+            } else {
+                tokenEl.innerHTML = '<p class="error">❌ No current user</p>';
+            }
+        }
+
+        function testDashboardRedirect() {
+            console.log('🧪 Testing dashboard redirect...');
+            console.log('Current location:', window.location.href);
+            console.log('Attempting redirect to: /dashboard.html');
+
+            // Check if dashboard.html exists
+            fetch('/dashboard.html', { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ dashboard.html exists, redirecting...');
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        console.error('❌ dashboard.html does not exist (status: ' + response.status + ')');
+                        alert('❌ Dashboard page not found!\n\nThe file /dashboard.html does not exist on your server.');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error checking dashboard:', error);
+                    alert('❌ Error checking for dashboard page:\n' + error.message);
+                });
+        }
+
+        function clearStorage() {
+            if (confirm('Clear all localStorage data?')) {
+                localStorage.clear();
+                alert('✅ Storage cleared');
+                location.reload();
+            }
+        }
+
+        async function signOut() {
+            if (window.authSystem) {
+                await authSystem.signOut();
+                alert('✅ Signed out');
+                location.reload();
+            }
+        }
+
+        // Wait for auth system to load
+        function waitForAuth() {
+            if (window.authSystem) {
+                console.log('✅ authSystem loaded');
+                displayInfo();
+
+                // Update every 2 seconds
+                setInterval(displayInfo, 2000);
+            } else {
+                setTimeout(waitForAuth, 100);
+            }
+        }
+
+        waitForAuth();
+    </script>
+</body>
+</html>

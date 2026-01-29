@@ -1,7 +1,10 @@
 // dashboard.js
+console.log('📊 Dashboard.js loaded');
+
 // Wait for authSystem to be ready
 function waitForAuthSystem(callback) {
     if (window.authSystem) {
+        console.log('✅ authSystem found');
         callback();
     } else {
         console.log('⏳ Waiting for authSystem...');
@@ -16,84 +19,108 @@ waitForAuthSystem(() => {
 });
 
 // Check authentication
-// Check authentication
 async function checkAuth() {
     console.log('🔍 Starting auth check...');
 
-    const token = localStorage.getItem('authToken');
-    const username = localStorage.getItem('username');
-
-    if (!token || !username) {
-        console.log('❌ No token/username found, redirecting to login...');
-        window.location.href = '/author-login.html';
-        return;
-    }
-
-    console.log('✅ Token and username found in localStorage');
-
-    // Give Firebase a moment to initialize auth state
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // Wait for Firebase auth to initialize
-    const currentUser = await window.authSystem.getCurrentUser();
-
-    if (!currentUser) {
-        console.error('❌ No Firebase user found after waiting, redirecting to login...');
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('username');
-        window.location.href = '/author-login.html';
-        return;
-    }
-
-    console.log('✅ Firebase user confirmed:', currentUser.uid);
-
-    // Wait for profile to load if not already loaded
-    if (!window.authSystem.userProfile) {
-        console.log('⏳ Profile not loaded yet, loading now...');
-        await window.authSystem.loadUserProfile(currentUser.uid);
-    }
-
-    console.log('✅ User profile loaded:', window.authSystem.userProfile?.username);
-
-    // Verify admin status
-    if (!window.authSystem.isAdminUser()) {
-        console.error('❌ Not an admin user, redirecting to login...');
-        await window.authSystem.signOut();
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('username');
-        window.location.href = '/author-login.html';
-        return;
-    }
-
-    console.log('✅ Admin access confirmed!');
-
-    const currentUserEl = document.getElementById('current-user');
-    if (currentUserEl) {
-        currentUserEl.textContent = username;
-    }
-
-    // Hide loading overlay
     const overlay = document.getElementById('auth-check-overlay');
-    if (overlay) {
-        overlay.style.display = 'none';
-    }
 
-    // Initialize dashboard
-    initDashboard();
+    try {
+        // Check localStorage first
+        const token = localStorage.getItem('authToken');
+        const username = localStorage.getItem('username');
+
+        if (!token || !username) {
+            console.log('❌ No token/username found, redirecting to login...');
+            window.location.href = '/author-login.html';
+            return;
+        }
+
+        console.log('✅ Token and username found in localStorage');
+
+        // Give Firebase a moment to initialize auth state
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Wait for Firebase auth to initialize
+        const currentUser = await window.authSystem.getCurrentUser();
+
+        if (!currentUser) {
+            console.error('❌ No Firebase user found, redirecting to login...');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('username');
+            localStorage.removeItem('isAdmin');
+            window.location.href = '/author-login.html';
+            return;
+        }
+
+        console.log('✅ Firebase user confirmed:', currentUser.uid);
+
+        // Wait for profile to load if not already loaded
+        if (!window.authSystem.userProfile) {
+            console.log('⏳ Profile not loaded yet, loading now...');
+            await window.authSystem.loadUserProfile(currentUser.uid);
+            // Give it a moment to finish
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        console.log('✅ User profile loaded:', window.authSystem.userProfile?.username);
+        console.log('📊 Profile data:', window.authSystem.userProfile);
+
+        // Verify admin status from the profile
+        if (!window.authSystem.userProfile || !window.authSystem.userProfile.isAdmin) {
+            console.error('❌ Not an admin user, redirecting to login...');
+            console.error('Profile:', window.authSystem.userProfile);
+            await window.authSystem.signOut();
+            localStorage.clear();
+            window.location.href = '/author-login.html';
+            return;
+        }
+
+        console.log('✅ Admin access confirmed!');
+
+        // Update UI with username
+        const currentUserEl = document.getElementById('current-user');
+        if (currentUserEl) {
+            currentUserEl.textContent = window.authSystem.userProfile.username;
+        }
+
+        // Hide loading overlay
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+
+        // Initialize dashboard
+        initDashboard();
+
+    } catch (error) {
+        console.error('❌ Auth check error:', error);
+        if (overlay) {
+            overlay.innerHTML = '<p style="color: #ff0033;">Authentication failed. Redirecting...</p>';
+        }
+        setTimeout(() => {
+            window.location.href = '/author-login.html';
+        }, 2000);
+    }
 }
 
 // Initialize dashboard functionality
 function initDashboard() {
+    console.log('🚀 Initializing dashboard...');
+
     const token = localStorage.getItem('authToken');
     const username = localStorage.getItem('username');
 
     // Logout functionality
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-        await window.authSystem.signOut();
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('username');
-        window.location.href = '/author-login.html';
-    });
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            console.log('🚪 Logging out...');
+            if (window.authSystem) {
+                await window.authSystem.signOut();
+            }
+            localStorage.clear();
+            window.location.href = '/author-login.html';
+        });
+    }
 
     // View switching
     const menuBtns = document.querySelectorAll('.menu-btn[data-view]');
@@ -109,7 +136,10 @@ function initDashboard() {
 
             // Show corresponding view
             contentViews.forEach(view => view.classList.remove('active'));
-            document.getElementById(`${viewId}-view`).classList.add('active');
+            const targetView = document.getElementById(`${viewId}-view`);
+            if (targetView) {
+                targetView.classList.add('active');
+            }
 
             // Load data for view
             if (viewId === 'posts') loadPosts('published');
@@ -121,36 +151,43 @@ function initDashboard() {
     const toolbar = document.getElementById('editor-toolbar');
     const editor = document.getElementById('post-content');
 
-    toolbar.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            e.preventDefault();
-            const command = e.target.dataset.command;
+    if (toolbar && editor) {
+        toolbar.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                e.preventDefault();
+                const command = e.target.dataset.command;
 
-            if (command === 'h2' || command === 'h3') {
-                document.execCommand('formatBlock', false, command);
-            } else if (command === 'createLink') {
-                const url = prompt('Enter URL:');
-                if (url) document.execCommand('createLink', false, url);
-            } else {
-                document.execCommand(command, false, null);
+                if (command === 'h2' || command === 'h3') {
+                    document.execCommand('formatBlock', false, command);
+                } else if (command === 'createLink') {
+                    const url = prompt('Enter URL:');
+                    if (url) document.execCommand('createLink', false, url);
+                } else {
+                    document.execCommand(command, false, null);
+                }
+
+                editor.focus();
             }
-
-            editor.focus();
-        }
-    });
+        });
+    }
 
     // Post form submission
     const postForm = document.getElementById('post-form');
+    const saveDraftBtn = document.getElementById('save-draft-btn');
     let editingPostId = null;
 
-    postForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await savePost('published');
-    });
+    if (postForm) {
+        postForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await savePost('published');
+        });
+    }
 
-    document.getElementById('save-draft-btn').addEventListener('click', async () => {
-        await savePost('draft');
-    });
+    if (saveDraftBtn) {
+        saveDraftBtn.addEventListener('click', async () => {
+            await savePost('draft');
+        });
+    }
 
     async function savePost(status) {
         const title = document.getElementById('post-title').value;
@@ -188,12 +225,14 @@ function initDashboard() {
                 editingPostId = null;
 
                 // Switch to posts view
-                document.querySelector('.menu-btn[data-view="posts"]').click();
+                const postsBtn = document.querySelector('.menu-btn[data-view="posts"]');
+                if (postsBtn) postsBtn.click();
             } else {
                 throw new Error(data.error);
             }
         } catch (error) {
             alert('Error saving post: ' + error.message);
+            console.error('Save post error:', error);
         }
     }
 
@@ -201,6 +240,8 @@ function initDashboard() {
     async function loadPosts(status = 'published') {
         const listId = status === 'draft' ? 'drafts-list' : 'posts-list';
         const listEl = document.getElementById(listId);
+
+        if (!listEl) return;
 
         listEl.innerHTML = '<p class="loading-text">Loading...</p>';
 
@@ -213,7 +254,7 @@ function initDashboard() {
 
             const data = await response.json();
 
-            if (data.success && data.posts.length > 0) {
+            if (data.success && data.posts && data.posts.length > 0) {
                 listEl.innerHTML = data.posts.map(post => `
                     <div class="post-card">
                         <div class="post-card-header">
@@ -237,6 +278,7 @@ function initDashboard() {
                 listEl.innerHTML = '<p class="empty-text">No posts yet.</p>';
             }
         } catch (error) {
+            console.error('Error loading posts:', error);
             listEl.innerHTML = '<p class="error-text">Error loading posts</p>';
         }
     }
@@ -260,13 +302,15 @@ function initDashboard() {
                 document.getElementById('post-content').innerHTML = post.content;
 
                 // Switch to new post view
-                document.querySelector('.menu-btn[data-view="new-post"]').click();
+                const newPostBtn = document.querySelector('.menu-btn[data-view="new-post"]');
+                if (newPostBtn) newPostBtn.click();
 
                 // Scroll to top
                 window.scrollTo(0, 0);
             }
         } catch (error) {
             alert('Error loading post: ' + error.message);
+            console.error('Edit post error:', error);
         }
     };
 
@@ -294,6 +338,7 @@ function initDashboard() {
             }
         } catch (error) {
             alert('Error deleting post: ' + error.message);
+            console.error('Delete post error:', error);
         }
     };
 
@@ -332,34 +377,51 @@ function initDashboard() {
             }
 
             try {
-                const response = await fetch('/api/auth/change-password', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        currentPassword,
-                        newPassword
-                    })
-                });
+                // Use Firebase to update password
+                const user = window.authSystem.currentUser;
 
-                const data = await response.json();
-
-                if (data.success) {
-                    successEl.textContent = '✅ Password changed successfully!';
-                    successEl.style.display = 'block';
-                    changePasswordForm.reset();
-
-                    // Optionally scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    throw new Error(data.error || 'Failed to change password');
+                if (!user) {
+                    throw new Error('No user logged in');
                 }
+
+                // Re-authenticate user first
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    currentPassword
+                );
+
+                await user.reauthenticateWithCredential(credential);
+
+                // Now update the password
+                await user.updatePassword(newPassword);
+
+                successEl.textContent = '✅ Password changed successfully!';
+                successEl.style.display = 'block';
+                changePasswordForm.reset();
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                console.log('✅ Password changed successfully');
+
             } catch (error) {
-                errorEl.textContent = error.message;
+                console.error('Password change error:', error);
+
+                let errorMessage = 'Failed to change password';
+
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Current password is incorrect';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'New password is too weak';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                errorEl.textContent = errorMessage;
                 errorEl.style.display = 'block';
             }
         });
     }
+
+    console.log('✅ Dashboard initialized');
 }
