@@ -182,31 +182,24 @@
                 const uid = uidSnapshot.val();
                 console.log('✅ Found UID for username:', uid);
 
-                // Get user data to find email
-                const userSnapshot = await db.ref('users/' + uid).once('value');
-                const userData = userSnapshot.val();
+                // Now we can read just the email field (allowed by updated rules)
+                const emailSnapshot = await db.ref('users/' + uid + '/email').once('value');
+                const email = emailSnapshot.val();
 
-                if (!userData) {
-                    throw new Error('User data not found');
+                if (!email) {
+                    throw new Error('This account does not have an email associated. Please contact support.');
                 }
 
-                console.log('✅ User data found, account type:', userData.accountType);
+                console.log('✅ Found email for username, signing in...');
 
-                // For email accounts, sign in with email
-                if (userData.accountType === 'email' && userData.email) {
-                    console.log('🔑 Signing in with email...');
-                    return await this.signInWithEmail(userData.email, password);
-                }
-
-                // For anonymous accounts (not fully supported)
-                throw new Error('Username login only works for email accounts. Please use your email to log in.');
+                // Sign in with email
+                return await this.signInWithEmail(email, password);
 
             } catch (error) {
                 console.error('Username login error:', error);
                 return { success: false, error: error.message || this.getErrorMessage(error) };
             }
         }
-
         // ============================================
         // ANONYMOUS AUTHENTICATION
         // ============================================
