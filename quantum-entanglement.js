@@ -145,51 +145,61 @@ class QuantumEntanglement {
         const line = document.querySelector('.connection-line');
         if (!line) return;
 
+        // Remove all decay classes first
+        line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
+
         // Opacity fade
         line.style.opacity = Math.max(0.2, strength);
 
         // Glow intensity decreases
-        const glowIntensity = strength * 10;
+        const glowIntensity = Math.max(5, strength * 10);
 
         // Color shift: blue → cyan → orange → red as it decays
-        let color = '#00d4ff'; // Stable blue
+        let color = '#00d4ff';
+        let stage = 'STABLE';
+
         if (strength < WARNING_THRESHOLDS.CRITICAL) {
-            color = '#ff3366'; // Critical red
+            color = '#ff3366';
+            stage = 'CRITICAL';
+            line.classList.add('decay-critical'); // ⭐ Add CSS class
         } else if (strength < WARNING_THRESHOLDS.UNSTABLE) {
-            color = '#ff8800'; // Unstable orange
+            color = '#ff8800';
+            stage = 'UNSTABLE';
+            line.classList.add('decay-unstable'); // ⭐ Add CSS class
         } else if (strength < WARNING_THRESHOLDS.STABLE) {
-            color = '#00ffff'; // Weakening cyan
+            color = '#00ffff';
+            stage = 'WEAKENING';
+            line.classList.add('decay-weakening'); // ⭐ Add CSS class
         }
 
         line.style.filter = `drop-shadow(0 0 ${glowIntensity}px ${color})`;
 
-        // ⭐ MAKE COLOR CHANGES MORE VISIBLE - Update nodes
+        // Update nodes
         const nodes = document.querySelectorAll('.node');
         nodes.forEach(node => {
-            node.style.background = color;
-            node.style.boxShadow = `0 0 ${glowIntensity}px ${color}`;
+            node.style.setProperty('background', color, 'important');
+            node.style.setProperty('box-shadow', `0 0 ${glowIntensity}px ${color}`, 'important');
         });
 
-        // ⭐ Update the connection wave color
+        // Update wave
         const wave = line.querySelector('.connection-wave');
         if (wave) {
-            wave.style.background =
-                `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`;
+            const gradient = `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`;
+            wave.style.setProperty('background', gradient, 'important');
         }
 
-        // Animation slows as connection weakens
+        // Animation slows
         const animSpeed = 1 + (1 - strength) * 3;
         line.style.animationDuration = `${animSpeed}s`;
 
-        // Add visual jitter when critical
+        // Jitter when critical
         if (strength < WARNING_THRESHOLDS.CRITICAL) {
             line.style.transform = `translateY(${Math.random() * 2 - 1}px)`;
         } else {
             line.style.transform = 'translateY(0)';
         }
 
-        // ⭐ Log for debugging
-        console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - Color: ${color}`);
+        console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - ${stage} - Color: ${color}`);
     }
 
 
@@ -655,7 +665,7 @@ class QuantumEntanglement {
             if (this.userRef) {
                 this.userRef.update({
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    lastActive: firebase.database.ServerValue.TIMESTAMP, // ⭐ Keep this for now
+                    
                     onlineTimestamp: firebase.database.ServerValue.TIMESTAMP, // ⭐ ADD this
                     online: true
                 });
@@ -1708,6 +1718,12 @@ class QuantumEntanglement {
         this.connectionStrength = 1.0;
         this.currentWarningStage = null;
         this.updateConnectionVisuals(1.0);
+
+        // ⭐ FORCE CLEAR ALL DECAY EFFECTS
+        if (line) {
+            line.style.opacity = '1';
+            line.style.transform = 'translateY(0)';
+        }
 
         // Remove any decay warnings
         const decayWarning = document.querySelector('.decay-warning');

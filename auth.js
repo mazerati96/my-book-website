@@ -109,6 +109,27 @@
             }
         }
 
+        async waitForAdminCheck(maxWaitMs = 3000) {
+            const startTime = Date.now();
+
+            while (Date.now() - startTime < maxWaitMs) {
+                if (this.userProfile !== null) {
+                    return {
+                        isAdmin: this.userProfile.isAdmin || false,
+                        profile: this.userProfile
+                    };
+                }
+                // Wait 100ms before checking again
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            return {
+                isAdmin: false,
+                profile: null,
+                timedOut: true
+            };
+        }
+
         // ============================================
         // EMAIL/PASSWORD AUTHENTICATION
         // ============================================

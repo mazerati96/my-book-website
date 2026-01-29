@@ -668,3 +668,29 @@
         font-size: 0.75rem;
     }
 }
+
+/* Make decay effects more visible */
+.connection-line {
+    transition: opacity 0.3s ease, filter 0.3s ease !important;
+}
+
+.node {
+    transition: background 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.connection-wave {
+    transition: background 0.3s ease !important;
+}
+
+/* Stage-specific styles for extra visibility */
+.connection-line.decay-critical {
+    filter: brightness(0.5) !important;
+}
+
+.connection-line.decay-unstable {
+    filter: brightness(0.7) !important;
+}
+
+.connection-line.decay-weakening {
+    filter: brightness(0.85) !important;
+}

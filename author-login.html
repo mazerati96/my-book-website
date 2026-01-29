@@ -181,7 +181,12 @@
         const loginForm = document.getElementById('login-form');
         const loginBtn = document.getElementById('login-btn');
         const errorMessage = document.getElementById('error-message');
-
+        // After successful login
+        const adminCheck = await authSystem.waitForAdminCheck();
+        if (!adminCheck.isAdmin) {
+            await authSystem.signOut();
+            throw new Error('Admin access required');
+        }
         // Wait for authSystem to be available
         function waitForAuthSystem(callback) {
             if (window.authSystem) {
@@ -196,7 +201,7 @@
 
             // NO onAuthStateChange listener here! Just the form handler:
 
-            loginForm.addEventListener('submit', async (e) => {
+            lloginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const username = document.getElementById('username').value;
@@ -210,10 +215,10 @@
                     let result;
 
                     if (username.includes('@')) {
-                        console.log('🔑 Attempting email login...');
+                        console.log('🔐 Attempting email login...');
                         result = await authSystem.signInWithEmail(username, password);
                     } else {
-                        console.log('🔑 Attempting username login...');
+                        console.log('🔐 Attempting username login...');
                         result = await authSystem.signInWithUsername(username, password);
                     }
 
@@ -223,33 +228,31 @@
 
                     console.log('✅ Firebase login successful');
 
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    // WAIT for auth state to settle
+                    await new Promise(resolve => setTimeout(resolve, 1500));
 
+                    // Force profile reload
                     const currentUser = await authSystem.getCurrentUser();
-
                     if (!currentUser) {
                         throw new Error('Firebase authentication failed');
                     }
 
                     console.log('✅ Firebase user confirmed:', currentUser.uid);
 
-                    if (!authSystem.userProfile) {
-                        console.log('⏳ Waiting for profile to load...');
-                        await authSystem.loadUserProfile(currentUser.uid);
-                    }
+                    // Reload profile to ensure we have fresh data
+                    await authSystem.loadUserProfile(currentUser.uid);
 
-                    console.log('✅ Profile loaded:', authSystem.userProfile?.username);
-
-                    if (!authSystem.isAdminUser()) {
-                        console.error('❌ Not an admin user');
+                    // Check the loaded profile directly
+                    if (!authSystem.userProfile || !authSystem.userProfile.isAdmin) {
+                        console.error('❌ Not an admin user. Profile:', authSystem.userProfile);
                         await authSystem.signOut();
                         throw new Error('Admin access required. This login is for authors only.');
                     }
 
-                    console.log('✅ Admin access confirmed');
+                    console.log('✅ Admin access confirmed:', authSystem.userProfile.username);
 
+                    // Get Firebase token for API calls
                     const firebaseToken = await authSystem.getFirebaseToken();
-
                     if (firebaseToken) {
                         localStorage.setItem('authToken', firebaseToken);
                         localStorage.setItem('username', authSystem.userProfile.username);
@@ -269,7 +272,13 @@
                     loginBtn.textContent = 'ACCESS SYSTEM';
                 }
             });
-        });
+            // After loading profile
+            console.log('📊 DEBUG INFO:');
+            console.log('  userProfile:', authSystem.userProfile);
+            console.log('  isAdmin flag:', authSystem.userProfile?.isAdmin);
+            console.log('  username:', authSystem.userProfile?.username);
+            console.log('  authSystem.isAdmin:', authSystem.isAdmin);
+            console.log('  isAdminUser():', authSystem.isAdminUser());
     </script>
 
     <!-- Footer -->
