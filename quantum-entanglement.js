@@ -6,8 +6,9 @@
 // This file assumes firebase is already initialized by firebase-config.js.
 
 const ENTANGLEMENT_TTL = 5 * 60 * 1000; // 5 minutes
-const HEARTBEAT_INTERVAL = 15000;
+const HEARTBEAT_INTERVAL = 30000; // ⭐ CHANGE from 15000 to 30000 (30 seconds)
 const DECAY_CHECK_INTERVAL = 5000; // Check decay every 5 seconds
+
 const WARNING_THRESHOLDS = {
     STABLE: 0.7,      // Above 70% strength
     UNSTABLE: 0.4,    // 40-70%
@@ -91,7 +92,7 @@ class QuantumEntanglement {
         this.heartbeatInterval = setInterval(() => {
             if (this.isConnected && this.userRef) {
                 this.userRef.update({
-                    lastActive: firebase.database.ServerValue.TIMESTAMP
+                    onlineTimestamp: firebase.database.ServerValue.TIMESTAMP // ⭐ CHANGED from lastActive
                 });
             }
         }, HEARTBEAT_INTERVAL);
@@ -641,7 +642,8 @@ class QuantumEntanglement {
     async registerUser() {
         await this.userRef.set({
             timestamp: firebase.database.ServerValue.TIMESTAMP,
-            lastActive: firebase.database.ServerValue.TIMESTAMP,
+            lastActive: firebase.database.ServerValue.TIMESTAMP, // ⭐ Keep this
+            onlineTimestamp: firebase.database.ServerValue.TIMESTAMP, // ⭐ ADD this
             looking: this.partnerId ? false : true,
             partnerId: this.partnerId || null,
             entangled: !!this.partnerId,
@@ -653,7 +655,8 @@ class QuantumEntanglement {
             if (this.userRef) {
                 this.userRef.update({
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    lastActive: firebase.database.ServerValue.TIMESTAMP,
+                    lastActive: firebase.database.ServerValue.TIMESTAMP, // ⭐ Keep this for now
+                    onlineTimestamp: firebase.database.ServerValue.TIMESTAMP, // ⭐ ADD this
                     online: true
                 });
             }
@@ -1694,7 +1697,7 @@ class QuantumEntanglement {
         this.lastMessageTime = Date.now();
         this.messagesExchanged++;
 
-        // ⭐ UPDATE FIREBASE TIMESTAMP TO RESET DECAY
+        // ⭐ UPDATE LASTACTIVE ON REAL USER INTERACTION
         if (this.userRef && this.isConnected) {
             this.userRef.update({
                 lastActive: firebase.database.ServerValue.TIMESTAMP
@@ -1709,6 +1712,8 @@ class QuantumEntanglement {
         // Remove any decay warnings
         const decayWarning = document.querySelector('.decay-warning');
         if (decayWarning) decayWarning.remove();
+
+        console.log('✅ Activity detected - connection refreshed to 100%');
     }
     
 
