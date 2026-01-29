@@ -83,7 +83,7 @@ class QuantumEntanglement {
             longSessions: 0,
             silentConnections: 0
         };
-
+        this.displayedMessageIds = new Set(); // Track displayed messages
 
     }
     //TIMER FOR HEARTBEAT ENTANGLEMENT
@@ -162,17 +162,19 @@ class QuantumEntanglement {
 
         line.style.filter = `drop-shadow(0 0 ${glowIntensity}px ${color})`;
 
-        // ⭐ ADD THIS: Make the color change more visible
+        // ⭐ MAKE COLOR CHANGES MORE VISIBLE - Update nodes
         const nodes = document.querySelectorAll('.node');
         nodes.forEach(node => {
             node.style.background = color;
             node.style.boxShadow = `0 0 ${glowIntensity}px ${color}`;
         });
 
-        // Update the wave gradient too
-        line.querySelector('.connection-wave')?.style.setProperty('background',
-            `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`
-        );
+        // ⭐ Update the connection wave color
+        const wave = line.querySelector('.connection-wave');
+        if (wave) {
+            wave.style.background =
+                `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`;
+        }
 
         // Animation slows as connection weakens
         const animSpeed = 1 + (1 - strength) * 3;
@@ -184,6 +186,9 @@ class QuantumEntanglement {
         } else {
             line.style.transform = 'translateY(0)';
         }
+
+        // ⭐ Log for debugging
+        console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - Color: ${color}`);
     }
 
 
@@ -1020,16 +1025,29 @@ class QuantumEntanglement {
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
 
+        // ⭐ CREATE UNIQUE ID FOR THIS MESSAGE
+        const messageId = `${senderId}_${timestamp}_${text.substring(0, 20)}`;
+
+        // ⭐ CHECK IF ALREADY DISPLAYED
+        if (this.displayedMessageIds.has(messageId)) {
+            console.log('🚫 Duplicate message blocked:', messageId);
+            return;
+        }
+
+        // ⭐ MARK AS DISPLAYED
+        this.displayedMessageIds.add(messageId);
+
         const isMe = senderId === this.userId;
         const senderName = isMe ? 'YOU' : await this.getDisplayName(senderId);
 
         const msgDiv = document.createElement('div');
         msgDiv.className = `chat-msg ${isMe ? 'me' : 'them'}`;
+        msgDiv.dataset.messageId = messageId; // Store ID on element
 
         msgDiv.innerHTML = `
-            <div class="msg-sender">${senderName}:</div>
-            <div class="msg-text">${this.escapeHtml(text)}</div>
-        `;
+        <div class="msg-sender">${senderName}:</div>
+        <div class="msg-text">${this.escapeHtml(text)}</div>
+    `;
 
         chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -1662,7 +1680,6 @@ class QuantumEntanglement {
         } catch (e) { /* ignore */ }
     }
 
-
     syncLineToActivity() {
         const line = document.querySelector('.connection-line');
         if (!line) return;
@@ -1677,14 +1694,23 @@ class QuantumEntanglement {
         this.lastMessageTime = Date.now();
         this.messagesExchanged++;
 
-        // ⭐ ADD THIS: Refresh the lastActive timestamp on activity
-        if (this.userRef) {
+        // ⭐ UPDATE FIREBASE TIMESTAMP TO RESET DECAY
+        if (this.userRef && this.isConnected) {
             this.userRef.update({
                 lastActive: firebase.database.ServerValue.TIMESTAMP
-            });
+            }).catch(e => console.error('Failed to update lastActive:', e));
         }
 
+        // ⭐ IMMEDIATELY RESET CONNECTION STRENGTH VISUALLY
+        this.connectionStrength = 1.0;
+        this.currentWarningStage = null;
+        this.updateConnectionVisuals(1.0);
+
+        // Remove any decay warnings
+        const decayWarning = document.querySelector('.decay-warning');
+        if (decayWarning) decayWarning.remove();
     }
+    
 
     // ======================
     // Cleanup
@@ -1705,6 +1731,8 @@ class QuantumEntanglement {
 
         this.currentWarningStage = null;
         this.connectionStrength = 1.0;
+        // ⭐ CLEAR MESSAGE TRACKING
+        this.displayedMessageIds.clear();
     }
 
     cleanup() {

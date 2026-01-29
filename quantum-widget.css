@@ -52,8 +52,73 @@
         animation: rotate 4s linear infinite;
     }
 
+/* Fix widget content scrolling */
 .widget-content {
     padding: 1rem;
+    overflow-y: auto; /* ⭐ Allow scrolling */
+    max-height: 530px; /* ⭐ Constrain height (600px widget - 70px header) */
+    display: flex;
+    flex-direction: column;
+}
+
+    /* Scrollbar for widget content */
+    .widget-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .widget-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .widget-content::-webkit-scrollbar-thumb {
+        background: #00d4ff;
+        border-radius: 3px;
+    }
+
+/* Fix quantum chat container */
+.quantum-chat {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(0, 212, 255, 0.3);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 300px; /* Keep existing */
+    min-height: 200px; /* ⭐ Ensure minimum height */
+    flex-shrink: 0; /* ⭐ Don't let it shrink */
+}
+
+/* Ensure chat input stays at bottom */
+.chat-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto; /* ⭐ Push to bottom */
+    flex-shrink: 0; /* ⭐ Never shrink */
+}
+
+/* Make sure input doesn't overflow */
+#chatInput {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    color: #00d4ff;
+    padding: 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    min-width: 0; /* ⭐ Allow shrinking below content size */
+}
+
+#sendBtn {
+    background: transparent;
+    border: 2px solid #00d4ff;
+    color: #00d4ff;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0; /* ⭐ Never shrink button */
 }
 
 /* RAINBOW PULSE EFFECT */
@@ -391,10 +456,10 @@
     background: transparent;
     border: 1px solid #00d4ff;
     color: #00d4ff;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
