@@ -821,8 +821,9 @@ class QuantumEntanglement {
         this.lastMessageTime = Date.now();
 
         this.startEntanglementHeartbeat();
+        
+        this.monitorEntanglementDecay();
         this.prepareEchoes();
-
         // Check if reconnection
         if (this.hasEntangledBefore(this.partnerId)) {
             setTimeout(() => {
