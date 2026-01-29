@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Author Dashboard - The Measure of Souls</title>
-    
+
 
     <style>
         #auth-check-overlay {
@@ -21,24 +21,22 @@
             color: #fff;
         }
     </style>
-    
-    <script>
-        const token = localStorage.getItem('authToken');
-        const username = localStorage.getItem('username');
-
-        if (!token || !username) {
-            // Redirect IMMEDIATELY before page renders
-            window.location.replace('/author-login.html');
-        }
-    </script>
 
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="navigation.css">
     <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="blog.css">
     <link rel="stylesheet" href="mobile-fixes.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="pages.css">
 </head>
 <body>
+    <div id="auth-check-overlay">
+        <p>Authenticating...</p>
+    </div>
+
     <div class="matrix-style-bg"></div>
 
     <!-- Dashboard Container -->
@@ -181,13 +179,23 @@
 
     <!-- Initialize Firebase -->
     <script src="firebase-config.js"></script>
-
+    <script src="storage-wrapper.js"></script>
+    <script src="cookie-consent.js"></script>
     <!-- Auth system (THIS IS MISSING!) -->
     <script src="auth.js"></script>
 
     <!-- Dashboard logic -->
     <script src="dashboard.js"></script>
     <script src="load-navigation"></script>
+
+
+    <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+
+    <script src="breadcrumbs.js"></script>
 </body>
 
 

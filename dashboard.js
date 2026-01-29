@@ -67,10 +67,15 @@ async function checkAuth() {
 
     console.log('✅ Admin access confirmed!');
 
-    // Display current user
     const currentUserEl = document.getElementById('current-user');
     if (currentUserEl) {
         currentUserEl.textContent = username;
+    }
+
+    // Hide loading overlay
+    const overlay = document.getElementById('auth-check-overlay');
+    if (overlay) {
+        overlay.style.display = 'none';
     }
 
     // Initialize dashboard
