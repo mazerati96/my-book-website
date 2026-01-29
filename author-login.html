@@ -177,6 +177,40 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
+                <p class="footer-tagline">Book One: Lay Upon The Earth</p>
+            </div>
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <span>|</span>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-decoration"></div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Auth system and other scripts -->
+    <script src="auth.js"></script>
+    <script src="audio-player.js"></script>
+    <script src="quantum-entanglement.js"></script>
+    <script src="script.js"></script>
+    <script src="load-navigation.js"></script>
+    <script src="memory-fragments.js"></script>
+    <script src="breadcrumbs.js"></script>
+
+    <!-- Login handler - MUST come after all other scripts -->
     <script>
         const loginForm = document.getElementById('login-form');
         const loginBtn = document.getElementById('login-btn');
@@ -267,8 +301,20 @@
                         throw new Error('Failed to get Firebase token');
                     }
 
-                    console.log('🚀 Redirecting to dashboard...');
-                    window.location.href = '/dashboard.html';
+                    // Check if dashboard exists before redirecting
+                    console.log('🔍 Checking if dashboard.html exists...');
+                    try {
+                        const response = await fetch('/dashboard.html', { method: 'HEAD' });
+                        if (response.ok) {
+                            console.log('🚀 Redirecting to dashboard...');
+                            window.location.href = '/dashboard.html';
+                        } else {
+                            throw new Error('Dashboard page not found (HTTP ' + response.status + '). Please create /dashboard.html');
+                        }
+                    } catch (fetchError) {
+                        console.error('❌ Dashboard check failed:', fetchError);
+                        throw new Error('Dashboard page not found. Please create /dashboard.html or check your server configuration.');
+                    }
 
                 } catch (error) {
                     console.error('❌ Login error:', error);
@@ -280,38 +326,5 @@
             });
         });
     </script>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-text">
-                <p>&copy; 2026 THE MEASURE OF SOULS TRILOGY. ALL RIGHTS RESERVED.</p>
-                <p class="footer-tagline">Book One: Lay Upon The Earth</p>
-            </div>
-            <div class="footer-links">
-                <a href="privacy-policy.html">Privacy Policy</a>
-                <span>|</span>
-                <a href="#">Terms of Service</a>
-            </div>
-        </div>
-        <div class="footer-decoration"></div>
-    </footer>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <!-- Initialize Firebase -->
-    <script src="firebase-config.js"></script>
-
-    <!-- Auth system and other scripts -->
-    <script src="auth.js"></script>
-    <script src="audio-player.js"></script>
-    <script src="quantum-entanglement.js"></script>
-    <script src="script.js"></script>
-    <script src="load-navigation.js"></script>
-    <script src="memory-fragments.js"></script>
-    <script src="breadcrumbs.js"></script>
 </body>
 </html>
