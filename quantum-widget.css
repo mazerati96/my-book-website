@@ -1,5 +1,5 @@
 /* ============================================
-   QUANTUM ENTANGLEMENT WIDGET - ULTIMATE
+   QUANTUM ENTANGLEMENT WIDGET - ULTIMATE (FULLY FIXED)
    ============================================ */
 
 .quantum-widget {
@@ -55,8 +55,8 @@
 /* Fix widget content scrolling */
 .widget-content {
     padding: 1rem;
-    overflow-y: auto; /* ⭐ Allow scrolling */
-    max-height: 530px; /* ⭐ Constrain height (600px widget - 70px header) */
+    overflow-y: auto;
+    max-height: 530px;
     display: flex;
     flex-direction: column;
 }
@@ -74,52 +74,6 @@
         background: #00d4ff;
         border-radius: 3px;
     }
-
-/* Fix quantum chat container */
-.quantum-chat {
-    margin-top: 1rem;
-    border-top: 1px solid rgba(0, 212, 255, 0.3);
-    padding-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    max-height: 300px; /* Keep existing */
-    min-height: 200px; /* ⭐ Ensure minimum height */
-    flex-shrink: 0; /* ⭐ Don't let it shrink */
-}
-
-/* Ensure chat input stays at bottom */
-.chat-input-wrapper {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: auto; /* ⭐ Push to bottom */
-    flex-shrink: 0; /* ⭐ Never shrink */
-}
-
-/* Make sure input doesn't overflow */
-#chatInput {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 212, 255, 0.5);
-    color: #00d4ff;
-    padding: 0.5rem;
-    font-family: 'Courier New', monospace;
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-    min-width: 0; /* ⭐ Allow shrinking below content size */
-}
-
-#sendBtn {
-    background: transparent;
-    border: 2px solid #00d4ff;
-    color: #00d4ff;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    flex-shrink: 0; /* ⭐ Never shrink button */
-}
 
 /* RAINBOW PULSE EFFECT */
 .rainbow-pulse {
@@ -237,10 +191,6 @@
     margin-bottom: 1rem;
 }
 
-.entanglement-status {
-    margin-bottom: 1rem;
-}
-
 .status-label {
     color: #666;
     font-size: 0.7rem;
@@ -266,13 +216,16 @@
     }
 }
 
+/* ⭐ FIXED: Make decay effects more visible */
 .connection-line {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin: 0.8rem 0;
+    transition: opacity 0.3s ease !important;
 }
 
+/* ⭐ FIXED: Node styling - allow JavaScript to override colors */
 .node {
     width: 10px;
     height: 10px;
@@ -280,7 +233,13 @@
     border-radius: 50%;
     box-shadow: 0 0 10px #00d4ff;
     animation: nodePulse 2s infinite;
+    transition: background 0.3s ease, box-shadow 0.3s ease !important;
 }
+
+    /* ⭐ FIXED: Disable animation when JavaScript sets custom colors */
+    .node[style*="background"] {
+        animation: none !important;
+    }
 
 @keyframes nodePulse {
     0%, 100% {
@@ -292,12 +251,14 @@
     }
 }
 
+/* ⭐ FIXED: Wave styling - allow JavaScript to override */
 .connection-wave {
     flex: 1;
     height: 2px;
     background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #00d4ff 80%, transparent 100%);
     position: relative;
     overflow: hidden;
+    transition: background 0.3s ease !important;
 }
 
     .connection-wave::after {
@@ -315,6 +276,19 @@
     to {
         left: 200%;
     }
+}
+
+/* ⭐ FIXED: Stage-specific styles without filter conflicts */
+.connection-line.decay-critical .node {
+    animation: nodePulse 0.5s infinite !important; /* Faster pulse when critical */
+}
+
+.connection-line.decay-unstable .node {
+    animation: nodePulse 1s infinite !important; /* Medium pulse when unstable */
+}
+
+.connection-line.decay-weakening .node {
+    animation: nodePulse 1.5s infinite !important; /* Slower pulse when weakening */
 }
 
 .shared-message {
@@ -375,10 +349,8 @@
 }
 
 /* Buttons */
-
-.close-btn, .minimize-btn {
+.close-btn, .minimize-btn, .maximize-btn {
     position: absolute;
-    top: 0.8rem;
     background: transparent;
     border: 1px solid #ff0033;
     color: #ff0033;
@@ -395,13 +367,22 @@
 }
 
 .close-btn {
+    top: 0.8rem;
     right: 0.5rem;
 }
 
 .minimize-btn {
-    right: 2rem; /* 0.5rem + 24px + some gap */
+    top: 0.8rem;
+    right: 2rem;
     border-color: #00d4ff;
     color: #00d4ff;
+}
+
+.maximize-btn {
+    right: 2rem;
+    border-color: #00d4ff;
+    color: #00d4ff;
+    margin-left: auto;
 }
 
 .close-btn:hover {
@@ -410,7 +391,7 @@
     transform: rotate(90deg);
 }
 
-.minimize-btn:hover {
+.minimize-btn:hover, .maximize-btn:hover {
     background: #00d4ff;
     color: #0a0a0a;
 }
@@ -450,30 +431,6 @@
     animation: pulse-badge 1s infinite;
 }
 
-.maximize-btn {
-    right: 2rem;
-    position: absolute;
-    background: transparent;
-    border: 1px solid #00d4ff;
-    color: #00d4ff;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    margin-left: auto;
-}
-
-    .maximize-btn:hover {
-        background: #00d4ff;
-        color: #0a0a0a;
-        transform: scale(1.1);
-    }
-
 @keyframes pulse-badge {
     0%, 100% {
         transform: scale(1);
@@ -494,6 +451,8 @@
     display: flex;
     flex-direction: column;
     max-height: 300px;
+    min-height: 200px;
+    flex-shrink: 0;
 }
 
 .chat-header {
@@ -557,6 +516,8 @@
 .chat-input-wrapper {
     display: flex;
     gap: 0.5rem;
+    margin-top: auto;
+    flex-shrink: 0;
 }
 
 #chatInput {
@@ -568,6 +529,7 @@
     font-family: 'Courier New', monospace;
     font-size: 0.8rem;
     transition: all 0.3s ease;
+    min-width: 0;
 }
 
     #chatInput:focus {
@@ -586,6 +548,7 @@
     font-weight: bold;
     font-size: 1rem;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
     #sendBtn:hover {
@@ -667,30 +630,4 @@
         padding: 0.6rem 1rem;
         font-size: 0.75rem;
     }
-}
-
-/* Make decay effects more visible */
-.connection-line {
-    transition: opacity 0.3s ease, filter 0.3s ease !important;
-}
-
-.node {
-    transition: background 0.3s ease, box-shadow 0.3s ease !important;
-}
-
-.connection-wave {
-    transition: background 0.3s ease !important;
-}
-
-/* Stage-specific styles for extra visibility */
-.connection-line.decay-critical {
-    filter: brightness(0.5) !important;
-}
-
-.connection-line.decay-unstable {
-    filter: brightness(0.7) !important;
-}
-
-.connection-line.decay-weakening {
-    filter: brightness(0.85) !important;
 }
