@@ -8,6 +8,7 @@ let symbolsClicked = new Set();
 let currentUserUid = null;
 let currentUsername = null;
 let isAdmin = false;
+let authChecked = false; // NEW: Track if auth check completed
 
 // ADMIN USERNAMES - Authors with moderation privileges
 const ADMIN_USERNAMES = ['Amaro', 'Matthew'];
@@ -16,8 +17,14 @@ const ADMIN_USERNAMES = ['Amaro', 'Matthew'];
 function initSignalPage() {
     console.log('📡 Initializing signal page...');
 
+    setupAudioControls();
+    setupVisualizer();
+    setupDecoder();
+
     // Get current user info if logged in
     if (window.authSystem && authSystem.isLoggedIn()) {
+        console.log('⏳ Waiting for auth state...');
+
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
                 currentUserUid = user.uid;
@@ -42,18 +49,23 @@ function initSignalPage() {
                     console.error('Error getting username:', e);
                 }
 
-                // Reload leaderboard to show/hide delete buttons based on admin status
-                if (document.getElementById('leaderboard-container')) {
-                    loadLeaderboard();
-                }
+                authChecked = true;
+
+                // NOW load leaderboard with admin status set
+                console.log('✅ Auth check complete, loading leaderboard...');
+                loadLeaderboard();
+            } else {
+                // Not logged in
+                authChecked = true;
+                loadLeaderboard();
             }
         });
+    } else {
+        // No auth system or not logged in
+        console.log('👤 No user logged in, loading leaderboard as guest...');
+        authChecked = true;
+        loadLeaderboard();
     }
-
-    setupAudioControls();
-    setupVisualizer();
-    setupDecoder();
-    loadLeaderboard();
 
     console.log('✅ Signal page ready!');
 }
