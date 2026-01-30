@@ -23,7 +23,17 @@ function initSignalPage() {
                 currentUserUid = user.uid;
                 try {
                     currentUsername = await authSystem.getUsername();
-                    isAdmin = ADMIN_USERNAMES.includes(currentUsername);
+
+                    // ⭐ CHECK BOTH: Firebase isAdmin flag AND hardcoded username list
+                    const isAdminByUsername = ADMIN_USERNAMES.includes(currentUsername);
+                    const isAdminByFirebase = window.authSystem.userProfile?.isAdmin === true;
+                    isAdmin = isAdminByUsername || isAdminByFirebase;
+
+                    console.log('🔍 Admin check results:');
+                    console.log('  Username:', currentUsername);
+                    console.log('  In admin list:', isAdminByUsername);
+                    console.log('  Firebase isAdmin:', isAdminByFirebase);
+                    console.log('  Final isAdmin:', isAdmin);
 
                     if (isAdmin) {
                         console.log('🛡️ Admin access granted:', currentUsername);
@@ -47,7 +57,6 @@ function initSignalPage() {
 
     console.log('✅ Signal page ready!');
 }
-
 // Setup audio controls
 function setupAudioControls() {
     const toggleBtn = document.getElementById('toggle-audio');
