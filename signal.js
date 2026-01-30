@@ -22,28 +22,21 @@ function initSignalPage() {
             if (user) {
                 currentUserUid = user.uid;
                 try {
-                    try {
-                        currentUsername = await authSystem.getUsername();
+                    currentUsername = await authSystem.getUsername();
+                    isAdmin = ADMIN_USERNAMES.includes(currentUsername);
 
-                        // Check admin status using BOTH Firebase flag AND hardcoded list
-                        const isAdminByUsername = ADMIN_USERNAMES.includes(currentUsername);
-                        const isAdminByFirebase = authSystem.userProfile?.isAdmin === true;
-                        isAdmin = isAdminByUsername || isAdminByFirebase;
-
-                        if (isAdmin) {
-                            console.log('🛡️ Admin access granted:', currentUsername);
-                            console.log('  - By username:', isAdminByUsername);
-                            console.log('  - By Firebase:', isAdminByFirebase);
-                        }
-                    } catch (e) {
-                        console.error('Error getting username:', e);
+                    if (isAdmin) {
+                        console.log('🛡️ Admin access granted:', currentUsername);
                     }
-
-                    // Reload leaderboard to show/hide delete buttons based on admin status
-                    if (document.getElementById('leaderboard-container')) {
-                        loadLeaderboard();
-                    }
+                } catch (e) {
+                    console.error('Error getting username:', e);
                 }
+
+                // Reload leaderboard to show/hide delete buttons based on admin status
+                if (document.getElementById('leaderboard-container')) {
+                    loadLeaderboard();
+                }
+            }
         });
     }
 
