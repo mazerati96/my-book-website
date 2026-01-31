@@ -20,85 +20,89 @@ function initSignalPage() {
     setupVisualizer();
     setupDecoder();
 
-    // Get current user info if logged in
-    if (window.authSystem && authSystem.isLoggedIn()) {
-        console.log('⏳ Checking admin status...');
+    // ALWAYS wait for auth state, don't check isLoggedIn() yet
+    console.log('⏳ Waiting for Firebase auth state...');
 
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUserUid = user.uid;
-                try {
-                    currentUsername = await authSystem.getUsername();
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            // User IS logged in
+            console.log('✅ User is logged in:', user.uid);
+            currentUserUid = user.uid;
 
-                    // Wait for profile to load if not already loaded
-                    if (!authSystem.userProfile) {
-                        await authSystem.loadUserProfile(user.uid);
-                    }
-
-                    // Check BOTH: hardcoded username list AND Firebase isAdmin flag
-                    const isAdminByUsername = ADMIN_USERNAMES.includes(currentUsername);
-                    const isAdminByFirebase = authSystem.userProfile?.isAdmin === true;
-                    isAdmin = isAdminByUsername || isAdminByFirebase;
-
-                    console.log('🔍 Admin check:');
-                    console.log('  UID:', currentUserUid);
-                    console.log('  Username:', currentUsername);
-                    console.log('  isAdmin:', isAdmin);
-
-                    if (isAdmin) {
-                        console.log('🛡️ Admin access granted:', currentUsername);
-                    }
-                } catch (e) {
-                    console.error('Error getting username:', e);
+            try {
+                // Wait for authSystem to be ready
+                if (!window.authSystem) {
+                    console.log('⏳ Waiting for authSystem...');
+                    await new Promise(resolve => {
+                        const check = setInterval(() => {
+                            if (window.authSystem) {
+                                clearInterval(check);
+                                resolve();
+                            }
+                        }, 100);
+                    });
                 }
 
-                // Reload leaderboard with admin status set
-                console.log('✅ Loading leaderboard with admin status...');
-                loadLeaderboard();
+                currentUsername = await authSystem.getUsername();
+                console.log('✅ Username:', currentUsername);
+
+                // Wait for profile to load
+                if (!authSystem.userProfile) {
+                    console.log('⏳ Loading profile...');
+                    await authSystem.loadUserProfile(user.uid);
+                }
+
+                // Check BOTH: hardcoded username list AND Firebase isAdmin flag
+                const isAdminByUsername = ADMIN_USERNAMES.includes(currentUsername);
+                const isAdminByFirebase = authSystem.userProfile?.isAdmin === true;
+                isAdmin = isAdminByUsername || isAdminByFirebase;
+
+                console.log('🔍 Admin check results:');
+                console.log('  UID:', currentUserUid);
+                console.log('  Username:', currentUsername);
+                console.log('  By username list:', isAdminByUsername);
+                console.log('  By Firebase flag:', isAdminByFirebase);
+                console.log('  Final isAdmin:', isAdmin);
+
+                if (isAdmin) {
+                    console.log('🛡️ Admin access granted:', currentUsername);
+                }
+            } catch (e) {
+                console.error('❌ Error loading user data:', e);
             }
-        });
-    } else {
-        // Not logged in, load leaderboard as guest
-        console.log('👤 Loading as guest...');
-        loadLeaderboard();
-    }
 
-    console.log('✅ Signal page ready!');
-}
+            // Load leaderboard with admin status set
+            console.log('✅ Loading leaderboard with user data...');
+            loadLeaderboard();
 
-// Setup audio controls
-function setupAudioControls() {
-    const toggleBtn = document.getElementById('toggle-audio');
-    const volumeSlider = document.getElementById('volume-slider');
-    const volumeValue = document.getElementById('volume-value');
-
-    if (!toggleBtn) return;
-
-    toggleBtn.addEventListener('click', () => {
-        const isPlaying = window.frequencyGenerator.toggle();
-
-        if (isPlaying) {
-            toggleBtn.classList.add('playing');
-            document.getElementById('audio-icon').textContent = '🔊';
-            document.getElementById('audio-text').textContent = 'STOP FREQUENCY';
-            document.getElementById('signal-status').textContent = 'BROADCASTING';
-            document.getElementById('signal-status').style.color = '#00ff88';
         } else {
-            toggleBtn.classList.remove('playing');
-            document.getElementById('audio-icon').textContent = '🔇';
-            document.getElementById('audio-text').textContent = 'PLAY FREQUENCY';
-            document.getElementById('signal-status').textContent = 'DORMANT';
-            document.getElementById('signal-status').style.color = 'var(--dark-white)';
+            // User is NOT logged in
+            console.log('👤 No user logged in, loading as guest...');
+            currentUserUid = null;
+            currentUsername = null;
+            isAdmin = false;
+            loadLeaderboard();
         }
     });
 
-    if (volumeSlider) {
-        volumeSlider.addEventListener('input', (e) => {
-            const volume = e.target.value / 100;
-            window.frequencyGenerator.setVolume(volume);
-            volumeValue.textContent = `${e.target.value}%`;
-        });
-    }
+    console.log('✅ Signal page setup complete!');
+}
+        } else {
+    toggleBtn.classList.remove('playing');
+    document.getElementById('audio-icon').textContent = '🔇';
+    document.getElementById('audio-text').textContent = 'PLAY FREQUENCY';
+    document.getElementById('signal-status').textContent = 'DORMANT';
+    document.getElementById('signal-status').style.color = 'var(--dark-white)';
+}
+    });
+
+if (volumeSlider) {
+    volumeSlider.addEventListener('input', (e) => {
+        const volume = e.target.value / 100;
+        window.frequencyGenerator.setVolume(volume);
+        volumeValue.textContent = `${e.target.value}%`;
+    });
+}
 }
 
 // Setup signal visualizer
