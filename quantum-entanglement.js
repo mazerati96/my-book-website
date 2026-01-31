@@ -152,6 +152,11 @@ class QuantumEntanglement {
         line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
         console.log(`🧹 After removal - Classes: "${line.className}"`);
 
+        // ⭐ NUCLEAR FIX: Force browser to recompute styles by triggering a reflow
+        line.style.display = 'none';
+        line.offsetHeight; // Force reflow
+        line.style.display = 'flex';
+
         // ⭐ FIXED: Determine state and use data attributes instead of inline styles
         let state = 'stable';
         let stage = 'STABLE';
