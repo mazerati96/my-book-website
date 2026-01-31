@@ -801,7 +801,7 @@ window.deleteInterpretation = async function (interpretationId, isAdminAction = 
                 adminUsername: currentUsername,
                 adminUid: currentUserUid,
                 targetUsername: data.username,
-                targetUid: data.userUid,
+                targetUid: data.userUid || 'anonymous', // FIX: Handle null/undefined userUid
                 interpretationId: interpretationId,
                 interpretation: data.interpretation,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
