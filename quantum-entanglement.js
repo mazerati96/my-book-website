@@ -203,7 +203,13 @@ class QuantumEntanglement {
 
         // ⭐ DEBUG: Check what opacity the browser is actually using
         const computedOpacity = window.getComputedStyle(line).opacity;
-        console.log(`🔗 Connection: ${(strength * 100).toFixed(1)}% - ${stage} - Classes: "${line.className}" - Computed Opacity: ${computedOpacity}`);
+        const widgetOpacity = window.getComputedStyle(document.querySelector('.quantum-widget')).opacity;
+        const contentOpacity = window.getComputedStyle(document.querySelector('.widget-content')).opacity;
+        const partnerOpacity = document.getElementById('partnerSection') ?
+            window.getComputedStyle(document.getElementById('partnerSection')).opacity : 'N/A';
+
+        console.log(`🔗 Connection: ${(strength * 100).toFixed(1)}% - ${stage} - Classes: "${line.className}"`);
+        console.log(`   📊 Opacity Debug: Line=${computedOpacity} | Widget=${widgetOpacity} | Content=${contentOpacity} | Partner=${partnerOpacity}`);
     }
 
 
@@ -1732,6 +1738,14 @@ class QuantumEntanglement {
         this.lastMessageTime = Date.now();
         this.messagesExchanged++;
 
+        // ⭐ FIXED: Clear silence effects on the shared message
+        const messageEl = document.getElementById('sharedMessage');
+        if (messageEl) {
+            messageEl.style.opacity = '';
+            messageEl.style.filter = '';
+            console.log('🧹 Cleared silence effects from shared message');
+        }
+
         // ⭐ UPDATE LASTACTIVE ON REAL USER INTERACTION
         if (this.userRef && this.isConnected) {
             this.userRef.update({
@@ -1749,6 +1763,13 @@ class QuantumEntanglement {
         // Remove any decay warnings
         const decayWarning = document.querySelector('.decay-warning');
         if (decayWarning) decayWarning.remove();
+
+        // ⭐ FIXED: Remove any silence warnings
+        const silenceWarning = document.querySelector('.silence-warning');
+        if (silenceWarning) {
+            silenceWarning.remove();
+            console.log('🧹 Cleared silence warning');
+        }
 
         console.log('✅ Activity detected - connection refreshed to 100%');
     }
