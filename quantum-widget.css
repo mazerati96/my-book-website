@@ -244,8 +244,8 @@
     }
 
     .node[data-state="weakening"] {
-        background: #00ffff !important;
-        box-shadow: 0 0 10px #00ffff !important;
+        background: #ffaa00 !important;
+        box-shadow: 0 0 10px #ffaa00 !important;
         animation: nodePulse 1.5s infinite !important;
     }
 
@@ -286,7 +286,7 @@
     }
 
     .connection-wave[data-state="weakening"] {
-        background: linear-gradient(90deg, transparent 0%, #00ffff 20%, #00ffff 80%, transparent 100%);
+        background: linear-gradient(90deg, transparent 0%, #ffaa00 20%, #ffaa00 80%, transparent 100%);
     }
 
     .connection-wave[data-state="unstable"] {

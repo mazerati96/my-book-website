@@ -183,14 +183,19 @@ class QuantumEntanglement {
             console.log(`🌊 Wave state set to: ${state}`);
         }
 
-        // Opacity fade based on strength
-        line.style.opacity = Math.max(0.3, strength);
-
-        // Jitter when critical
-        if (strength < WARNING_THRESHOLDS.CRITICAL) {
-            line.style.transform = `translateY(${Math.random() * 2 - 1}px)`;
+        // ⭐ FIXED: Handle opacity - fully reset when stable
+        if (state === 'stable') {
+            line.style.opacity = ''; // Clear inline style, let CSS take over
+            line.style.transform = ''; // Clear inline style
         } else {
-            line.style.transform = 'translateY(0)';
+            // Apply fade and jitter for decay states
+            line.style.opacity = Math.max(0.3, strength);
+
+            if (strength < WARNING_THRESHOLDS.CRITICAL) {
+                line.style.transform = `translateY(${Math.random() * 2 - 1}px)`;
+            } else {
+                line.style.transform = 'translateY(0)';
+            }
         }
 
         console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - ${stage} - State: ${state}`);
@@ -1610,9 +1615,28 @@ class QuantumEntanglement {
             newStage = 'SEVERED';
         }
 
-        if (newStage !== this.currentWarningStage && newStage !== 'STABLE') {
+        // ⭐ FIXED: Update stage and handle warnings
+        if (newStage !== this.currentWarningStage) {
             this.currentWarningStage = newStage;
-            this.showWarning(newStage, strength);
+
+            if (newStage === 'STABLE') {
+                // Remove warning when returning to stable
+                this.removeWarning();
+            } else {
+                // Show warning for non-stable states
+                this.showWarning(newStage, strength);
+            }
+        }
+    }
+
+    removeWarning() {
+        const partnerSection = document.getElementById('partnerSection');
+        if (!partnerSection) return;
+
+        const existing = partnerSection.querySelector('.quantum-warning');
+        if (existing) {
+            existing.remove();
+            console.log('⚡ Warning cleared - connection restored');
         }
     }
 
