@@ -150,6 +150,7 @@ class QuantumEntanglement {
 
         // ⭐ FIXED: Remove all decay classes first
         line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
+        console.log(`🧹 After removal - Classes: "${line.className}"`);
 
         // ⭐ FIXED: Determine state and use data attributes instead of inline styles
         let state = 'stable';
@@ -169,6 +170,8 @@ class QuantumEntanglement {
             line.classList.add('decay-weakening');
         }
 
+        console.log(`📝 After state assignment - Classes: "${line.className}" - State: ${state}`);
+
         // ⭐ FIXED: Update nodes using data attributes (CSS handles the rest)
         const nodes = document.querySelectorAll('.node');
         console.log(`📍 Found ${nodes.length} nodes - Setting state: ${state}`);
@@ -183,22 +186,19 @@ class QuantumEntanglement {
             console.log(`🌊 Wave state set to: ${state}`);
         }
 
-        // ⭐ FIXED: Handle opacity - fully reset when stable
-        if (state === 'stable') {
-            line.style.opacity = ''; // Clear inline style, let CSS take over
-            line.style.transform = ''; // Clear inline style
-        } else {
-            // Apply fade and jitter for decay states
-            line.style.opacity = Math.max(0.3, strength);
+        // ⭐ NUCLEAR OPTION: DON'T set inline opacity AT ALL - let CSS decay classes handle EVERYTHING!
+        // Clear any existing inline styles that might interfere
+        line.style.opacity = '';
+        line.style.transform = '';
 
-            if (strength < WARNING_THRESHOLDS.CRITICAL) {
-                line.style.transform = `translateY(${Math.random() * 2 - 1}px)`;
-            } else {
-                line.style.transform = 'translateY(0)';
-            }
+        // Only jitter when critical
+        if (strength < WARNING_THRESHOLDS.CRITICAL) {
+            line.style.transform = `translateY(${Math.random() * 2 - 1}px)`;
         }
 
-        console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - ${stage} - State: ${state}`);
+        // ⭐ DEBUG: Check what opacity the browser is actually using
+        const computedOpacity = window.getComputedStyle(line).opacity;
+        console.log(`🔗 Connection: ${(strength * 100).toFixed(1)}% - ${stage} - Classes: "${line.className}" - Computed Opacity: ${computedOpacity}`);
     }
 
 
