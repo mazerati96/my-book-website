@@ -143,7 +143,10 @@ class QuantumEntanglement {
 
     updateConnectionVisuals(strength) {
         const line = document.querySelector('.connection-line');
-        if (!line) return;
+        if (!line) {
+            console.warn('⚠️ .connection-line not found!');
+            return;
+        }
 
         // Remove all decay classes first
         line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
@@ -172,19 +175,23 @@ class QuantumEntanglement {
             line.classList.add('decay-weakening');
         }
 
-        // ⭐ UPDATE NODES - Use cssText to force override
+        // ⭐ UPDATE NODES - Set individual properties to avoid animation conflicts
         const nodes = document.querySelectorAll('.node');
+        console.log(`📍 Found ${nodes.length} nodes`);
         nodes.forEach(node => {
-            node.style.cssText = `background: ${color} !important; box-shadow: 0 0 ${glowIntensity}px ${color} !important; width: 10px !important; height: 10px !important; border-radius: 50% !important;`;
-            console.log(`📍 Node updated to ${color}`);
+            node.style.setProperty('background', color, 'important');
+            node.style.setProperty('box-shadow', `0 0 ${glowIntensity}px ${color}`, 'important');
+            node.style.setProperty('animation', 'none', 'important'); // Stop animation
+            console.log(`📍 Node background set to ${color}`);
         });
 
-        // ⭐ UPDATE WAVE - Use cssText to force override
+        // ⭐ UPDATE WAVE - Change the wave color AND make it visible
         const wave = line.querySelector('.connection-wave');
         if (wave) {
-            const gradient = `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`;
-            wave.style.cssText = `flex: 1 !important; height: 2px !important; background: ${gradient} !important; position: relative !important; overflow: hidden !important;`;
-            console.log(`🌊 Wave updated to ${color}`);
+            // Set the wave itself with a solid color border to make it visible
+            wave.style.setProperty('background', color, 'important');
+            wave.style.setProperty('box-shadow', `0 0 ${glowIntensity}px ${color}`, 'important');
+            console.log(`🌊 Wave set to ${color}`);
         }
 
         // Animation slows
@@ -1717,22 +1724,25 @@ class QuantumEntanglement {
         this.connectionStrength = 1.0;
         this.currentWarningStage = null;
 
-        // ⭐ FORCE CLEAR ALL DECAY EFFECTS BEFORE UPDATING
+        // ⭐ FORCE CLEAR ALL DECAY EFFECTS
         if (line) {
             line.style.opacity = '1';
             line.style.transform = 'translateY(0)';
             line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
         }
 
-        // ⭐ RESTORE COLORS TO BLUE
+        // ⭐ RESTORE COLORS TO BLUE - Use setProperty
         const nodes = document.querySelectorAll('.node');
         nodes.forEach(node => {
-            node.style.cssText = `background: #00d4ff !important; box-shadow: 0 0 10px #00d4ff !important; width: 10px !important; height: 10px !important; border-radius: 50% !important;`;
+            node.style.setProperty('background', '#00d4ff', 'important');
+            node.style.setProperty('box-shadow', '0 0 10px #00d4ff', 'important');
+            node.style.setProperty('animation', 'nodePulse 2s infinite', 'important'); // Restore animation
         });
 
         const wave = line.querySelector('.connection-wave');
         if (wave) {
-            wave.style.cssText = `flex: 1 !important; height: 2px !important; background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #00d4ff 80%, transparent 100%) !important; position: relative !important; overflow: hidden !important;`;
+            wave.style.setProperty('background', '#00d4ff', 'important');
+            wave.style.setProperty('box-shadow', '0 0 10px #00d4ff', 'important');
         }
 
         // Now update with full strength
