@@ -1028,21 +1028,23 @@ class QuantumEntanglement {
     }
 
     async displayChatMessage(senderId, text, timestamp) {
-        this.syncLineToActivity();
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
 
         // ⭐ CREATE UNIQUE ID FOR THIS MESSAGE
         const messageId = `${senderId}_${timestamp}_${text.substring(0, 20)}`;
 
-        // ⭐ CHECK IF ALREADY DISPLAYED
+        // ⭐ CHECK IF ALREADY DISPLAYED - STOP HERE IF DUPLICATE
         if (this.displayedMessageIds.has(messageId)) {
             console.log('🚫 Duplicate message blocked:', messageId);
-            return;
+            return; // Don't call syncLineToActivity for duplicates!
         }
 
         // ⭐ MARK AS DISPLAYED
         this.displayedMessageIds.add(messageId);
+
+        // ⭐ ONLY sync activity for NEW messages
+        this.syncLineToActivity();
 
         const isMe = senderId === this.userId;
         const senderName = isMe ? 'YOU' : await this.getDisplayName(senderId);
@@ -1708,32 +1710,11 @@ class QuantumEntanglement {
             }).catch(e => console.error('Failed to update lastActive:', e));
         }
 
-        // ⭐ IMMEDIATELY RESET CONNECTION STRENGTH VISUALLY
+        // ⭐ FIXED: Reset connection strength and let CSS handle visuals via data attributes
         this.connectionStrength = 1.0;
         this.currentWarningStage = null;
 
-        // ⭐ FORCE CLEAR ALL DECAY EFFECTS
-        if (line) {
-            line.style.opacity = '1';
-            line.style.transform = 'translateY(0)';
-            line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
-        }
-
-        // ⭐ RESTORE COLORS TO BLUE - Use setProperty
-        const nodes = document.querySelectorAll('.node');
-        nodes.forEach(node => {
-            node.style.setProperty('background', '#00d4ff', 'important');
-            node.style.setProperty('box-shadow', '0 0 10px #00d4ff', 'important');
-            node.style.setProperty('animation', 'nodePulse 2s infinite', 'important'); // Restore animation
-        });
-
-        const wave = line.querySelector('.connection-wave');
-        if (wave) {
-            wave.style.setProperty('background', '#00d4ff', 'important');
-            wave.style.setProperty('box-shadow', '0 0 10px #00d4ff', 'important');
-        }
-
-        // Now update with full strength
+        // Update visuals using data attributes (CSS handles the rest)
         this.updateConnectionVisuals(1.0);
 
         // Remove any decay warnings
