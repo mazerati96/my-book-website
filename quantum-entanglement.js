@@ -148,55 +148,43 @@ class QuantumEntanglement {
             return;
         }
 
-        // Remove all decay classes first
+        // ⭐ FIXED: Remove all decay classes first
         line.classList.remove('decay-critical', 'decay-unstable', 'decay-weakening');
 
-        // Opacity fade
-        line.style.opacity = Math.max(0.2, strength);
-
-        // Glow intensity decreases
-        const glowIntensity = Math.max(5, strength * 10);
-
-        // Color shift: blue → cyan → orange → red as it decays
-        let color = '#00d4ff';
+        // ⭐ FIXED: Determine state and use data attributes instead of inline styles
+        let state = 'stable';
         let stage = 'STABLE';
 
         if (strength < WARNING_THRESHOLDS.CRITICAL) {
-            color = '#ff3366';
+            state = 'critical';
             stage = 'CRITICAL';
             line.classList.add('decay-critical');
         } else if (strength < WARNING_THRESHOLDS.UNSTABLE) {
-            color = '#ff8800';
+            state = 'unstable';
             stage = 'UNSTABLE';
             line.classList.add('decay-unstable');
         } else if (strength < WARNING_THRESHOLDS.STABLE) {
-            color = '#00ffff';
+            state = 'weakening';
             stage = 'WEAKENING';
             line.classList.add('decay-weakening');
         }
 
-        // ⭐ UPDATE NODES - Set individual properties to avoid animation conflicts
+        // ⭐ FIXED: Update nodes using data attributes (CSS handles the rest)
         const nodes = document.querySelectorAll('.node');
-        console.log(`📍 Found ${nodes.length} nodes`);
+        console.log(`📍 Found ${nodes.length} nodes - Setting state: ${state}`);
         nodes.forEach(node => {
-            node.style.setProperty('background', color, 'important');
-            node.style.setProperty('box-shadow', `0 0 ${glowIntensity}px ${color}`, 'important');
-            node.style.setProperty('animation', 'none', 'important'); // Stop animation
-            console.log(`📍 Node background set to ${color}`);
+            node.setAttribute('data-state', state);
         });
 
-        // ⭐ UPDATE WAVE - Change the wave color AND make it visible
+        // ⭐ FIXED: Update wave using data attributes
         const wave = line.querySelector('.connection-wave');
         if (wave) {
-            // Set the wave itself with a solid color border to make it visible
-            wave.style.setProperty('background', color, 'important');
-            wave.style.setProperty('box-shadow', `0 0 ${glowIntensity}px ${color}`, 'important');
-            console.log(`🌊 Wave set to ${color}`);
+            wave.setAttribute('data-state', state);
+            console.log(`🌊 Wave state set to: ${state}`);
         }
 
-        // Animation slows
-        const animSpeed = 1 + (1 - strength) * 3;
-        line.style.animationDuration = `${animSpeed}s`;
+        // Opacity fade based on strength
+        line.style.opacity = Math.max(0.3, strength);
 
         // Jitter when critical
         if (strength < WARNING_THRESHOLDS.CRITICAL) {
@@ -205,7 +193,7 @@ class QuantumEntanglement {
             line.style.transform = 'translateY(0)';
         }
 
-        console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - ${stage} - Color: ${color}`);
+        console.log(`🔗 Connection strength: ${(strength * 100).toFixed(1)}% - ${stage} - State: ${state}`);
     }
 
 

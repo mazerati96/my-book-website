@@ -1,5 +1,5 @@
 /* ============================================
-   QUANTUM ENTANGLEMENT WIDGET - ULTIMATE (FULLY FIXED)
+   QUANTUM ENTANGLEMENT WIDGET - FIXED VERSION
    ============================================ */
 
 .quantum-widget {
@@ -216,16 +216,16 @@
     }
 }
 
-/* ⭐ FIXED: Make decay effects more visible */
+/* ⭐ FIXED: Connection line with proper state management */
 .connection-line {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin: 0.8rem 0;
-    transition: opacity 0.3s ease !important;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* ⭐ FIXED: Node styling - allow JavaScript to override colors */
+/* ⭐ FIXED: Default node styling - NO inline style overrides */
 .node {
     width: 10px;
     height: 10px;
@@ -233,12 +233,32 @@
     border-radius: 50%;
     box-shadow: 0 0 10px #00d4ff;
     animation: nodePulse 2s infinite;
-    transition: background 0.3s ease, box-shadow 0.3s ease !important;
+    transition: all 0.3s ease;
 }
 
-    /* ⭐ FIXED: Disable animation when JavaScript sets custom colors */
-    .node[style*="background"] {
-        animation: none !important;
+    /* ⭐ CRITICAL FIX: Use data attributes instead of inline styles for state management */
+    .node[data-state="stable"] {
+        background: #00d4ff !important;
+        box-shadow: 0 0 10px #00d4ff !important;
+        animation: nodePulse 2s infinite !important;
+    }
+
+    .node[data-state="weakening"] {
+        background: #00ffff !important;
+        box-shadow: 0 0 10px #00ffff !important;
+        animation: nodePulse 1.5s infinite !important;
+    }
+
+    .node[data-state="unstable"] {
+        background: #ff8800 !important;
+        box-shadow: 0 0 10px #ff8800 !important;
+        animation: nodePulse 1s infinite !important;
+    }
+
+    .node[data-state="critical"] {
+        background: #ff3366 !important;
+        box-shadow: 0 0 10px #ff3366 !important;
+        animation: nodePulse 0.5s infinite !important;
     }
 
 @keyframes nodePulse {
@@ -251,15 +271,31 @@
     }
 }
 
-/* ⭐ FIXED: Wave styling - allow JavaScript to override */
+/* ⭐ FIXED: Wave styling with data attributes */
 .connection-wave {
     flex: 1;
     height: 2px;
     background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #00d4ff 80%, transparent 100%);
     position: relative;
     overflow: hidden;
-    transition: background 0.3s ease !important;
+    transition: all 0.3s ease;
 }
+
+    .connection-wave[data-state="stable"] {
+        background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #00d4ff 80%, transparent 100%);
+    }
+
+    .connection-wave[data-state="weakening"] {
+        background: linear-gradient(90deg, transparent 0%, #00ffff 20%, #00ffff 80%, transparent 100%);
+    }
+
+    .connection-wave[data-state="unstable"] {
+        background: linear-gradient(90deg, transparent 0%, #ff8800 20%, #ff8800 80%, transparent 100%);
+    }
+
+    .connection-wave[data-state="critical"] {
+        background: linear-gradient(90deg, transparent 0%, #ff3366 20%, #ff3366 80%, transparent 100%);
+    }
 
     .connection-wave::after {
         content: '';
@@ -278,18 +314,30 @@
     }
 }
 
-/* ⭐ FIXED: Stage-specific styles without filter conflicts */
-.connection-line.decay-critical .node {
-    animation: nodePulse 0.5s infinite !important; /* Faster pulse when critical */
+/* ⭐ FIXED: Stage-specific styles using classes on .connection-line */
+.connection-line.decay-critical {
+    opacity: 0.5;
 }
 
-.connection-line.decay-unstable .node {
-    animation: nodePulse 1s infinite !important; /* Medium pulse when unstable */
+    .connection-line.decay-critical .connection-wave::after {
+        animation: wave 0.5s linear infinite;
+    }
+
+.connection-line.decay-unstable {
+    opacity: 0.7;
 }
 
-.connection-line.decay-weakening .node {
-    animation: nodePulse 1.5s infinite !important; /* Slower pulse when weakening */
+    .connection-line.decay-unstable .connection-wave::after {
+        animation: wave 1s linear infinite;
+    }
+
+.connection-line.decay-weakening {
+    opacity: 0.85;
 }
+
+    .connection-line.decay-weakening .connection-wave::after {
+        animation: wave 1.5s linear infinite;
+    }
 
 .shared-message {
     background: rgba(0, 212, 255, 0.1);
