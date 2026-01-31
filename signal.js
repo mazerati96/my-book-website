@@ -12,6 +12,7 @@ let isAdmin = false;
 // ADMIN USERNAMES - Authors with moderation privileges
 const ADMIN_USERNAMES = ['Amaro', 'Matthew'];
 
+
 // Initialize signal page
 function initSignalPage() {
     console.log('📡 Initializing signal page...');
@@ -20,50 +21,54 @@ function initSignalPage() {
     setupVisualizer();
     setupDecoder();
 
-    // Get current user info if logged in
-    if (window.authSystem && authSystem.isLoggedIn()) {
-        console.log('⏳ Checking admin status...');
+    // Wait for Firebase auth state
+    console.log('⏳ Waiting for auth state...');
 
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUserUid = user.uid;
-                try {
-                    currentUsername = await authSystem.getUsername();
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            console.log('✅ User logged in:', user.uid);
+            currentUserUid = user.uid;
 
-                    // Wait for profile to load if not already loaded
-                    if (!authSystem.userProfile) {
-                        await authSystem.loadUserProfile(user.uid);
-                    }
-
-                    // Check BOTH: hardcoded username list AND Firebase isAdmin flag
-                    const isAdminByUsername = ADMIN_USERNAMES.includes(currentUsername);
-                    const isAdminByFirebase = authSystem.userProfile?.isAdmin === true;
-                    isAdmin = isAdminByUsername || isAdminByFirebase;
-
-                    console.log('🔍 Admin check:');
-                    console.log('  UID:', currentUserUid);
-                    console.log('  Username:', currentUsername);
-                    console.log('  isAdmin:', isAdmin);
-
-                    if (isAdmin) {
-                        console.log('🛡️ Admin access granted:', currentUsername);
-                    }
-                } catch (e) {
-                    console.error('Error getting username:', e);
+            try {
+                // Wait for authSystem
+                let attempts = 0;
+                while (!window.authSystem && attempts < 50) {
+                    await new Promise(r => setTimeout(r, 100));
+                    attempts++;
                 }
 
-                // Reload leaderboard with admin status set
-                console.log('✅ Loading leaderboard with admin status...');
-                loadLeaderboard();
-            }
-        });
-    } else {
-        // Not logged in, load leaderboard as guest
-        console.log('👤 Loading as guest...');
-        loadLeaderboard();
-    }
+                currentUsername = await authSystem.getUsername();
+                console.log('✅ Username:', currentUsername);
 
-    console.log('✅ Signal page ready!');
+                // Load profile if needed
+                if (!authSystem.userProfile) {
+                    await authSystem.loadUserProfile(user.uid);
+                }
+
+                // Check admin status (both methods)
+                const byUsername = ADMIN_USERNAMES.includes(currentUsername);
+                const byFirebase = authSystem.userProfile?.isAdmin === true;
+                isAdmin = byUsername || byFirebase;
+
+                console.log('🔍 isAdmin:', isAdmin);
+                if (isAdmin) {
+                    console.log('🛡️ Admin:', currentUsername);
+                }
+            } catch (e) {
+                console.error('❌ Error:', e);
+            }
+
+            loadLeaderboard();
+        } else {
+            console.log('👤 Guest mode');
+            currentUserUid = null;
+            currentUsername = null;
+            isAdmin = false;
+            loadLeaderboard();
+        }
+    });
+
+    console.log('✅ Setup complete!');
 }
 
 // Setup audio controls
