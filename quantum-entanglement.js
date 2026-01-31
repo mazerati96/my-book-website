@@ -85,7 +85,7 @@ class QuantumEntanglement {
             silentConnections: 0
         };
         this.displayedMessageIds = new Set(); // Track displayed messages
-       
+
     }
     //TIMER FOR HEARTBEAT ENTANGLEMENT
     startEntanglementHeartbeat() {
@@ -175,26 +175,16 @@ class QuantumEntanglement {
         // ⭐ UPDATE NODES - Use cssText to force override
         const nodes = document.querySelectorAll('.node');
         nodes.forEach(node => {
-            node.style.cssText = `
-            background: ${color} !important;
-            box-shadow: 0 0 ${glowIntensity}px ${color} !important;
-            width: 10px !important;
-            height: 10px !important;
-            border-radius: 50% !important;
-        `;
+            node.style.cssText = `background: ${color} !important; box-shadow: 0 0 ${glowIntensity}px ${color} !important; width: 10px !important; height: 10px !important; border-radius: 50% !important;`;
+            console.log(`📍 Node updated to ${color}`);
         });
 
         // ⭐ UPDATE WAVE - Use cssText to force override
         const wave = line.querySelector('.connection-wave');
         if (wave) {
             const gradient = `linear-gradient(90deg, transparent 0%, ${color} 20%, ${color} 80%, transparent 100%)`;
-            wave.style.cssText = `
-            flex: 1 !important;
-            height: 2px !important;
-            background: ${gradient} !important;
-            position: relative !important;
-            overflow: hidden !important;
-        `;
+            wave.style.cssText = `flex: 1 !important; height: 2px !important; background: ${gradient} !important; position: relative !important; overflow: hidden !important;`;
+            console.log(`🌊 Wave updated to ${color}`);
         }
 
         // Animation slows
@@ -674,7 +664,7 @@ class QuantumEntanglement {
             if (this.userRef) {
                 this.userRef.update({
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    
+
                     onlineTimestamp: firebase.database.ServerValue.TIMESTAMP, // ⭐ ADD this
                     online: true
                 });
@@ -887,7 +877,7 @@ class QuantumEntanglement {
         this.lastMessageTime = Date.now();
 
         this.startEntanglementHeartbeat();
-        
+
         this.monitorEntanglementDecay();
         this.prepareEchoes();
         // Check if reconnection
@@ -1737,24 +1727,12 @@ class QuantumEntanglement {
         // ⭐ RESTORE COLORS TO BLUE
         const nodes = document.querySelectorAll('.node');
         nodes.forEach(node => {
-            node.style.cssText = `
-            background: #00d4ff !important;
-            box-shadow: 0 0 10px #00d4ff !important;
-            width: 10px !important;
-            height: 10px !important;
-            border-radius: 50% !important;
-        `;
+            node.style.cssText = `background: #00d4ff !important; box-shadow: 0 0 10px #00d4ff !important; width: 10px !important; height: 10px !important; border-radius: 50% !important;`;
         });
 
         const wave = line.querySelector('.connection-wave');
         if (wave) {
-            wave.style.cssText = `
-            flex: 1 !important;
-            height: 2px !important;
-            background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #00d4ff 80%, transparent 100%) !important;
-            position: relative !important;
-            overflow: hidden !important;
-        `;
+            wave.style.cssText = `flex: 1 !important; height: 2px !important; background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #00d4ff 80%, transparent 100%) !important; position: relative !important; overflow: hidden !important;`;
         }
 
         // Now update with full strength
@@ -1766,7 +1744,7 @@ class QuantumEntanglement {
 
         console.log('✅ Activity detected - connection refreshed to 100%');
     }
-    
+
 
     // ======================
     // Cleanup
