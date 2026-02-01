@@ -832,17 +832,6 @@ class QuantumEntanglement {
                 // Skip self and stop if we already connected
                 if (otherUserId === this.userId || this.isConnected) continue;
 
-                // ⭐ CRITICAL: Guests cannot pair with authenticated users (Firebase permission denied)
-                // Guests (GUEST_xxx) can only pair with other guests
-                // Authenticated users (UIDs) can only pair with other authenticated users
-                const isGuestUserId = otherUserId.startsWith('GUEST_');
-                const amIGuest = this.isGuestMode || this.userId.startsWith('GUEST_');
-
-                if (amIGuest !== isGuestUserId) {
-                    // Skip: Guest trying to pair with auth user, or auth user trying to pair with guest
-                    continue;
-                }
-
                 // Check if this user is available
                 if (otherUserData.looking && !otherUserData.partnerId) {
                     console.log('🔍 Found potential partner:', otherUserId);
