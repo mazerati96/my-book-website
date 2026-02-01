@@ -192,7 +192,7 @@ footer {
 
     /* Display size constraint: mirrors #lightbox-image behavior */
     .epigraph-section .book-cover .lightbox-image {
-        max-width: 420px; /* visible width cap — change to match gallery if needed */
+        max-width: 420px; /* visible width cap â€" change to match gallery if needed */
         width: 100%; /* lets image scale down to container on small screens */
         max-height: 70vh; /* same vertical cap as lightbox so it never fills the screen */
         height: auto;
@@ -262,19 +262,26 @@ footer {
     margin: 0 auto;
 }
 
-}
-
 .preview-panel {
     background-color: var(--bg-card);
     border: 2px solid rgba(255, 215, 0, 0.3);
     padding: 2rem;
     transition: all 0.3s;
+    text-align: center;
 }
 
     .preview-panel:hover {
         border-color: #ffd700;
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         transform: translateY(-5px);
+    }
+
+    .preview-panel img {
+        max-width: 200px;
+        width: 100%;
+        height: auto;
+        margin: 0 auto 1rem;
+        display: block;
     }
 
 .panel-icon {
@@ -409,3 +416,7 @@ footer {
     border-bottom-color: #ffd700;
 }
 
+/* Themes section */
+.themes-section {
+    background-color: var(--bg-dark);
+}
