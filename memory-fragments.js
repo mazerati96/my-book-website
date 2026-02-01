@@ -291,7 +291,7 @@ class MemoryFragmentSystem {
         `;
         modal.innerHTML = `
             <div style="color: gold; font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; font-family: 'Courier New', monospace;">
-                ⚡ DEVELOPER ACCESS GRANTED ⚡
+                ⚡DEVELOPER ACCESS GRANTED⚡
             </div>
             <div style="color: white; font-family: 'Courier New', monospace; font-size: 1rem; line-height: 1.6; font-style: normal;">
                 All memory fragments unlocked via Konami Code.<br><br>
