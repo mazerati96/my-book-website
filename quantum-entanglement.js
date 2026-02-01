@@ -327,8 +327,58 @@ class QuantumEntanglement {
         // Check guest mode
         this.isGuestMode = localStorage.getItem('guestMode') === 'true';
 
-        if (this.isGuestMode) {
-            // Guest mode - auto setup with guest ID
+        // ⭐ CRITICAL FIX: ALWAYS listen for auth state changes, even in guest mode
+        // This allows us to detect when a guest user logs in
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                // User is logged in
+                console.log('🔐 User logged in:', user.uid);
+
+                // ⭐ CRITICAL FIX: Clear guest mode when transitioning to authenticated user
+                const wasGuestMode = this.isGuestMode;
+                const oldUserId = this.userId;
+
+                if (wasGuestMode) {
+                    console.log('🔄 Transitioning from guest mode to authenticated user');
+
+                    // Clear guest mode flags
+                    localStorage.removeItem('guestMode');
+                    localStorage.removeItem('guestQuantumId');
+                    this.isGuestMode = false;
+
+                    // Disconnect from old guest pairing
+                    if (this.partnerId) {
+                        console.log('🔌 Disconnecting old guest pairing');
+                        await this.severEntanglement();
+                    }
+
+                    // Clean up old guest user entry in Firebase
+                    if (oldUserId && oldUserId.startsWith('GUEST_')) {
+                        console.log('🧹 Cleaning up old guest user entry:', oldUserId);
+                        await this.db.ref('activeUsers/' + oldUserId).remove();
+                    }
+                }
+
+                // Set new authenticated user ID
+                this.userId = user.uid;
+
+                // If widget was closed, don't auto-open
+                if (this.isClosed) {
+                    console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
+                    return;
+                }
+
+                // Auto-launch with new authenticated ID
+                await this.launchWidget();
+            } else {
+                // User logged out - cleanup
+                this.userId = null;
+                this.handleLogout();
+            }
+        });
+
+        // If in guest mode AND not logged in, auto-launch guest session
+        if (this.isGuestMode && !firebase.auth().currentUser) {
             console.log('⚛️ Quantum Entanglement: Guest Mode Active');
 
             // If widget was closed, don't auto-open
@@ -340,59 +390,10 @@ class QuantumEntanglement {
             // Auto-launch for guest if not closed
             // Give a small delay to let page load
             setTimeout(() => {
-                if (!this.isClosed) {
+                if (!this.isClosed && !firebase.auth().currentUser) {
                     this.launchWidget();
                 }
             }, 1000);
-        } else {
-            // Listen for auth state changes (non-guest)
-            this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-                if (user) {
-                    // User is logged in
-                    console.log('🔐 User logged in:', user.uid);
-
-                    // ⭐ CRITICAL FIX: Clear guest mode when transitioning to authenticated user
-                    const wasGuestMode = this.isGuestMode;
-                    const oldUserId = this.userId;
-
-                    if (wasGuestMode) {
-                        console.log('🔄 Transitioning from guest mode to authenticated user');
-
-                        // Clear guest mode flags
-                        localStorage.removeItem('guestMode');
-                        localStorage.removeItem('guestQuantumId');
-                        this.isGuestMode = false;
-
-                        // Disconnect from old guest pairing
-                        if (this.partnerId) {
-                            console.log('🔌 Disconnecting old guest pairing');
-                            await this.severEntanglement();
-                        }
-
-                        // Clean up old guest user entry in Firebase
-                        if (oldUserId && oldUserId.startsWith('GUEST_')) {
-                            console.log('🧹 Cleaning up old guest user entry:', oldUserId);
-                            await this.db.ref('activeUsers/' + oldUserId).remove();
-                        }
-                    }
-
-                    // Set new authenticated user ID
-                    this.userId = user.uid;
-
-                    // If widget was closed, don't auto-open
-                    if (this.isClosed) {
-                        console.log('⚛️ Quantum Entanglement available - Click footer button to launch');
-                        return;
-                    }
-
-                    // Auto-launch with new authenticated ID
-                    await this.launchWidget();
-                } else {
-                    // User logged out - cleanup
-                    this.userId = null;
-                    this.handleLogout();
-                }
-            });
         }
     }
 
