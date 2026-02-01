@@ -60,6 +60,11 @@
                             <div class="info-label">MEMBER SINCE</div>
                             <div class="info-value" id="profileCreatedAt">-</div>
                         </div>
+
+                        <div class="info-item">
+                            <div class="info-label">ADMIN STATUS</div>
+                            <div class="info-value" id="profileAdminStatus">-</div>
+                        </div>
                     </div>
                 </div>
 
@@ -269,6 +274,15 @@
                         document.getElementById('profileCreatedAt').textContent = date.toLocaleDateString();
                     }
 
+                    // Display admin status
+                    const isAdmin = profile.isAdmin === true;
+                    const adminStatusElement = document.getElementById('profileAdminStatus');
+                    adminStatusElement.textContent = isAdmin ? 'YES' : 'NO';
+                    adminStatusElement.style.color = isAdmin ? 'var(--accent-cyan)' : 'var(--primary-white)';
+                    if (isAdmin) {
+                        adminStatusElement.style.textShadow = '0 0 10px var(--accent-cyan)';
+                    }
+
                     // Load progress stats
                     loadProgressStats(profile);
 
@@ -415,11 +429,11 @@
 
                 if (requireUsername) {
                     confirmMessage.innerHTML = `
-                            ${message}
-                            <input type="text" id="confirmUsernameInput" placeholder="Enter username"
-                                style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
-                                border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
-                        `;
+                                ${message}
+                                <input type="text" id="confirmUsernameInput" placeholder="Enter username"
+                                    style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.5);
+                                    border: 1px solid rgba(255,255,255,0.3); color: white; font-family: 'Courier New', monospace;">
+                            `;
                 } else {
                     confirmMessage.textContent = message;
                 }
