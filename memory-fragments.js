@@ -9,90 +9,90 @@ const memoryFragments = [
         type: 'quote',
         content: '"No sacrifice is worth giving if it is not for the living."',
         category: 'philosophy',
-        riddleClue: 'What remains when all else fades?',
-        riddleAnswer: 'soul',
-        riddleHint: '(4 letters)'
+        riddleClue: 'The protagonist of this story. The one who bears memories not her own.',
+        riddleAnswer: 'she',
+        riddleHint: '(3 letters)'
     },
     {
         id: 'frag-002',
         type: 'memory',
         content: 'Ten years of war. Ten years of choices. All of them leading here.',
         category: 'past',
-        riddleClue: 'What am I if not my memories?',
-        riddleAnswer: 'mind',
-        riddleHint: '(4 letters)'
+        riddleClue: 'What you do when faced with a decision. The power to select your path.',
+        riddleAnswer: 'chooses',
+        riddleHint: '(7 letters)'
     },
     {
         id: 'frag-003',
         type: 'thought',
         content: 'She wonders: Are these memories mine? Or am I just the echo of someone else?',
         category: 'android',
-        riddleClue: 'Built, not born. What defines me?',
-        riddleAnswer: 'choice',
-        riddleHint: '(6 letters)'
+        riddleClue: 'Neither from nor of, but rather in the direction toward.',
+        riddleAnswer: 'to',
+        riddleHint: '(2 letters)'
     },
     {
         id: 'frag-004',
         type: 'signal',
         content: '36 Hz. Constant. Eternal. A prayer against entropy.',
         category: 'frequency',
-        riddleClue: 'The measure of all things.',
-        riddleAnswer: 'souls',
-        riddleHint: '(5 letters)'
+        riddleClue: 'What you are when you transform, evolve, or change into something new.',
+        riddleAnswer: 'become',
+        riddleHint: '(6 letters)'
     },
     {
         id: 'frag-005',
         type: 'quote',
         content: '"The measure of a soul is not what it is, but what it chooses to become."',
         category: 'philosophy',
-        riddleClue: 'What you do when you decide.',
-        riddleAnswer: 'choose',
-        riddleHint: '(6 letters)'
+        riddleClue: 'Greater than. Beyond. Exceeding what was.',
+        riddleAnswer: 'more',
+        riddleHint: '(4 letters)'
     },
     {
         id: 'frag-006',
         type: 'vision',
         content: 'Gold. Everywhere gold. Visions that shouldn\'t exist in circuits and code.',
         category: 'android',
-        riddleClue: 'What the frequency calls to.',
-        riddleAnswer: 'minds',
-        riddleHint: '(5 letters)'
+        riddleClue: 'In comparison to. As opposed to. A word of contrast.',
+        riddleAnswer: 'than',
+        riddleHint: '(4 letters)'
     },
     {
         id: 'frag-007',
         type: 'memory',
         content: 'The soldier\'s last breath. The choice to continue. The transfer.',
         category: 'past',
-        riddleClue: 'Without this, no choice matters.',
-        riddleAnswer: 'purpose',
-        riddleHint: '(7 letters)'
+        riddleClue: 'Electronic pathways. The nervous system of machines.',
+        riddleAnswer: 'circuits',
+        riddleHint: '(8 letters)'
     },
     {
         id: 'frag-008',
         type: 'thought',
         content: 'The Brigade needs a leader. But can something built lead something born?',
         category: 'android',
-        riddleClue: 'To show the way forward.',
-        riddleAnswer: 'lead',
-        riddleHint: '(4 letters)'
+        riddleClue: 'A conjunction. It joins things together. Not or, but ___.',
+        riddleAnswer: 'and',
+        riddleHint: '(3 letters)'
     },
     {
         id: 'frag-009',
         type: 'signal',
         content: 'The frequency whispers. It has been waiting. It knows.',
         category: 'frequency',
-        riddleClue: 'Where consciousness meets circuitry.',
-        riddleAnswer: 'her',
-        riddleHint: '(3 letters)'
+        riddleClue: 'The language of programming. Instructions that define behavior.',
+        riddleAnswer: 'code',
+        riddleHint: '(4 letters)'
     },
     {
         id: 'frag-010',
         type: 'quote',
         content: '"Some choices define who you are. These will define what existence means."',
         category: 'philosophy',
-        riddleClue: 'Everything that is.',
-        riddleAnswer: 'existence',
-        riddleHint: '(9 letters)'
+        riddleClue: 'Look back at all your answers. What message have you assembled? (type the complete phrase)',
+        riddleAnswer: 'she chooses to become more than circuits and code',
+        riddleHint: '(all previous answers combined)'
     }
 ];
 
