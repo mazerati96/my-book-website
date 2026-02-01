@@ -550,87 +550,6 @@ function initTrilogyCards() {
 }
 
 // ============================================
-
-// ============================================
-// KONAMI CODE EASTER EGG - ENHANCED WITH RAINBOW MODAL
-// ============================================
-let rainbowActive = false;
-let rainbowAnimationId = null;
-
-function initKonamiCode() {
-    // Listen for konami activation from memory-fragments.js
-    window.addEventListener('konami-activated', () => {
-        activateRainbowMode();
-        console.log('🌈 KONAMI CODE RAINBOW EFFECT ACTIVATED! 🌈');
-    });
-
-    // Listen for deactivation
-    window.addEventListener('konami-deactivated', () => {
-        deactivateRainbowMode();
-    });
-}
-
-function activateRainbowMode() {
-    if (rainbowActive) return;
-    rainbowActive = true;
-
-    // Create rainbow animation style if it doesn't exist
-    if (!document.getElementById('rainbow-style')) {
-        const style = document.createElement('style');
-        style.id = 'rainbow-style';
-        style.textContent = `
-            @keyframes rainbow {
-                0% { filter: hue-rotate(0deg); }
-                100% { filter: hue-rotate(360deg); }
-            }
-
-            .rainbow-active {
-                animation: rainbow 2s linear infinite !important;
-            }
-
-            /* Ensure modals and backdrops get rainbow effect */
-            .konami-rainbow-modal,
-            .konami-rainbow-bg {
-                animation: rainbow 2s linear infinite !important;
-            }
-
-            /* Add glow effect to the modal */
-            .konami-rainbow-modal {
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8),
-                            0 0 60px rgba(255, 215, 0, 0.5) !important;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    // Apply rainbow to body
-    document.body.classList.add('rainbow-active');
-
-    // Apply to all existing modal backdrops and modals
-    document.querySelectorAll('.modal-backdrop, .memory-modal').forEach(el => {
-        el.classList.add('rainbow-active');
-    });
-
-    console.log('🎨 Rainbow mode activated!');
-}
-
-function deactivateRainbowMode() {
-    if (!rainbowActive) return;
-    rainbowActive = false;
-
-    // Remove rainbow from body
-    document.body.classList.remove('rainbow-active');
-
-    // Remove from all modal elements
-    document.querySelectorAll('.modal-backdrop, .memory-modal').forEach(el => {
-        el.classList.remove('rainbow-active');
-    });
-
-    console.log('🎨 Rainbow mode deactivated');
-}
-
-
-// ============================================
 // CONSOLE MESSAGES
 // ============================================
 function initConsoleMessages() {
@@ -784,7 +703,7 @@ function initializeAll() {
     initEnhancedParallax();
     initSmoothScroll();
     initTrilogyCards();
-    initKonamiCode();
+
     initConsoleMessages();
     initPersistentAudio();
     createFrequencyToggle();

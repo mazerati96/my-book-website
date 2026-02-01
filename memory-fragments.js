@@ -215,46 +215,107 @@ class MemoryFragmentSystem {
         this.saveSolvedRiddles();
         this.updateProgressTracker();
 
+        // Create rainbow animation style
+        const style = document.createElement('style');
+        style.id = 'konami-rainbow-style';
+        style.textContent = `
+            @keyframes rainbowCycle {
+                0% { 
+                    filter: hue-rotate(0deg);
+                    border-color: hsl(0, 100%, 50%);
+                }
+                16.67% { 
+                    filter: hue-rotate(60deg);
+                    border-color: hsl(60, 100%, 50%);
+                }
+                33.33% { 
+                    filter: hue-rotate(120deg);
+                    border-color: hsl(120, 100%, 50%);
+                }
+                50% { 
+                    filter: hue-rotate(180deg);
+                    border-color: hsl(180, 100%, 50%);
+                }
+                66.67% { 
+                    filter: hue-rotate(240deg);
+                    border-color: hsl(240, 100%, 50%);
+                }
+                83.33% { 
+                    filter: hue-rotate(300deg);
+                    border-color: hsl(300, 100%, 50%);
+                }
+                100% { 
+                    filter: hue-rotate(360deg);
+                    border-color: hsl(360, 100%, 50%);
+                }
+            }
+
+            .konami-rainbow-modal {
+                animation: rainbowCycle 3s linear infinite !important;
+            }
+
+            .konami-rainbow-bg {
+                animation: rainbowCycle 3s linear infinite !important;
+            }
+        `;
+        document.head.appendChild(style);
+
         const backdrop = document.createElement('div');
         backdrop.className = 'modal-backdrop konami-rainbow-bg';
+        backdrop.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            pointer-events: auto;
+        `;
 
         const modal = document.createElement('div');
         modal.className = 'memory-modal konami-rainbow-modal';
-        modal.style.borderColor = 'var(--accent-gold)';
+        modal.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(10, 10, 10, 0.98);
+            border: 3px solid gold;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            z-index: 10000;
+            pointer-events: auto;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+        `;
         modal.innerHTML = `
-            <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
+            <div style="color: gold; font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; font-family: 'Courier New', monospace;">
                 ⚡ DEVELOPER ACCESS GRANTED ⚡
             </div>
-            <div class="memory-modal-content" style="font-style: normal; color: var(--accent-gold);">
+            <div style="color: white; font-family: 'Courier New', monospace; font-size: 1rem; line-height: 1.6; font-style: normal;">
                 All memory fragments unlocked via Konami Code.<br><br>
                 All riddles solved automatically.<br>
                 Secret page accessible.
             </div>
-            <button class="memory-modal-close" style="background-color: var(--accent-gold);">ACCESS GRANTED</button>
+            <button class="memory-modal-close" style="background-color: gold; color: black; border: none; padding: 0.8rem 2rem; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 1.5rem; width: 100%; font-family: 'Courier New', monospace; letter-spacing: 0.1em;">ACCESS GRANTED</button>
         `;
 
         document.body.appendChild(backdrop);
         document.body.appendChild(modal);
 
-        // Wait for next frame to ensure modal is in DOM, then apply rainbow
-        requestAnimationFrame(() => {
-            backdrop.classList.add('rainbow-active');
-            modal.classList.add('rainbow-active');
-            // Notify script.js to apply rainbow effect AFTER modal is ready
-            window.dispatchEvent(new CustomEvent('konami-activated'));
-        });
-
         const closeModal = () => {
             backdrop.remove();
             modal.remove();
-            // Stop rainbow effect
-            window.dispatchEvent(new CustomEvent('konami-deactivated'));
+            // Remove the style tag
+            const styleTag = document.getElementById('konami-rainbow-style');
+            if (styleTag) styleTag.remove();
         };
 
         modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
         backdrop.addEventListener('click', closeModal);
 
-        console.log('🎮 KONAMI CODE ACTIVATED!');
+        console.log('🎮 KONAMI CODE ACTIVATED - RAINBOW MODAL!');
     }
 
     // ============================================
