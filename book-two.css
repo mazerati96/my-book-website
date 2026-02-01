@@ -396,8 +396,3 @@ footer {
     border-top-color: #00d4ff;
     border-bottom-color: #00d4ff;
 }
-
-/* Themes section */
-.themes-section {
-    background-color: var(--bg-dark);
-}
