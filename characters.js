@@ -9,7 +9,7 @@ const characterData = {
         subtitle: "BRIGADE COMMANDER",
         id: "FILE: A-001",
         stamp: "CONFIDENTIAL",
-        icon: "🤖",
+        image: "images/ElpidaCS.png",
         status: "ACTIVE",
         stats: {
             "STATUS": "ACTIVE",
@@ -33,7 +33,7 @@ const characterData = {
         subtitle: "BRIGADE TACTICAL OFFICER",
         id: "FILE: B-047",
         stamp: "CONFIDENTIAL",
-        image: "images/sacrifice.png",
+        image: "images/GeoCS.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
