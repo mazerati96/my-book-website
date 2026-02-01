@@ -1,6 +1,7 @@
 /* ============================================
    KEYFRAME ANIMATIONS - OPTIMIZED
    ============================================ */
+@import "mobile-fixes.css";
 
 :root {
     --animation-speed: 1;
