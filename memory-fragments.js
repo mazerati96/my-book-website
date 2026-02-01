@@ -215,11 +215,14 @@ class MemoryFragmentSystem {
         this.saveSolvedRiddles();
         this.updateProgressTracker();
 
+        // Notify script.js to apply rainbow effect
+        window.dispatchEvent(new CustomEvent('konami-activated'));
+
         const backdrop = document.createElement('div');
-        backdrop.className = 'modal-backdrop';
+        backdrop.className = 'modal-backdrop konami-rainbow-bg';
 
         const modal = document.createElement('div');
-        modal.className = 'memory-modal';
+        modal.className = 'memory-modal konami-rainbow-modal';
         modal.style.borderColor = 'var(--accent-gold)';
         modal.innerHTML = `
             <div style="color: var(--accent-gold); font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center;">
@@ -236,9 +239,15 @@ class MemoryFragmentSystem {
         document.body.appendChild(backdrop);
         document.body.appendChild(modal);
 
+        // Apply rainbow effect to modal elements
+        backdrop.classList.add('rainbow-active');
+        modal.classList.add('rainbow-active');
+
         const closeModal = () => {
             backdrop.remove();
             modal.remove();
+            // Stop rainbow effect
+            window.dispatchEvent(new CustomEvent('konami-deactivated'));
         };
 
         modal.querySelector('.memory-modal-close').addEventListener('click', closeModal);
