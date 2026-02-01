@@ -349,6 +349,34 @@ class QuantumEntanglement {
             this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
                 if (user) {
                     // User is logged in
+                    console.log('🔐 User logged in:', user.uid);
+
+                    // ⭐ CRITICAL FIX: Clear guest mode when transitioning to authenticated user
+                    const wasGuestMode = this.isGuestMode;
+                    const oldUserId = this.userId;
+
+                    if (wasGuestMode) {
+                        console.log('🔄 Transitioning from guest mode to authenticated user');
+
+                        // Clear guest mode flags
+                        localStorage.removeItem('guestMode');
+                        localStorage.removeItem('guestQuantumId');
+                        this.isGuestMode = false;
+
+                        // Disconnect from old guest pairing
+                        if (this.partnerId) {
+                            console.log('🔌 Disconnecting old guest pairing');
+                            await this.severEntanglement();
+                        }
+
+                        // Clean up old guest user entry in Firebase
+                        if (oldUserId && oldUserId.startsWith('GUEST_')) {
+                            console.log('🧹 Cleaning up old guest user entry:', oldUserId);
+                            await this.db.ref('activeUsers/' + oldUserId).remove();
+                        }
+                    }
+
+                    // Set new authenticated user ID
                     this.userId = user.uid;
 
                     // If widget was closed, don't auto-open
@@ -357,7 +385,7 @@ class QuantumEntanglement {
                         return;
                     }
 
-                    // Auto-launch if not closed
+                    // Auto-launch with new authenticated ID
                     await this.launchWidget();
                 } else {
                     // User logged out - cleanup
@@ -481,6 +509,14 @@ class QuantumEntanglement {
         // CRITICAL FIX: Initialize userRef BEFORE calling registerUser
         this.userRef = this.db.ref('activeUsers/' + this.userId);
 
+        // ⭐ Check if widget needs to be rebuilt (e.g., transitioning from guest to auth)
+        const existingWidget = document.getElementById('quantumWidget');
+        const needsRebuild = existingWidget && existingWidget.dataset.userId !== this.userId;
+
+        if (needsRebuild) {
+            console.log('🔄 Rebuilding widget for new user ID');
+            existingWidget.remove();
+        }
 
         if (!document.getElementById('quantumWidget')) {
             this.createWidget();
@@ -526,6 +562,7 @@ class QuantumEntanglement {
         const widget = document.createElement('div');
         widget.className = 'quantum-widget rainbow-pulse';
         widget.id = 'quantumWidget';
+        widget.dataset.userId = this.userId; // ⭐ Track which user ID this widget was created for
         widget.innerHTML = `
             <button class="minimize-btn" id="minimizeBtn" title="Minimize">−</button>
             <button class="close-btn" id="closeWidget" title="Close">×</button>
