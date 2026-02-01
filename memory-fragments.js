@@ -290,10 +290,10 @@ class MemoryFragmentSystem {
             box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
         `;
         modal.innerHTML = `
-            <div style="color: gold; font-size: 2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; font-family: 'Courier New', monospace;">
-                ⚡DEVELOPER ACCESS GRANTED⚡
+            <div style="color: gold; font-size: 1.8rem; font-weight: bold; margin-bottom: 1rem; text-align: center; font-family: 'Courier New', monospace; white-space: nowrap;">
+                ⚡ DEVELOPER ACCESS GRANTED ⚡
             </div>
-            <div style="color: white; font-family: 'Courier New', monospace; font-size: 1rem; line-height: 1.6; font-style: normal;">
+            <div style="color: white; font-family: 'Courier New', monospace; font-size: 1rem; line-height: 1.6; font-style: normal; text-align: center;">
                 All memory fragments unlocked via Konami Code.<br><br>
                 All riddles solved automatically.<br>
                 Secret page accessible.
