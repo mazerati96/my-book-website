@@ -215,9 +215,6 @@ class MemoryFragmentSystem {
         this.saveSolvedRiddles();
         this.updateProgressTracker();
 
-        // Notify script.js to apply rainbow effect
-        window.dispatchEvent(new CustomEvent('konami-activated'));
-
         const backdrop = document.createElement('div');
         backdrop.className = 'modal-backdrop konami-rainbow-bg';
 
@@ -239,9 +236,13 @@ class MemoryFragmentSystem {
         document.body.appendChild(backdrop);
         document.body.appendChild(modal);
 
-        // Apply rainbow effect to modal elements
-        backdrop.classList.add('rainbow-active');
-        modal.classList.add('rainbow-active');
+        // Wait for next frame to ensure modal is in DOM, then apply rainbow
+        requestAnimationFrame(() => {
+            backdrop.classList.add('rainbow-active');
+            modal.classList.add('rainbow-active');
+            // Notify script.js to apply rainbow effect AFTER modal is ready
+            window.dispatchEvent(new CustomEvent('konami-activated'));
+        });
 
         const closeModal = () => {
             backdrop.remove();

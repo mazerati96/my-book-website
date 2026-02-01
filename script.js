@@ -558,23 +558,10 @@ let rainbowActive = false;
 let rainbowAnimationId = null;
 
 function initKonamiCode() {
-    let konamiCode = [];
-    const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-        'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-
-    document.addEventListener('keydown', (e) => {
-        konamiCode.push(e.key);
-        konamiCode = konamiCode.slice(-10);
-
-        if (konamiCode.join('') === konamiPattern.join('')) {
-            activateRainbowMode();
-            console.log('🌈 KONAMI CODE ACTIVATED! 🌈');
-        }
-    });
-
     // Listen for konami activation from memory-fragments.js
     window.addEventListener('konami-activated', () => {
         activateRainbowMode();
+        console.log('🌈 KONAMI CODE RAINBOW EFFECT ACTIVATED! 🌈');
     });
 
     // Listen for deactivation
