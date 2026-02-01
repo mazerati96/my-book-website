@@ -33,7 +33,7 @@ const characterData = {
         subtitle: "BRIGADE TACTICAL OFFICER",
         id: "FILE: B-047",
         stamp: "CONFIDENTIAL",
-        icon: "images/sacrifice.png",
+        image: "images/sacrifice.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
