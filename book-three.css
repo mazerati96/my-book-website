@@ -258,6 +258,10 @@ footer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 }
 
 .preview-panel {
@@ -403,4 +407,9 @@ footer {
 .cta-section {
     border-top-color: #ffd700;
     border-bottom-color: #ffd700;
+}
+
+/* Themes section */
+.themes-section {
+    background-color: var(--bg-dark);
 }
