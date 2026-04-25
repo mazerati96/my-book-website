@@ -243,6 +243,7 @@ footer {
     border-top: 2px solid var(--accent-red);
     padding: 3rem 2rem 2rem;
     position: relative;
+    z-index: 1000; /* Added this */
 }
 
 .footer-content {
@@ -253,6 +254,8 @@ footer {
     align-items: center;
     flex-wrap: wrap;
     gap: 2rem;
+    position: relative; /* Added this */
+    z-index: 1001; /* Added this */
 }
 
 .footer-text p {
@@ -276,6 +279,9 @@ footer {
         color: var(--primary-white);
         text-decoration: none;
         transition: all 0.3s;
+        position: relative; /* Added this */
+        z-index: 1002; /* Added this */
+        pointer-events: auto; /* Added this - ensures links are clickable */
     }
 
         .footer-links a:hover {
