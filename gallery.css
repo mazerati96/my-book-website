@@ -103,13 +103,13 @@
 }
 
 .cover2 {
-    background-image: url('images/book2-cover.png');
+    background-image: url('images/'); /*deleted book two and book three covers*/
     background-size: cover;
     background-position: center;
 }
 
 .cover3 {
-    background-image: url('images/book3-cover.png');
+    background-image: url('images/');
     background-size: cover;
     background-position: center;
 }
