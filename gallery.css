@@ -25,7 +25,8 @@
 .gallery-section {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 5rem 2rem 12rem;
+    /* increased bottom padding to ensure space for footer on small viewports */
+    padding: 5rem 2rem 20rem;
     position: relative;
     z-index: 1;
     isolation: isolate;
@@ -398,19 +399,7 @@
         line-height: 1.6;
     }
 
-/* ==================================================================
-   Spacer to prevent last gallery row from being covered by the footer
-   Add extra space after the gallery section so pages with small
-   viewports or tall footers cannot overlap the last images.
-   Adjust the height below if your footer is taller or shorter.
-   ================================================================== */
-.gallery-section::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 10rem; /* tweak this value if needed */
-    pointer-events: none;
-}
+
 
 /* Responsive lightbox */
 @media (max-width: 768px) {
