@@ -275,7 +275,7 @@
 .gallery-section .site-art-grid::after {
     content: "";
     display: block;
-    height: 12rem; /* tweak as needed */
+    height: 6rem; /* tweak as needed */
     width: 100%;
 }
 
