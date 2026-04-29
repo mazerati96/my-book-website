@@ -256,9 +256,17 @@
         line-height: 1.6;
     }
 
+/* Site art grid - smaller cards, centered */
+.site-art-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 250px));
+    gap: 2.5rem;
+    justify-content: center;
+}
+
 .gallery-item.site-art .image-placeholder img {
     object-fit: contain;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 /* Responsive */
