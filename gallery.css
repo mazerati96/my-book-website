@@ -398,6 +398,20 @@
         line-height: 1.6;
     }
 
+/* ==================================================================
+   Spacer to prevent last gallery row from being covered by the footer
+   Add extra space after the gallery section so pages with small
+   viewports or tall footers cannot overlap the last images.
+   Adjust the height below if your footer is taller or shorter.
+   ================================================================== */
+.gallery-section::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 10rem; /* tweak this value if needed */
+    pointer-events: none;
+}
+
 /* Responsive lightbox */
 @media (max-width: 768px) {
     .lightbox-close {
