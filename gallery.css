@@ -256,6 +256,11 @@
         line-height: 1.6;
     }
 
+.gallery-item.site-art .image-placeholder img {
+    object-fit: contain;
+    padding: 2rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .gallery-grid {
