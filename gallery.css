@@ -25,12 +25,9 @@
 .gallery-section {
     max-width: 1400px;
     margin: 0 auto;
-    /* restore previous sensible bottom padding (adjust if footer overlaps) */
-    padding: 5rem 2rem 6rem !important; /* !important beats the section rule in layout.css */
-    
+    padding: 5rem 2rem 3rem;
     position: relative;
     z-index: 1;
-    isolation: isolate;
 }
 
 .gallery-category {
