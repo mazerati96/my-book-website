@@ -13,15 +13,30 @@ function initGallery() {
     galleryItems.forEach(item => {
         // Click to open lightbox
         item.addEventListener('click', () => {
-            const title = item.dataset.title;
-            const imagePlaceholder = item.querySelector('.image-placeholder');
-            const imageUrl = window.getComputedStyle(imagePlaceholder).backgroundImage;
-            const description = item.querySelector('.item-info p').textContent;
+            const title = item.dataset.title || '';
 
-            // Extract URL from CSS background-image property
-            const cleanUrl = imageUrl.slice(5, -2); // Removes 'url("' and '")'
+            // Prefer the actual <img> src if present, otherwise fall back to CSS background-image
+            const imgEl = item.querySelector('.image-placeholder img');
+            let imageUrl = '';
+            if (imgEl && imgEl.src) {
+                imageUrl = imgEl.src;
+            } else {
+                const imagePlaceholder = item.querySelector('.image-placeholder');
+                const bg = window.getComputedStyle(imagePlaceholder).backgroundImage || '';
+                if (bg.startsWith('url(')) {
+                    imageUrl = bg.slice(5, -2);
+                }
+            }
 
-            openLightbox(cleanUrl, title, description);
+            const descEl = item.querySelector('.item-info p');
+            const description = descEl ? descEl.textContent : '';
+
+            if (!imageUrl) {
+                console.warn('Gallery: no image URL found for item', item);
+                return;
+            }
+
+            openLightbox(imageUrl, title, description);
         });
 
         // Enhanced glitch on hover
