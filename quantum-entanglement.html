@@ -241,9 +241,9 @@
             </p>
 
             <div class="connection-visual">
-                <span class="particle-icon qe-particle">⚛️</span>
+                <img src="images/atom.png" alt="atom">
                 <div class="wave-line"></div>
-                <span class="particle-icon qe-particle" style="animation-delay: 0.5s;">⚛️</span>
+                <span class="particle-icon qe-particle" style="animation-delay: 0.5s;"><img src="images/atom.png" alt="atom"></span>
             </div>
 
             <button class="launch-widget-btn" id="launchWidgetBtn">
@@ -262,37 +262,37 @@
 
         <div class="qe-grid">
             <div class="qe-card">
-                <div class="qe-icon">🔗</div>
+                <img src="images/chain.png" alt="chain">
                 <h3>RANDOM CONNECTION</h3>
                 <p>When you activate the widget, our quantum algorithm searches the field for another consciousness seeking connection. Your pairing is completely random—stranger to stranger, soul to soul.</p>
             </div>
 
             <div class="qe-card">
-                <div class="qe-icon">🆔</div>
+                <img src="images/ID.png" alt="ID">
                 <h3>ANONYMOUS IDENTITY</h3>
                 <p>Each user receives a randomly generated quantum ID (e.g., USER_A4F2). Your identity remains cryptic. You are known only by your designation. No personal information is collected or stored.</p>
             </div>
 
             <div class="qe-card">
-                <div class="qe-icon">💬</div>
+                <img src="images/message.png" alt="message">
                 <h3>SHARED MESSAGES</h3>
                 <p>Once entangled, you'll receive cryptic fragments from the trilogy's universe. You can also chat with your quantum partner in real-time—a stranger connected by chance and choice.</p>
             </div>
 
             <div class="qe-card">
-                <div class="qe-icon">⏳</div>
+                <img src="images/connection.png" alt="connection">
                 <h3>ONE CONNECTION ONLY</h3>
                 <p>Each quantum entanglement is unique. Once your partner disconnects, the bond is severed forever. You'll be paired with someone new. You can never reconnect with a previous partner—just like particles in the quantum void.</p>
             </div>
 
             <div class="qe-card">
-                <div class="qe-icon">🌌</div>
+                <img src="images/persistent.png" alt="persistent">
                 <h3>PERSISTENT ACROSS PAGES</h3>
                 <p>Your entanglement persists as you navigate the site. The widget follows you, maintaining your connection even as you explore different corners of the universe.</p>
             </div>
 
             <div class="qe-card">
-                <div class="qe-icon">🔊</div>
+                <img src="images/audio.png" alt="audio">
                 <h3>AUDIO FEEDBACK</h3>
                 <p>Subtle tones alert you to new messages, connections, and disconnections. The quantum field speaks in frequencies—listen closely.</p>
             </div>
@@ -382,9 +382,9 @@
     <script src="breadcrumbs.js"></script>
 
     <script>
-        // Launch widget when buttons are clicked
-        document.getElementById('launchWidgetBtn').addEventListener('click', launchWidget);
-        document.getElementById('launchWidgetBtn2').addEventListener('click', launchWidget);
+        // Launch widget when buttons are clicked (guard against missing elements)
+        document.getElementById('launchWidgetBtn')?.addEventListener('click', launchWidget);
+        document.getElementById('launchWidgetBtn2')?.addEventListener('click', launchWidget);
 
         function launchWidget() {
             // Check if quantum entanglement instance exists
