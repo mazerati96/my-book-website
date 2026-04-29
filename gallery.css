@@ -27,7 +27,7 @@
     margin: 0 auto;
     padding: 5rem 2rem 12rem;
     position: relative;
-    z-index: 1;
+    z-index: 11;
     isolation: isolate;
 }
 
