@@ -250,7 +250,7 @@ section {
    FOOTER
    ============================================ */
 footer {
-    margin-top: 5rem;
+    margin-top: 8rem;
     background-color: var(--bg-black);
     border-top: 2px solid var(--accent-red);
     padding: 3rem 2rem 2rem;
