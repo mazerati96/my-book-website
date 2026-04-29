@@ -268,6 +268,17 @@
     justify-content: center;
 }
 
+/* Add a bottom spacer inside the gallery section so the last
+   row is visually separated from the footer without shifting
+   the footer itself. This keeps spacing local to the page. */
+.gallery-section .gallery-grid::after,
+.gallery-section .site-art-grid::after {
+    content: "";
+    display: block;
+    height: 6rem; /* tweak as needed */
+    width: 100%;
+}
+
 .gallery-item.site-art .image-placeholder img {
     object-fit: contain;
     padding: 1.5rem;

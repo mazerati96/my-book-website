@@ -6,11 +6,10 @@
     --footer-space: 16rem;
 }
 
-/* Reserve space at the end of the document so footers that
-   sit above content (via z-index or positioning) don't cover
-   the last page content on small viewports. */
+/* Body padding removed: reserve space per-section instead to
+   avoid adding whitespace after the footer itself. */
 body {
-    padding-bottom: var(--footer-space);
+    /* no global bottom padding here */
 }
 
 .hero {
