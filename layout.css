@@ -1,6 +1,18 @@
 /* ============================================
    HERO SECTION
    ============================================ */
+:root {
+    /* adjust this value to match your footer height if needed */
+    --footer-space: 16rem;
+}
+
+/* Reserve space at the end of the document so footers that
+   sit above content (via z-index or positioning) don't cover
+   the last page content on small viewports. */
+body {
+    padding-bottom: var(--footer-space);
+}
+
 .hero {
     position: relative;
     min-height: 100vh;
