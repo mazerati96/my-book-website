@@ -259,7 +259,7 @@
 /* PERFORMANCE OPTIMIZATION: Reduce animation for scrolling elements */
 @media (prefers-reduced-motion: no-preference) {
     .parallax-layer,
-    section,
+  
     .hero-content {
         will-change: transform;
     }
