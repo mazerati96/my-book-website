@@ -25,9 +25,10 @@
 .gallery-section {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 5rem 2rem 8rem;
+    padding: 5rem 2rem 12rem;
     position: relative;
     z-index: 1;
+    isolation: isolate;
 }
 
 .gallery-category {
