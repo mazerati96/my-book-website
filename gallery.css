@@ -26,7 +26,8 @@
     max-width: 1400px;
     margin: 0 auto;
     /* restore previous sensible bottom padding (adjust if footer overlaps) */
-    padding: 5rem 2rem 12rem;
+    padding: 5rem 2rem 6rem !important; /* !important beats the section rule in layout.css */
+    
     position: relative;
     z-index: 1;
     isolation: isolate;
