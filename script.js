@@ -223,14 +223,8 @@ function initEnhancedParallax() {
         layer1.style.transform = `translateY(${scrolled * 0.2}px)`;
         layer2.style.transform = `translateY(${scrolled * 0.3}px)`;
 
-        // Section parallax
-        document.querySelectorAll('section').forEach((section, index) => {
-            const rect = section.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                const offset = (window.innerHeight - rect.top) * 0.1;
-                section.style.transform = `translateY(${offset}px)`;
-            }
-        });
+        
+        
     });
 }
 
@@ -490,8 +484,8 @@ function initContactForm() {
 // ============================================
 function initScrollAnimations() {
     const fadeObserverOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+        threshold: 0,
+        rootMargin: '0px 0px 0px 0px'
     };
 
     const fadeObserver = new IntersectionObserver((entries) => {
