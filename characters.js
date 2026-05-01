@@ -338,7 +338,7 @@ function showCharacterModal(characterId) {
         
         <div class="modal-portrait">
             <div class="portrait-frame">
-                <span class="portrait-icon">${data.icon}</span>
+                <img src="${data.image}" alt="${data.name}" class="portrait-img" onerror="this.style.display='none'">
             </div>
             <div class="status-badge">${data.status}</div>
         </div>
