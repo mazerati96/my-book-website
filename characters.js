@@ -9,7 +9,7 @@ const characterData = {
         subtitle: "BRIGADE COMMANDER",
         id: "FILE: A-001",
         stamp: "CONFIDENTIAL",
-        image: "images/ElpidaCS.png",
+        image: "images/Elpida2.png",
         status: "ACTIVE",
         stats: {
             "STATUS": "ACTIVE",
@@ -33,7 +33,7 @@ const characterData = {
         subtitle: "BRIGADE TACTICAL OFFICER",
         id: "FILE: B-047",
         stamp: "CONFIDENTIAL",
-        image: "images/GeoCS.png",
+        image: "images/Geo.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
@@ -57,7 +57,7 @@ const characterData = {
         subtitle: "CHIEF ENGINEER",
         id: "FILE: B-089",
         stamp: "CONFIDENTIAL",
-        icon: "🔧",
+        image: "images/Ciel.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
@@ -81,7 +81,7 @@ const characterData = {
         subtitle: "PILOT",
         id: "FILE: C-112",
         stamp: "CONFIDENTIAL",
-        icon: "🚀",
+        image: "images/Tahani.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
@@ -105,7 +105,7 @@ const characterData = {
         subtitle: "COMBAT AND TACTICAL EXPERT",
         id: "FILE: D-205",
         stamp: "CONFIDENTIAL",
-        icon: "🔥",
+        image: "images/Cinder.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
@@ -130,7 +130,7 @@ const characterData = {
         subtitle: "WEAPONS AND COMBAT EXPERT",
         id: "FILE: E-309",
         stamp: "CONFIDENTIAL",
-        icon: "🎯",
+        image: "images/Scout.png",
         status: "HUMAN",
         stats: {
             "STATUS": "ACTIVE",
