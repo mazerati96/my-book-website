@@ -316,7 +316,9 @@
     justify-content: center;
     margin-bottom: 1rem;
     box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
-    overflow: hidden
+    overflow: hidden;
+    border-radius: 0; /* keep square, or try 4px for slight rounding */
+    flex-shrink: 0; /* ADD: prevents frame from squishing in flex layouts */
 }
 
 .portrait-icon {
@@ -327,7 +329,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center center;
     display: block;
 }
 
