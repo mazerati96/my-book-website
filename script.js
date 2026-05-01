@@ -223,7 +223,10 @@ function initEnhancedParallax() {
         layer1.style.transform = `translateY(${scrolled * 0.2}px)`;
         layer2.style.transform = `translateY(${scrolled * 0.3}px)`;
 
-        
+        document.querySelectorAll('.parallax-item').forEach(item => {
+            const speed = parseFloat(item.getAttribute('data-parallax-speed')) || 0.1;
+            item.style.transform = `translateY(${scrolled * speed}px)`;
+        });
         
     });
 }
