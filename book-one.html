@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="pages.css">
     <link rel="stylesheet" href="book-one-accent.css">
     <link rel="stylesheet" href="book-one.css">
+    <link rel="stylesheet" href="book-progress.css">
     <link rel="stylesheet" href="mobile-fixes.css">
 
     <!-- Quantum Entanglement Widget -->
@@ -221,16 +222,17 @@
             <h2>THE JOURNEY BEGINS HERE</h2>
             <p>One android. One crew. One discovery that will redefine existence.</p>
             <p><em>Currently in Fifth Draft!</em></p>
-            <div class="progress-visual">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 85%"></div>
-                </div>
-                <span class="progress-label">85% Complete</span>
-            </div>
+
+            <!--
+                data-book-id="book-one" is the Realtime Database key.
+                book-two.html uses data-book-id="book-two", etc.
+                book-progress.js finds this element and injects the bar here.
+            -->
+            <div class="progress-visual" data-book-id="book-one"></div>
+
             <div class="cta-buttons">
                 <a href="blog.html" class="primary-btn">
                     <span>READ THE BLOG FOR UPDATES</span>
-
                 </a>
                 <a href="contact.html" class="secondary-btn">
                     <span>ASK THE AUTHOR</span>
@@ -275,5 +277,6 @@
     <script src="load-navigation.js"></script>
     <script src="memory-fragments.js"></script>
     <script src="breadcrumbs.js"></script>
+    <script src="book-progress.js"></script>
 </body>
 </html>

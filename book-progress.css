@@ -1,0 +1,226 @@
+/* ============================================
+   BOOK PROGRESS BAR — book-progress.css
+   Themed with CSS variables so book-two and
+   book-three can override --bp-accent alone.
+   ============================================ */
+
+/* Default accent — green for book one.
+   Book two / three: add one rule in their
+   own accent CSS:
+   [data-book-id="book-two"] { --bp-accent: #your-color; }  */
+[data-book-id] {
+    --bp-accent: #00ff88;
+}
+
+/* ── Wrapper ───────────────────────────────── */
+.bp-wrapper {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ── Meta row ──────────────────────────────── */
+.bp-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.bp-stage {
+    color: var(--bp-accent);
+    font-weight: bold;
+}
+
+    .bp-stage.is-complete {
+        color: var(--bp-accent);
+    }
+
+.bp-right {
+    color: var(--bp-accent);
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* ── Edit button ───────────────────────────── */
+.bp-edit-btn {
+    background: none;
+    border: 1px solid var(--bp-accent);
+    color: var(--bp-accent);
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .bp-edit-btn:hover {
+        background: var(--bp-accent);
+        color: var(--bg-black, #0a0a0a);
+    }
+
+/* ── Track & fill ──────────────────────────── */
+.bp-track {
+    width: 100%;
+    height: 30px;
+    background-color: rgba(0, 255, 136, 0.15);
+    border: 2px solid var(--bp-accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.bp-fill {
+    height: 100%;
+    background: var(--bp-accent);
+    box-shadow: 0 0 20px var(--bp-accent);
+    transition: width 0.6s ease;
+    animation: bp-glow 2s ease-in-out infinite;
+}
+
+    .bp-fill.is-complete {
+        background: var(--bp-accent);
+        box-shadow: 0 0 30px var(--bp-accent);
+    }
+
+@keyframes bp-glow {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* ── Percentage label below bar ────────────── */
+.bp-pct-label {
+    color: var(--bp-accent);
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* ── Edit panel ────────────────────────────── */
+.bp-edit-panel {
+    margin-top: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--bp-accent);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── Labelled field ────────────────────────── */
+.bp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+    .bp-field label {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        color: var(--bp-accent);
+    }
+
+    .bp-field input {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 255, 136, 0.4);
+        color: #ffffff;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        padding: 6px 10px;
+        width: 100%;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+        .bp-field input:focus {
+            border-color: var(--bp-accent);
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+        }
+
+/* ── Complete checkbox row ─────────────────── */
+.bp-cb-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+    .bp-cb-row input[type="checkbox"] {
+        accent-color: var(--bp-accent);
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+    .bp-cb-row label {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: var(--bp-accent);
+        cursor: pointer;
+    }
+
+/* ── Actions row ───────────────────────────── */
+.bp-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.bp-save-btn,
+.bp-cancel-btn {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    cursor: pointer;
+    border: 1px solid var(--bp-accent);
+    transition: all 0.2s;
+}
+
+.bp-save-btn {
+    background: var(--bp-accent);
+    color: var(--bg-black, #0a0a0a);
+}
+
+    .bp-save-btn:hover:not(:disabled) {
+        box-shadow: 0 0 15px var(--bp-accent);
+    }
+
+    .bp-save-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.bp-cancel-btn {
+    background: none;
+    color: var(--bp-accent);
+}
+
+    .bp-cancel-btn:hover {
+        background: rgba(0, 255, 136, 0.1);
+    }
+
+.bp-saved-msg {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--bp-accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+    .bp-saved-msg.visible {
+        opacity: 1;
+    }
